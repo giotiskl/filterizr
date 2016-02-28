@@ -1,0 +1,34 @@
+{
+  "name": "filterizr",
+  "version": "1.0.0",
+  "description": "Filterizr is a jQuery plugin that sorts, shuffles and applies stunning filters over responsive galleries using CSS3 transitions and custom CSS effects",
+  "main": "src/jquery.filterizr.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/giotiskl/Filterizr.git"
+  },
+  "keywords": [
+    "filter",
+    "shuffle",
+    "sort",
+    "filterizr",
+    "gallery",
+    "responsive",
+    "css3",
+    "css",
+    "lightweight",
+    "customizable",
+    "Yiotis",
+    "jquery-plugin",
+    "ecosystem:jquery"
+  ],
+  "author": "Yiotis Kaltsikis <yiotiskal@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/giotiskl/filterizr/issues"
+  },
+  "homepage": "https://github.com/giotiskl/Filterizr#readme"
+}
