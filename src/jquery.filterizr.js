@@ -207,9 +207,14 @@
         */
         sort: function(attr, sortOrder) {
             var self 	  = this;
-            attr 	  = attr || 'domIndex';
-            sortOrder = sortOrder || 'asc';
+            attr 	      = attr      || 'domIndex';
+            sortOrder     = sortOrder || 'asc';
 
+            //Register sort attr on all elements if it is a user-defined data-attribute
+            var b = attr !== 'domIndex' && attr !== 'sortData' && attr !== 'w' && attr!== 'h';
+            if (b)
+                for (var i = 0; i < self._mainArray.length; i++)
+                    self._mainArray[i][attr] = self._mainArray[i].data(attr);
             //Sort items
             self._mainArray.sort(self._comparator(attr, sortOrder));
             self._subArrays = self._makeSubarrays();
