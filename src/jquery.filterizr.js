@@ -4,7 +4,7 @@
 *
 * @author Yiotis Kaltsikis
 * @see {@link http://yiotis.net/filterizr}
-* @version 1.0.0
+* @version 1.1.0
 * @license MIT License
 */
 
@@ -152,6 +152,8 @@
             self._mainArray   = self._getFiltrItems();
             self._subArrays   = self._makeSubarrays();
             self._activeArray = self._getCollectionByFilter(self.options.filter);
+            //Used for multiple category filtering
+            self._toggledCategories = { };
             //Generate unique ID for resize events
             self._uID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -175,19 +177,38 @@
         */
         filter: function(targetFilter) {
             var self   = this,
-            target = self._getCollectionByFilter(targetFilter);
+                target = self._getCollectionByFilter(targetFilter);
 
             self.options.filter = targetFilter;
             self.trigger('filteringStart');
 
-            //Minimize all .filtr-item elements that are not the same between categories
-            var toFilterOut = self._getArrayOfUniqueItems(self._activeArray, target);
-            for (var i = 0; i < toFilterOut.length; i++) {
-                toFilterOut[i]._filterOut();
+            self._handleFiltering(target);
+        },
+
+        /**
+        * Toggles filters on/off and renders the new collection
+        * @param {number} toggledFilter - the filter to toggle
+        */
+        toggleFilter: function(toggledFilter) {
+            var self   = this,
+                target = [], i = 0;
+
+            self.trigger('filteringStart');
+            //Toggle the toggledFilter in the active categories
+            if (!self._toggledCategories[toggledFilter])
+                self._toggledCategories[toggledFilter] = true;
+            else
+                delete self._toggledCategories[toggledFilter];
+
+            //If a filter is toggled on then display only items belonging to that category
+            if (self._multifilterModeOn()) {
+                target = self._makeMultifilterArray();
+                self._handleFiltering(target);
             }
-            self._activeArray = target;
-            //Reposition same items and filter in new
-            self._placeItems(target);
+            //If all filters toggled off then display unfiltered gallery
+            else {
+                self.filter('all');
+            }
         },
 
         /**
@@ -195,9 +216,15 @@
         */
         shuffle: function() {
             var self = this;
+
             self._mainArray = self._fisherYatesShuffle(self._mainArray);
             self._subArrays = self._makeSubarrays();
-            self._placeItems(self._getCollectionByFilter(self.options.filter));
+
+            var target = self._multifilterModeOn() ?
+                            self._makeMultifilterArray() :
+                            self._getCollectionByFilter(self.options.filter);
+
+            self._placeItems(target);
         },
 
         /**
@@ -206,20 +233,25 @@
         * @param {string} [sortOrder] - asc/desc (default: 'asc').
         */
         sort: function(attr, sortOrder) {
-            var self 	  = this;
-            attr 	      = attr      || 'domIndex';
-            sortOrder     = sortOrder || 'asc';
+            var self  = this;
+            //Set defaults
+            attr 	  = attr      || 'domIndex';
+            sortOrder = sortOrder || 'asc';
 
             //Register sort attr on all elements if it is a user-defined data-attribute
-            var b = attr !== 'domIndex' && attr !== 'sortData' && attr !== 'w' && attr!== 'h';
-            if (b)
+            var isUserAttr = attr !== 'domIndex' && attr !== 'sortData' && attr !== 'w' && attr!== 'h';
+            if (isUserAttr)
                 for (var i = 0; i < self._mainArray.length; i++)
                     self._mainArray[i][attr] = self._mainArray[i].data(attr);
             //Sort items
             self._mainArray.sort(self._comparator(attr, sortOrder));
             self._subArrays = self._makeSubarrays();
             //Place sorted collection to new positions
-            self._placeItems(self._getCollectionByFilter(self.options.filter));
+            var target = self._multifilterModeOn() ?
+                            self._makeMultifilterArray() :
+                            self._getCollectionByFilter(self.options.filter);
+
+            self._placeItems(target);
         },
 
         /**
@@ -281,12 +313,48 @@
                 //Multiple categories scenario
                 if (typeof self._mainArray[i]._category === 'object') {
                     for (var p in self._mainArray[i]._category)
-                    subArrays[self._mainArray[i]._category[p] - 1].push(self._mainArray[i]);
+                        subArrays[self._mainArray[i]._category[p] - 1].push(self._mainArray[i]);
                 }
                 //Single category
                 else subArrays[self._mainArray[i]._category - 1].push(self._mainArray[i]);
             }
             return subArrays;
+        },
+
+        /**
+        * Make a .filtr-item array based on the activated filters
+        * @return {Object[]} array consisting of the .filtr-item elements belonging to active filters
+        * @private
+        */
+        _makeMultifilterArray: function() {
+            var self   = this,
+                target = [], addedMap = {};
+
+            for (var i = 0; i < self._mainArray.length; i++) {
+                //If the item belongs to multiple categories
+                var item = self._mainArray[i],
+                    belongsToCategory = false,
+                    isUnique = item.domIndex in addedMap === false;
+                //Check if item belongs to categories whose filters are toggled on
+                if (Array.isArray(item._category)) {
+                    for (var x = 0; x < item._category.length; x++) {
+                        if (item._category[x] in self._toggledCategories) {
+                            belongsToCategory = true;
+                            break;
+                        }
+                    }
+                }
+                else {
+                    if (item._category in self._toggledCategories) belongsToCategory = true;
+                }
+                //If the item is not already visible and belongs to a category
+                //of the toggled on filters push it to target collection
+                if (isUnique && belongsToCategory) {
+                    addedMap[item.domIndex] = true;
+                    target.push(item);
+                }
+            }
+            return target;
         },
 
         /**
@@ -301,6 +369,17 @@
                 //Exit case
                 if (self.options.filter === targetFilter) return;
                 self.filter(targetFilter);
+            });
+            //Multiple filter controls
+            $('*[data-multifilter]').click(function() {
+                var targetFilter = $(this).data('multifilter');
+                if (targetFilter === 'all') {
+                    self._toggledCategories = { };
+                    self.filter('all');
+                }
+                else {
+                    self.toggleFilter(targetFilter);
+                }
             });
             //Shuffle control
             $('*[data-shuffle]').click(function() {
@@ -333,7 +412,10 @@
             self
             //Container resize event
             .on('resizeFiltrContainer', function() {
-                self.filter(self.options.filter);
+                if (self._multifilterModeOn())
+                    self.toggleFilter();
+                else
+                    self.filter(self.options.filter);
             })
             //onFilteringStart event
             .on('filteringStart', function() {
@@ -491,6 +573,33 @@
             //Update the height of .filtr-container based on new positions
             self.css('height', containerHeight);
             return posArray;
+        },
+
+        /**
+        * Handles filtering in/out and reposition items when transition between categories
+        * @param {Object[]} the target array towards which to filter
+        * @private
+        */
+        _handleFiltering: function(target) {
+            var self = this,
+                toFilterOut = self._getArrayOfUniqueItems(self._activeArray, target);
+            //Minimize all .filtr-item elements that are not the same between categories
+            for (var i = 0; i < toFilterOut.length; i++) {
+                toFilterOut[i]._filterOut();
+            }
+            self._activeArray = target;
+            //Reposition same items and filter in new
+            self._placeItems(target);
+        },
+
+        /**
+        * Determines if the user is using data-multifilter controls or simple data-filter controls
+        * @return {boolean} indicating whether multiple filter mode is on
+        * @private
+        */
+        _multifilterModeOn: function() {
+            var self = this;
+            return Object.keys(self._toggledCategories).length > 0;
         },
 
         /**
@@ -695,6 +804,7 @@
 
         /**
         * Determines which categories this items belongs to and updates the _lastCategory prop of Filterizr.
+        * @throws {InvalidArgumentException} data-category of .filtr-item elements must be integer or string of integers delimited by ', '
         * @return {Object[]|number} the categories this item belongs to.
         * @private
         */
@@ -704,13 +814,19 @@
             //If more than one category provided
             if (typeof ret === 'string') {
                 ret = ret.split(', ');
-                for (var n in ret)
-                if (ret[n] > self._parent._lastCategory)
-                self._parent._lastCategory = ret[n];
+                for (var n in ret) {
+                    //Error checking: make sure data-category has an integer as its value
+                    if (isNaN(parseInt(ret[n]))) {
+                        throw new Error('Filterizr: the value of data-category must be a number, starting from value 1 and increasing.');
+                    }
+                    if (ret[n] > self._parent._lastCategory) {
+                        self._parent._lastCategory = ret[n];
+                    }
+                }
             }
             else {
                 if (ret > self._parent._lastCategory)
-                self._parent._lastCategory = ret;
+                    self._parent._lastCategory = ret;
             }
             return ret;
         },
@@ -723,6 +839,7 @@
             var self = this;
             //finished filtering out
             if (self._filteringOut) {
+                $(self).addClass('filteredOut');
                 self._isFilteredOut = true;
                 self._filteringOut  = false;
             }
@@ -743,8 +860,8 @@
         * @private
         */
         _filterOut: function() {
-            var self   		 = this,
-            filterOutCss = self._parent._makeDeepCopy(self._parent.options.filterOutCss);
+            var self         = this,
+                filterOutCss = self._parent._makeDeepCopy(self._parent.options.filterOutCss);
             //Auto add translate to transform over user-defined filterOut styles
             filterOutCss.transform += ' translate3d(' + self._lastPos.left + 'px,' + self._lastPos.top + 'px, 0)';
             //Play animation
@@ -760,7 +877,9 @@
         */
         _filterIn: function(targetPos) {
             var self  	    = this,
-            filterInCss = self._parent._makeDeepCopy(self._parent.options.filterInCss);
+                filterInCss = self._parent._makeDeepCopy(self._parent.options.filterInCss);
+            //Remove the filteredOut class
+            $(self).removeClass('filteredOut');
             //Tag as filtering in for transitionend event
             self._filteringIn = true;
             self._lastPos 	  = targetPos;
