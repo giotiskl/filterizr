@@ -4,7 +4,7 @@
 *
 * @author Yiotis Kaltsikis
 * @see {@link http://yiotis.net/filterizr}
-* @version 1.1.0
+* @version 1.2.0
 * @license MIT License
 */
 
@@ -154,6 +154,8 @@
             self._activeArray = self._getCollectionByFilter(self.options.filter);
             //Used for multiple category filtering
             self._toggledCategories = { };
+            //Used for search feature
+            self._typedText = $('input[data-search]').val();
             //Generate unique ID for resize events
             self._uID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -181,8 +183,10 @@
 
             self.options.filter = targetFilter;
             self.trigger('filteringStart');
-
+            //Filter items
             self._handleFiltering(target);
+            //Apply search filter on top if activated
+            if (self._isSearchActivated()) self.search(self._typedText);
         },
 
         /**
@@ -203,11 +207,58 @@
             //If a filter is toggled on then display only items belonging to that category
             if (self._multifilterModeOn()) {
                 target = self._makeMultifilterArray();
+                //Filter items
                 self._handleFiltering(target);
+                //Apply search filter on top if activated
+                if (self._isSearchActivated()) self.search(self._typedText);
             }
             //If all filters toggled off then display unfiltered gallery
             else {
+                //Filter items
                 self.filter('all');
+                //Apply search filter on top if activated
+                if (self._isSearchActivated()) self.search(self._typedText);
+            }
+        },
+
+        /**
+        * Searches the contents of .filtr-item elements, filters them and renders the results
+        * @param {string} text to search in contents of .filtr-item elements
+        */
+        search: function(text) {
+            var self   = this,
+                //get active category
+                array  = self._multifilterModeOn() ?
+                            self._makeMultifilterArray() :
+                            self._getCollectionByFilter(self.options.filter),
+                target = [], i = 0;
+
+            if (self._isSearchActivated()) {
+                for (i = 0; i < array.length; i++) {
+                    //Check if the text typed in the textbox is contained in the .filtr-item element
+                    //and add it to the target array
+                    var containsText = array[i].text().toLowerCase().indexOf(text.toLowerCase()) > -1;
+                    if (containsText) {
+                        target.push(array[i]);
+                    }
+                }
+            }
+            //Show the results
+            if (target.length > 0) {
+                self._handleFiltering(target);
+            }
+            //If there are no results
+            else {
+                //and search is activated, show blank
+                if (self._isSearchActivated()) {
+                    for (i = 0; i < self._activeArray.length; i++) {
+                        self._activeArray[i]._filterOut();
+                    }
+                }
+                //if search is not activated display gallery with last applied filter
+                else {
+                    self._handleFiltering(array);
+                }
             }
         },
 
@@ -224,7 +275,10 @@
                             self._makeMultifilterArray() :
                             self._getCollectionByFilter(self.options.filter);
 
-            self._placeItems(target);
+            if (self._isSearchActivated())
+                self.search(self._typedText);
+            else
+                self._placeItems(target);
         },
 
         /**
@@ -240,9 +294,11 @@
 
             //Register sort attr on all elements if it is a user-defined data-attribute
             var isUserAttr = attr !== 'domIndex' && attr !== 'sortData' && attr !== 'w' && attr!== 'h';
-            if (isUserAttr)
-                for (var i = 0; i < self._mainArray.length; i++)
+            if (isUserAttr) {
+                for (var i = 0; i < self._mainArray.length; i++) {
                     self._mainArray[i][attr] = self._mainArray[i].data(attr);
+                }
+            }
             //Sort items
             self._mainArray.sort(self._comparator(attr, sortOrder));
             self._subArrays = self._makeSubarrays();
@@ -251,7 +307,10 @@
                             self._makeMultifilterArray() :
                             self._getCollectionByFilter(self.options.filter);
 
-            self._placeItems(target);
+            if (self._isSearchActivated())
+                self.search(self._typedText);
+            else
+                self._placeItems(target);
         },
 
         /**
@@ -393,6 +452,13 @@
             $('*[data-sortDesc]').click(function() {
                 var sortAttr = $('*[data-sortOrder]').val();
                 self.sort(sortAttr, 'desc');
+            });
+            //Search control
+            $('input[data-search]').keyup(function() {
+                self._typedText = $(this).val();
+                self._delayEvent(function() {
+                    self.search(self._typedText);
+                }, 250, self._uID);
             });
         },
 
@@ -600,6 +666,16 @@
         _multifilterModeOn: function() {
             var self = this;
             return Object.keys(self._toggledCategories).length > 0;
+        },
+
+        /**
+        * Determines if the user has something typed in the search box
+        * @return {boolean} indicating whether the user has searched
+        * @private
+        */
+        _isSearchActivated: function() {
+            var self = this;
+            return self._typedText.length > 0;
         },
 
         /**
