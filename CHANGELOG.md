@@ -1,3 +1,8 @@
+##Version 1.2.0
+-Added new API method .filterizr('search', text), which is used to apply a search filter.
+-Added new search control in the form of an input text which must have a data-search attribute.
+-Updated public API methods to account for and apply the search filter over their intended operations.
+
 ##Version 1.1.0
 -Added new API method .filterizr('toggleFilter', toggledFilter), which is used for the new multi-filtering mode.
 -Added new filtering mode and filtering controls for multi-filtering. The user can now activate filters and display specific portions of the gallery alone or in combination. When all filters are turned of an unfiltered gallery is shown.
