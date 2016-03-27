@@ -4,7 +4,7 @@
 *
 * @author Yiotis Kaltsikis
 * @see {@link http://yiotis.net/filterizr}
-* @version 1.1.0
+* @version 1.2.0
 * @license MIT License
 */
 
@@ -183,8 +183,10 @@
 
             self.options.filter = targetFilter;
             self.trigger('filteringStart');
-
+            //Filter items
             self._handleFiltering(target);
+            //Apply search filter on top if activated
+            if (self._isSearchActivated()) self.search(self._typedText);
         },
 
         /**
@@ -205,11 +207,17 @@
             //If a filter is toggled on then display only items belonging to that category
             if (self._multifilterModeOn()) {
                 target = self._makeMultifilterArray();
+                //Filter items
                 self._handleFiltering(target);
+                //Apply search filter on top if activated
+                if (self._isSearchActivated()) self.search(self._typedText);
             }
             //If all filters toggled off then display unfiltered gallery
             else {
+                //Filter items
                 self.filter('all');
+                //Apply search filter on top if activated
+                if (self._isSearchActivated()) self.search(self._typedText);
             }
         },
 
@@ -249,10 +257,7 @@
                 }
                 //if search is not activated display gallery with last applied filter
                 else {
-                    if (self._multifilterModeOn())
-                        self.toggleFilter();
-                    else
-                        self.filter(self.options.filter);
+                    self._handleFiltering(array);
                 }
             }
         },
@@ -270,7 +275,10 @@
                             self._makeMultifilterArray() :
                             self._getCollectionByFilter(self.options.filter);
 
-            self._placeItems(target);
+            if (self._isSearchActivated())
+                self.search(self._typedText);
+            else
+                self._placeItems(target);
         },
 
         /**
@@ -286,9 +294,11 @@
 
             //Register sort attr on all elements if it is a user-defined data-attribute
             var isUserAttr = attr !== 'domIndex' && attr !== 'sortData' && attr !== 'w' && attr!== 'h';
-            if (isUserAttr)
-                for (var i = 0; i < self._mainArray.length; i++)
+            if (isUserAttr) {
+                for (var i = 0; i < self._mainArray.length; i++) {
                     self._mainArray[i][attr] = self._mainArray[i].data(attr);
+                }
+            }
             //Sort items
             self._mainArray.sort(self._comparator(attr, sortOrder));
             self._subArrays = self._makeSubarrays();
@@ -297,7 +307,10 @@
                             self._makeMultifilterArray() :
                             self._getCollectionByFilter(self.options.filter);
 
-            self._placeItems(target);
+            if (self._isSearchActivated())
+                self.search(self._typedText);
+            else
+                self._placeItems(target);
         },
 
         /**
