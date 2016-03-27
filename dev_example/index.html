@@ -21,8 +21,8 @@
     <div class="container">
         <!-- Filter Controls - Simple Mode -->
         <div class="row">
-            <!-- A basic setup of controls, all you have to do is use data-filter="all" for an unfiltered gallery
-            and then the values of your categories to filter between them -->
+            <!-- A basic setup of simple mode filter controls, all you have to do is use data-filter="all"
+            for an unfiltered gallery and then the values of your categories to filter between them -->
             <ul class="simplefilter">
                 Simple filter controls:
                 <li class="active" data-filter="all">All</li>
@@ -36,8 +36,8 @@
 
         <!-- Filter Controls - Multifilter Mode -->
         <div class="row">
-            <!-- A basic setup of controls, all you have to do is use data-filter="all" for an unfiltered gallery
-            and then the values of your categories to filter between them -->
+            <!-- A basic setup of multifilter controls, when the user toggles a category
+            the corresponding items are rendered or hidden -->
             <ul class="multifilter">
                 Multifilter controls:
                 <li data-multifilter="1">Cityscape</li>
@@ -48,13 +48,13 @@
 
         <!-- Shuffle & Sort Controls -->
         <div class="row">
-            <!-- A basic setup of controls, all you have to do is use data-filter="all" for an unfiltered gallery
-            and then the values of your categories to filter between them -->
             <ul class="sortandshuffle">
                 Sort &amp; Shuffle controls:
+                <!-- Basic shuffle control -->
                 <li class="shuffle-btn" data-shuffle>Shuffle</li>
-                <li class="sort-btn active" data-asc>Asc</li>
-                <li class="sort-btn" data-desc>Desc</li>
+                <!-- Basic sort controls consisting of asc/desc button and a select -->
+                <li class="sort-btn active" data-sortAsc>Asc</li>
+                <li class="sort-btn" data-sortDesc>Desc</li>
                 <select data-sortOrder>
                     <option value="domIndex">
                         Position
@@ -66,36 +66,51 @@
             </ul>
         </div>
 
+        <!-- Search control -->
+        <div class="row search-row">
+            Search control:
+            <input type="text" class="filtr-search" name="filtr-search" data-search>
+        </div>
+
         <div class="row">
             <!-- This is the set up of a basic gallery, your items must have the categories they belong to in a data-category
             attribute, which starts from the value 1 and goes up from there -->
             <div class="filtr-container">
                 <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="Busy streets">
                     <img class="img-responsive" src="img/city_1.jpg" alt="sample image">
+                    <span class="item-desc">Busy Streets</span>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 5" data-sort="Luminous night">
                     <img class="img-responsive" src="img/nature_2.jpg" alt="sample image">
+                    <span class="item-desc">Luminous night</span>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 4" data-sort="City wonders">
                     <img class="img-responsive" src="img/city_3.jpg" alt="sample image">
+                    <span class="item-desc">city wonders</span>
                 </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="In production">>
+                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="In production">
                     <img class="img-responsive" src="img/industrial_1.jpg" alt="sample image">
+                    <span class="item-desc">in production</span>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3, 4" data-sort="Industrial site">
                     <img class="img-responsive" src="img/industrial_2.jpg" alt="sample image">
+                    <span class="item-desc">industrial site</span>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Peaceful lake">
                     <img class="img-responsive" src="img/nature_1.jpg" alt="sample image">
+                    <span class="item-desc">peaceful lake</span>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="City lights">
                     <img class="img-responsive" src="img/city_2.jpg" alt="sample image">
+                    <span class="item-desc">city lights</span>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Dreamhouse">
                     <img class="img-responsive" src="img/nature_3.jpg" alt="sample image">
+                    <span class="item-desc">dreamhouse</span>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="Restless machines">
                     <img class="img-responsive" src="img/industrial_3.jpg" alt="sample image">
+                    <span class="item-desc">restless machines</span>
                 </div>
             </div>
         </div>
