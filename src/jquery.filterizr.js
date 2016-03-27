@@ -4,7 +4,7 @@
 *
 * @author Yiotis Kaltsikis
 * @see {@link http://yiotis.net/filterizr}
-* @version 1.2.0
+* @version 1.2.1
 * @license MIT License
 */
 
@@ -155,7 +155,7 @@
             //Used for multiple category filtering
             self._toggledCategories = { };
             //Used for search feature
-            self._typedText = $('input[data-search]').val();
+            self._typedText = $('input[data-search]').val() || '';
             //Generate unique ID for resize events
             self._uID = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
                 var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);

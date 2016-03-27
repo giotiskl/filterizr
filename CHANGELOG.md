@@ -1,3 +1,6 @@
+#Version 1.2.1
+-Fixed a minor bug which would occur in the absence of a search input field
+
 ##Version 1.2.0
 -Added new API method .filterizr('search', text), which is used to apply a search filter.
 -Added new search control in the form of an input text which must have a data-search attribute.
