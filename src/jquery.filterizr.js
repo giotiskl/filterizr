@@ -503,7 +503,7 @@
             array = self._activeArray,
             //Container data
             containerHeight = 0,
-            cols = Math.round(self.width() / self.find('.filtr-item').outerWidth()),
+            cols = Math.floor(self.width() / self.find('.filtr-item').outerWidth()),
             rows = 0,
             //Item data
             itemWidth  = array[0].outerWidth(),
