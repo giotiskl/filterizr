@@ -205,10 +205,13 @@
 
             self.trigger('filteringStart');
             //Toggle the toggledFilter in the active categories
-            if (!self._toggledCategories[toggledFilter])
-                self._toggledCategories[toggledFilter] = true;
-            else
-                delete self._toggledCategories[toggledFilter];
+            //If undefined (in case of window resize) ignore
+            if (toggledFilter) {
+                if (!self._toggledCategories[toggledFilter])
+                    self._toggledCategories[toggledFilter] = true;
+                else
+                    delete self._toggledCategories[toggledFilter];
+            }
 
             //If a filter is toggled on then display only items belonging to that category
             if (self._multifilterModeOn()) {
