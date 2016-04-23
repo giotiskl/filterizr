@@ -551,7 +551,7 @@
         */
         _calcItemPositions: function() {
             var self  = this,
-            array = self._activeArray,
+                array = self._activeArray,
             //Container data
             containerHeight = 0,
             cols = Math.round(self.width() / self.find('.filtr-item').outerWidth()),
@@ -937,7 +937,7 @@
         */
         _getCategory: function() {
             var self = this,
-            ret  = self.data('category');
+                ret  = self.data('category');
             //If more than one category provided
             if (typeof ret === 'string') {
                 ret = ret.split(', ');
@@ -946,8 +946,8 @@
                     if (isNaN(parseInt(ret[n]))) {
                         throw new Error('Filterizr: the value of data-category must be a number, starting from value 1 and increasing.');
                     }
-                    if (ret[n] > self._parent._lastCategory) {
-                        self._parent._lastCategory = ret[n];
+                    if (parseInt(ret[n]) > self._parent._lastCategory) {
+                        self._parent._lastCategory = parseInt(ret[n]);
                     }
                 }
             }
