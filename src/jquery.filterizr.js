@@ -112,7 +112,7 @@
                 animationDuration: 0.5,
                 callbacks: {
                     onFilteringStart: function() { },
-                    onFilteringEnd  : function() { }
+                    onFilteringEnd  : function() { },
                 },
                 delay: 0,
                 delayMode: 'progressive',
@@ -328,6 +328,13 @@
                 for (i = 0; i < self._mainArray.length; i++) {
                     self._mainArray[i].css('transition', 'all ' + self.options.animationDuration + 's ' +  self.options.easing + ' ' + self._mainArray[i]._calcDelay() + 'ms');
                 }
+            }
+            //If the user tries to override a callback, make sure undefined callbacks are set to empty functions
+            if (options.callbacks) {
+                if (!options.callbacks.onFilteringStart)
+                    self.options.callbacks.onFilteringStart = function() { };
+                if (!options.callbacks.onFilteringEnd)
+                    self.options.callbacks.onFilteringEnd = function() { };
             }
             //If the user has not defined a transform property in their CSS, add it
             //while overriding, including translates for movement
