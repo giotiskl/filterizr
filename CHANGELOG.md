@@ -1,5 +1,10 @@
+##Version 1.2.2
+* Improved UX of setOptions method when overriding the callbacks object in options. All undefined callbacks will now be set to an empty function by default.
+* Fixed a bug in getCategory method of filtr items, where a string would be compared with a number, by using parseInt.
+* Fixed a bug in toggleFilter method where if the user would resize the window undefined would be added to the toggledOn filters and would cause an error to be thrown if the user switched off the categories.
+
 ##Version 1.2.1
-* Fixed a minor bug which would occur in the absence of a search input field
+* Fixed a minor bug which would occur in the absence of a search input field.
 
 ##Version 1.2.0
 * Added new API method .filterizr('search', text), which is used to apply a search filter.
