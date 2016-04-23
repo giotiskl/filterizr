@@ -112,7 +112,11 @@
                 animationDuration: 0.5,
                 callbacks: {
                     onFilteringStart: function() { },
-                    onFilteringEnd  : function() { },
+                    onFilteringEnd: function() { },
+                    onShufflingStart: function() { },
+                    onShufflingEnd: function() { },
+                    onSortingStart: function() { },
+                    onSortingEnd: function() { }
                 },
                 delay: 0,
                 delayMode: 'progressive',
@@ -148,6 +152,8 @@
             });
             self._lastCategory = 0; //Highest value in data-category of .filtr-items
             self._isAnimating  = false;
+            self._isShuffling  = false;
+            self._isSorting    = false;
             //.filtr-item collections
             self._mainArray   = self._getFiltrItems();
             self._subArrays   = self._makeSubarrays();
@@ -268,6 +274,11 @@
         shuffle: function() {
             var self = this;
 
+            //ShufflingStart callback
+            self._isAnimating = true;
+            self._isShuffling = true;
+            self.trigger('shufflingStart');
+
             self._mainArray = self._fisherYatesShuffle(self._mainArray);
             self._subArrays = self._makeSubarrays();
 
@@ -291,6 +302,11 @@
             //Set defaults
             attr 	  = attr      || 'domIndex';
             sortOrder = sortOrder || 'asc';
+
+            //SortingStart callback
+            self._isAnimating = true;
+            self._isSorting   = true;
+            self.trigger('sortingStart');
 
             //Register sort attr on all elements if it is a user-defined data-attribute
             var isUserAttr = attr !== 'domIndex' && attr !== 'sortData' && attr !== 'w' && attr!== 'h';
@@ -335,6 +351,14 @@
                     self.options.callbacks.onFilteringStart = function() { };
                 if (!options.callbacks.onFilteringEnd)
                     self.options.callbacks.onFilteringEnd = function() { };
+                if (!options.callbacks.onShufflingStart)
+                    self.options.callbacks.onShufflingStart = function() { };
+                if (!options.callbacks.onShufflingEnd)
+                    self.options.callbacks.onShufflingEnd = function() { };
+                if (!options.callbacks.onSortingStart)
+                    self.options.callbacks.onSortingStart = function() { };
+                if (!options.callbacks.onSortingEnd)
+                    self.options.callbacks.onSortingEnd = function() { };
             }
             //If the user has not defined a transform property in their CSS, add it
             //while overriding, including translates for movement
@@ -497,6 +521,26 @@
             //onFilteringEnd event
             .on('filteringEnd', function() {
                 self.options.callbacks.onFilteringEnd();
+            })
+            //onShufflingStart event
+            .on('shufflingStart', function() {
+                self._isShuffling = true;
+                self.options.callbacks.onShufflingStart();
+            })
+            //onFilteringEnd event
+            .on('shufflingEnd', function() {
+                self.options.callbacks.onShufflingEnd();
+                self._isShuffling = false;
+            })
+            //onSortingStart event
+            .on('sortingStart', function() {
+                self._isSorting = true;
+                self.options.callbacks.onSortingStart();
+            })
+            //onSortingEnd event
+            .on('sortingEnd', function() {
+                self.options.callbacks.onSortingEnd();
+                self._isSorting = false;
             });
         },
 
@@ -933,7 +977,12 @@
             }
             //if animating trigger filteringEnd event once on parent
             if (self._parent._isAnimating) {
-                self._parent.trigger('filteringEnd');
+                if (self._parent._isShuffling)
+                    self._parent.trigger('shufflingEnd');
+                else if (self._parent._isSorting)
+                    self._parent.trigger('sortingEnd');
+                else
+                    self._parent.trigger('filteringEnd');
                 self._parent._isAnimating = false;
             }
         },
@@ -959,13 +1008,13 @@
         * @private
         */
         _filterIn: function(targetPos) {
-            var self  	    = this,
+            var self        = this,
                 filterInCss = self._parent._makeDeepCopy(self._parent.options.filterInCss);
             //Remove the filteredOut class
             $(self).removeClass('filteredOut');
             //Tag as filtering in for transitionend event
             self._filteringIn = true;
-            self._lastPos 	  = targetPos;
+            self._lastPos     = targetPos;
             //Auto add translate to transform over user-defined filterIn styles
             filterInCss.transform += ' translate3d(' + targetPos.left + 'px,' + targetPos.top + 'px, 0)';
             //Play animation
