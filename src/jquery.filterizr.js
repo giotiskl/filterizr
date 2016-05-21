@@ -405,8 +405,10 @@
             for (i = 0; i < self._mainArray.length; i++) {
                 //Multiple categories scenario
                 if (typeof self._mainArray[i]._category === 'object') {
-                    for (var p in self._mainArray[i]._category)
+                    var length = self._mainArray[i]._category.length;
+                    for (var p = 0; p < length; p++) {
                         subArrays[self._mainArray[i]._category[p] - 1].push(self._mainArray[i]);
+                    }
                 }
                 //Single category
                 else subArrays[self._mainArray[i]._category - 1].push(self._mainArray[i]);
@@ -944,13 +946,13 @@
             //If more than one category provided
             if (typeof ret === 'string') {
                 ret = ret.split(', ');
-                for (var n in ret) {
+                for (var i = 0; i < ret.length; i++) {
                     //Error checking: make sure data-category has an integer as its value
-                    if (isNaN(parseInt(ret[n]))) {
+                    if (isNaN(parseInt(ret[i]))) {
                         throw new Error('Filterizr: the value of data-category must be a number, starting from value 1 and increasing.');
                     }
-                    if (parseInt(ret[n]) > self._parent._lastCategory) {
-                        self._parent._lastCategory = parseInt(ret[n]);
+                    if (parseInt(ret[i]) > self._parent._lastCategory) {
+                        self._parent._lastCategory = parseInt(ret[i]);
                     }
                 }
             }
