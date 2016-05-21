@@ -4,7 +4,7 @@
 *
 * @author Yiotis Kaltsikis
 * @see {@link http://yiotis.net/filterizr}
-* @version 1.2.1
+* @version 1.2.3
 * @license MIT License
 */
 
@@ -1003,6 +1003,8 @@
             filterOutCss.transform += ' translate3d(' + self._lastPos.left + 'px,' + self._lastPos.top + 'px, 0)';
             //Play animation
             self.css(filterOutCss);
+            //Make unclickable
+            self.css('pointer-events', 'none');
             //Tag as filteringOut for transitionend event
             self._filteringOut = true;
         },
@@ -1020,6 +1022,8 @@
             //Tag as filtering in for transitionend event
             self._filteringIn = true;
             self._lastPos     = targetPos;
+            //Make clickable
+            self.css('pointer-events', 'auto');
             //Auto add translate to transform over user-defined filterIn styles
             filterInCss.transform += ' translate3d(' + targetPos.left + 'px,' + targetPos.top + 'px, 0)';
             //Play animation
