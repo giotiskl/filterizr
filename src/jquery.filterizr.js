@@ -132,7 +132,9 @@
                 },
                 layout: 'sameSize',
                 selector: (typeof selector === 'string') ? selector : '.filtr-container',
-                setupControls: true
+                setupControls: true,
+                sortAttr: 'domIndex',
+                sortOrder: 'asc'
             };
             //No arguments constructor
             if (arguments.length === 0) {
@@ -185,8 +187,10 @@
         */
         filter: function(targetFilter) {
             var self   = this,
-                target = self._getCollectionByFilter(targetFilter);
-
+                target = self._multifilterModeOn() ? 
+                    self._makeMultifilterArray() : 
+                    self._getCollectionByFilter(targetFilter);
+                
             self.options.filter = targetFilter;
             self.trigger('filteringStart');
             //Filter items
@@ -203,7 +207,6 @@
             var self   = this,
                 target = [], i = 0;
 
-            self.trigger('filteringStart');
             //Toggle the toggledFilter in the active categories
             //If undefined (in case of window resize) ignore
             if (toggledFilter) {
@@ -213,20 +216,14 @@
                     delete self._toggledCategories[toggledFilter];
             }
 
-            //If a filter is toggled on then display only items belonging to that category
-            if (self._multifilterModeOn()) {
-                target = self._makeMultifilterArray();
-                //Filter items
-                self._handleFiltering(target);
-                //Apply search filter on top if activated
-                if (self._isSearchActivated()) self.search(self._typedText);
+            // If filters toggled on filter without changing option.filter value.
+            if(self._multifilterModeOn()){
+                self.filter(self.options.filter);
             }
             //If all filters toggled off then display unfiltered gallery
             else {
                 //Filter items
                 self.filter('all');
-                //Apply search filter on top if activated
-                if (self._isSearchActivated()) self.search(self._typedText);
             }
         },
 
@@ -303,8 +300,8 @@
         sort: function(attr, sortOrder) {
             var self  = this;
             //Set defaults
-            attr 	  = attr      || 'domIndex';
-            sortOrder = sortOrder || 'asc';
+            self.options.sortAttr = attr = attr || 'domIndex';
+            self.options.sortOrder = sortOrder = sortOrder || 'asc';
 
             //SortingStart callback
             self._isAnimating = true;
@@ -331,7 +328,35 @@
             else
                 self._placeItems(target);
         },
-
+        
+        /**
+        * Append new elements to gallery. Can be used for example for infinite scroll.
+        * @param {Object} toAppend - jQuery collection of elements to append to gallery. 
+        * @param {boolean} doSort - flag indicates whether to redo sorting after appending or not
+        * @return {jQuery} this - to facilitate jQuery method chaining.
+        */
+        appendToGallery: function(toAppend, doSort){
+            var self = this;
+            doSort = doSort || false;
+            
+            // Append new elements to mainArray, generate new subArrays and append to the DOM
+            console.log($(toAppend));
+            Array.prototype.push.apply(self._mainArray, self._getFiltrItems(toAppend));
+            
+            self._subArrays = self._makeSubarrays();
+            self.append(toAppend);
+            
+            // Do the filtering without changing option.filter value.
+            self.filter(self.options.filter);
+            
+            // Do the sorting based on current criteria (disabled by default) 
+            if(doSort){
+                self.sort(self.options.sortAttr, self.options.sortOrder);
+            }
+            
+            return self;
+        },
+        
         /**
         * Overrides the default options with the user-provided ones.
         * @param {object} options - the user-provided options to override defaults.
@@ -377,14 +402,15 @@
         * @return {Object[]}  all .filtr-item elements contained in Filterizr's container.
         * @private
         */
-        _getFiltrItems: function() {
+        _getFiltrItems: function(filtrItems) {
             var self       = this,
-            filtrItems = $(self.find('.filtr-item')),
-            itemsArray = [];
+            filtrItems = filtrItems || $(self.find('.filtr-item')),
+            itemsArray = [],
+            currentLength = self._mainArray ? self._mainArray.length : 0;
 
             $.each(filtrItems, function(i, e) {
                 //Set item up as Filtr object & push to array
-                var item = $(e).extend(FiltrItemProto)._init(i, self);
+                var item = $(e).extend(FiltrItemProto)._init(i + currentLength, self);
                 itemsArray.push(item);
             });
             return itemsArray;
