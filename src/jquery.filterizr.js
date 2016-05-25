@@ -399,19 +399,21 @@
             var self = this,
             subArrays = [];
 
-            for (var i = 0; i < self._lastCategory; i++) subArrays.push([]);
-
             //Populate the sub-arrays
-            for (i = 0; i < self._mainArray.length; i++) {
+            for (var i = 0; i < self._mainArray.length; i++) {
                 //Multiple categories scenario
                 if (typeof self._mainArray[i]._category === 'object') {
                     var length = self._mainArray[i]._category.length;
                     for (var x = 0; x < length; x++) {
-                        subArrays[self._mainArray[i]._category[x] - 1].push(self._mainArray[i]);
+                        var index = self._mainArray[i]._category[x];
+                        (subArrays[index] = subArrays[index] || []).push(self._mainArray[i]);
                     }
                 }
                 //Single category
-                else subArrays[self._mainArray[i]._category - 1].push(self._mainArray[i]);
+                else{ 
+                    var index = self._mainArray[i]._category;
+                    (subArrays[index] = subArrays[index] || []).push(self._mainArray[i]);
+                }
             }
             return subArrays;
         },
@@ -758,7 +760,7 @@
         */
         _getCollectionByFilter: function(filter) {
             var self = this;
-            return filter === 'all' ? self._mainArray : self._subArrays[filter - 1];
+            return filter === 'all' ? self._mainArray : self._subArrays[filter];
         },
 
         /**
