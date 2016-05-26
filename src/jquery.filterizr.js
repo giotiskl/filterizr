@@ -340,7 +340,6 @@
             doSort = doSort || false;
             
             // Append new elements to mainArray, generate new subArrays and append to the DOM
-            console.log($(toAppend));
             Array.prototype.push.apply(self._mainArray, self._getFiltrItems(toAppend));
             
             self._subArrays = self._makeSubarrays();
