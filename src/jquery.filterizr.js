@@ -132,7 +132,8 @@
                 },
                 layout: 'sameSize',
                 selector: (typeof selector === 'string') ? selector : '.filtr-container',
-                setupControls: true
+                setupControls: true, 
+                gutterPixels: 4
             };
             //No arguments constructor
             if (arguments.length === 0) {
@@ -559,7 +560,7 @@
                 array = self._activeArray,
             //Container data
             containerHeight = 0,
-            cols = Math.round(self.width() / self.find('.filtr-item').outerWidth()),
+            cols = Math.floor(self.width() / (self.find('.filtr-item').outerWidth() + self.options.gutterPixels)),
             rows = 0,
             //Item data
             itemWidth  = array[0].outerWidth(),
@@ -599,6 +600,7 @@
                         top: top
                     });
                     left += itemWidth;
+                    left += self.options.gutterPixels;
                     if (containerHeight < itemHeight) containerHeight = itemHeight;
                 }
             }
@@ -611,6 +613,7 @@
                         top: top
                     });
                     top += itemHeight;
+                    top += self.options.gutterPixels;
                 }
                 containerHeight = top;
             }
@@ -634,7 +637,10 @@
                         top  += array[0].outerHeight();
                         rows++;
                     }
-                    else left += itemOuterWidth;
+                    else {
+                    	left += itemOuterWidth;
+                    	left += self.options.gutterPixels;
+                    }
                 }
                 containerHeight = rows * array[0].outerHeight();
             }
@@ -648,6 +654,7 @@
                     });
                     if (i % cols === 0) rows++;
                     left += itemWidth;
+                    left += self.options.gutterPixels;
                     top = 0;
                     if (rows > 0) {
                         x = rows;
@@ -683,9 +690,11 @@
                     });
                     //Set left and top properties for next point before next iteration
                     left += itemWidth;
+                    left += self.options.gutterPixels;
                     //On row change calc new top and reset left
                     if (i % cols === 0) {
                         top += array[0].outerHeight();
+                        top += self.options.gutterPixels;
                         left = 0;
                     }
                 }
