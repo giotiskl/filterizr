@@ -694,7 +694,7 @@
                     }
                 }
                 rows = Math.ceil(array.length / cols);
-                containerHeight = rows * (array.length ? array[0].outerHeight() : 1);
+                containerHeight = rows * (array.length ? array[0].outerHeight() : 0);
             }
             //Update the height of .filtr-container based on new positions
             self.css('height', containerHeight);
