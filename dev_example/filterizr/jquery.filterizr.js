@@ -131,6 +131,7 @@
                     'transform': 'scale(1)'
                 },
                 layout: 'sameSize',
+                pageSize: null,
                 selector: (typeof selector === 'string') ? selector : '.filtr-container',
                 setupControls: true
             };
@@ -407,7 +408,10 @@
                 if (typeof self._mainArray[i]._category === 'object') {
                     var length = self._mainArray[i]._category.length;
                     for (var x = 0; x < length; x++) {
-                        subArrays[self._mainArray[i]._category[x] - 1].push(self._mainArray[i]);
+                      var index = self._mainArray[i]._category[x] - 1;
+                      if (!self.options.pageSize || (subArrays[index].length < self.options.pageSize)) {
+                         subArrays[index].push(self._mainArray[i]);
+                      }
                     }
                 }
                 //Single category
@@ -562,7 +566,7 @@
             cols = Math.round(self.width() / self.find('.filtr-item').outerWidth()),
             rows = 0,
             //Item data
-            itemWidth  = array[0].outerWidth(),
+            itemWidth  = array.length ? array[0].outerWidth() : 0,
             itemHeight = 0,
             //Position calculation vars
             left = 0, top = 0,
@@ -631,7 +635,7 @@
                     if (x > rowWidth) {
                         x 	 = 0;
                         left = 0;
-                        top  += array[0].outerHeight();
+                        top  += array.length ? array[0].outerHeight() : 0;
                         rows++;
                     }
                     else left += itemOuterWidth;
@@ -690,7 +694,7 @@
                     }
                 }
                 rows = Math.ceil(array.length / cols);
-                containerHeight = rows * array[0].outerHeight();
+                containerHeight = rows * (array.length ? array[0].outerHeight() : 1);
             }
             //Update the height of .filtr-container based on new positions
             self.css('height', containerHeight);
