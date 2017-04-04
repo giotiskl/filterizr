@@ -4,7 +4,7 @@
 *
 * @author Yiotis Kaltsikis
 * @see {@link http://yiotis.net/filterizr}
-* @version 1.2.3
+* @version 1.2.4
 * @license MIT License
 */
 
@@ -81,7 +81,7 @@
         //Create the Filterizr obj as an internal private property on the current object
         //to serve as a private namespace
         if (!self._fltr) {
-            self._fltr = $.fn.filterizr.prototype.init(self.selector, (typeof args[0] === 'object' ? args[0] : undefined));
+            self._fltr = $.fn.filterizr.prototype.init(self, (typeof args[0] === 'object' ? args[0] : undefined));
         }
         //Call all public Filterizr methods through the private Filterizr object
         if (typeof args[0] === 'string') {
@@ -101,12 +101,12 @@
 
         /**
         * Filterizr constructor.
-        * @param {string} [selector] - the selector of your container.
+        * @param {Object} [container] - your container.
         * @param {Object} [options] - user options to override defaults.
         * @constructor
         */
-        init: function(selector, options) {
-            var self = $(selector).extend($.fn.filterizr.prototype);
+        init: function(container, options) {
+            var self = $(container).extend($.fn.filterizr.prototype);
             //Default options
             self.options = {
                 animationDuration: 0.5,
@@ -131,12 +131,10 @@
                     'transform': 'scale(1)'
                 },
                 layout: 'sameSize',
-                selector: (typeof selector === 'string') ? selector : '.filtr-container',
                 setupControls: true
             };
             //No arguments constructor
             if (arguments.length === 0) {
-                selector = self.options.selector;
                 options  = self.options;
             }
             //One argument constructor (only options)
