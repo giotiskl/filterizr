@@ -1,4 +1,9 @@
+## Version 1.2.4
+* Fixed the bug caused by selector property which was removed in jQuery version 3.
+* Removed ````selector```` from configuration options.
+
 ## Version 1.2.3
+>>>>>>> 49a03e141a03cc4fd52c9f19e5b348dcc6f3ffef
 * Added Bower support.
 * Fixed a bug which made Filterizr incompatible with some other scripts (e.g. Mootools) due to using for..in loops on Arrays.
 * Fixed a bug where .filteredOut items would be clickable by adding ```pointer-events: none``` on all filtered out items (for IE10 a ````.filteredOut { z-index: 1-; }```` rule is still needed in your CSS file).
