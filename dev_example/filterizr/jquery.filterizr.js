@@ -131,6 +131,7 @@
                     'transform': 'scale(1)'
                 },
                 layout: 'sameSize',
+                pageSize: null,
                 selector: (typeof selector === 'string') ? selector : '.filtr-container',
                 setupControls: true
             };
@@ -407,7 +408,10 @@
                 if (typeof self._mainArray[i]._category === 'object') {
                     var length = self._mainArray[i]._category.length;
                     for (var x = 0; x < length; x++) {
-                        subArrays[self._mainArray[i]._category[x] - 1].push(self._mainArray[i]);
+                      var index = self._mainArray[i]._category[x] - 1;
+                      if (!self.options.pageSize || (subArrays[index].length < self.options.pageSize)) {
+                         subArrays[index].push(self._mainArray[i]);
+                      }
                     }
                 }
                 //Single category
@@ -562,12 +566,12 @@
             cols = Math.round(self.width() / self.find('.filtr-item').outerWidth()),
             rows = 0,
             //Item data
-            itemWidth  = array[0].outerWidth(),
+            itemWidth  = Array.isArray(array) && array.length ? array[0].outerWidth() : 0,
             itemHeight = 0,
             //Position calculation vars
             left = 0, top = 0,
             //Loop vars
-            i = 0, x = 0,
+            i = 0, l = 0, x = 0,
             //Array of positions to return
             posArray = [];
 
@@ -580,7 +584,7 @@
                 //Instantiate new Packer, set up grid
                 var packer = new Packer(self.outerWidth());
                 packer.fit(self._activeArray);
-                for (i = 0; i < array.length; i++) {
+                for (i = 0, l = Array.isArray(array) ? array.length : 0; i < l; i++) {
                     posArray.push({
                         left: array[i].fit.x,
                         top: array[i].fit.y
@@ -591,7 +595,7 @@
             //Horizontal layout
             if (self.options.layout === 'horizontal') {
                 rows = 1;
-                for (i = 1; i <= array.length; i++) {
+                for (i = 1, l = Array.isArray(array) ? array.length : 0; i <= l; i++) {
                     itemWidth = array[i - 1].outerWidth();
                     itemHeight = array[i - 1].outerHeight();
                     posArray.push({
@@ -604,7 +608,7 @@
             }
             //Vertical layout
             else if (self.options.layout === 'vertical') {
-                for (i = 1; i <= array.length; i++) {
+                for (i = 1, l = Array.isArray(array) ? array.length : 0; i <= l; i++) {
                     itemHeight = array[i - 1].outerHeight();
                     posArray.push({
                         left: left,
@@ -618,7 +622,7 @@
             else if (self.options.layout === 'sameHeight') {
                 rows = 1;
                 var rowWidth = self.outerWidth();
-                for (i = 1; i <= array.length; i++) {
+                for (i = 1, l = Array.isArray(array) ? array.length : 0; i <= l; i++) {
                     itemWidth = array[i - 1].width();
                     var itemOuterWidth = array[i - 1].outerWidth(),
                     nextItemWidth = 0;
@@ -631,7 +635,7 @@
                     if (x > rowWidth) {
                         x 	 = 0;
                         left = 0;
-                        top  += array[0].outerHeight();
+                        top  += Array.isArray(array) && array.length ? array[0].outerHeight() : 0;
                         rows++;
                     }
                     else left += itemOuterWidth;
@@ -641,7 +645,7 @@
             //Layout for items of same width and varying height
             else if (self.options.layout === 'sameWidth') {
                 //Get positions
-                for (i = 1; i <= array.length; i++) {
+                for (i = 1, l = Array.isArray(array) ? array.length : 0; i <= l; i++) {
                     posArray.push({
                         left: left,
                         top: top
@@ -675,7 +679,7 @@
             }
             //Layout for items of exactly same size
             else if (self.options.layout === 'sameSize') {
-                for (i = 1; i <= array.length; i++) {
+                for (i = 1, l = Array.isArray(array) ? array.length : 0; i <= l; i++) {
                     //Push first point at (left: 0, top: 0)
                     posArray.push({
                         left: left,
@@ -689,8 +693,8 @@
                         left = 0;
                     }
                 }
-                rows = Math.ceil(array.length / cols);
-                containerHeight = rows * array[0].outerHeight();
+                rows = Array.isArray(array) ? Math.ceil(array.length / cols) : 0;
+                containerHeight = rows * (Array.isArray(array) && array.length ? array[0].outerHeight() : 0);
             }
             //Update the height of .filtr-container based on new positions
             self.css('height', containerHeight);
@@ -706,7 +710,7 @@
             var self = this,
                 toFilterOut = self._getArrayOfUniqueItems(self._activeArray, target);
             //Minimize all .filtr-item elements that are not the same between categories
-            for (var i = 0; i < toFilterOut.length; i++) {
+            for (var i = 0, l = Array.isArray(toFilterOut) ? toFilterOut.length : 0; i < l; i++) {
                 toFilterOut[i]._filterOut();
             }
             self._activeArray = target;
@@ -745,7 +749,7 @@
             self._isAnimating = true;
             //Recalculate positions and filter in items
             self._itemPositions = self._calcItemPositions();
-            for (var i = 0; i < arr.length; i++) {
+            for (var i = 0, l = Array.isArray(arr) ? arr.length : 0; i < l; i++) {
                 arr[i]._filterIn(self._itemPositions[i]);
             }
         },
@@ -811,11 +815,11 @@
         * @private
         */
         _getArrayOfUniqueItems: function(arr1, arr2) {
-            var r = [], o = {}, l = arr2.length, i, v;
+            var r = [], o = {}, l = Array.isArray(arr2) ? arr2.length : 0, i, v;
             for (i = 0; i < l; i++) {
                 o[arr2[i].domIndex] = true;
             }
-            l = arr1.length;
+            l = Array.isArray(arr1) ? arr1.length : 0;
             for (i = 0; i < l; i++) {
                 v = arr1[i];
                 if (!(v.domIndex in o)) {
