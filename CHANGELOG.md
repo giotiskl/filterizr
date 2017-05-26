@@ -1,3 +1,7 @@
+## Version 1.2.5
+* Fixed the bug caused by selector property which was removed in jQuery version 3.
+* Removed ````selector```` from configuration options.
+
 ## Version 1.2.3
 * Added Bower support.
 * Fixed a bug which made Filterizr incompatible with some other scripts (e.g. Mootools) due to using for..in loops on Arrays.
