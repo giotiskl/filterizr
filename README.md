@@ -25,3 +25,58 @@ IE10+ and all modern browsers.
 
 ## License
 Filterizr is licensed under [the MIT License](https://opensource.org/licenses/MIT) (i.e. you do whatever you want with it). Enjoy!
+
+## Additionnal Documentation for new feature
+to be added to the website tutorial
+### group-label.
+this feature permit to have string in datafilter in the following format :
+``
+<li data-filter="color-1"> Green </li>
+<li data-filter="color-2"> Orange </li>
+``
+the label is ignored in normal mode and in multi-filtering (toggle) mode. in these mode, `"color-1"` and `"fruit-1"` would be treated the same (and broke the filtering);
+in group-filtering mode, the value is ignored if the label does not correspond to the group name. `"color-1"` would only be matched by value "1" of group "color" and ignored elsewhere.
+
+### group filtering mode
+this feature make it possible to have AND logical operation with filter.
+
+to use it, you need to use the `data-groupmultifilter` attribute and give him a name and a value.
+
+```
+<ul>                                    
+    <li data-groupmultifilter="color-1"> Red </li>
+    <li data-groupmultifilter="color-2"> Green </li>
+    <li data-groupmultifilter="color-3"> Blue </li>
+    <li data-groupmultifilter="size-4"> Small </li>
+    <li data-groupmultifilter="size-5"> Medium </li>
+    <li data-groupmultifilter="size-6"> Large </li>
+</ul>
+```
+
+the element can of course be placed in multiple `<ul>` tag, but it is not mandatory to do so. only the label in `data-groupmultifilter` is used to separate group.
+
+with the feature of group-label, it is possible to reuse number in distinct group.
+```
+<ul>                                    
+    <li data-groupmultifilter="color-1"> Red </li>
+    <li data-groupmultifilter="color-2"> Green </li>
+    <li data-groupmultifilter="color-3"> Blue </li>
+    <li data-groupmultifilter="size-1"> Small </li>
+    <li data-groupmultifilter="size-2"> Medium </li>
+    <li data-groupmultifilter="size-3"> Large </li>
+</ul>
+```
+
+will work as expected, but only in group multifilter mode.
+in toggle mode and in normal mode, the script will simpli ignore label, resulting in the same behaviour as
+```
+<ul>                                    
+    <li data-groupmultifilter="1"> Red </li>
+    <li data-groupmultifilter="2"> Green </li>
+    <li data-groupmultifilter="3"> Blue </li>
+    <li data-groupmultifilter="1"> Small </li>
+    <li data-groupmultifilter="2"> Medium </li>
+    <li data-groupmultifilter="3"> Large </li>
+</ul>
+```
+which doesn't work as expected.

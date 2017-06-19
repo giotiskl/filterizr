@@ -3,9 +3,11 @@
 * responsive galleries using CSS3 transitions and custom CSS effects.
 *
 * @author Yiotis Kaltsikis
+* @contributor Félix Brunet
 * @see {@link http://yiotis.net/filterizr}
-* @version 1.2.5
+* @version 1.3.0
 * @license MIT License
+* 
 */
 
 (function(global, $) {
@@ -34,18 +36,18 @@
             for (n = 0; n < len ; n++) {
                 block = blocks[n];
                 if ((node = this.findNode(this.root, block.w, block.h)))
-                block.fit = this.splitNode(node, block.w, block.h);
+                    block.fit = this.splitNode(node, block.w, block.h);
                 else
-                block.fit = this.growDown(block.w, block.h);
+                    block.fit = this.growDown(block.w, block.h);
             }
         },
         findNode: function(root, w, h) {
             if (root.used)
-            return this.findNode(root.right, w, h) || this.findNode(root.down, w, h);
+                return this.findNode(root.right, w, h) || this.findNode(root.down, w, h);
             else if ((w <= root.w) && (h <= root.h))
-            return root;
+                return root;
             else
-            return null;
+                return null;
         },
         splitNode: function(node, w, h) {
             node.used = true;
@@ -65,9 +67,9 @@
                 right: this.root
             };
             if ((node = this.findNode(this.root, w, h)))
-            return this.splitNode(node, w, h);
+                return this.splitNode(node, w, h);
             else
-            return null;
+                return null;
         }
     };
 
@@ -130,7 +132,7 @@
                     'opacity': 1,
                     'transform': 'scale(1)'
                 },
-                layout: 'sameSize',
+                layout: 'packed',
                 setupControls: true
             };
             //No arguments constructor
@@ -158,6 +160,8 @@
             self._activeArray = self._getCollectionByFilter(self.options.filter);
             //Used for multiple category filtering
             self._toggledCategories = { };
+            //Used for multiple category filtering with multiple group
+            self._toggledCategoriesGroup = { };
             //Used for search feature
             self._typedText = $('input[data-search]').val() || '';
             //Generate unique ID for resize events
@@ -227,7 +231,43 @@
                 if (self._isSearchActivated()) self.search(self._typedText);
             }
         },
-
+        
+        /**
+        * Toggles filter on/off of group and renders the new collection
+        * @param {number} toggledFilter - the filter to toggle
+        * @param {string} group - the name of the group of filter
+        */
+        groupFilter: function(toggledFilter, group) {
+            var self   = this,
+                target = [], i = 0;
+                //TODO
+            self.trigger('filteringStart');
+            //Toggle the toggledFilter in the active categories of the group
+            //If undefined (in case of window resize) ignore
+            if (toggledFilter && group) {
+                if (!self._toggledCategoriesGroup[group][toggledFilter])
+                    self._toggledCategoriesGroup[group][toggledFilter] = true;
+                else
+                    delete self._toggledCategoriesGroup[group][toggledFilter];
+            }
+            
+             //If a filter is toggled on then display only items belonging to that category
+            if (self._multifilterGroupModeOn()) {
+                target = self._makeGroupMultifilterArray();
+                //Filter items
+                self._handleFiltering(target);
+                //Apply search filter on top if activated
+                if (self._isSearchActivated()) self.search(self._typedText);
+            }
+            //If all filters toggled off then display unfiltered gallery
+            else {
+                //Filter items
+                self.filter('all');
+                //Apply search filter on top if activated
+                if (self._isSearchActivated()) self.search(self._typedText);
+            }
+        },
+        
         /**
         * Searches the contents of .filtr-item elements, filters them and renders the results
         * @param {string} text to search in contents of .filtr-item elements
@@ -236,8 +276,8 @@
             var self   = this,
                 //get active category
                 array  = self._multifilterModeOn() ?
-                            self._makeMultifilterArray() :
-                            self._getCollectionByFilter(self.options.filter),
+                self._makeMultifilterArray() :
+            self._getCollectionByFilter(self.options.filter),
                 target = [], i = 0;
 
             if (self._isSearchActivated()) {
@@ -284,8 +324,8 @@
             self._subArrays = self._makeSubarrays();
 
             var target = self._multifilterModeOn() ?
-                            self._makeMultifilterArray() :
-                            self._getCollectionByFilter(self.options.filter);
+                self._makeMultifilterArray() :
+            self._getCollectionByFilter(self.options.filter);
 
             if (self._isSearchActivated())
                 self.search(self._typedText);
@@ -321,8 +361,8 @@
             self._subArrays = self._makeSubarrays();
             //Place sorted collection to new positions
             var target = self._multifilterModeOn() ?
-                            self._makeMultifilterArray() :
-                            self._getCollectionByFilter(self.options.filter);
+                self._makeMultifilterArray() :
+            self._getCollectionByFilter(self.options.filter);
 
             if (self._isSearchActivated())
                 self.search(self._typedText);
@@ -377,8 +417,8 @@
         */
         _getFiltrItems: function() {
             var self       = this,
-            filtrItems = $(self.find('.filtr-item')),
-            itemsArray = [];
+                filtrItems = $(self.find('.filtr-item')),
+                itemsArray = [];
 
             $.each(filtrItems, function(i, e) {
                 //Set item up as Filtr object & push to array
@@ -395,17 +435,23 @@
         */
         _makeSubarrays: function() {
             var self = this,
-            subArrays = [];
+                subArrays = [];
 
             for (var i = 0; i < self._lastCategory; i++) subArrays.push([]);
 
             //Populate the sub-arrays
             for (i = 0; i < self._mainArray.length; i++) {
                 //Multiple categories scenario
-                if (typeof self._mainArray[i]._category === 'object') {
-                    var length = self._mainArray[i]._category.length;
-                    for (var x = 0; x < length; x++) {
-                        subArrays[self._mainArray[i]._category[x] - 1].push(self._mainArray[i]);
+                var item = self._mainArray[i];
+                if (Array.isArray(item._category)) {
+                    for (var x = 0; x < item._category.length; x++) {
+                        var value;
+                        if(Array.isArray(item._category[x])) {
+                            value = item._category[x][1];
+                        } else {
+                            value = item._category[x];
+                        }
+                        subArrays[value - 1].push(item);
                     }
                 }
                 //Single category
@@ -431,13 +477,19 @@
                 //Check if item belongs to categories whose filters are toggled on
                 if (Array.isArray(item._category)) {
                     for (var x = 0; x < item._category.length; x++) {
-                        if (item._category[x] in self._toggledCategories) {
+                        var value;
+                        if(Array.isArray(item._category[x])) {
+                            value = item._category[x][1];
+                        } else {
+                            value = item._category[x];
+                        }
+                        
+                        if (value in self._toggledCategories) {
                             belongsToCategory = true;
                             break;
                         }
                     }
-                }
-                else {
+                } else {
                     if (item._category in self._toggledCategories) belongsToCategory = true;
                 }
                 //If the item is not already visible and belongs to a category
@@ -448,6 +500,54 @@
                 }
             }
             return target;
+        },
+        
+        /**
+        * Make a .filtr-item array based on the activated filters of all group. Perform a OR logical operation between all filter of same group and a AND logical operation between all group of filter.
+        * @return {Object[]} array consisting of the .filtr-item elements belonging to active filters. 
+        * @private
+        */
+        _makeGroupMultifilterArray: function() {
+            var self   = this,
+                target = [], addedMap = {};
+            
+            for (var i = 0; i < self._mainArray.length; i++) {
+                
+                //If the item belongs to multiple categories
+                var item = self._mainArray[i],
+                    isUnique = item.domIndex in addedMap === false;
+                //Check if item belongs to categories whose filters are toggled on
+                //If the item is not already visible and belongs to a category
+                //of the toggled on filters push it to target collection
+                if(isUnique && Object.keys(self._toggledCategoriesGroup).every(function (group) {
+                    if(Array.isArray(item._category)) {
+                        return Object.keys(self._toggledCategoriesGroup[group]).length === 0 || 
+                            item._category.some(self._checkCategory(group))
+                    } else {
+                        return Object.keys(self._toggledCategoriesGroup[group]).length === 0 || 
+                            self._checkCategory(group)(item._category);
+                    }
+                })) {
+                    addedMap[item.domIndex] = true;
+                    target.push(item);
+                }
+            }
+            return target;
+        },
+        
+        /**
+        * Check if the category is present in group, in a curry fashion to be used with Array function
+        */
+        _checkCategory : function(group) {
+            var self = this;
+            return function(category) {
+                if(Array.isArray(category)) {
+                    return category[0] === group &&
+                        category[1] in self._toggledCategoriesGroup[group]
+                } else {
+                    return category in self._toggledCategoriesGroup[group]
+                }                
+            }
         },
 
         /**
@@ -472,6 +572,26 @@
                 }
                 else {
                     self.toggleFilter(targetFilter);
+                }
+            });
+            //Multiple filter controls
+            $('*[data-groupmultifilter]').click(function() {
+                var info = $(this).data('groupmultifilter').split("-");
+                var targetFilter = info[1];
+                var group = info[0];
+                if(group && targetFilter) {
+                    if (targetFilter === 'all') {
+                        self._toggledCategoriesGroup[group] = {};
+                        self.groupFilter();
+                    }
+                    else {
+                        if(!self._toggledCategoriesGroup[group]) {
+                            self._toggledCategoriesGroup[group] = {};
+                        };
+                        self.groupFilter(targetFilter, group);
+                    }                    
+                } else {
+                    console.log("groupmultifilter must have data of format {groupName-categoriesNumber}")
                 }
             });
             //Shuffle control
@@ -511,37 +631,37 @@
             //Filterizr events
             self
             //Container resize event
-            .on('resizeFiltrContainer', function() {
+                .on('resizeFiltrContainer', function() {
                 if (self._multifilterModeOn())
                     self.toggleFilter();
                 else
                     self.filter(self.options.filter);
             })
             //onFilteringStart event
-            .on('filteringStart', function() {
+                .on('filteringStart', function() {
                 self.options.callbacks.onFilteringStart();
             })
             //onFilteringEnd event
-            .on('filteringEnd', function() {
+                .on('filteringEnd', function() {
                 self.options.callbacks.onFilteringEnd();
             })
             //onShufflingStart event
-            .on('shufflingStart', function() {
+                .on('shufflingStart', function() {
                 self._isShuffling = true;
                 self.options.callbacks.onShufflingStart();
             })
             //onFilteringEnd event
-            .on('shufflingEnd', function() {
+                .on('shufflingEnd', function() {
                 self.options.callbacks.onShufflingEnd();
                 self._isShuffling = false;
             })
             //onSortingStart event
-            .on('sortingStart', function() {
+                .on('sortingStart', function() {
                 self._isSorting = true;
                 self.options.callbacks.onSortingStart();
             })
             //onSortingEnd event
-            .on('sortingEnd', function() {
+                .on('sortingEnd', function() {
                 self.options.callbacks.onSortingEnd();
                 self._isSorting = false;
             });
@@ -555,19 +675,19 @@
         _calcItemPositions: function() {
             var self  = this,
                 array = self._activeArray,
-            //Container data
-            containerHeight = 0,
-            cols = Math.round(self.width() / self.find('.filtr-item').outerWidth()),
-            rows = 0,
-            //Item data
-            itemWidth  = array[0].outerWidth(),
-            itemHeight = 0,
-            //Position calculation vars
-            left = 0, top = 0,
-            //Loop vars
-            i = 0, x = 0,
-            //Array of positions to return
-            posArray = [];
+                //Container data
+                containerHeight = 0,
+                cols = Math.round(self.width() / self.find('.filtr-item').outerWidth()),
+                rows = 0,
+                //Item data
+                itemWidth  = self.find('.filtr-item').outerWidth(),
+                itemHeight = 0,
+                //Position calculation vars
+                left = 0, top = 0,
+                //Loop vars
+                i = 0, x = 0,
+                //Array of positions to return
+                posArray = [];
 
             //Layout for items of varying sizes
             if (self.options.layout === 'packed') {
@@ -619,7 +739,7 @@
                 for (i = 1; i <= array.length; i++) {
                     itemWidth = array[i - 1].width();
                     var itemOuterWidth = array[i - 1].outerWidth(),
-                    nextItemWidth = 0;
+                        nextItemWidth = 0;
                     if (array[i]) nextItemWidth = array[i].width();
                     posArray.push({
                         left: left,
@@ -668,7 +788,7 @@
                         columnHeight = 0;
                     }
                     else
-                    columnHeight = 0;
+                        columnHeight = 0;
                 }
             }
             //Layout for items of exactly same size
@@ -701,6 +821,9 @@
         * @private
         */
         _handleFiltering: function(target) {
+            if(!target){
+                var target = 0;
+            }
             var self = this,
                 toFilterOut = self._getArrayOfUniqueItems(self._activeArray, target);
             //Minimize all .filtr-item elements that are not the same between categories
@@ -721,6 +844,19 @@
             var self = this;
             return Object.keys(self._toggledCategories).length > 0;
         },
+        
+        /**
+        * Determines if the user is using data-multifiltergroup controls
+        * @return {boolean} indicating whether multiple filter group mode is on
+        * @private
+        */
+        _multifilterGroupModeOn: function() {
+            var self = this;
+            return Object.keys(self._toggledCategoriesGroup).some(function (group) {
+                return Object.keys(self._toggledCategoriesGroup[group]).length > 0;
+            })
+        },
+        
 
         /**
         * Determines if the user has something typed in the search box
@@ -785,19 +921,19 @@
             return function(a, b) {
                 if (sortOrder === 'asc') {
                     if (a[prop] < b[prop])
-                    return -1;
+                        return -1;
                     else if (a[prop] > b[prop])
-                    return 1;
+                        return 1;
                     else
-                    return 0;
+                        return 0;
                 }
                 else if (sortOrder === 'desc') {
                     if (b[prop] < a[prop])
-                    return -1;
+                        return -1;
                     else if (b[prop] > a[prop])
-                    return 1;
+                        return 1;
                     else
-                    return 0;
+                        return 0;
                 }
             };
         },
@@ -893,7 +1029,7 @@
             self._filteringIn   = false;
             //Determine delay & set initial item styles
             self.css(parent.options.filterOutCss)
-            .css({
+                .css({
                 '-webkit-backface-visibility': 'hidden',
                 'perspective': '1000px',
                 '-webkit-perspective': '1000px',
@@ -926,9 +1062,9 @@
         _calcDelay: function() {
             var self = this, r = 0;
             if (self._parent.options.delayMode === 'progressive')
-            r = self._parent.options.delay * self.domIndex;
+                r = self._parent.options.delay * self.domIndex;
             else
-            if (self.domIndex % 2 === 0) r = self._parent.options.delay;
+                if (self.domIndex % 2 === 0) r = self._parent.options.delay;
             return r;
         },
 
@@ -946,11 +1082,23 @@
                 ret = ret.split(', ');
                 for (var i = 0; i < ret.length; i++) {
                     //Error checking: make sure data-category has an integer as its value
-                    if (isNaN(parseInt(ret[i]))) {
+                    var tab = ret[i].split("-");
+                    var value;
+                    if(tab.length <= 1) {                        
+                        value = parseInt(ret[i]);
+                    } else if(tab.length === 2){
+                        ret[i] = tab;
+                        value = parseInt(ret[i][1]);
+                    } else {
+                        throw new Error('Filteriz: the value of data-category must not have more than one dash')
+                    }
+                    
+                    if(isNaN(value)) {
                         throw new Error('Filterizr: the value of data-category must be a number, starting from value 1 and increasing.');
                     }
-                    if (parseInt(ret[i]) > self._parent._lastCategory) {
-                        self._parent._lastCategory = parseInt(ret[i]);
+                    
+                    if (value > self._parent._lastCategory) {
+                        self._parent._lastCategory = value;
                     }
                 }
             }
