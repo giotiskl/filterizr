@@ -80,3 +80,47 @@ in toggle mode and in normal mode, the script will simpli ignore label, resultin
 </ul>
 ```
 which doesn't work as expected.
+
+### onFilteringStart and onFilteringEnd callback
+the filteringStart event and the onFilteringStart callback receive 
+
+```
+filtrizr.on('filteringStart', function(event, previousCategory, newCategory) {
+    
+})
+
+fltr.filterizr('setOptions', {
+   callbacks: {
+      onFilteringStart: function(previousCategory, newCategory) {
+         //your code here 
+      }
+   }
+})
+```
+
+in normal mode, `previousCategory` and `newCategory` are string with the number (or string all) of the previous and new category filtered
+in toggle mode, its an object in format :
+```
+{
+    1 : true,
+    4 : true,
+    5 : true
+}
+```
+changing the object does NOT change the actual filtering. (this is a copy of the private object _toggledCategories)
+
+in group mode, it is an object in format :
+```
+{
+    group1 : {
+        1 : true,
+        5 : true
+    },
+    group2 : {
+        3 : true
+    }
+}
+```
+changing the object does not change the actual filtering. (this is a copy of the private object _toggledCategoriesGroup)
+
+the filteringEnd event and the onFilteringEnd callback only receive the newCategory parameter.

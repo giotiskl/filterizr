@@ -188,9 +188,9 @@
         filter: function(targetFilter) {
             var self   = this,
                 target = self._getCollectionByFilter(targetFilter);
-
+            var previous = self.options.filter;
             self.options.filter = targetFilter;
-            self.trigger('filteringStart');
+            self.trigger('filteringStart', [previous, targetFilter]);
             //Filter items
             self._handleFiltering(target);
             //Apply search filter on top if activated
@@ -202,34 +202,34 @@
         * @param {number} toggledFilter - the filter to toggle
         */
         toggleFilter: function(toggledFilter) {
-            var self   = this,
-                target = [], i = 0;
+            var self   = this;
 
-            self.trigger('filteringStart');
+            var previous = Object.Assign({}, self._toggledCategories);
+            
             //Toggle the toggledFilter in the active categories
             //If undefined (in case of window resize) ignore
             if (toggledFilter) {
-                if (!self._toggledCategories[toggledFilter])
-                    self._toggledCategories[toggledFilter] = true;
-                else
-                    delete self._toggledCategories[toggledFilter];
+                if(toggledFilter === "all") {
+                    self._toggledCategories = { }
+                } else {
+                    if (!self._toggledCategories[toggledFilter])
+                        self._toggledCategories[toggledFilter] = true;
+                    else
+                        delete self._toggledCategories[toggledFilter];                    
+                }
             }
+            self.trigger('filteringStart', [previous, Object.Assign({}, self._toggledCategories)]);
 
             //If a filter is toggled on then display only items belonging to that category
             if (self._multifilterModeOn()) {
-                target = self._makeMultifilterArray();
-                //Filter items
-                self._handleFiltering(target);
-                //Apply search filter on top if activated
-                if (self._isSearchActivated()) self.search(self._typedText);
+                self._handleFiltering(self._makeMultifilterArray());
             }
             //If all filters toggled off then display unfiltered gallery
             else {
-                //Filter items
-                self.filter('all');
-                //Apply search filter on top if activated
-                if (self._isSearchActivated()) self.search(self._typedText);
+                self._handleFiltering(self._getCollectionByFilter("all"));
             }
+            //Apply search filter on top if activated
+            if (self._isSearchActivated()) self.search(self._typedText);
         },
         
         /**
@@ -238,34 +238,39 @@
         * @param {string} group - the name of the group of filter
         */
         groupFilter: function(toggledFilter, group) {
-            var self   = this,
-                target = [], i = 0;
-                //TODO
-            self.trigger('filteringStart');
+            var self   = this;
+                
+            var previous = JSON.parse(JSON.stringify(self._toggledCategoriesGroup));
             //Toggle the toggledFilter in the active categories of the group
             //If undefined (in case of window resize) ignore
-            if (toggledFilter && group) {
-                if (!self._toggledCategoriesGroup[group][toggledFilter])
-                    self._toggledCategoriesGroup[group][toggledFilter] = true;
-                else
-                    delete self._toggledCategoriesGroup[group][toggledFilter];
+            if (toggledFilter) {
+                if(group) {
+                    if(toggledFilter === "all") {
+                        self._toggledCategoriesGroup[group] = { };
+                    } else {
+                        if (!self._toggledCategoriesGroup[group][toggledFilter])
+                            self._toggledCategoriesGroup[group][toggledFilter] = true;
+                        else
+                            delete self._toggledCategoriesGroup[group][toggledFilter];                    
+                    }                    
+                } else if(toggledFilter === "all"){
+                    self._toggledCategoriesGroup = { };
+                } else {
+                    throw new Error("Filterizr : calling groupFilter with a filter not equal to 'all' and without group is not permitted");
+                }
             }
+            self.trigger('filteringStart', [previous, JSON.parse(JSON.stringify(self._toggledCategoriesGroup))]);
             
              //If a filter is toggled on then display only items belonging to that category
             if (self._multifilterGroupModeOn()) {
-                target = self._makeGroupMultifilterArray();
-                //Filter items
-                self._handleFiltering(target);
-                //Apply search filter on top if activated
-                if (self._isSearchActivated()) self.search(self._typedText);
+                self._handleFiltering(self._makeGroupMultifilterArray());
             }
             //If all filters toggled off then display unfiltered gallery
             else {
-                //Filter items
-                self.filter('all');
-                //Apply search filter on top if activated
-                if (self._isSearchActivated()) self.search(self._typedText);
+               self._handleFiltering(self._getCollectionByFilter("all"));
             }
+            //Apply search filter on top if activated
+            if (self._isSearchActivated()) self.search(self._typedText);
         },
         
         /**
@@ -275,9 +280,9 @@
         search: function(text) {
             var self   = this,
                 //get active category
-                array  = self._multifilterModeOn() ?
-                self._makeMultifilterArray() :
-            self._getCollectionByFilter(self.options.filter),
+                array  = self._multifilterGroupModeOn() ? self._makeGroupMultifilterArray() : 
+                    self._multifilterModeOn() ? self._makeMultifilterArray() :
+                    self._getCollectionByFilter(self.options.filter),
                 target = [], i = 0;
 
             if (self._isSearchActivated()) {
@@ -566,13 +571,7 @@
             //Multiple filter controls
             $('*[data-multifilter]').click(function() {
                 var targetFilter = $(this).data('multifilter');
-                if (targetFilter === 'all') {
-                    self._toggledCategories = { };
-                    self.filter('all');
-                }
-                else {
-                    self.toggleFilter(targetFilter);
-                }
+                self.toggleFilter(targetFilter);                
             });
             //Multiple filter controls
             $('*[data-groupmultifilter]').click(function() {
@@ -580,18 +579,14 @@
                 var targetFilter = info[1];
                 var group = info[0];
                 if(group && targetFilter) {
-                    if (targetFilter === 'all') {
+                    if(!self._toggledCategoriesGroup[group]) {
                         self._toggledCategoriesGroup[group] = {};
-                        self.groupFilter();
-                    }
-                    else {
-                        if(!self._toggledCategoriesGroup[group]) {
-                            self._toggledCategoriesGroup[group] = {};
-                        };
-                        self.groupFilter(targetFilter, group);
-                    }                    
+                    };
+                    self.groupFilter(targetFilter, group);
+                } else if(group === "all") {
+                    self.groupFilter(group);
                 } else {
-                    console.log("groupmultifilter must have data of format {groupName-categoriesNumber}")
+                    console.log("groupmultifilter must have data of format {groupName-categoriesNumber/all} or only all")
                 }
             });
             //Shuffle control
@@ -632,18 +627,20 @@
             self
             //Container resize event
                 .on('resizeFiltrContainer', function() {
-                if (self._multifilterModeOn())
+                if(self._multifilterGroupModeOn())
+                    self.groupFilter();
+                else if (self._multifilterModeOn())
                     self.toggleFilter();
                 else
                     self.filter(self.options.filter);
             })
             //onFilteringStart event
-                .on('filteringStart', function() {
-                self.options.callbacks.onFilteringStart();
+                .on('filteringStart', function(event, previousData, nextData) {
+                self.options.callbacks.onFilteringStart(previousData, nextData);
             })
             //onFilteringEnd event
-                .on('filteringEnd', function() {
-                self.options.callbacks.onFilteringEnd();
+                .on('filteringEnd', function(event, newData) {
+                    self.options.callbacks.onFilteringEnd(newData);
             })
             //onShufflingStart event
                 .on('shufflingStart', function() {
@@ -1132,8 +1129,17 @@
                     self._parent.trigger('shufflingEnd');
                 else if (self._parent._isSorting)
                     self._parent.trigger('sortingEnd');
-                else
-                    self._parent.trigger('filteringEnd');
+                else {
+                    var argData;
+                    if(self._parent._multifilterGroupModeOn()) {
+                        argData = JSON.parse(JSON.stringify(self._parent._toggledCategoriesGroup));
+                    } else if(self._parent._multifilterModeOn()) {
+                        argData = Object.Assign({}, self._parent._toggledCategories);
+                    } else {
+                        argData = self._parent.options.filter;
+                    }
+                    self._parent.trigger('filteringEnd', [argData]);
+                }
                 self._parent._isAnimating = false;
             }
         },
