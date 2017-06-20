@@ -3,6 +3,7 @@
 * Added 'group' label for the new filtering mode. in group filtering mode, if there is a group-label with a value, the value is matched only with filter of the specified group. (fix #6)
 * fix bug where `filteringStart` event was called more than once in multi-filtering mode.
 * add filtering data (filter choose or filters toggledon) with `filteringStart` event and `filteringEnd` event, and in parameter of `onFilteringStart` and `onFilteringEnd` callbacks. filteringStart got "previous" and "after" data.
+* fix #55 in a backware compatible way.
 
 ## Version 1.2.5
 * Fixed the bug caused by selector property which was removed in jQuery version 3.

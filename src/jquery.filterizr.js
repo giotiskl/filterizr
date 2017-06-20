@@ -1076,7 +1076,7 @@
                 ret  = self.data('category');
             //If more than one category provided
             if (typeof ret === 'string') {
-                ret = ret.split(', ');
+                ret = ret.split(/\s*,\s*/);
                 for (var i = 0; i < ret.length; i++) {
                     //Error checking: make sure data-category has an integer as its value
                     var tab = ret[i].split("-");
