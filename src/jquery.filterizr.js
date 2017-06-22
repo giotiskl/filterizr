@@ -124,6 +124,7 @@
                 delayMode: 'progressive',
                 easing: 'ease-out',
                 filter: 'all',
+                filterMode : "active",
                 filterOutCss: {
                     'opacity': 0,
                     'transform': 'scale(0.5)'
@@ -157,11 +158,6 @@
             //.filtr-item collections
             self._mainArray   = self._getFiltrItems();
             self._subArrays   = self._makeSubarrays();
-            self._activeArray = self._getCollectionByFilter(self.options.filter);
-            //Used for multiple category filtering
-            self._toggledCategories = { };
-            //Used for multiple category filtering with multiple group
-            self._toggledCategoriesGroup = { };
             //Used for search feature
             self._typedText = $('input[data-search]').val() || '';
             //Generate unique ID for resize events
@@ -173,8 +169,26 @@
             self._setupEvents();
             //Set up standard Filterizr controls (for multiple Filterizrs in your scene, set to false)
             if (self.options.setupControls) self._setupControls();
+            
             //Start Filterizr!
-            self.filter(self.options.filter);
+            self._activeArray = [];
+            //Used for multiple category filtering
+            self._toggledCategories = {};
+            //Used for multiple category filtering with multiple group
+            self._toggledCategoriesGroup = {};            
+            
+            if(self.options.filterMode === "toggle" && typeof self.options.filter === "object") {
+                self._toggledCategories = JSON.parse(JSON.stringify(self.options.filter));
+                self.toggleFilter();
+                //put a valid value in self.options.filter so if self.filter(self.options.filter) is called in resize event, it does not break;
+                self.options.filter = "all"; 
+            } else if(self.options.filterMode === "group" && typeof self.options.filter === "object") {
+                self._toggledCategoriesGroup = JSON.parse(JSON.stringify(self.options.filter));
+                self.groupFilter();
+                self.options.filter = "all";
+            } else {
+                self.filter(self.options.filter);
+            }
             return self;
         },
 
@@ -190,7 +204,11 @@
                 target = self._getCollectionByFilter(targetFilter);
             var previous = self.options.filter;
             self.options.filter = targetFilter;
-            self.trigger('filteringStart', [previous, targetFilter]);
+            self.trigger('filteringStart', [
+                previous, 
+                targetFilter, 
+                target.map(function (elem) {return elem[0]})
+            ]);
             //Filter items
             self._handleFiltering(target);
             //Apply search filter on top if activated
@@ -202,7 +220,8 @@
         * @param {number} toggledFilter - the filter to toggle
         */
         toggleFilter: function(toggledFilter) {
-            var self   = this;
+            var self   = this,
+                target = [];
 
             var previous = Object.Assign({}, self._toggledCategories);
             
@@ -218,16 +237,22 @@
                         delete self._toggledCategories[toggledFilter];                    
                 }
             }
-            self.trigger('filteringStart', [previous, Object.Assign({}, self._toggledCategories)]);
+            self.trigger('filteringStart', [
+                previous, 
+                Object.Assign({}, self._toggledCategories),
+                target.map(function (elem) {return elem[0]})
+            ]);
 
             //If a filter is toggled on then display only items belonging to that category
             if (self._multifilterModeOn()) {
-                self._handleFiltering(self._makeMultifilterArray());
+                target = self._makeMultifilterArray();
             }
             //If all filters toggled off then display unfiltered gallery
             else {
-                self._handleFiltering(self._getCollectionByFilter("all"));
+                target = self._getCollectionByFilter("all");
             }
+            
+            self._handleFiltering(target);
             //Apply search filter on top if activated
             if (self._isSearchActivated()) self.search(self._typedText);
         },
@@ -238,7 +263,8 @@
         * @param {string} group - the name of the group of filter
         */
         groupFilter: function(toggledFilter, group) {
-            var self   = this;
+            var self   = this,
+                target = [];
                 
             var previous = JSON.parse(JSON.stringify(self._toggledCategoriesGroup));
             //Toggle the toggledFilter in the active categories of the group
@@ -248,6 +274,9 @@
                     if(toggledFilter === "all") {
                         self._toggledCategoriesGroup[group] = { };
                     } else {
+                        if(!self._toggledCategoriesGroup[group]) {
+                            self._toggledCategoriesGroup[group] = {};
+                        };
                         if (!self._toggledCategoriesGroup[group][toggledFilter])
                             self._toggledCategoriesGroup[group][toggledFilter] = true;
                         else
@@ -259,16 +288,24 @@
                     throw new Error("Filterizr : calling groupFilter with a filter not equal to 'all' and without group is not permitted");
                 }
             }
-            self.trigger('filteringStart', [previous, JSON.parse(JSON.stringify(self._toggledCategoriesGroup))]);
             
-             //If a filter is toggled on then display only items belonging to that category
+              //If a filter is toggled on then display only items belonging to that category
             if (self._multifilterGroupModeOn()) {
-                self._handleFiltering(self._makeGroupMultifilterArray());
+                target = self._makeGroupMultifilterArray();
             }
             //If all filters toggled off then display unfiltered gallery
             else {
-               self._handleFiltering(self._getCollectionByFilter("all"));
+                target = self._getCollectionByFilter("all");
             }
+            
+            self.trigger('filteringStart', [
+                previous, 
+                JSON.parse(JSON.stringify(self._toggledCategoriesGroup)), 
+                target.map(function (elem) {return elem[0]})
+            ]);
+            
+            self._handleFiltering(target);
+            
             //Apply search filter on top if activated
             if (self._isSearchActivated()) self.search(self._typedText);
         },
@@ -579,9 +616,6 @@
                 var targetFilter = info[1];
                 var group = info[0];
                 if(group && targetFilter) {
-                    if(!self._toggledCategoriesGroup[group]) {
-                        self._toggledCategoriesGroup[group] = {};
-                    };
                     self.groupFilter(targetFilter, group);
                 } else if(group === "all") {
                     self.groupFilter(group);
@@ -624,9 +658,7 @@
                 }, 250, self._uID);
             });
             //Filterizr events
-            self
-            //Container resize event
-                .on('resizeFiltrContainer', function() {
+            self.on('resizeFiltrContainer', function() {
                 if(self._multifilterGroupModeOn())
                     self.groupFilter();
                 else if (self._multifilterModeOn())
@@ -635,8 +667,8 @@
                     self.filter(self.options.filter);
             })
             //onFilteringStart event
-                .on('filteringStart', function(event, previousData, nextData) {
-                self.options.callbacks.onFilteringStart(previousData, nextData);
+                .on('filteringStart', function(event, previousData, nextData, elemTable) {
+                    self.options.callbacks.onFilteringStart(previousData, nextData, elemTable);
             })
             //onFilteringEnd event
                 .on('filteringEnd', function(event, newData) {

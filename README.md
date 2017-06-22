@@ -82,16 +82,16 @@ in toggle mode and in normal mode, the script will simpli ignore label, resultin
 which doesn't work as expected.
 
 ### onFilteringStart and onFilteringEnd callback
-the filteringStart event and the onFilteringStart callback receive 
+the filteringStart event and the onFilteringStart callback now receive data.
 
 ```
-filtrizr.on('filteringStart', function(event, previousCategory, newCategory) {
+filtrizr.on('filteringStart', function(event, previousCategory, newCategory, activeElem) {
     
 })
 
 fltr.filterizr('setOptions', {
    callbacks: {
-      onFilteringStart: function(previousCategory, newCategory) {
+      onFilteringStart: function(previousCategory, newCategory, activeElem) {
          //your code here 
       }
    }
@@ -123,4 +123,42 @@ in group mode, it is an object in format :
 ```
 changing the object does not change the actual filtering. (this is a copy of the private object _toggledCategoriesGroup)
 
+activeElem is an array of the actual active DOM element. Usefull for checking if there is element actually displayed.
+```
+if(activeElem.length === 0) {
+    //no elem is actually visible. you can add an error message or anything you need.
+}
+```
+
 the filteringEnd event and the onFilteringEnd callback only receive the newCategory parameter.
+
+
+### filterMode option
+this new option permit to send to filterizr the initial activefilter for toggle and group mode.
+
+by example :
+```
+//category 1, 3 and 4 toggled at the start
+$('.filtr-container').filterizr({
+    filterMode : "toggle",
+    filter : {
+        1 : true,
+        3 : true,
+        4 : true
+    }
+});
+
+//category 1 of group1 and 3,4 of group2 are selected at the start
+$('.filtr-container').filterizr({
+    filterMode : "group",
+    filter : {
+        group1 : {
+            1 : true
+        },
+        group2 : {
+            3 : true,
+            4 : true
+        }
+    }
+});
+```
