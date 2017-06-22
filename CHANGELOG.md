@@ -1,3 +1,12 @@
+## Version 1.3.0
+* Added new filtering mode and filtering controls for multi-filtering. The user can now have multiple group of filter to be applied concurently in an AND logical operation. (fix #20)
+* Added 'group' label for the new filtering mode. in group filtering mode, if there is a group-label with a value, the value is matched only with filter of the specified group. (fix #6)
+* fix bug where `filteringStart` event was called more than once in multi-filtering mode.
+* add filtering data (filter choose or filters toggledon) with `filteringStart` event and `filteringEnd` event, and in parameter of `onFilteringStart` and `onFilteringEnd` callbacks. 
+    `filteringStart` got `previousCategory` and `newCategory` data, as well as `activeElement`. `filteringEnd` got only `newCategory`.
+* fix #55 in a backware compatible way.
+* new option : `filterMode`, accept `"active"`, `"toggle"` and `"group"`. default to `"active"` (same behaviour as previously). the options can be used to send initial `toggle` or `group` data via the `filter` option.
+
 ## Version 1.2.5
 * Fixed the bug caused by selector property which was removed in jQuery version 3.
 * Removed ````selector```` from configuration options.

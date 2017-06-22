@@ -25,3 +25,140 @@ IE10+ and all modern browsers.
 
 ## License
 Filterizr is licensed under [the MIT License](https://opensource.org/licenses/MIT) (i.e. you do whatever you want with it). Enjoy!
+
+## Additionnal Documentation for new feature
+to be added to the website tutorial
+### group-label.
+this feature permit to have string in datafilter in the following format :
+``
+<li data-filter="color-1"> Green </li>
+<li data-filter="color-2"> Orange </li>
+``
+the label is ignored in normal mode and in multi-filtering (toggle) mode. in these mode, `"color-1"` and `"fruit-1"` would be treated the same (and broke the filtering);
+in group-filtering mode, the value is ignored if the label does not correspond to the group name. `"color-1"` would only be matched by value "1" of group "color" and ignored elsewhere.
+
+### group filtering mode
+this feature make it possible to have AND logical operation with filter.
+
+to use it, you need to use the `data-groupmultifilter` attribute and give him a name and a value.
+
+```
+<ul>                                    
+    <li data-groupmultifilter="color-1"> Red </li>
+    <li data-groupmultifilter="color-2"> Green </li>
+    <li data-groupmultifilter="color-3"> Blue </li>
+    <li data-groupmultifilter="size-4"> Small </li>
+    <li data-groupmultifilter="size-5"> Medium </li>
+    <li data-groupmultifilter="size-6"> Large </li>
+</ul>
+```
+
+the element can of course be placed in multiple `<ul>` tag, but it is not mandatory to do so. only the label in `data-groupmultifilter` is used to separate group.
+
+with the feature of group-label, it is possible to reuse number in distinct group.
+```
+<ul>                                    
+    <li data-groupmultifilter="color-1"> Red </li>
+    <li data-groupmultifilter="color-2"> Green </li>
+    <li data-groupmultifilter="color-3"> Blue </li>
+    <li data-groupmultifilter="size-1"> Small </li>
+    <li data-groupmultifilter="size-2"> Medium </li>
+    <li data-groupmultifilter="size-3"> Large </li>
+</ul>
+```
+
+will work as expected, but only in group multifilter mode.
+in toggle mode and in normal mode, the script will simpli ignore label, resulting in the same behaviour as
+```
+<ul>                                    
+    <li data-groupmultifilter="1"> Red </li>
+    <li data-groupmultifilter="2"> Green </li>
+    <li data-groupmultifilter="3"> Blue </li>
+    <li data-groupmultifilter="1"> Small </li>
+    <li data-groupmultifilter="2"> Medium </li>
+    <li data-groupmultifilter="3"> Large </li>
+</ul>
+```
+which doesn't work as expected.
+
+### onFilteringStart and onFilteringEnd callback
+the filteringStart event and the onFilteringStart callback now receive data.
+
+```
+filtrizr.on('filteringStart', function(event, previousCategory, newCategory, activeElem) {
+    
+})
+
+fltr.filterizr('setOptions', {
+   callbacks: {
+      onFilteringStart: function(previousCategory, newCategory, activeElem) {
+         //your code here 
+      }
+   }
+})
+```
+
+in normal mode, `previousCategory` and `newCategory` are string with the number (or string all) of the previous and new category filtered
+in toggle mode, its an object in format :
+```
+{
+    1 : true,
+    4 : true,
+    5 : true
+}
+```
+changing the object does NOT change the actual filtering. (this is a copy of the private object _toggledCategories)
+
+in group mode, it is an object in format :
+```
+{
+    group1 : {
+        1 : true,
+        5 : true
+    },
+    group2 : {
+        3 : true
+    }
+}
+```
+changing the object does not change the actual filtering. (this is a copy of the private object _toggledCategoriesGroup)
+
+activeElem is an array of the actual active DOM element. Usefull for checking if there is element actually displayed.
+```
+if(activeElem.length === 0) {
+    //no elem is actually visible. you can add an error message or anything you need.
+}
+```
+
+the filteringEnd event and the onFilteringEnd callback only receive the newCategory parameter.
+
+
+### filterMode option
+this new option permit to send to filterizr the initial activefilter for toggle and group mode.
+
+by example :
+```
+//category 1, 3 and 4 toggled at the start
+$('.filtr-container').filterizr({
+    filterMode : "toggle",
+    filter : {
+        1 : true,
+        3 : true,
+        4 : true
+    }
+});
+
+//category 1 of group1 and 3,4 of group2 are selected at the start
+$('.filtr-container').filterizr({
+    filterMode : "group",
+    filter : {
+        group1 : {
+            1 : true
+        },
+        group2 : {
+            3 : true,
+            4 : true
+        }
+    }
+});
+```
