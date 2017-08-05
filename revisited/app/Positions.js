@@ -14,7 +14,7 @@ const Positions = (Layout, Filterizr) => {
         FilterContainer,
         FilterItems
       } = Filterizr.props;
-      console.log(Filterizr.props)
+
       // calculate number of columns and rows the grid should have
       let cols = FilterContainer.calcColumns(Layout);
       let row = 0;
