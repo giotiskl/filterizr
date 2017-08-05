@@ -1,41 +1,90 @@
+import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
+import Positions from './Positions';
 import _ from 'lodash';
 
 class Filterizr {
   constructor(selector = ".filtr-container", options) {
-    // get and setup container
-    this.FilterContainer = new FilterContainer(selector, options);
-    // get and setup items
-    this.FilterItems = this.FilterContainer.getFilterItems();
-    // filter items with initial filter
-    this.FilteredItems = this.filter(options.filter);
+    // make the options a property of the Filterizr instance
+    // so that we can later easily modify them
+    this.options = options;
+    // setup FilterControls and FilterContainer
+    const filterControls  = new FilterControls(this);
+    const filterContainer = new FilterContainer(selector);
 
-    this.render(this.FilteredItems);
-    console.log(this.FilterContainer, this.FilterItems, this.FilteredItems);
+    // define props
+    this.props = {
+      FilterControls: filterControls,
+      FilterContainer: filterContainer,
+      FilterItems: filterContainer.props.FilterItems,
+      FilteredItems: [],
+    }
+
+    // Init Filterizr
+    this.filter(this.options.filter);
   }
 
   // Public API of Filterizr
   filter(category) {
+    const { 
+      FilterContainer,
+      FilterItems,
+    } = this.props;
+
     // trigger filtering start event
-    this.FilterContainer.trigger('filteringStart');
-    // if category is set to all then no filter is applied
-    return category === "all" ?
+    FilterContainer.trigger('filteringStart');
+    // Get filtered items
+    const FilteredItems = (category === "all") ?
       // in this case return all items
-      this.FilterItems :
+      FilterItems :
       // otherwise return filtered array
-      _.filter(this.FilterItems, (FilterItem) => {
-        const categories = FilterItem.$node.attr('data-category').split(/\s*,\s*/g);
+      _.filter(FilterItems, (FilterItem) => {
+        const categories = FilterItem.getCategories();
         return _.includes(categories, category)
       });
+    // update FilteredItems prop
+    this.props.FilteredItems = FilteredItems;
+    // render them on screen
+    this.render(FilteredItems);
+  }
+
+  shuffle() {
+    const {
+      FilteredItems
+    } = this.props;
+
+    // shuffle items until they are different from the initial FilteredItems
+    let ShuffledItems = _.shuffle(FilteredItems)
+    while (FilteredItems.length > 1 && _.isEqual(FilteredItems, ShuffledItems)) {
+      ShuffledItems = _.shuffle(FilteredItems)
+    }
+
+    // update and render shuffled items
+    this.props.FilteredItems = ShuffledItems;
+    this.render(ShuffledItems);
+  }
+
+  setOptions(newOptions) {
+    this.options = _.merge(this.options, newOptions);
   }
 
   // Helper methods
   render(FilterItems) {
-    _.each(FilterItems, (FilterItem) => {
-      FilterItem.filterIn({
-        left: '100',
-        top: '100',
-      })
+    // get items to be filtered out
+    const FilteredOutItems = _.reject(this.props.FilterItems, (FilterItem) => {
+      const  categories = FilterItem.getCategories();
+      return _.includes(categories, this.options.filter);
+    })
+    // filter out old items
+    _.each(FilteredOutItems, (FilterItem) => {
+      FilterItem.filterOut();
+    });
+
+    // Determine target positions for items to be filtered in
+    const PositionsArray = Positions(this.options.layout, this);
+    // filter in new items
+    _.each(FilterItems, (FilterItem, index) => {
+      FilterItem.filterIn(PositionsArray[index]);
     });
   }
 }

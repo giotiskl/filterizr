@@ -2,14 +2,15 @@ import FilterItem from './FilterItem';
 import { map } from 'lodash';
 
 class FilterContainer {
-  constructor(selector, options) {
+  constructor(selector, layout) {
     // cache jQuery node
     this.$node = $(selector);
 
     // set props
     this.props = {
+      FilterItems: this.getFilterItems(),
       w: this.getWidth(),
-      h: this.getHeight(),
+      h: 0,
     }
 
     // set up initial styles of container
@@ -20,27 +21,32 @@ class FilterContainer {
   }
 
   getFilterItems() {
-    return map(this.$node.find('.filtr-item'), (item) => {
-      return new FilterItem($(item));
+    return map(this.$node.find('.filtr-item'), (item, index) => {
+      return new FilterItem($(item), index);
     });
   }
 
-  getHeight() {
-    return this.$node.innerHeight();
+  calcColumns(Layout) {
+    switch(Layout) {
+      case 'sameSize':
+        return this.props.w / this.props.FilterItems[0].props.w;
+    }
+
+    // default case
+    return this.props.w / this.props.FilterItems[0].props.w;
+  }
+
+  // Helpers determining dimensions
+  updateHeight(newHeight) {
+    this.props.h = newHeight;
+    this.$node.css('height', newHeight);    
   }
 
   getWidth() {
     return this.$node.innerWidth();
   }
 
-  /**
-   * Calculates the amounts of columns the FilterContainer
-   * should have based on how many items can fit per row.
-   */
-  getColumns() {
-
-  }
-
+  // Event helpers
   trigger(evt) {
     this.$node.trigger(evt);
   }
