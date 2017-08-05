@@ -12,6 +12,7 @@ class FilterControls {
 
     this.setupFilterControls();
     this.setupShuffleControls();
+    this.setupSortControls();
   }
 
   setupFilterControls() {
@@ -41,6 +42,25 @@ class FilterControls {
 
     $(`${selector} *[data-shuffle]`).on('click', (evt) => {
       Filterizr.shuffle();
+    });
+  }
+
+  setupSortControls() {
+    //Sort controls
+    const {
+      Filterizr,
+      selector
+    } = this.props;
+
+    $(`${selector} *[data-sortAsc]`).on('click', (evt) => {
+      const sortAttr = $(`${selector} *[data-sortOrder]`).val();
+      Filterizr.props.sortOrder = 'asc';
+      Filterizr.sort(sortAttr, 'asc');
+    });
+    $(`${selector} *[data-sortDesc]`).on('click', (evt) => {
+      const sortAttr = $(`${selector} *[data-sortOrder]`).val();
+      Filterizr.props.sortOrder = 'desc';
+      Filterizr.sort(sortAttr, 'desc');
     });
   }
 }

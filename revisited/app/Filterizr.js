@@ -8,12 +8,14 @@ class Filterizr {
     // make the options a property of the Filterizr instance
     // so that we can later easily modify them
     this.options = options;
+
     // setup FilterControls and FilterContainer
     const filterControls  = new FilterControls(this);
     const filterContainer = new FilterContainer(selector);
-
     // define props
     this.props = {
+      sort: 'index',
+      sortOrder: 'asc',
       FilterControls: filterControls,
       FilterContainer: filterContainer,
       FilterItems: filterContainer.props.FilterItems,
@@ -46,6 +48,27 @@ class Filterizr {
     this.props.FilteredItems = FilteredItems;
     // render them on screen
     this.render(FilteredItems);
+  }
+
+  sort(sortAttr = 'index', sortOrder = 'asc') {
+    const { 
+      FilterItems,
+    } = this.props;
+
+    // Sort the FilterItems and reverse the array if order is descending
+    let SortedItems = _.sortBy(FilterItems, (FilterItem) => {
+      return (sortAttr !== 'index' && sortAttr !== 'sortData') ?
+        // if the user has not used one of the two default sort attributes
+        // then search for custom data attributes on the filter items to sort
+        FilterItem.props.data[sortAttr] :
+        // otherwise use the defaults
+        FilterItem.props[sortAttr];
+    });
+    SortedItems = sortOrder === 'asc' ? SortedItems : _.reverse(SortedItems);
+
+    // Update and render the sorted items
+    this.props.FilterItems = SortedItems;
+    this.filter(this.options.filter);
   }
 
   shuffle() {
