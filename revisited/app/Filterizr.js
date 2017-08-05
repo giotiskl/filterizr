@@ -14,6 +14,7 @@ class Filterizr {
     const filterContainer = new FilterContainer(selector);
     // define props
     this.props = {
+      searchTerm: '',
       sort: 'index',
       sortOrder: 'asc',
       FilterControls: filterControls,
@@ -29,6 +30,7 @@ class Filterizr {
   // Public API of Filterizr
   filter(category) {
     const { 
+      searchTerm,
       FilterContainer,
       FilterItems,
     } = this.props;
@@ -46,8 +48,11 @@ class Filterizr {
       });
     // update FilteredItems prop
     this.props.FilteredItems = FilteredItems;
+    // if there is a search term apply it as an extra layer of filter
+    if (searchTerm)
+      this.props.FilteredItems = this.search(searchTerm);
     // render them on screen
-    this.render(FilteredItems);
+    this.render(this.props.FilteredItems);
   }
 
   sort(sortAttr = 'index', sortOrder = 'asc') {
@@ -69,6 +74,17 @@ class Filterizr {
     // Update and render the sorted items
     this.props.FilterItems = SortedItems;
     this.filter(this.options.filter);
+  }
+
+  search(searchTerm = this.props.searchTerm) {
+    const {
+      FilteredItems
+    } = this.props;
+
+    return _.filter(FilteredItems, (FilterItem) => {
+      const contents = FilterItem.getContentsLowercase();
+      return _.includes(contents, searchTerm);
+    });
   }
 
   shuffle() {

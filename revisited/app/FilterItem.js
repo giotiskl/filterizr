@@ -66,6 +66,10 @@ class FilterItem {
   }
 
   /* Helper methods */
+  getContentsLowercase() {
+    return this.$node.text().toLowerCase();
+  }
+
   getCategories() {
     return this.$node.attr('data-category').split(/\s*,\s*/g);
   }
