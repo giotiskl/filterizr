@@ -1,3 +1,5 @@
+import { debounce } from 'lodash';
+
 class FilterControls {
   /**
    * @param {object} Filterizr keep a ref to the Filterizr object to control actions
@@ -12,6 +14,7 @@ class FilterControls {
 
     this.setupFilterControls();
     this.setupShuffleControls();
+    this.setupSearchControls();
     this.setupSortControls();
   }
 
@@ -45,8 +48,24 @@ class FilterControls {
     });
   }
 
+  setupSearchControls() {
+    const {
+      Filterizr,
+      selector
+    } = this.props;
+
+    const handler = 
+
+    $(`${selector} *[data-search]`).on('keyup', debounce((evt) => {
+      const $textfield = $(evt.target);
+      const val = $textfield.val();
+      
+      Filterizr.props.searchTerm = val.toLowerCase();
+      Filterizr.filter(Filterizr.options.filter);
+    }, 250));
+  }
+
   setupSortControls() {
-    //Sort controls
     const {
       Filterizr,
       selector
