@@ -61,7 +61,7 @@ class FilterControls {
       const val = $textfield.val();
       
       Filterizr.props.searchTerm = val.toLowerCase();
-      Filterizr.filter(Filterizr.options.filter);
+      Filterizr.search(Filterizr.props.searchTerm);
     }, 250));
   }
 

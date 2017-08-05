@@ -37,6 +37,60 @@ class Filterizr {
 
     // trigger filtering start event
     FilterContainer.trigger('filteringStart');
+    
+    // filter items and optionally apply search if a search term exists
+    const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, category), searchTerm);
+    this.props.FilteredItems = FilteredItems;
+
+    // render the items
+    this.render(FilteredItems);
+  }
+
+  sort(sortAttr = 'index', sortOrder = 'asc') {
+    const { 
+      FilterItems,
+    } = this.props;
+
+    // sort main array
+    this.props.FilterItems = this.sortFilterItems(FilterItems, sortAttr, sortOrder);
+    // apply filters
+    const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
+    this.props.FilteredItems = FilteredItems;
+
+    // Update and render the sorted items
+    this.render(FilteredItems);
+  }
+
+  search(searchTerm = this.props.searchTerm) {
+    const {
+      FilterItems
+    } = this.props;
+
+    // filter items and optionally apply search if a search term exists
+    const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, this.options.filter), searchTerm);
+    this.props.FilteredItems = FilteredItems;
+
+    // render the items
+    this.render(FilteredItems);
+  }
+
+  shuffle() {
+    const {
+      FilteredItems
+    } = this.props;
+
+    const ShuffledItems = this.shuffleFilterItems(FilteredItems);
+    this.props.FilteredItems = ShuffledItems;
+
+    this.render(ShuffledItems);
+  }
+
+  setOptions(newOptions) {
+    this.options = _.merge(this.options, newOptions);
+  }
+
+  // Helper methods
+  filterFilterItems(FilterItems, category) {
     // Get filtered items
     const FilteredItems = (category === "all") ?
       // in this case return all items
@@ -46,20 +100,11 @@ class Filterizr {
         const categories = FilterItem.getCategories();
         return _.includes(categories, category)
       });
-    // update FilteredItems prop
-    this.props.FilteredItems = FilteredItems;
-    // if there is a search term apply it as an extra layer of filter
-    if (searchTerm)
-      this.props.FilteredItems = this.search(searchTerm);
-    // render them on screen
-    this.render(this.props.FilteredItems);
+
+    return FilteredItems;
   }
 
-  sort(sortAttr = 'index', sortOrder = 'asc') {
-    const { 
-      FilterItems,
-    } = this.props;
-
+  sortFilterItems(FilterItems ,sortAttr = 'index', sortOrder = 'asc') {
     // Sort the FilterItems and reverse the array if order is descending
     let SortedItems = _.sortBy(FilterItems, (FilterItem) => {
       return (sortAttr !== 'index' && sortAttr !== 'sortData') ?
@@ -71,43 +116,30 @@ class Filterizr {
     });
     SortedItems = sortOrder === 'asc' ? SortedItems : _.reverse(SortedItems);
 
-    // Update and render the sorted items
-    this.props.FilterItems = SortedItems;
-    this.filter(this.options.filter);
+    return SortedItems;
   }
 
-  search(searchTerm = this.props.searchTerm) {
-    const {
-      FilteredItems
-    } = this.props;
+  searchFilterItems(FilterItems, searchTerm = this.props.searchTerm) {
+    if (!searchTerm) return FilterItems; // exit case when no search is applied
 
-    return _.filter(FilteredItems, (FilterItem) => {
+    const SoughtItems =  _.filter(FilterItems, (FilterItem) => {
       const contents = FilterItem.getContentsLowercase();
       return _.includes(contents, searchTerm);
     });
+
+    return SoughtItems;
   }
 
-  shuffle() {
-    const {
-      FilteredItems
-    } = this.props;
-
+  shuffleFilterItems(FilterItems) {
+    let ShuffledItems = _.shuffle(FilterItems)
     // shuffle items until they are different from the initial FilteredItems
-    let ShuffledItems = _.shuffle(FilteredItems)
-    while (FilteredItems.length > 1 && _.isEqual(FilteredItems, ShuffledItems)) {
-      ShuffledItems = _.shuffle(FilteredItems)
+    while (FilterItems.length > 1 && _.isEqual(FilterItems, ShuffledItems)) {
+      ShuffledItems = _.shuffle(FilterItems)
     }
 
-    // update and render shuffled items
-    this.props.FilteredItems = ShuffledItems;
-    this.render(ShuffledItems);
-  }
+    return ShuffledItems;
+  }  
 
-  setOptions(newOptions) {
-    this.options = _.merge(this.options, newOptions);
-  }
-
-  // Helper methods
   render(FilterItems) {
     // get items to be filtered out
     const FilteredOutItems = _.reject(this.props.FilterItems, (FilterItem) => {
@@ -121,6 +153,7 @@ class Filterizr {
 
     // Determine target positions for items to be filtered in
     const PositionsArray = Positions(this.options.layout, this);
+
     // filter in new items
     _.each(FilterItems, (FilterItem, index) => {
       FilterItem.filterIn(PositionsArray[index]);
