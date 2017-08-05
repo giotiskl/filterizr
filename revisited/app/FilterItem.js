@@ -1,5 +1,5 @@
 import DefaultOptions from './options';
-import { cloneDeep } from 'lodash';
+import { omit, cloneDeep } from 'lodash';
 
 class FilterItem {
   constructor($node, index) {
@@ -15,7 +15,13 @@ class FilterItem {
 
     // set props
     this.props = {
+      data: (() => {
+        // all data-attributes defined by the user, can be used for sorting
+        const data = this.$node.data();
+        return omit(data, ['category', 'sort']);
+      })(),
       index,
+      sortData: this.$node.data('sort'),
       lastPosition: { left: 0, top: 0 },
       w: this.getWidth(),
       h: this.getHeight(),
