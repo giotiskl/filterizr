@@ -23,7 +23,7 @@ class Filterizr {
 
     // setup FilterControls and FilterContainer
     const filterControls  = new FilterControls(this);
-    const filterContainer = new FilterContainer(selector);
+    const filterContainer = new FilterContainer(selector, options);
     // define props
     this.props = {
       searchTerm: '',
@@ -37,9 +37,6 @@ class Filterizr {
 
     // Init Filterizr
     this.filter(this.options.filter);
-
-    this.props.FilterContainer.Filterizr = this;
-    window.FilterContainer = this.props.FilterContainer;
   }
 
   // Public API of Filterizr
@@ -209,7 +206,7 @@ class Filterizr {
     })
     // filter out old items
     each(FilteredOutItems, (FilterItem) => {
-      FilterItem.filterOut();
+      FilterItem.filterOut(this.options);
     });
 
     // Determine target positions for items to be filtered in
@@ -217,7 +214,7 @@ class Filterizr {
 
     // filter in new items
     each(FilterItems, (FilterItem, index) => {
-      FilterItem.filterIn(PositionsArray[index]);
+      FilterItem.filterIn(PositionsArray[index], this.options);
     });
   }
 }
