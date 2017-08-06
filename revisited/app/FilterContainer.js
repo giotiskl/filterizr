@@ -5,14 +5,14 @@ import {
 } from 'lodash';
 
 class FilterContainer {
-  constructor(selector) {
+  constructor(selector = '.filtr-container', options) {
     // cache jQuery node
     this.$node = $(selector);
 
     // set props
     this.props = {
       // other props
-      FilterItems: this.getFilterItems(),
+      FilterItems: this.getFilterItems(options),
       w: this.getWidth(),
       h: 0,
     }
@@ -24,10 +24,12 @@ class FilterContainer {
     });
   }
 
-  getFilterItems() {
-    return map(this.$node.find('.filtr-item'), (item, index) => {
-      return new FilterItem($(item), index);
+  getFilterItems(options) {
+    const FilterItems = map(this.$node.find('.filtr-item'), (item, index) => {
+      return new FilterItem($(item), index, options);
     });
+
+    return FilterItems;
   }
 
   calcColumns(Layout) {
