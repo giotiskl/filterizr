@@ -35,17 +35,29 @@ class FilterContainer {
   calcColumns(Layout) {
     switch(Layout) {
       case 'sameSize':
-        return this.props.w / this.props.FilterItems[0].props.w;
+        return Math.round(this.props.w / this.props.FilterItems[0].props.w);
     }
 
     // default case
-    return this.props.w / this.props.FilterItems[0].props.w;
+    return Math.round(this.props.w / this.props.FilterItems[0].props.w);
   }
 
   // Helpers determining dimensions
   updateHeight(newHeight) {
     this.props.h = newHeight;
     this.$node.css('height', newHeight);    
+  }
+
+  updateWidth() {
+    this.props.w = this.getWidth();
+  }
+
+  updateFilterItemsDimensions() {
+    const {
+      FilterItems
+    } = this.props;
+
+    this.props.FilterItems = each(FilterItems, (FilterItem) => FilterItem.updateDimensions());
   }
 
   getWidth() {

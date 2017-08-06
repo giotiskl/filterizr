@@ -99,6 +99,11 @@ class FilterItem {
   trigger(evt) {
     this.$node.trigger(evt);
   }
+
+  updateDimensions() {
+    this.props.w = this.getWidth();
+    this.props.h = this.getHeight();
+  }
 }
 
 export default FilterItem;

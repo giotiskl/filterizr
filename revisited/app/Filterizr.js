@@ -4,6 +4,7 @@ import Positions from './Positions';
 import {
   concat,
   each,
+  debounce,
   filter,
   intersection,
   includes,
@@ -35,6 +36,8 @@ class Filterizr {
       FilteredItems: [],
     }
 
+    // set up events needed by Filterizr
+    this.setupEvents();
     // Init Filterizr
     this.filter(this.options.filter);
   }
@@ -54,6 +57,7 @@ class Filterizr {
     const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, category), searchTerm);
     this.props.FilteredItems = FilteredItems;
 
+    // set up events needed by Filterizr
     // render the items
     this.render(FilteredItems);
   }
@@ -216,6 +220,16 @@ class Filterizr {
     each(FilterItems, (FilterItem, index) => {
       FilterItem.filterIn(PositionsArray[index], this.options);
     });
+  }
+
+  setupEvents() {
+    // set up a window resize event to fire refiltering
+    $(window).on('resize', debounce((evt) => {
+      this.props.FilterContainer.updateWidth();
+      this.props.FilterContainer.updateFilterItemsDimensions();
+      this.filter(this.options.filter);
+      console.log('filtering');
+    }, 250));
   }
 }
 
