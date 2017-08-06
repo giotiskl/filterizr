@@ -23,6 +23,9 @@ class FilterControls {
     this.setupSortControls();
   }
 
+  /**
+   * Sets up the controls for filtering
+   */
   setupFilterControls() {
     const {
       Filterizr,
@@ -51,6 +54,9 @@ class FilterControls {
     });
   }
 
+  /**
+   * Sets up the controls for shuffling
+   */
   setupShuffleControls() {
     const {
       Filterizr,
@@ -62,6 +68,9 @@ class FilterControls {
     });
   }
 
+  /**
+   * Sets up the controls for searching
+   */
   setupSearchControls() {
     const {
       Filterizr,
@@ -79,6 +88,9 @@ class FilterControls {
     }, 250));
   }
 
+  /*
+   * Sets up the controls for sorting
+   */
   setupSortControls() {
     const {
       Filterizr,
