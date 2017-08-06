@@ -1,4 +1,9 @@
-import { debounce } from 'lodash';
+import { 
+  concat, 
+  debounce,
+  reject,
+  flatten,
+} from 'lodash';
 
 class FilterControls {
   /**
@@ -24,6 +29,7 @@ class FilterControls {
       selector
     } = this.props;
 
+    // Single filter mode controls
     $(`${selector} *[data-filter]`).on('click', (evt) => {
       const $ctrl = $(evt.target);
       const targetFilter = $ctrl.attr('data-filter');
@@ -34,6 +40,14 @@ class FilterControls {
       });
 
       Filterizr.filter(Filterizr.options.filter);
+    });
+
+    // Multifilter mode controls
+    $(`${selector} *[data-multifilter]`).on('click', (evt) => {
+      const $ctrl        = $(evt.target);
+      const targetFilter = $ctrl.attr('data-multifilter');
+      
+      Filterizr.toggleFilter(targetFilter);
     });
   }
 
