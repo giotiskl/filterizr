@@ -1,13 +1,17 @@
 import FilterItem from './FilterItem';
-import { map } from 'lodash';
+import { 
+  each,
+  map,
+} from 'lodash';
 
 class FilterContainer {
-  constructor(selector, layout) {
+  constructor(selector) {
     // cache jQuery node
     this.$node = $(selector);
 
     // set props
     this.props = {
+      // other props
       FilterItems: this.getFilterItems(),
       w: this.getWidth(),
       h: 0,
