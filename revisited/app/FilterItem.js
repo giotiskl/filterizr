@@ -5,6 +5,8 @@ class FilterItem {
   constructor($node, index) {
     // extract needed options
     const {
+      delay,
+      delayMode,
       filterOutCss,
       animationDuration,
       easing
@@ -38,8 +40,7 @@ class FilterItem {
         '-webkit-perspective': '1000px',
         '-webkit-transform-style': 'preserve-3d',
         'position': 'absolute',
-        'transition': `all ${animationDuration}s ${easing}`,
-        //'transition': 'all ' + parent.options.animationDuration + 's ' + parent.options.easing + ' ' + self._calcDelay() + 'ms'
+        'transition': `all ${animationDuration}s ${easing} ${this.calcDelay(delay, delayMode)}ms`,
       });
   }
 
@@ -66,6 +67,18 @@ class FilterItem {
   }
 
   /* Helper methods */
+  calcDelay(delay, delayMode) {
+    let ret = 0;
+
+    if (delayMode === 'progressive')
+      ret = delay * this.props.index;
+    else
+      if (this.props.index % 2 === 0)
+        ret = delay;
+
+    return ret;
+  }
+
   getContentsLowercase() {
     return this.$node.text().toLowerCase();
   }

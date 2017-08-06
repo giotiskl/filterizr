@@ -37,6 +37,9 @@ class Filterizr {
 
     // Init Filterizr
     this.filter(this.options.filter);
+
+    this.props.FilterContainer.Filterizr = this;
+    window.FilterContainer = this.props.FilterContainer;
   }
 
   // Public API of Filterizr
