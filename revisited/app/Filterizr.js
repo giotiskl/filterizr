@@ -1,7 +1,19 @@
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
-import _ from 'lodash';
+import {
+  concat,
+  each,
+  filter,
+  intersection,
+  includes,
+  isEqual,
+  merge,
+  reject,
+  reverse,
+  shuffle,
+  sortBy,
+} from 'lodash';
 
 class Filterizr {
   constructor(selector = ".filtr-container", options) {
@@ -86,19 +98,62 @@ class Filterizr {
   }
 
   setOptions(newOptions) {
-    this.options = _.merge(this.options, newOptions);
+    this.options = merge(this.options, newOptions);
+  }
+
+  toggleFilter(toggledFilter) {
+    let activeFilters = this.options.filter;
+
+    // if the active filters are already an array
+    if (Array.isArray(activeFilters)) {
+      // check if toggledFilter is there
+      if (~activeFilters.indexOf(toggledFilter)) {
+        // remove filter
+        activeFilters = reject(activeFilters, f => f === toggledFilter);          
+        // if there is now only 1 item in the array flatten it
+        if (activeFilters.length === 1)
+          activeFilters = activeFilters[0];
+      }
+      // otherwise just push it
+      else
+        activeFilters.push(toggledFilter);
+    }
+    // in case there is only one active filter, then form an array
+    else  {
+      // if the current filter is set to "all"
+      activeFilters === "all" ?
+        // then just set the filter to the int of the target filter
+        activeFilters = toggledFilter :
+        // if the active filter is already set to a category
+        // and the user clicks another category filter, check
+        // that they are not the same and
+        (activeFilters !== toggledFilter) ?
+        // form an array with both of them
+        activeFilters = concat(activeFilters, toggledFilter) :
+        // if the same category is clicked then revert filter to "all"
+        activeFilters = "all";
+    }
+
+    // update active filter in Filterizr's options
+    this.setOptions({
+      filter: activeFilters,
+    });
+
+    this.filter(this.options.filter);
   }
 
   // Helper methods
-  filterFilterItems(FilterItems, category) {
+  filterFilterItems(FilterItems, filters) {
     // Get filtered items
-    const FilteredItems = (category === "all") ?
+    const FilteredItems = (filters === "all") ?
       // in this case return all items
       FilterItems :
       // otherwise return filtered array
-      _.filter(FilterItems, (FilterItem) => {
+      filter(FilterItems, (FilterItem) => {
         const categories = FilterItem.getCategories();
-        return _.includes(categories, category)
+        return Array.isArray(filters) ? 
+          intersection(categories, filters).length :
+          includes(categories, filters)
       });
 
     return FilteredItems;
@@ -106,7 +161,7 @@ class Filterizr {
 
   sortFilterItems(FilterItems ,sortAttr = 'index', sortOrder = 'asc') {
     // Sort the FilterItems and reverse the array if order is descending
-    let SortedItems = _.sortBy(FilterItems, (FilterItem) => {
+    let SortedItems = sortBy(FilterItems, (FilterItem) => {
       return (sortAttr !== 'index' && sortAttr !== 'sortData') ?
         // if the user has not used one of the two default sort attributes
         // then search for custom data attributes on the filter items to sort
@@ -114,7 +169,7 @@ class Filterizr {
         // otherwise use the defaults
         FilterItem.props[sortAttr];
     });
-    SortedItems = sortOrder === 'asc' ? SortedItems : _.reverse(SortedItems);
+    SortedItems = sortOrder === 'asc' ? SortedItems : reverse(SortedItems);
 
     return SortedItems;
   }
@@ -122,19 +177,19 @@ class Filterizr {
   searchFilterItems(FilterItems, searchTerm = this.props.searchTerm) {
     if (!searchTerm) return FilterItems; // exit case when no search is applied
 
-    const SoughtItems =  _.filter(FilterItems, (FilterItem) => {
+    const SoughtItems =  filter(FilterItems, (FilterItem) => {
       const contents = FilterItem.getContentsLowercase();
-      return _.includes(contents, searchTerm);
+      return includes(contents, searchTerm);
     });
 
     return SoughtItems;
   }
 
   shuffleFilterItems(FilterItems) {
-    let ShuffledItems = _.shuffle(FilterItems)
+    let ShuffledItems = shuffle(FilterItems)
     // shuffle items until they are different from the initial FilteredItems
-    while (FilterItems.length > 1 && _.isEqual(FilterItems, ShuffledItems)) {
-      ShuffledItems = _.shuffle(FilterItems)
+    while (FilterItems.length > 1 && isEqual(FilterItems, ShuffledItems)) {
+      ShuffledItems = shuffle(FilterItems)
     }
 
     return ShuffledItems;
@@ -142,12 +197,15 @@ class Filterizr {
 
   render(FilterItems) {
     // get items to be filtered out
-    const FilteredOutItems = _.reject(this.props.FilterItems, (FilterItem) => {
-      const  categories = FilterItem.getCategories();
-      return _.includes(categories, this.options.filter);
+    const FilteredOutItems = reject(this.props.FilterItems, (FilterItem) => {
+      const categories = FilterItem.getCategories();
+      const filters = this.options.filter;
+      return Array.isArray(filters) ? 
+        intersection(categories, filters).length :
+        includes(categories, filters)
     })
     // filter out old items
-    _.each(FilteredOutItems, (FilterItem) => {
+    each(FilteredOutItems, (FilterItem) => {
       FilterItem.filterOut();
     });
 
@@ -155,7 +213,7 @@ class Filterizr {
     const PositionsArray = Positions(this.options.layout, this);
 
     // filter in new items
-    _.each(FilterItems, (FilterItem, index) => {
+    each(FilterItems, (FilterItem, index) => {
       FilterItem.filterIn(PositionsArray[index]);
     });
   }
