@@ -1,16 +1,17 @@
-import DefaultOptions from './options';
-import { omit, cloneDeep } from 'lodash';
+import { 
+  omit, 
+  cloneDeep 
+} from 'lodash';
 
 class FilterItem {
-  constructor($node, index) {
-    // extract needed options
+  constructor($node, index, options) {
     const {
       delay,
       delayMode,
       filterOutCss,
       animationDuration,
       easing
-    } = DefaultOptions;
+    } = options;
 
     // cache jQuery node
     this.$node = $node;
@@ -45,9 +46,9 @@ class FilterItem {
   }
 
   /* Filtering methods */
-  filterIn(targetPos) {
+  filterIn(targetPos, options) {
     // perform a deep clone of the filtering in css
-    let filterInCss = cloneDeep(DefaultOptions.filterInCss);
+    let filterInCss = cloneDeep(options.filterInCss);
     // enhance it with the target position towards which the item should animate
     filterInCss.transform += ' translate3d(' + targetPos.left + 'px,' + targetPos.top + 'px, 0)';
     // animate
@@ -56,9 +57,9 @@ class FilterItem {
     this.props.lastPosition = targetPos;
   }
 
-  filterOut() {
+  filterOut(options) {
     // perform a deep clone of the filtering out css
-    let filterOutCss = cloneDeep(DefaultOptions.filterOutCss);
+    let filterOutCss = cloneDeep(options.filterOutCss);
     const { lastPosition } = this.props;
     //Auto add translate to transform over user-defined filterOut styles
     filterOutCss.transform += ' translate3d(' + lastPosition.left + 'px,' + lastPosition.top + 'px, 0)';
