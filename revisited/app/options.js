@@ -20,7 +20,7 @@ const options = {
     'opacity': 1,
     'transform': 'scale(1)'
   },
-  layout: 'vertical',
+  layout: 'sameSize',
   setupControls: true,
 }
 
