@@ -225,10 +225,11 @@ class Filterizr {
   setupEvents() {
     // set up a window resize event to fire refiltering
     $(window).on('resize', debounce((evt) => {
+      // update dimensions of items based on new window size
       this.props.FilterContainer.updateWidth();
       this.props.FilterContainer.updateFilterItemsDimensions();
+      // refilter the grid to assume new positions
       this.filter(this.options.filter);
-      console.log('filtering');
     }, 250));
   }
 }
