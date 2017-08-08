@@ -1,5 +1,6 @@
 import HorizontalLayout from './layouts/HorizontalLayout';
 import VerticalLayout from './layouts/VerticalLayout';
+import SameHeightLayout from './layouts/SameHeightLayout';
 import SameSizeLayout from './layouts/SameSizeLayout';
 
 /**
@@ -14,6 +15,8 @@ const Positions = (Layout, Filterizr) => {
       return HorizontalLayout(Filterizr);
     case 'vertical':
       return VerticalLayout(Filterizr);
+    case 'sameHeight':
+      return SameHeightLayout(Filterizr);
     case 'sameSize':
       return SameSizeLayout(Filterizr);
     default:
