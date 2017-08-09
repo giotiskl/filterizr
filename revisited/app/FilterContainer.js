@@ -33,12 +33,6 @@ class FilterContainer {
   }
 
   calcColumns(Layout) {
-    switch(Layout) {
-      case 'sameSize':
-        return Math.round(this.props.w / this.props.FilterItems[0].props.w);
-    }
-
-    // default case
     return Math.round(this.props.w / this.props.FilterItems[0].props.w);
   }
 
