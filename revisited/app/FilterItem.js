@@ -1,7 +1,7 @@
 import { 
   omit, 
   cloneDeep 
-} from 'lodash';
+} from './vendor/lodash.custom';
 
 class FilterItem {
   constructor($node, index, options) {

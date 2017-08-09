@@ -1,4 +1,4 @@
-import { map } from 'lodash';
+import { map } from '../vendor/lodash.custom';
 
 /**
  * Vertical layout algorithm that arranges all FilterItems in one col. Their height may vary.

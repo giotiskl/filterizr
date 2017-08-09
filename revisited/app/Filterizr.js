@@ -14,7 +14,7 @@ import {
   reverse,
   shuffle,
   sortBy,
-} from 'lodash';
+} from './vendor/lodash.custom';
 
 class Filterizr {
   constructor(selector = ".filtr-container", options) {
