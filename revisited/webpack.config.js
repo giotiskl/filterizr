@@ -9,7 +9,7 @@ module.exports = {
   ],
   output: {
     path: __dirname,
-    filename: 'bundle.js',
+    filename: './dist/filterizr.min.js',
   },
   module: {
     loaders: [
