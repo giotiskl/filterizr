@@ -209,7 +209,7 @@ class Filterizr {
     })
     // filter out old items
     each(FilteredOutItems, (FilterItem) => {
-      FilterItem.filterOut(this.options);
+      FilterItem.filterOut(this.options.filterOutCss);
     });
 
     // Determine target positions for items to be filtered in
@@ -217,7 +217,7 @@ class Filterizr {
 
     // filter in new items
     each(FilterItems, (FilterItem, index) => {
-      FilterItem.filterIn(PositionsArray[index], this.options);
+      FilterItem.filterIn(PositionsArray[index], this.options.filterInCss);
     });
   }
 
