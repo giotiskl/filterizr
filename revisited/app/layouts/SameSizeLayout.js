@@ -10,10 +10,11 @@ const SameSizeLayout = (Filterizr) => {
     FilterItems
   } = Filterizr.props;
   // calculate number of columns and rows the grid should have
-  let cols = FilterContainer.calcColumns(Layout);
+  let cols = FilterContainer.calcColumns();
   let row = 0;
   // calculate array of positions
   const targetPositions = map(FilterItems, (FilterItem, index) => {
+    console.log(index)
     // update current row
     if (index % cols === 0 && index >= cols)
       row++;
