@@ -30,7 +30,6 @@ class Filterizr {
       searchTerm: '',
       sort: 'index',
       sortOrder: 'asc',
-      FilterControls: filterControls,
       FilterContainer: filterContainer,
       FilterItems: filterContainer.props.FilterItems,
       FilteredItems: [],
