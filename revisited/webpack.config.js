@@ -1,5 +1,6 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ProvidePlugin = require('webpack').ProvidePlugin;
+var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
 
 module.exports = {
   entry: [
@@ -31,12 +32,8 @@ module.exports = {
       title: "Filterizr revisited",
       template: "showcase/index.html",
     }),
-    new ProvidePlugin({
-      // extracts jquery into the global namespace
-      // under $/jQuery variable names
-      $: 'jquery',
-      jQuery: 'jquery',
-    }),
+    // uglify plugin for JS
+    new UglifyJsPlugin(),
   ],
   resolve: {
     extensions: ['.js'],
