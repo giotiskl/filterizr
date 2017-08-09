@@ -2,7 +2,7 @@ import FilterItem from './FilterItem';
 import { 
   each,
   map,
-} from 'lodash';
+} from './vendor/lodash.custom';
 
 class FilterContainer {
   constructor(selector = '.filtr-container', options) {
