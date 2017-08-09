@@ -14,7 +14,6 @@ const SameSizeLayout = (Filterizr) => {
   let row = 0;
   // calculate array of positions
   const targetPositions = map(FilterItems, (FilterItem, index) => {
-    console.log(index)
     // update current row
     if (index % cols === 0 && index >= cols)
       row++;
