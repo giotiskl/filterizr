@@ -3,6 +3,7 @@ import VerticalLayout from './layouts/VerticalLayout';
 import SameHeightLayout from './layouts/SameHeightLayout';
 import SameWidthLayout from './layouts/SameWidthLayout';
 import SameSizeLayout from './layouts/SameSizeLayout';
+import PackedLayout from './layouts/PackedLayout';
 
 /**
  * Calculates and returns an array of objects representing
@@ -22,6 +23,8 @@ const Positions = (Layout, Filterizr) => {
       return SameWidthLayout(Filterizr);
     case 'sameSize':
       return SameSizeLayout(Filterizr);
+    case 'packed':
+      return PackedLayout(Filterizr);
     default:
       return SameSizeLayout(Filterizr);
   }
