@@ -1,3 +1,42 @@
+import { map } from 'lodash';
+
+/**
+ * Packed layout for items that can have varying width as well as varying height.
+ * @param {object} Filterizr instance.
+ */
+const PackedLayout = (Filterizr) => {
+  const {
+    FilterContainer,
+    FilterItems
+  } = Filterizr.props;
+
+  //Instantiate new Packer, set up grid
+  const packer = new Packer(FilterContainer.props.w);
+  let filterItemsDimensions = map(FilterItems, FilterItem => { 
+    return {
+      w: FilterItem.props.w, 
+      h: FilterItem.props.h
+    }
+  });
+  // enhance array with coordinates
+  // added in an extra object named fit
+  // by the packing algorithm
+  packer.fit(filterItemsDimensions)
+
+  const targetPositions = map(filterItemsDimensions, filterItemDimensions => {
+    const filterItemCoords = filterItemDimensions.fit;
+    return {
+      left: filterItemCoords.x,
+      top : filterItemCoords.y,
+    }
+  });
+
+  // set height of container
+  FilterContainer.updateHeight(packer.root.h);
+
+  return targetPositions;
+}
+
 /**
  * Modified version of Jake Gordon's Bin Packing algorithm used for Filterizr's 'packed' layout
  * @see {@link https://github.com/jakesgordon/bin-packing}
@@ -54,4 +93,4 @@ Packer.prototype = {
   }
 };
 
-export default Packer;
+export default PackedLayout;
