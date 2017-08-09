@@ -1,4 +1,4 @@
-import { map } from 'lodash';
+import { map } from '../vendor/lodash.custom';
 
 /**
  * Packed layout for items that can have varying width as well as varying height.

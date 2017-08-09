@@ -3,7 +3,7 @@ import {
   debounce,
   reject,
   flatten,
-} from 'lodash';
+} from './vendor/lodash.custom';
 
 class FilterControls {
   /**

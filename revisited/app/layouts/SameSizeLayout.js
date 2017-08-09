@@ -1,4 +1,4 @@
-import { map } from 'lodash';
+import { map } from '../vendor/lodash.custom';
 
 /**
  * Same size layout for items that have the same width/height

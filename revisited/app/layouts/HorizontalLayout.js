@@ -1,4 +1,4 @@
-import { map } from 'lodash';
+import { map } from '../vendor/lodash.custom';
 
 /**
  * Horizontal layout algorithm that arranges all FilterItems in one row. Their width may vary.
