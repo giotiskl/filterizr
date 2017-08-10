@@ -32,7 +32,7 @@ class FilterContainer {
     return FilterItems;
   }
 
-  calcColumns(Layout) {
+  calcColumns() {
     return Math.round(this.props.w / this.props.FilterItems[0].props.w);
   }
 
