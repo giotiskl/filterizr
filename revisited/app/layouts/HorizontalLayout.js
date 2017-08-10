@@ -1,5 +1,3 @@
-import { map } from '../vendor/lodash.custom';
-
 /**
  * Horizontal layout algorithm that arranges all FilterItems in one row. Their width may vary.
  * @param {object} Filterizr instance.
@@ -14,7 +12,7 @@ const HorizontalLayout = (Filterizr) => {
       // target height of FilterContainer
       containerHeight = 0;
 
-  const targetPositions = map(FilterItems, (FilterItem, index) => {
+  const targetPositions = FilterItems.map((FilterItem, index) => {
     const pos = {
       left: left,
       top: 0,

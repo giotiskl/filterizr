@@ -1,5 +1,3 @@
-import { map } from '../vendor/lodash.custom';
-
 /**
  * Vertical layout algorithm that arranges all FilterItems in one col. Their height may vary.
  * @param {object} Filterizr instance.
@@ -13,7 +11,7 @@ const VerticalLayout = (Filterizr) => {
   // be the total height of the FilterContainer
   let top = 0;
 
-  const targetPositions = map(FilterItems, (FilterItem, index) => {
+  const targetPositions = FilterItems.map((FilterItem, index) => {
     const pos = {
       left: 0,
       top: top,
