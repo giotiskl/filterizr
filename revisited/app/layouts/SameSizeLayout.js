@@ -1,5 +1,3 @@
-import { map } from '../vendor/lodash.custom';
-
 /**
  * Same size layout for items that have the same width/height
  * @param {object} Filterizr instance.
@@ -13,7 +11,7 @@ const SameSizeLayout = (Filterizr) => {
   let cols = FilterContainer.calcColumns();
   let row = 0;
   // calculate array of positions
-  const targetPositions = map(FilterItems, (FilterItem, index) => {
+  const targetPositions = FilterItems.map((FilterItem, index) => {
     // update current row
     if (index % cols === 0 && index >= cols)
       row++;

@@ -1,8 +1,4 @@
 import FilterItem from './FilterItem';
-import { 
-  each,
-  map,
-} from './vendor/lodash.custom';
 
 class FilterContainer {
   constructor(selector = '.filtr-container', options) {
@@ -25,7 +21,7 @@ class FilterContainer {
   }
 
   getFilterItems(options) {
-    const FilterItems = map(this.$node.find('.filtr-item'), (item, index) => {
+    const FilterItems = $.map(this.$node.find('.filtr-item'), (item, index) => {
       return new FilterItem($(item), index, options);
     });
 
@@ -51,7 +47,7 @@ class FilterContainer {
       FilterItems
     } = this.props;
 
-    this.props.FilterItems = each(FilterItems, (FilterItem) => FilterItem.updateDimensions());
+    this.props.FilterItems.forEach(FilterItem => FilterItem.updateDimensions());
   }
 
   getWidth() {

@@ -3,14 +3,11 @@ import FilterContainer from './FilterContainer';
 import Positions from './Positions';
 import {
   concat,
-  each,
   debounce,
-  filter,
   intersection,
   includes,
   isEqual,
   merge,
-  reject,
   reverse,
   shuffle,
   sortBy,
@@ -105,6 +102,7 @@ class Filterizr {
   }
 
   toggleFilter(toggledFilter) {
+    // NOTE: fix bug in how filters are toggled
     let activeFilters = this.options.filter;
 
     // if the active filters are already an array
@@ -112,7 +110,7 @@ class Filterizr {
       // check if toggledFilter is there
       if (~activeFilters.indexOf(toggledFilter)) {
         // remove filter
-        activeFilters = reject(activeFilters, f => f === toggledFilter);          
+        activeFilters = activeFilters.filter(f => f !== toggledFilter);          
         // if there is now only 1 item in the array flatten it
         if (activeFilters.length === 1)
           activeFilters = activeFilters[0];
@@ -142,6 +140,7 @@ class Filterizr {
       filter: activeFilters,
     });
 
+    console.log(activeFilters)
     this.filter(this.options.filter);
   }
 
@@ -152,7 +151,7 @@ class Filterizr {
       // in this case return all items
       FilterItems :
       // otherwise return filtered array
-      filter(FilterItems, (FilterItem) => {
+      FilterItems.filter(FilterItem => {
         const categories = FilterItem.getCategories();
         return Array.isArray(filters) ? 
           intersection(categories, filters).length :
@@ -180,7 +179,7 @@ class Filterizr {
   searchFilterItems(FilterItems, searchTerm = this.props.searchTerm) {
     if (!searchTerm) return FilterItems; // exit case when no search is applied
 
-    const SoughtItems =  filter(FilterItems, (FilterItem) => {
+    const SoughtItems =  FilterItems.filter(FilterItem => {
       const contents = FilterItem.getContentsLowercase();
       return includes(contents, searchTerm);
     });
@@ -200,15 +199,15 @@ class Filterizr {
 
   render(FilterItems) {
     // get items to be filtered out
-    const FilteredOutItems = reject(this.props.FilterItems, (FilterItem) => {
+    const FilteredOutItems = this.props.FilterItems.filter(FilterItem => {
       const categories = FilterItem.getCategories();
       const filters = this.options.filter;
       return Array.isArray(filters) ? 
-        intersection(categories, filters).length :
-        includes(categories, filters)
+        !intersection(categories, filters).length :
+        !includes(categories, filters)
     })
     // filter out old items
-    each(FilteredOutItems, (FilterItem) => {
+    FilteredOutItems.forEach(FilterItem => {
       FilterItem.filterOut(this.options.filterOutCss);
     });
 
@@ -216,7 +215,7 @@ class Filterizr {
     const PositionsArray = Positions(this.options.layout, this);
 
     // filter in new items
-    each(FilterItems, (FilterItem, index) => {
+    FilterItems.forEach((FilterItem, index) => {
       FilterItem.filterIn(PositionsArray[index], this.options.filterInCss);
     });
   }

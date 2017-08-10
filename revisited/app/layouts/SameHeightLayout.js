@@ -1,5 +1,3 @@
-import { map } from '../vendor/lodash.custom';
-
 /**
  * Same height layout for items that have the same height, but can have varying width
  * @param {object} Filterizr instance.
@@ -14,7 +12,7 @@ const SameHeightLayout = (Filterizr) => {
   let row = 0, left = 0;
 
   // calculate array of positions
-  const targetPositions = map(FilterItems, (FilterItem, index) => {
+  const targetPositions = FilterItems.map((FilterItem, index) => {
     const w = FilterItem.props.w;
     // in case the item exceeds the grid then move to next row and reset left
     if (left + w > gridWidth) {
