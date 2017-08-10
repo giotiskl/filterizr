@@ -1,7 +1,4 @@
-import { 
-  omit, 
-  cloneDeep 
-} from './vendor/lodash.custom';
+import { cloneDeep } from './utils';
 
 class FilterItem {
   constructor($node, index, options) {
@@ -21,7 +18,10 @@ class FilterItem {
       data: (() => {
         // all data-attributes defined by the user, can be used for sorting
         const data = this.$node.data();
-        return omit(data, ['category', 'sort']);
+        // remove category and sort which could be there by API design
+        delete data.category;
+        delete data.sort;
+        return data;
       })(),
       index,
       sortData: this.$node.data('sort'),

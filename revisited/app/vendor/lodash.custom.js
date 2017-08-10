@@ -1,7 +1,7 @@
 /**
  * @license
  * Lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash include="concat,each,debounce,filter,intersection,includes,isEqual,merge,reject,reverse,shuffle,sortBy,omit,cloneDeep,map,flatten"`
+ * Build: `lodash include="concat,debounce,intersection,includes,isEqual,merge,reverse,shuffle,sortBy"`
  * Copyright JS Foundation and other contributors <https://js.foundation/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -1580,24 +1580,6 @@
   var baseEach = createBaseEach(baseForOwn);
 
   /**
-   * The base implementation of `_.filter` without support for iteratee shorthands.
-   *
-   * @private
-   * @param {Array|Object} collection The collection to iterate over.
-   * @param {Function} predicate The function invoked per iteration.
-   * @returns {Array} Returns the new filtered array.
-   */
-  function baseFilter(collection, predicate) {
-    var result = [];
-    baseEach(collection, function(value, index, collection) {
-      if (predicate(value, index, collection)) {
-        result.push(value);
-      }
-    });
-    return result;
-  }
-
-  /**
    * The base implementation of `_.flatten` with support for restricting flattening.
    *
    * @private
@@ -2282,36 +2264,6 @@
   }
 
   /**
-   * The base implementation of `_.slice` without an iteratee call guard.
-   *
-   * @private
-   * @param {Array} array The array to slice.
-   * @param {number} [start=0] The start position.
-   * @param {number} [end=array.length] The end position.
-   * @returns {Array} Returns the slice of `array`.
-   */
-  function baseSlice(array, start, end) {
-    var index = -1,
-        length = array.length;
-
-    if (start < 0) {
-      start = -start > length ? 0 : (length + start);
-    }
-    end = end > length ? length : end;
-    if (end < 0) {
-      end += length;
-    }
-    length = start > end ? 0 : ((end - start) >>> 0);
-    start >>>= 0;
-
-    var result = Array(length);
-    while (++index < length) {
-      result[index] = array[index + start];
-    }
-    return result;
-  }
-
-  /**
    * The base implementation of `_.toString` which doesn't convert nullish
    * values to empty strings.
    *
@@ -2333,20 +2285,6 @@
     }
     var result = (value + '');
     return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
-  }
-
-  /**
-   * The base implementation of `_.unset`.
-   *
-   * @private
-   * @param {Object} object The object to modify.
-   * @param {Array|string} path The property path to unset.
-   * @returns {boolean} Returns `true` if the property is deleted, else `false`.
-   */
-  function baseUnset(object, path) {
-    path = castPath(path, object);
-    object = parent(object, path);
-    return object == null || delete object[toKey(last(path))];
   }
 
   /**
@@ -2730,19 +2668,6 @@
   }
 
   /**
-   * Used by `_.omit` to customize its `_.cloneDeep` use to only clone plain
-   * objects.
-   *
-   * @private
-   * @param {*} value The value to inspect.
-   * @param {string} key The key of the property to inspect.
-   * @returns {*} Returns the uncloned value or `undefined` to defer cloning to `_.cloneDeep`.
-   */
-  function customOmitClone(value) {
-    return isPlainObject(value) ? undefined : value;
-  }
-
-  /**
    * A specialized version of `baseIsEqualDeep` for arrays with support for
    * partial deep comparisons.
    *
@@ -2973,17 +2898,6 @@
     stack['delete'](object);
     stack['delete'](other);
     return result;
-  }
-
-  /**
-   * A specialized version of `baseRest` which flattens the rest array.
-   *
-   * @private
-   * @param {Function} func The function to apply a rest parameter to.
-   * @returns {Function} Returns the new function.
-   */
-  function flatRest(func) {
-    return setToString(overRest(func, undefined, flatten), func + '');
   }
 
   /**
@@ -3502,18 +3416,6 @@
   }
 
   /**
-   * Gets the parent value at `path` of `object`.
-   *
-   * @private
-   * @param {Object} object The object to query.
-   * @param {Array} path The path to get the parent value of.
-   * @returns {*} Returns the parent value.
-   */
-  function parent(object, path) {
-    return path.length < 2 ? object : baseGet(object, baseSlice(path, 0, -1));
-  }
-
-  /**
    * Sets the `toString` method of `func` to return `string`.
    *
    * @private
@@ -3669,25 +3571,6 @@
   }
 
   /**
-   * Flattens `array` a single level deep.
-   *
-   * @static
-   * @memberOf _
-   * @since 0.1.0
-   * @category Array
-   * @param {Array} array The array to flatten.
-   * @returns {Array} Returns the new flattened array.
-   * @example
-   *
-   * _.flatten([1, [2, [3, [4]], 5]]);
-   * // => [1, 2, [3, [4]], 5]
-   */
-  function flatten(array) {
-    var length = array == null ? 0 : array.length;
-    return length ? baseFlatten(array, 1) : [];
-  }
-
-  /**
    * Creates an array of unique values that are included in all given arrays
    * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
    * for equality comparisons. The order and references of result values are
@@ -3710,25 +3593,6 @@
       ? baseIntersection(mapped)
       : [];
   });
-
-  /**
-   * Gets the last element of `array`.
-   *
-   * @static
-   * @memberOf _
-   * @since 0.1.0
-   * @category Array
-   * @param {Array} array The array to query.
-   * @returns {*} Returns the last element of `array`.
-   * @example
-   *
-   * _.last([1, 2, 3]);
-   * // => 3
-   */
-  function last(array) {
-    var length = array == null ? 0 : array.length;
-    return length ? array[length - 1] : undefined;
-  }
 
   /**
    * Reverses `array` so that the first element becomes the last, the second
@@ -3758,83 +3622,6 @@
   }
 
   /*------------------------------------------------------------------------*/
-
-  /**
-   * Iterates over elements of `collection`, returning an array of all elements
-   * `predicate` returns truthy for. The predicate is invoked with three
-   * arguments: (value, index|key, collection).
-   *
-   * **Note:** Unlike `_.remove`, this method returns a new array.
-   *
-   * @static
-   * @memberOf _
-   * @since 0.1.0
-   * @category Collection
-   * @param {Array|Object} collection The collection to iterate over.
-   * @param {Function} [predicate=_.identity] The function invoked per iteration.
-   * @returns {Array} Returns the new filtered array.
-   * @see _.reject
-   * @example
-   *
-   * var users = [
-   *   { 'user': 'barney', 'age': 36, 'active': true },
-   *   { 'user': 'fred',   'age': 40, 'active': false }
-   * ];
-   *
-   * _.filter(users, function(o) { return !o.active; });
-   * // => objects for ['fred']
-   *
-   * // The `_.matches` iteratee shorthand.
-   * _.filter(users, { 'age': 36, 'active': true });
-   * // => objects for ['barney']
-   *
-   * // The `_.matchesProperty` iteratee shorthand.
-   * _.filter(users, ['active', false]);
-   * // => objects for ['fred']
-   *
-   * // The `_.property` iteratee shorthand.
-   * _.filter(users, 'active');
-   * // => objects for ['barney']
-   */
-  function filter(collection, predicate) {
-    var func = isArray(collection) ? arrayFilter : baseFilter;
-    return func(collection, getIteratee(predicate, 3));
-  }
-
-  /**
-   * Iterates over elements of `collection` and invokes `iteratee` for each element.
-   * The iteratee is invoked with three arguments: (value, index|key, collection).
-   * Iteratee functions may exit iteration early by explicitly returning `false`.
-   *
-   * **Note:** As with other "Collections" methods, objects with a "length"
-   * property are iterated like arrays. To avoid this behavior use `_.forIn`
-   * or `_.forOwn` for object iteration.
-   *
-   * @static
-   * @memberOf _
-   * @since 0.1.0
-   * @alias each
-   * @category Collection
-   * @param {Array|Object} collection The collection to iterate over.
-   * @param {Function} [iteratee=_.identity] The function invoked per iteration.
-   * @returns {Array|Object} Returns `collection`.
-   * @see _.forEachRight
-   * @example
-   *
-   * _.forEach([1, 2], function(value) {
-   *   console.log(value);
-   * });
-   * // => Logs `1` then `2`.
-   *
-   * _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
-   *   console.log(key);
-   * });
-   * // => Logs 'a' then 'b' (iteration order is not guaranteed).
-   */
-  function forEach(collection, iteratee) {
-    var func = isArray(collection) ? arrayEach : baseEach;
-    return func(collection, getIteratee(iteratee, 3));
-  }
 
   /**
    * Checks if `value` is in `collection`. If `collection` is a string, it's
@@ -3877,92 +3664,6 @@
     return isString(collection)
       ? (fromIndex <= length && collection.indexOf(value, fromIndex) > -1)
       : (!!length && baseIndexOf(collection, value, fromIndex) > -1);
-  }
-
-  /**
-   * Creates an array of values by running each element in `collection` thru
-   * `iteratee`. The iteratee is invoked with three arguments:
-   * (value, index|key, collection).
-   *
-   * Many lodash methods are guarded to work as iteratees for methods like
-   * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
-   *
-   * The guarded methods are:
-   * `ary`, `chunk`, `curry`, `curryRight`, `drop`, `dropRight`, `every`,
-   * `fill`, `invert`, `parseInt`, `random`, `range`, `rangeRight`, `repeat`,
-   * `sampleSize`, `slice`, `some`, `sortBy`, `split`, `take`, `takeRight`,
-   * `template`, `trim`, `trimEnd`, `trimStart`, and `words`
-   *
-   * @static
-   * @memberOf _
-   * @since 0.1.0
-   * @category Collection
-   * @param {Array|Object} collection The collection to iterate over.
-   * @param {Function} [iteratee=_.identity] The function invoked per iteration.
-   * @returns {Array} Returns the new mapped array.
-   * @example
-   *
-   * function square(n) {
-   *   return n * n;
-   * }
-   *
-   * _.map([4, 8], square);
-   * // => [16, 64]
-   *
-   * _.map({ 'a': 4, 'b': 8 }, square);
-   * // => [16, 64] (iteration order is not guaranteed)
-   *
-   * var users = [
-   *   { 'user': 'barney' },
-   *   { 'user': 'fred' }
-   * ];
-   *
-   * // The `_.property` iteratee shorthand.
-   * _.map(users, 'user');
-   * // => ['barney', 'fred']
-   */
-  function map(collection, iteratee) {
-    var func = isArray(collection) ? arrayMap : baseMap;
-    return func(collection, getIteratee(iteratee, 3));
-  }
-
-  /**
-   * The opposite of `_.filter`; this method returns the elements of `collection`
-   * that `predicate` does **not** return truthy for.
-   *
-   * @static
-   * @memberOf _
-   * @since 0.1.0
-   * @category Collection
-   * @param {Array|Object} collection The collection to iterate over.
-   * @param {Function} [predicate=_.identity] The function invoked per iteration.
-   * @returns {Array} Returns the new filtered array.
-   * @see _.filter
-   * @example
-   *
-   * var users = [
-   *   { 'user': 'barney', 'age': 36, 'active': false },
-   *   { 'user': 'fred',   'age': 40, 'active': true }
-   * ];
-   *
-   * _.reject(users, function(o) { return !o.active; });
-   * // => objects for ['fred']
-   *
-   * // The `_.matches` iteratee shorthand.
-   * _.reject(users, { 'age': 40, 'active': true });
-   * // => objects for ['barney']
-   *
-   * // The `_.matchesProperty` iteratee shorthand.
-   * _.reject(users, ['active', false]);
-   * // => objects for ['fred']
-   *
-   * // The `_.property` iteratee shorthand.
-   * _.reject(users, 'active');
-   * // => objects for ['barney']
-   */
-  function reject(collection, predicate) {
-    var func = isArray(collection) ? arrayFilter : baseFilter;
-    return func(collection, negate(getIteratee(predicate, 3)));
   }
 
   /**
@@ -4294,65 +3995,7 @@
   // Expose `MapCache`.
   memoize.Cache = MapCache;
 
-  /**
-   * Creates a function that negates the result of the predicate `func`. The
-   * `func` predicate is invoked with the `this` binding and arguments of the
-   * created function.
-   *
-   * @static
-   * @memberOf _
-   * @since 3.0.0
-   * @category Function
-   * @param {Function} predicate The predicate to negate.
-   * @returns {Function} Returns the new negated function.
-   * @example
-   *
-   * function isEven(n) {
-   *   return n % 2 == 0;
-   * }
-   *
-   * _.filter([1, 2, 3, 4, 5, 6], _.negate(isEven));
-   * // => [1, 3, 5]
-   */
-  function negate(predicate) {
-    if (typeof predicate != 'function') {
-      throw new TypeError(FUNC_ERROR_TEXT);
-    }
-    return function() {
-      var args = arguments;
-      switch (args.length) {
-        case 0: return !predicate.call(this);
-        case 1: return !predicate.call(this, args[0]);
-        case 2: return !predicate.call(this, args[0], args[1]);
-        case 3: return !predicate.call(this, args[0], args[1], args[2]);
-      }
-      return !predicate.apply(this, args);
-    };
-  }
-
   /*------------------------------------------------------------------------*/
-
-  /**
-   * This method is like `_.clone` except that it recursively clones `value`.
-   *
-   * @static
-   * @memberOf _
-   * @since 1.0.0
-   * @category Lang
-   * @param {*} value The value to recursively clone.
-   * @returns {*} Returns the deep cloned value.
-   * @see _.clone
-   * @example
-   *
-   * var objects = [{ 'a': 1 }, { 'b': 2 }];
-   *
-   * var deep = _.cloneDeep(objects);
-   * console.log(deep[0] === objects[0]);
-   * // => false
-   */
-  function cloneDeep(value) {
-    return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
-  }
 
   /**
    * Performs a
@@ -5089,48 +4732,6 @@
   });
 
   /**
-   * The opposite of `_.pick`; this method creates an object composed of the
-   * own and inherited enumerable property paths of `object` that are not omitted.
-   *
-   * **Note:** This method is considerably slower than `_.pick`.
-   *
-   * @static
-   * @since 0.1.0
-   * @memberOf _
-   * @category Object
-   * @param {Object} object The source object.
-   * @param {...(string|string[])} [paths] The property paths to omit.
-   * @returns {Object} Returns the new object.
-   * @example
-   *
-   * var object = { 'a': 1, 'b': '2', 'c': 3 };
-   *
-   * _.omit(object, ['a', 'c']);
-   * // => { 'b': '2' }
-   */
-  var omit = flatRest(function(object, paths) {
-    var result = {};
-    if (object == null) {
-      return result;
-    }
-    var isDeep = false;
-    paths = arrayMap(paths, function(path) {
-      path = castPath(path, object);
-      isDeep || (isDeep = path.length > 1);
-      return path;
-    });
-    copyObject(object, getAllKeysIn(object), result);
-    if (isDeep) {
-      result = baseClone(result, CLONE_DEEP_FLAG | CLONE_FLAT_FLAG | CLONE_SYMBOLS_FLAG, customOmitClone);
-    }
-    var length = paths.length;
-    while (length--) {
-      baseUnset(result, paths[length]);
-    }
-    return result;
-  });
-
-  /**
    * Creates an array of the own enumerable string keyed property values of `object`.
    *
    * **Note:** Non-object values are coerced to objects.
@@ -5324,19 +4925,13 @@
   lodash.concat = concat;
   lodash.constant = constant;
   lodash.debounce = debounce;
-  lodash.filter = filter;
-  lodash.flatten = flatten;
   lodash.intersection = intersection;
   lodash.iteratee = iteratee;
   lodash.keys = keys;
   lodash.keysIn = keysIn;
-  lodash.map = map;
   lodash.memoize = memoize;
   lodash.merge = merge;
-  lodash.negate = negate;
-  lodash.omit = omit;
   lodash.property = property;
-  lodash.reject = reject;
   lodash.reverse = reverse;
   lodash.shuffle = shuffle;
   lodash.sortBy = sortBy;
@@ -5346,9 +4941,7 @@
   /*------------------------------------------------------------------------*/
 
   // Add methods that return unwrapped values in chain sequences.
-  lodash.cloneDeep = cloneDeep;
   lodash.eq = eq;
-  lodash.forEach = forEach;
   lodash.get = get;
   lodash.hasIn = hasIn;
   lodash.identity = identity;
@@ -5367,7 +4960,6 @@
   lodash.isString = isString;
   lodash.isSymbol = isSymbol;
   lodash.isTypedArray = isTypedArray;
-  lodash.last = last;
   lodash.stubArray = stubArray;
   lodash.stubFalse = stubFalse;
   lodash.now = now;
@@ -5375,9 +4967,6 @@
   lodash.toInteger = toInteger;
   lodash.toNumber = toNumber;
   lodash.toString = toString;
-
-  // Add aliases.
-  lodash.each = forEach;
 
   /*------------------------------------------------------------------------*/
 

@@ -1,5 +1,3 @@
-import { map } from '../vendor/lodash.custom';
-
 /**
  * Packed layout for items that can have varying width as well as varying height.
  * @param {object} Filterizr instance.
@@ -12,7 +10,7 @@ const PackedLayout = (Filterizr) => {
 
   //Instantiate new Packer, set up grid
   const packer = new Packer(FilterContainer.props.w);
-  let filterItemsDimensions = map(FilterItems, FilterItem => { 
+  let filterItemsDimensions = FilterItems.map(FilterItem => { 
     return {
       w: FilterItem.props.w, 
       h: FilterItem.props.h
@@ -23,7 +21,7 @@ const PackedLayout = (Filterizr) => {
   // by the packing algorithm
   packer.fit(filterItemsDimensions)
 
-  const targetPositions = map(filterItemsDimensions, filterItemDimensions => {
+  const targetPositions = filterItemsDimensions.map(filterItemDimensions => {
     const filterItemCoords = filterItemDimensions.fit;
     return {
       left: filterItemCoords.x,

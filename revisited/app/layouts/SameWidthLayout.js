@@ -1,5 +1,3 @@
-import { map } from '../vendor/lodash.custom';
-
 /**
  * Same width layout for items that have the same width, but can have varying height
  * @param {object} Filterizr instance.
@@ -16,7 +14,7 @@ const SameWidthLayout = (Filterizr) => {
       containerHeight = 0;
 
   // calculate array of positions
-  const targetPositions = map(FilterItems, (FilterItem, index) => {
+  const targetPositions = FilterItems.map((FilterItem, index) => {
     // update height of tallest item in row if needed
     const h = FilterItem.props.h;
     if (h > heightOfTallestInRow)
