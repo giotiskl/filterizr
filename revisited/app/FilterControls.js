@@ -1,8 +1,5 @@
 import { 
-  concat, 
   debounce,
-  reject,
-  flatten,
 } from './vendor/lodash.custom';
 
 class FilterControls {
