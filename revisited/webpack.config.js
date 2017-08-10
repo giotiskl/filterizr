@@ -20,10 +20,7 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         // run JS through Babel
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['es2015'],
-          }
+          loader: 'babel-loader'
         }
       },
     ]
