@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "webpack-dev-server --progress --inline --hot",
-    "build": "webpack",
+    "build": "webpack -p --progress --env=production",
+    "analyze": "webpack -p --progress --env=analyze",
     "test": "jest"
   },
   "dependencies": {},
