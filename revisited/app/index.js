@@ -10,9 +10,6 @@ import DefaultOptions from './options';
     const selector  = `.${this.get(0).className}`;
     const args = arguments;
 
-    console.log(this)
-
-
     // user is instantiating Filterizr
     if (!this._fltr && args.length === 0 || (args.length === 1 && typeof args[0] === 'object')) {
       const options = args.length > 0 ? args[0] : DefaultOptions;
@@ -43,6 +40,7 @@ import DefaultOptions from './options';
           filterizr.setOptions(...methodArgs);
           return this;
         default:
+          throw new Error(`${method} is not part of the Filterizr API. Please refer to the docs for more information.`);
           return;
       }
     }
