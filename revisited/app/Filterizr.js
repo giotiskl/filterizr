@@ -48,6 +48,11 @@ class Filterizr {
 
     // trigger filtering start event
     FilterContainer.trigger('filteringStart');
+
+    // cast category to string or array of strings
+    category = Array.isArray(category) ?
+      category.map(c => c.toString()) :
+      category.toString();
     
     // filter items and optionally apply search if a search term exists
     const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, category), searchTerm);
