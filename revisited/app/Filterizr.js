@@ -2,16 +2,17 @@ import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
 import {
-  concat,
   debounce,
   intersection,
-  includes,
   isEqual,
-  merge,
   reverse,
   shuffle,
   sortBy,
 } from './vendor/lodash.custom';
+import { 
+  merge,
+  stringInArray 
+} from './utils';
 
 class Filterizr {
   constructor(selector = ".filtr-container", options) {
@@ -103,41 +104,42 @@ class Filterizr {
   }
 
   setOptions(newOptions) {
-    this.options = merge(this.options, newOptions);
+    this.options = merge(newOptions, this.options);
   }
 
   toggleFilter(toggledFilter) {
-    // NOTE: fix bug in how filters are toggled
     let activeFilters = this.options.filter;
 
-    // if the active filters are already an array
-    if (Array.isArray(activeFilters)) {
-      // check if toggledFilter is there
-      if (~activeFilters.indexOf(toggledFilter)) {
-        // remove filter
-        activeFilters = activeFilters.filter(f => f !== toggledFilter);          
-        // if there is now only 1 item in the array flatten it
-        if (activeFilters.length === 1)
-          activeFilters = activeFilters[0];
-      }
-      // otherwise just push it
-      else
-        activeFilters.push(toggledFilter);
+    if (activeFilters === 'all') {
+      // if set to all then just set to new category
+      activeFilters = toggledFilter;
     }
-    // in case there is only one active filter, then form an array
-    else  {
-      // if the current filter is set to "all"
-      activeFilters === "all" ?
-        // then just set the filter to the int of the target filter
-        activeFilters = toggledFilter :
-        // if the active filter is already set to a category
-        // and the user clicks another category filter, check
-        // that they are not the same and
-        (activeFilters !== toggledFilter) ?
-        // form an array with both of them
-        activeFilters = concat(activeFilters, toggledFilter) :
-        // if the same category is clicked then revert filter to "all"
-        activeFilters = "all";
+    else {
+      if (Array.isArray(activeFilters)) {
+        // if the toggledFilter is already included in the array
+        if (stringInArray(activeFilters, toggledFilter)) {
+          // then remove it
+          activeFilters = activeFilters.filter(f => f !== toggledFilter);          
+          // and check if there is now only 1 item left in the array
+          if (activeFilters.length === 1)
+            // in that case flatten it
+            activeFilters = activeFilters[0];
+        }
+        else {
+          // if the item is not in the array then simply push it
+          activeFilters.push(toggledFilter);
+        }
+      }
+      else {
+        // in case the filter is NOT set to "all" 
+        // check if the toggledFilter is the active one
+        if (activeFilters === toggledFilter)
+          // in this case revert to all
+          activeFilters = "all";
+        else
+          // otherwise form an array with the two values
+          activeFilters = [activeFilters, toggledFilter]
+      }
     }
 
     // update active filter in Filterizr's options
@@ -145,7 +147,6 @@ class Filterizr {
       filter: activeFilters,
     });
 
-    console.log(activeFilters)
     this.filter(this.options.filter);
   }
 
@@ -160,7 +161,7 @@ class Filterizr {
         const categories = FilterItem.getCategories();
         return Array.isArray(filters) ? 
           intersection(categories, filters).length :
-          includes(categories, filters)
+          stringInArray(categories, filters)
       });
 
     return FilteredItems;
@@ -186,7 +187,7 @@ class Filterizr {
 
     const SoughtItems =  FilterItems.filter(FilterItem => {
       const contents = FilterItem.getContentsLowercase();
-      return includes(contents, searchTerm);
+      return ~contents.lastIndexOf(searchTerm);
     });
 
     return SoughtItems;
@@ -209,7 +210,7 @@ class Filterizr {
       const filters = this.options.filter;
       return Array.isArray(filters) ? 
         !intersection(categories, filters).length :
-        !includes(categories, filters)
+        !stringInArray(categories, filters)
     })
     // filter out old items
     FilteredOutItems.forEach(FilterItem => {
