@@ -55,3 +55,14 @@ const merge = (target, old) => {
 }
 
 export { merge };
+
+/**
+ * A function get the intersection of two arrays. IE9+.
+ * @param {array} arr1 is the first array of which to get the intersection
+ * @param {array} arr2 is the second array of which to get the intersection
+ */
+const intersection = (arr1, arr2) => {
+  return Array.prototype.filter.call(arr1, (n) => ~arr2.indexOf(n));
+}
+
+export { intersection };
