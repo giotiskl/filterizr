@@ -147,8 +147,6 @@ class Filterizr {
       filter: activeFilters,
     });
 
-    console.log(this.options.filter);
-
     this.filter(this.options.filter);
   }
 
