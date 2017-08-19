@@ -3,13 +3,13 @@ import FilterContainer from './FilterContainer';
 import Positions from './Positions';
 import {
   debounce,
-  intersection,
   isEqual,
   reverse,
   shuffle,
   sortBy,
 } from './vendor/lodash.custom';
 import { 
+  intersection,
   merge,
   stringInArray 
 } from './utils';
