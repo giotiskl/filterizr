@@ -56,7 +56,9 @@ class Filterizr {
       category.toString();
     
     // filter items and optionally apply search if a search term exists
-    const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, category), searchTerm);
+    const FilteredItems = this.searchFilterItems(
+      this.filterFilterItems(FilterItems, category), searchTerm
+    );
     this.props.FilteredItems = FilteredItems;
 
     // set up events needed by Filterizr
