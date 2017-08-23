@@ -54,9 +54,31 @@ class FilterContainer {
     return this.$node.innerWidth();
   }
 
-  // Event helpers
+  //- Event helpers
+  /**
+   * Method wrapper around jQuery's trigger
+   * @param {string} evt name of the event
+   */
   trigger(evt) {
     this.$node.trigger(evt);
+  }
+
+  /**
+   * Method wrapper around jQuery's off
+   * @param {string} evt name of the event
+   * @param {function} cb callback to execute on event
+   */
+  off(evt, cb) {
+    this.$node.off(evt, cb);
+  }
+
+  /**
+   * Method wrapper around jQuery's on
+   * @param {string} evt name of the event
+   * @param {function} cb callback to execute on event
+   */
+  on(evt, cb) {
+    this.$node.on(evt, cb);
   }
 }
 
