@@ -64,6 +64,9 @@ class Filterizr {
     // set up events needed by Filterizr
     // render the items
     this.render(FilteredItems);
+
+    // trigger filtering end event
+    FilterContainer.trigger('filteringEnd');
   }
 
   sort(sortAttr = 'index', sortOrder = 'asc') {
@@ -106,7 +109,11 @@ class Filterizr {
   }
 
   setOptions(newOptions) {
+    // merge options
     this.options = merge(newOptions, this.options);
+    // if callbacks defined then reregister events
+    if ('callbacks' in newOptions)
+      this.setupFilterizrEvents();
   }
 
   toggleFilter(toggledFilter) {
@@ -228,7 +235,25 @@ class Filterizr {
     });
   }
 
+  setupFilterizrEvents() {
+    const { FilterContainer } = this.props;
+    const { callbacks } = this.options;
+
+    // cancel existing evts
+    FilterContainer.off('filteringStart filteringEnd shufflingStart shufflingEnd sortingStart sortingEnd')
+    // rebind evts
+    FilterContainer.on('filteringStart', callbacks.onFilteringStart);
+    FilterContainer.on('filteringEnd', callbacks.onFilteringEnd);
+    FilterContainer.on('shufflingStart', callbacks.onShufflingStart);
+    FilterContainer.on('shufflingEnd', callbacks.onShufflingEnd);
+    FilterContainer.on('sortingStart', callbacks.onSortingStart);
+    FilterContainer.on('sortingEnd', callbacks.onSortingEnd);
+  }
+
   setupEvents() {
+    //- Filterizr events
+    this.setupFilterizrEvents();
+    //- Generic events
     // set up a window resize event to fire refiltering
     $(window).on('resize', debounce((evt) => {
       // update dimensions of items based on new window size
