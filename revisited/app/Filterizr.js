@@ -4,7 +4,6 @@ import Positions from './Positions';
 import {
   debounce,
   isEqual,
-  reverse,
   shuffle,
   sortBy,
 } from './vendor/lodash.custom';
@@ -186,7 +185,7 @@ class Filterizr {
         // otherwise use the defaults
         FilterItem.props[sortAttr];
     });
-    SortedItems = sortOrder === 'asc' ? SortedItems : reverse(SortedItems);
+    SortedItems = sortOrder === 'asc' ? SortedItems : SortedItems.reverse();
 
     return SortedItems;
   }
