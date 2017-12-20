@@ -1,6 +1,6 @@
 import { 
   debounce,
-} from './vendor/lodash.custom';
+} from './utils';
 
 class FilterControls {
   /**
