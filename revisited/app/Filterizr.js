@@ -2,15 +2,15 @@ import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
 import {
-  debounce,
   isEqual,
   shuffle,
   sortBy,
 } from './vendor/lodash.custom';
 import { 
+  debounce,
   intersection,
   merge,
-  stringInArray 
+  stringInArray,
 } from './utils';
 
 class Filterizr {
