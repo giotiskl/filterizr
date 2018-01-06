@@ -20,6 +20,15 @@ class FilterContainer {
     });
   }
 
+  destroy() {
+    // Remove all inline styles and unbind all events
+    this.$node
+      .attr('style', '')
+      .find('.filtr-item')
+      .attr('style', '');
+    this.unbindEvents();
+  }
+
   getFilterItems(options) {
     const FilterItems = $.map(this.$node.find('.filtr-item'), (item, index) => {
       return new FilterItem($(item), index, options);
@@ -54,6 +63,26 @@ class FilterContainer {
     return this.$node.innerWidth();
   }
 
+  bindEvents(callbacks) {
+    this.$node.on('filteringStart.Filterizr', callbacks.onFilteringStart);
+    this.$node.on('filteringEnd.Filterizr', callbacks.onFilteringEnd);
+    this.$node.on('shufflingStart.Filterizr', callbacks.onShufflingStart);
+    this.$node.on('shufflingEnd.Filterizr', callbacks.onShufflingEnd);
+    this.$node.on('sortingStart.Filterizr', callbacks.onSortingStart);
+    this.$node.on('sortingEnd.Filterizr', callbacks.onSortingEnd);
+  }
+
+  unbindEvents() {
+    this.$node.off(
+      `filteringStart.Filterizr 
+      filteringEnd.Filterizr 
+      shufflingStart.Filterizr 
+      shufflingEnd.Filterizr 
+      sortingStart.Filterizr 
+      sortingEnd.Filterizr`
+    );
+  }
+
   //- Event helpers
   /**
    * Method wrapper around jQuery's trigger
@@ -61,24 +90,6 @@ class FilterContainer {
    */
   trigger(evt) {
     this.$node.trigger(evt);
-  }
-
-  /**
-   * Method wrapper around jQuery's off
-   * @param {string} evt name of the event
-   * @param {function} cb callback to execute on event
-   */
-  off(evt, cb) {
-    this.$node.off(evt, cb);
-  }
-
-  /**
-   * Method wrapper around jQuery's on
-   * @param {string} evt name of the event
-   * @param {function} cb callback to execute on event
-   */
-  on(evt, cb) {
-    this.$node.on(evt, cb);
   }
 }
 

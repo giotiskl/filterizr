@@ -11,7 +11,7 @@ class FilterControls {
   constructor(Filterizr, selector = '') {
     this.props = {
       Filterizr,
-      selector
+      selector,
     }
 
     this.setupFilterControls();
@@ -57,7 +57,7 @@ class FilterControls {
   setupShuffleControls() {
     const {
       Filterizr,
-      selector
+      selector,
     } = this.props;
 
     $(`${selector} *[data-shuffle]`).on('click.Filterizr', (evt) => {
@@ -71,10 +71,8 @@ class FilterControls {
   setupSearchControls() {
     const {
       Filterizr,
-      selector
+      selector,
     } = this.props;
-
-    const handler = 
 
     $(`${selector} *[data-search]`).on('keyup.Filterizr', debounce((evt) => {
       const $textfield = $(evt.target);
@@ -85,13 +83,13 @@ class FilterControls {
     }, 250));
   }
 
-  /*
+  /**
    * Sets up the controls for sorting
    */
   setupSortControls() {
     const {
       Filterizr,
-      selector
+      selector,
     } = this.props;
 
     $(`${selector} *[data-sortAsc]`).on('click.Filterizr', (evt) => {
@@ -104,6 +102,23 @@ class FilterControls {
       Filterizr.props.sortOrder = 'desc';
       Filterizr.sort(sortAttr, 'desc');
     });
+  }
+
+  /**
+   * Destroys all controls
+   */
+  destroy() {
+    const {
+      Filterizr,
+      selector
+    } = this.props;
+
+    $(`${selector} *[data-filter]`).off('click.Filterizr');
+    $(`${selector} *[data-multifilter]`).off('click.Filterizr');
+    $(`${selector} *[data-shuffle]`).off('click.Filterizr');
+    $(`${selector} *[data-search]`).off('keyup.Filterizr');
+    $(`${selector} *[data-sortAsc]`).off('click.Filterizr');
+    $(`${selector} *[data-sortDesc]`).off('click.Filterizr');
   }
 }
 

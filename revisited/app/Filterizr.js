@@ -18,7 +18,7 @@ class Filterizr {
     this.options = options;
 
     // setup FilterControls and FilterContainer
-    const filterControls  = new FilterControls(this);
+    const filterControls  = new FilterControls(this, options.controlsSelector);
     const filterContainer = new FilterContainer(selector, options);
     // define props
     this.props = {
@@ -31,7 +31,7 @@ class Filterizr {
     }
 
     // set up events needed by Filterizr
-    this.setupEvents();
+    this.bindEvents();
     // Init Filterizr
     this.filter(this.options.filter);
   }
@@ -66,10 +66,24 @@ class Filterizr {
     FilterContainer.trigger('filteringEnd');
   }
 
+  destroy() {
+    const { FilterContainer } = this.props;
+    const { controlsSelector } = this.options;
+    // Unbind all events of FilterContainer and Filterizr
+    // and remove inline styles.
+    FilterContainer.destroy();
+    $(window).off('resize.Filterizr');
+    // Destroy all controls of the instance
+    $(`${controlsSelector} *[data-filter]`).off('click.Filterizr');
+    $(`${controlsSelector} *[data-multifilter]`).off('click.Filterizr');
+    $(`${controlsSelector} *[data-shuffle]`).off('click.Filterizr');
+    $(`${controlsSelector} *[data-search]`).off('keyup.Filterizr');
+    $(`${controlsSelector} *[data-sortAsc]`).off('click.Filterizr');
+    $(`${controlsSelector} *[data-sortDesc]`).off('click.Filterizr');
+  }
+
   sort(sortAttr = 'index', sortOrder = 'asc') {
-    const { 
-      FilterItems,
-    } = this.props;
+    const { FilterItems } = this.props;
 
     // sort main array
     this.props.FilterItems = this.sortFilterItems(FilterItems, sortAttr, sortOrder);
@@ -82,9 +96,7 @@ class Filterizr {
   }
 
   search(searchTerm = this.props.searchTerm) {
-    const {
-      FilterItems
-    } = this.props;
+    const { FilterItems } = this.props;
 
     // filter items and optionally apply search if a search term exists
     const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, this.options.filter), searchTerm);
@@ -110,7 +122,7 @@ class Filterizr {
     this.options = merge(newOptions, this.options);
     // if callbacks defined then reregister events
     if ('callbacks' in newOptions)
-      this.setupFilterizrEvents();
+      this.resetFilterContainerEvents();
   }
 
   toggleFilter(toggledFilter) {
@@ -232,25 +244,19 @@ class Filterizr {
     });
   }
 
-  setupFilterizrEvents() {
+  resetFilterContainerEvents() {
     const { FilterContainer } = this.props;
     const { callbacks } = this.options;
-
     // cancel existing evts
-    FilterContainer.off('filteringStart filteringEnd shufflingStart shufflingEnd sortingStart sortingEnd')
+    FilterContainer.unbindEvents();
     // rebind evts
-    FilterContainer.on('filteringStart.Filterizr', callbacks.onFilteringStart);
-    FilterContainer.on('filteringEnd.Filterizr', callbacks.onFilteringEnd);
-    FilterContainer.on('shufflingStart.Filterizr', callbacks.onShufflingStart);
-    FilterContainer.on('shufflingEnd.Filterizr', callbacks.onShufflingEnd);
-    FilterContainer.on('sortingStart.Filterizr', callbacks.onSortingStart);
-    FilterContainer.on('sortingEnd.Filterizr', callbacks.onSortingEnd);
+    FilterContainer.bindEvents(callbacks);
   }
 
-  setupEvents() {
-    //- Filterizr events
-    this.setupFilterizrEvents();
-    //- Generic events
+  bindEvents() {
+    //- FilterContainer events
+    this.resetFilterContainerEvents();
+    //- Generic Filterizr events
     // set up a window resize event to fire refiltering
     $(window).on('resize.Filterizr', debounce((evt) => {
       // update dimensions of items based on new window size
