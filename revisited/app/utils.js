@@ -1,7 +1,7 @@
 /**
  * A simple function to check if an array of strings includes a certain value.
- * @param {array} arr is the array of string
- * @param {string} s is the value to be checked if included
+ * @param {Array} arr is the array of string
+ * @param {String} s is the value to be checked if included
  */
 const stringInArray = (arr, s) => {
   let found = false;
@@ -17,7 +17,8 @@ export { stringInArray }
 /**
  * A very simple function to perform a basic
  * deep clone of an object.
- * @param {object} o is the object to perform the deep clone on
+ * @param {Object} o is the object to perform the deep clone on
+ * @return {Object} deep clone
  */
 const cloneDeep = (o) => {
   let ret = {};
@@ -32,8 +33,8 @@ export { cloneDeep };
  * A function to recursively merge to object, copying over all
  * properties of the old object missing from the target object.
  * In case a prop in is an object, the method is called recursively.
- * @param {object} target is the target object with the updates values.
- * @param {object} old is the old object from which the missing props are copied.
+ * @param {Object} target is the target object with the updates values.
+ * @param {Object} old is the old object from which the missing props are copied.
  */
 const merge = (target, old) => {
   const oldKeys = Object.keys(old);
@@ -58,8 +59,8 @@ export { merge };
 
 /**
  * A function get the intersection of two arrays. IE9+.
- * @param {array} arr1 is the first array of which to get the intersection
- * @param {array} arr2 is the second array of which to get the intersection
+ * @param {Array} arr1 is the first array of which to get the intersection
+ * @param {Array} arr2 is the second array of which to get the intersection
  */
 const intersection = (arr1, arr2) => {
   return Array.prototype.filter.call(arr1, (n) => ~arr2.indexOf(n));
