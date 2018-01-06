@@ -106,3 +106,25 @@ const shuffle = (array) => {
 };
 
 export { shuffle };
+
+/**
+ * Simple method to check if two arrays of FilterItems
+ * are sorted in the same manner or not.
+ * @param {Array} arr1 the first array of FilterItems
+ * @param {Array} arr2 the second array of FilterItems
+ * @return {Boolean} equality
+ */
+const filterItemArraysHaveSameSorting = (a1, a2) => {
+  // Exit case if arrays do not have equal length
+  if (a1.length !== a2.length) return false;
+  // Iterate over first array and compare indices with second
+  for (let i = 0; i < a1.length; i++) {
+    const index1 = a1[i].props.index;
+    const index2 = a2[i].props.index;
+    // Means arrays do not have identical sorting
+    if (index1 !== index2) return false;
+  }
+  return true;
+}
+
+export { filterItemArraysHaveSameSorting };
