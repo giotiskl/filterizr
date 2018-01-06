@@ -1,4 +1,4 @@
-import Filterizr from './filterizr';
+import Filterizr from './Filterizr';
 import DefaultOptions from './options';
 
 (function($) {
