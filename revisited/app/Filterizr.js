@@ -1,15 +1,13 @@
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
-import {
-  sortBy,
-} from './vendor/lodash.custom';
 import { 
   debounce,
   filterItemArraysHaveSameSorting,
   intersection,
   merge,
   shuffle,
+  sortBy,
   stringInArray,
 } from './utils';
 
