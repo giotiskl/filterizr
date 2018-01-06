@@ -39,6 +39,11 @@ import DefaultOptions from './options';
         case 'setOptions':
           filterizr.setOptions(...methodArgs);
           return this;
+        case 'destroy':
+          filterizr.destroy(...methodArgs);
+          // Kill internal reference to Filterizr instance
+          delete this._fltr;
+          return this;
         default:
           throw new Error(`${method} is not part of the Filterizr API. Please refer to the docs for more information.`);
           return;

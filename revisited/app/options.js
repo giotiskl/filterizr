@@ -8,6 +8,7 @@ const options = {
     onSortingStart: function() { },
     onSortingEnd: function() { }
   },
+  controlsSelector: '',
   delay: 0,
   delayMode: 'progressive',
   easing: 'ease-out',
