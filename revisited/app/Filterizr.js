@@ -241,12 +241,12 @@ class Filterizr {
     // cancel existing evts
     FilterContainer.off('filteringStart filteringEnd shufflingStart shufflingEnd sortingStart sortingEnd')
     // rebind evts
-    FilterContainer.on('filteringStart', callbacks.onFilteringStart);
-    FilterContainer.on('filteringEnd', callbacks.onFilteringEnd);
-    FilterContainer.on('shufflingStart', callbacks.onShufflingStart);
-    FilterContainer.on('shufflingEnd', callbacks.onShufflingEnd);
-    FilterContainer.on('sortingStart', callbacks.onSortingStart);
-    FilterContainer.on('sortingEnd', callbacks.onSortingEnd);
+    FilterContainer.on('filteringStart.Filterizr', callbacks.onFilteringStart);
+    FilterContainer.on('filteringEnd.Filterizr', callbacks.onFilteringEnd);
+    FilterContainer.on('shufflingStart.Filterizr', callbacks.onShufflingStart);
+    FilterContainer.on('shufflingEnd.Filterizr', callbacks.onShufflingEnd);
+    FilterContainer.on('sortingStart.Filterizr', callbacks.onSortingStart);
+    FilterContainer.on('sortingEnd.Filterizr', callbacks.onSortingEnd);
   }
 
   setupEvents() {
@@ -254,7 +254,7 @@ class Filterizr {
     this.setupFilterizrEvents();
     //- Generic events
     // set up a window resize event to fire refiltering
-    $(window).on('resize', debounce((evt) => {
+    $(window).on('resize.Filterizr', debounce((evt) => {
       // update dimensions of items based on new window size
       this.props.FilterContainer.updateWidth();
       this.props.FilterContainer.updateFilterItemsDimensions();
