@@ -2,11 +2,11 @@ import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
 import {
-  isEqual,
   sortBy,
 } from './vendor/lodash.custom';
 import { 
   debounce,
+  filterItemArraysHaveSameSorting,
   intersection,
   merge,
   shuffle,
@@ -204,7 +204,7 @@ class Filterizr {
   shuffleFilterItems(FilterItems) {
     let ShuffledItems = shuffle(FilterItems)
     // shuffle items until they are different from the initial FilteredItems
-    while (FilterItems.length > 1 && isEqual(FilterItems, ShuffledItems)) {
+    while (FilterItems.length > 1 && filterItemArraysHaveSameSorting(FilterItems, ShuffledItems)) {
       ShuffledItems = shuffle(FilterItems)
     }
 
