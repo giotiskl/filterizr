@@ -2,6 +2,8 @@ import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
 import { 
+  allStringsOfArray1InArray2,
+  checkOptionForErrors,
   debounce,
   filterItemArraysHaveSameSorting,
   intersection,
@@ -54,7 +56,8 @@ class Filterizr {
     
     // filter items and optionally apply search if a search term exists
     const FilteredItems = this.searchFilterItems(
-      this.filterFilterItems(FilterItems, category), searchTerm
+      this.filterFilterItems(FilterItems, category), 
+      searchTerm,
     );
     this.props.FilteredItems = FilteredItems;
 
@@ -118,6 +121,21 @@ class Filterizr {
   }
 
   setOptions(newOptions) {
+    // error checking
+    checkOptionForErrors(
+      'multifilterLogicalOperator', 
+      newOptions.multifilterLogicalOperator, 
+      'string',
+      'and', 
+      'or',
+    );
+    checkOptionForErrors(
+      'delayMode', 
+      newOptions.delayMode, 
+      'string',
+      'progressive', 
+      'alternate',
+    );
     // merge options
     this.options = merge(newOptions, this.options);
     // if callbacks defined then reregister events
@@ -170,6 +188,7 @@ class Filterizr {
 
   // Helper methods
   filterFilterItems(FilterItems, filters) {
+    const { multifilterLogicalOperator } = this.options;
     // Get filtered items
     const FilteredItems = (filters === "all") ?
       // in this case return all items
@@ -177,9 +196,16 @@ class Filterizr {
       // otherwise return filtered array
       FilterItems.filter(FilterItem => {
         const categories = FilterItem.getCategories();
-        return Array.isArray(filters) ? 
-          intersection(categories, filters).length :
-          stringInArray(categories, filters)
+        const multiFilteringEnabled = Array.isArray(filters);
+        if (multiFilteringEnabled) {
+          if (multifilterLogicalOperator === 'or') {
+            return intersection(categories, filters).length;
+          } else {
+            return allStringsOfArray1InArray2(filters, categories);
+          }
+        } else {
+          return stringInArray(categories, filters);
+        }
       });
 
     return FilteredItems;
@@ -222,14 +248,22 @@ class Filterizr {
   }  
 
   render(FilterItems) {
+    const { multifilterLogicalOperator } = this.options;
     // get items to be filtered out
     const FilteredOutItems = this.props.FilterItems.filter(FilterItem => {
       const categories = FilterItem.getCategories();
       const filters = this.options.filter;
-      return Array.isArray(filters) ? 
-        !intersection(categories, filters).length :
-        !stringInArray(categories, filters)
-    })
+      const multiFilteringEnabled = Array.isArray(filters);
+      if (multiFilteringEnabled) {
+        if (multifilterLogicalOperator === 'or') {
+          return !intersection(categories, filters).length;
+        } else {
+          return !allStringsOfArray1InArray2(filters, categories);
+        }
+      } else {
+        return !stringInArray(categories, filters);
+      }
+    });
     // filter out old items
     FilteredOutItems.forEach(FilterItem => {
       FilterItem.filterOut(this.options.filterOutCss);

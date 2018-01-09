@@ -1,7 +1,8 @@
 /**
  * A simple function to check if an array of strings includes a certain value.
- * @param {Array} arr is the array of string
+ * @param {Array} arr is the array of strings
  * @param {String} s is the value to be checked if included
+ * @return {Boolean} whether the string is found or not
  */
 const stringInArray = (arr, s) => {
   let found = false;
@@ -12,7 +13,29 @@ const stringInArray = (arr, s) => {
   return found;
 }
 
-export { stringInArray }
+export { stringInArray };
+
+/**
+ * A function to check that all elements of an array are found within another array.
+ * @param {Array} arr1 is the array of strings to be checked
+ * @param {Array} arr1 is the array of strings to check against
+ * @return {Boolean} whether all string of arr1 are contained in arr2
+ */
+const allStringsOfArray1InArray2 = (arr1, arr2) => {
+  for (let i = 0; i < arr1.length; i++) {
+    let found = false;
+    const string = arr1[i];
+    for (let x = 0; x < arr2.length; x++) {
+      if (string === arr2[x]) found = true;
+    }
+    if (!found) return false;
+  }
+  return true;
+}
+
+export { allStringsOfArray1InArray2 };
+
+window.allStringsOfArray1InArray2 = allStringsOfArray1InArray2;
 
 /**
  * A very simple function to perform a basic
@@ -156,4 +179,38 @@ const sortBy = (array, propFn) => {
   return cloned.sort(comparator(propFn));
 }
 
-export { sortBy }
+export { sortBy };
+
+/**
+ * Error checking method to restrict a prop to some allowed values
+ * @param {String} name of the option key in the options object
+ * @param {String|Number|Object|Function|Array} value of the option
+ * @param {String} type of the property
+ * @param {Array} rest accepted values for option
+ */
+const checkOptionForErrors = (name, value, type, ...args) => {
+  if (typeof value === 'undefined') return; // exit case, missing from options
+
+  // Check the type of the option
+  const typeError = new Error(`Filterizr: expected type of option "${name}" to be "${type}", but its type is: "${typeof value}"`);
+  if (type === 'array') {
+    if (!Array.isArray(value)) {
+      throw typeError;
+    }
+  } else {
+    if (typeof value !== type) {
+      throw typeError;
+    }
+  }
+
+  // Make sure that the value of the option is within the accepted values
+  let validValue = false;
+  args.forEach((el) => {
+    if (el === value) validValue = true;
+  });
+  if (!validValue) {
+    throw new Error(`Filterizr: allowed values for option "${name}" are: ${args.map(el => `"${el}"`).join(', ')}. Value received: "${value}".`);
+  }
+}
+
+export { checkOptionForErrors };
