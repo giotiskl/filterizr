@@ -22,6 +22,7 @@ const options = {
     'transform': 'scale(1)'
   },
   layout: 'sameSize',
+  multifilterLogicalOperator: 'or',
   setupControls: true,
 }
 
