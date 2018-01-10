@@ -186,9 +186,10 @@ export { sortBy };
  * @param {String} name of the option key in the options object
  * @param {String|Number|Object|Function|Array} value of the option
  * @param {String} type of the property
- * @param {Array} rest accepted values for option
+ * @param {Array} allowed accepted values for option
+ * @param {String} furtherHelpLink a link to docs for further help
  */
-const checkOptionForErrors = (name, value, type, ...args) => {
+const checkOptionForErrors = (name, value, type, allowed, furtherHelpLink) => {
   if (typeof value === 'undefined') return; // exit case, missing from options
 
   // Check the type of the option
@@ -198,19 +199,40 @@ const checkOptionForErrors = (name, value, type, ...args) => {
       throw typeError;
     }
   } else {
-    if (typeof value !== type) {
+    if (!(typeof value).match(type)) {
       throw typeError;
     }
   }
 
   // Make sure that the value of the option is within the accepted values
-  let validValue = false;
-  args.forEach((el) => {
-    if (el === value) validValue = true;
-  });
-  if (!validValue) {
-    throw new Error(`Filterizr: allowed values for option "${name}" are: ${args.map(el => `"${el}"`).join(', ')}. Value received: "${value}".`);
+  const referTo = (link) => {
+    if (link) {
+      return ` For further help read here: ${link}`;
+    }
+    return '';
+  };
+
+  if (Array.isArray(allowed)) {
+    let validValue = false;
+    allowed.forEach((el) => {
+      if (el === value) validValue = true;
+    });
+    if (!validValue) {
+      throw new Error(`Filterizr: allowed values for option "${name}" are: ${allowed.map(el => `"${el}"`).join(', ')}. Value received: "${value}".${referTo(furtherHelpLink)}`);
+    }
+  } else if (allowed instanceof RegExp) {
+    const isValid = value.match(allowed);
+    if (!isValid) {
+      throw new Error(`Filterizr: invalid value "${value}" for option "${name}" received.${referTo(furtherHelpLink)}`);
+    }
   }
 }
 
 export { checkOptionForErrors };
+
+/**
+ * A Regexp to validate potential values for the CSS easing property of transitions.
+ */
+const cssEasingValuesRegexp = /(^linear$)|(^ease-in-out$)|(^ease-in$)|(^ease-out$)|(^ease$)|(^step-start$)|(^step-end$)|(^steps\(\d\s*,\s*(end|start)\))$|(^cubic-bezier\((\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\))$/;
+
+export { cssEasingValuesRegexp };
