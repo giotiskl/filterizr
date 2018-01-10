@@ -4,6 +4,7 @@ import Positions from './Positions';
 import { 
   allStringsOfArray1InArray2,
   checkOptionForErrors,
+  cssEasingValuesRegexp,
   debounce,
   filterItemArraysHaveSameSorting,
   intersection,
@@ -122,22 +123,43 @@ class Filterizr {
 
   setOptions(newOptions) {
     // error checking
+    checkOptionForErrors('animationDuration', newOptions.animationDuration, 'number');
+    checkOptionForErrors('callbacks', newOptions.callbacks, 'object');
+    checkOptionForErrors('controlsSelector', newOptions.controlsSelector, 'string');
+    checkOptionForErrors('delay', newOptions.delay, 'number');
     checkOptionForErrors(
-      'multifilterLogicalOperator', 
-      newOptions.multifilterLogicalOperator, 
-      'string',
-      'and', 
-      'or',
+      'easing', 
+      newOptions.easing, 
+      'string', 
+      cssEasingValuesRegexp, 
+      'https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp'
     );
     checkOptionForErrors(
       'delayMode', 
       newOptions.delayMode, 
       'string',
-      'progressive', 
-      'alternate',
+      ['progressive', 'alternate'],
     );
+    checkOptionForErrors('filter', newOptions.filter, 'string|number');
+    checkOptionForErrors('filterOutCss', newOptions.filterOutCss, 'object');
+    checkOptionForErrors('filterInCss', newOptions.filterOutCss, 'object');
+    checkOptionForErrors(
+      'layout', 
+      newOptions.layout, 
+      'string',
+      ['sameSize', 'vertical', 'horizontal', 'sameHeight', 'sameWidth', 'packed'],
+    );
+    checkOptionForErrors(
+      'multifilterLogicalOperator', 
+      newOptions.multifilterLogicalOperator, 
+      'string',
+      ['and', 'or'],
+    );
+    checkOptionForErrors('setupControls', newOptions.setupControls, 'boolean');
+
     // merge options
     this.options = merge(newOptions, this.options);
+
     // if callbacks defined then reregister events
     if ('callbacks' in newOptions)
       this.resetFilterContainerEvents();
