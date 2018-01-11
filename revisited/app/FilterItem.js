@@ -1,6 +1,12 @@
 import { cloneDeep } from './utils';
 
 class FilterItem {
+  /**
+   * Constructor of FilterItem
+   * @param {Object} $node is the jQuery node to create the FilterItem out of
+   * @param {Number} index is the index of the FilterItem when iterating over them
+   * @param {Object} options the options Filterizr was initialized with
+   */
   constructor($node, index, options) {
     const {
       delay,
