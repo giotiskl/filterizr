@@ -24,6 +24,9 @@ import DefaultOptions from './options';
         case 'filter':
           filterizr.filter(...methodArgs);
           return this;
+        case 'insertItem':
+          filterizr.insertItem(...methodArgs);
+          return this;
         case 'toggleFilter':
           filterizr.toggleFilter(...methodArgs);
           return this;

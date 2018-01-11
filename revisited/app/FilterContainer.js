@@ -37,6 +37,16 @@ class FilterContainer {
     return FilterItems;
   }
 
+  push($node, options) {
+    const { FilterItems } = this.props;
+    // Add new item to DOM
+    this.$node.append($node);
+    // Initialize it as a FilterItem and push into array
+    const index = FilterItems.length;
+    const filterItem = new FilterItem($node, index, options);
+    this.props.FilterItems.push(filterItem);
+  }
+
   calcColumns() {
     return Math.round(this.props.w / this.props.FilterItems[0].props.w);
   }
