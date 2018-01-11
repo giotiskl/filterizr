@@ -40,6 +40,10 @@ class Filterizr {
   }
 
   // Public API of Filterizr
+  /**
+   * Filters the items in the grid by a category
+   * @param {String} category by which to filter
+   */
   filter(category) {
     const { 
       searchTerm,
@@ -70,6 +74,9 @@ class Filterizr {
     FilterContainer.trigger('filteringEnd');
   }
 
+  /**
+   * Destroys the Filterizr instance and unbinds all events.
+   */
   destroy() {
     const { FilterContainer } = this.props;
     const { controlsSelector } = this.options;
@@ -86,6 +93,25 @@ class Filterizr {
     $(`${controlsSelector} *[data-sortDesc]`).off('click.Filterizr');
   }
 
+  /**
+   * Inserts a new FilterItem in the Filterizr grid
+   * @param {Object} $node the jQuery of the HTML item to append
+   */
+  insertItem($node) {
+    const { FilterContainer } = this.props;
+    // Add the item to the FilterContainer
+    const $nodeToPush = $node.clone().attr('style', '');
+    FilterContainer.push($nodeToPush, this.options);
+    // Retrigger filter for new item to assume position in the grid
+    const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
+    this.render(FilteredItems);
+  }
+
+  /**
+   * Sorts the FilterItems in the grid
+   * @param {String} sortAttr the attribute by which to perform the sort
+   * @param {String} sortOrder ascending or descending
+   */
   sort(sortAttr = 'index', sortOrder = 'asc') {
     const { FilterItems } = this.props;
 
@@ -99,6 +125,10 @@ class Filterizr {
     this.render(FilteredItems);
   }
 
+  /**
+   * Searches through the FilterItems for a given string and adds an additional filter layer.
+   * @param {String} searchTerm the term for which to search
+   */
   search(searchTerm = this.props.searchTerm) {
     const { FilterItems } = this.props;
 
@@ -110,6 +140,9 @@ class Filterizr {
     this.render(FilteredItems);
   }
 
+  /**
+   * Shuffles the FilterItems in the grid, making sure their positions have changed. 
+   */
   shuffle() {
     const {
       FilteredItems
@@ -121,6 +154,11 @@ class Filterizr {
     this.render(ShuffledItems);
   }
 
+  /**
+   * Updates the perferences of the users for rendering the Filterizr grid,
+   * additionally performs error checking on the new options passed.
+   * @param {Object} newOptions to override the defaults.
+   */
   setOptions(newOptions) {
     // error checking
     checkOptionForErrors('animationDuration', newOptions.animationDuration, 'number');
@@ -165,6 +203,10 @@ class Filterizr {
       this.resetFilterContainerEvents();
   }
 
+  /**
+   * Performs multifiltering with AND/OR logic.
+   * @param {String} toggledFilter the filter to toggle
+   */
   toggleFilter(toggledFilter) {
     let activeFilters = this.options.filter;
 
