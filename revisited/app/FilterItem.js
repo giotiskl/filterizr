@@ -1,4 +1,7 @@
-import { cloneDeep } from './utils';
+import { 
+  cloneDeep,
+  transitionEndEvt,
+} from './utils';
 
 class FilterItem {
   /**
@@ -32,6 +35,7 @@ class FilterItem {
       index,
       sortData: this.$node.data('sort'),
       lastPosition: { left: 0, top: 0 },
+      filteredOut: false, // used for the onTransitionEnd event
       w: this.getWidth(),
       h: this.getHeight(),
     }
@@ -49,9 +53,15 @@ class FilterItem {
         'position': 'absolute',
         'transition': `all ${animationDuration}s ${easing} ${this.calcDelay(delay, delayMode)}ms`,
       });
+
+    // finally bind events
+    this.bindEvents();
   }
 
-  /* Filtering methods */
+  /**
+   * Filters in a specific FilterItem out of the grid.
+   * @param {Object} cssOptions for the animation
+   */
   filterIn(targetPos, cssOptions) {
     // perform a deep clone of the filtering in css
     let filterInCss = cloneDeep(cssOptions);
@@ -61,8 +71,14 @@ class FilterItem {
     this.$node.css(filterInCss);
     // update last position to be the targetPos
     this.props.lastPosition = targetPos;
+    // update state
+    this.props.filteredOut = false;
   }
 
+  /**
+   * Filters out a specific FilterItem out of the grid.
+   * @param {Object} cssOptions for the animation
+   */
   filterOut(cssOptions) {
     // perform a deep clone of the filtering out css
     let filterOutCss = cloneDeep(cssOptions);
@@ -71,9 +87,13 @@ class FilterItem {
     filterOutCss.transform += ' translate3d(' + lastPosition.left + 'px,' + lastPosition.top + 'px, 0)';
     //Play animation
     this.$node.css(filterOutCss);
+    // update state
+    this.props.filteredOut = true;
   }
 
-  /* Helper methods */
+  /**
+   * Helper method to calculate the animation delay for a given .filtr-item
+   */
   calcDelay(delay, delayMode) {
     let ret = 0;
 
@@ -86,29 +106,71 @@ class FilterItem {
     return ret;
   }
 
+  /**
+   * Helper method for the search method of Filterizr
+   */
   getContentsLowercase() {
     return this.$node.text().toLowerCase();
   }
 
+  /**
+   * Returns all categories of the .filtr-item data-category attribute
+   * with a regexp regarding all whitespace.
+   */
   getCategories() {
     return this.$node.attr('data-category').split(/\s*,\s*/g);
   }
 
+  /**
+   * Wrapper around jQuery's innerHeight to calculate the item's width
+   */
   getHeight() {
     return this.$node.innerHeight();
   }
 
+  /**
+   * Wrapper around jQuery's innerWidth to calculate the item's width
+   */
   getWidth() {
     return this.$node.innerWidth();
   }
 
+  /**
+   * Wrapper around jQuery's trigger
+   * @param {String} evt the name of the event to trigger
+   */
   trigger(evt) {
     this.$node.trigger(evt);
   }
 
+  /**
+   * Recalculates the dimensions of the element and updates them in the state
+   */
   updateDimensions() {
     this.props.w = this.getWidth();
     this.props.h = this.getHeight();
+  }
+
+  /**
+   * Sets up the events related to the FilterItem instance
+   */
+  bindEvents() {
+    this.$node.on(transitionEndEvt, (evt) => {
+      // On transitionEnd determine if the item is filtered out or not,
+      // in case it is add the .filteredOut class for easy targeting by
+      // the user and set the z-index to -1000 to prevent mouse events
+      // from being intercepted.
+      const { filteredOut } = this.props;
+      this.$node.toggleClass('filteredOut', filteredOut);
+      this.$node.css('z-index', filteredOut ? -1000 : '');
+    });
+  }
+
+  /**
+   * Removes all events related to the FilterItem instance
+   */
+  unbindEvents() {
+    this.$node.off(transitionEndEvt);
   }
 }
 
