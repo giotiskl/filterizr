@@ -61,4 +61,10 @@ describe('Filterizr', () => {
     });
   });
 
+  describe('#filter', () => {
+    it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter');
+    it('should add the .filteredOut class to all filtered out .filtr-item elements');
+    it('should set an inline style z-index: -1000 on filteringEnd for .filteredOut .filtr-item elements');
+  });
+
 });
