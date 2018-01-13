@@ -23,6 +23,13 @@ class Filterizr {
     // setup FilterControls and FilterContainer
     const filterControls  = new FilterControls(this, options.controlsSelector);
     const filterContainer = new FilterContainer(selector, options);
+
+    if (!filterContainer.$node.length) {
+      // Throw because the selector given was not
+      // found to initialize a FilterContainer.
+      throw new Error(`Filterizr: could not find a container with the selector ${selector}, to initialize Filterizr.`);
+    }
+
     // define props
     this.props = {
       searchTerm: '',
@@ -100,8 +107,8 @@ class Filterizr {
   insertItem($node) {
     const { FilterContainer } = this.props;
     // Add the item to the FilterContainer
-    const $nodeToPush = $node.clone().attr('style', '');
-    FilterContainer.push($nodeToPush, this.options);
+    const $nodeModified = $node.clone().attr('style', '');
+    FilterContainer.push($nodeModified, this.options);
     // Retrigger filter for new item to assume position in the grid
     const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
     this.render(FilteredItems);
