@@ -4,6 +4,9 @@ import { fakeDom } from './testUtils';
 // import items to be tested
 import Filterizr from '../app/Filterizr';
 import DefaultOptions from '../app/options';
+import { 
+  stringInArray,
+} from '../app/utils';
 
 // General setup
 window.$ = $;
@@ -35,7 +38,7 @@ describe('Filterizr', () => {
     it('should return a new instance of the Filterizr class', () => {
       expect(filterizr instanceof Filterizr).toBe(true);
     });
-  })
+  });
 
   describe('#destroy', () => {
     beforeEach(() => {
@@ -62,9 +65,50 @@ describe('Filterizr', () => {
   });
 
   describe('#filter', () => {
-    it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter');
-    it('should add the .filteredOut class to all filtered out .filtr-item elements');
-    it('should set an inline style z-index: -1000 on filteringEnd for .filteredOut .filtr-item elements');
+    const filter = '2';
+    let FilteredOutItems, FilteredInItems;
+
+    beforeEach(() => {
+      filterizr.filter(filter);
+      FilteredOutItems = filterizr.props.FilterItems.filter((FilterItem) => {
+        const categories = FilterItem.getCategories();
+        return !stringInArray(categories, filter);
+      });
+      FilteredInItems = filterizr.props.FilterItems.filter(FilterItem => {
+        const categories = FilterItem.getCategories();
+        return stringInArray(categories, filter);
+      });
+    });
+
+    it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter', () => {
+      // Wait for animation to finish before test
+      setTimeout(() => {
+        FilteredInItems.forEach((FilterItem) => {
+          const categories = FilterItem.getCategories();
+          const belongsToCategory = stringInArray(categories, filter);
+          expect(belongsToCategory).toEqual(true);
+        });
+      }, 1000);
+    });
+
+    it('should add the .filteredOut class to all filtered out .filtr-item elements', () => {
+      // Wait for animation to finish before test
+      setTimeout(() => {
+        FilteredOutItems.forEach((FilterItem) => {
+          expect(FilterItem.$node.hasClass('.filteredOut'));
+        });
+      });
+    });
+
+    it('should set an inline style z-index: -1000 on filteringEnd for .filteredOut .filtr-item elements', () => {
+      // Wait for animation to finish before test
+      setTimeout(() => {
+        FilteredOutItems.forEach((FilterItem) => {
+          const zIndexOfFilteredOutItem = FilterItem.$node.css('z-index');
+          expect(zIndexOfFilteredOutItem).toEqual('-1000');
+        });
+      }, 1000);
+    });
   });
 
 });
