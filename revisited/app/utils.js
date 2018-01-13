@@ -11,7 +11,7 @@ const stringInArray = (arr, s) => {
       found = true;
   }
   return found;
-}
+};
 
 export { stringInArray };
 
@@ -31,7 +31,7 @@ const allStringsOfArray1InArray2 = (arr1, arr2) => {
     if (!found) return false;
   }
   return true;
-}
+};
 
 export { allStringsOfArray1InArray2 };
 
@@ -48,7 +48,7 @@ const cloneDeep = (o) => {
   for (const p in o)
     ret[p] = o[p];
   return ret;
-}
+};
 
 export { cloneDeep };
 
@@ -60,7 +60,6 @@ export { cloneDeep };
  * @param {Object} old is the old object from which the missing props are copied.
  */
 const merge = (target, old) => {
-  const oldKeys = Object.keys(old);
   // iterate over props of old
   for (let p in old) {
     if (!(p in target)) {
@@ -76,7 +75,7 @@ const merge = (target, old) => {
     }
   }
   return target;
-}
+};
 
 export { merge };
 
@@ -87,7 +86,7 @@ export { merge };
  */
 const intersection = (arr1, arr2) => {
   return Array.prototype.filter.call(arr1, (n) => ~arr2.indexOf(n));
-}
+};
 
 export { intersection };
 
@@ -124,7 +123,7 @@ const shuffle = (array) => {
   while (cloned.length !== 0) {
     let rIndex = Math.floor(cloned.length * Math.random());
     randomizedArray.push(cloned[rIndex]);
-    cloned.splice(rIndex, 1)
+    cloned.splice(rIndex, 1);
   }
   return randomizedArray;
 };
@@ -149,7 +148,7 @@ const filterItemArraysHaveSameSorting = (a1, a2) => {
     if (index1 !== index2) return false;
   }
   return true;
-}
+};
 
 export { filterItemArraysHaveSameSorting };
 
@@ -173,11 +172,11 @@ const sortBy = (array, propFn) => {
       } else {
         return 0;
       }
-    } 
-  }
+    };
+  };
 
   return cloned.sort(comparator(propFn));
-}
+};
 
 export { sortBy };
 
@@ -226,7 +225,7 @@ const checkOptionForErrors = (name, value, type, allowed, furtherHelpLink) => {
       throw new Error(`Filterizr: invalid value "${value}" for option "${name}" received.${referTo(furtherHelpLink)}`);
     }
   }
-}
+};
 
 export { checkOptionForErrors };
 
