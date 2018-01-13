@@ -86,4 +86,6 @@ const fakeDom = `
 </div>
 `
 
-export default fakeDom;
+export {
+  fakeDom,
+};

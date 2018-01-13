@@ -236,3 +236,16 @@ export { checkOptionForErrors };
 const cssEasingValuesRegexp = /(^linear$)|(^ease-in-out$)|(^ease-in$)|(^ease-out$)|(^ease$)|(^step-start$)|(^step-end$)|(^steps\(\d\s*,\s*(end|start)\))$|(^cubic-bezier\((\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\))$/;
 
 export { cssEasingValuesRegexp };
+
+/**
+ * The name of the transitionEnd event namespaced as a const
+ */
+const transitionEndEvt = `
+  webkitTransitionEnd.Filterizr 
+  otransitionend.Filterizr 
+  oTransitionEnd.Filterizr 
+  msTransitionEnd.Filterizr 
+  transitionend.Filterizr
+`;
+
+export { transitionEndEvt };
