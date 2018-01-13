@@ -1,19 +1,27 @@
-// import dependencies for test
-import fakeDom from './fakeDom';
+// import test utils
 import $ from 'jquery';
-window.$ = $;
-$('body').html(fakeDom);
+import { fakeDom } from './testUtils';
 // import items to be tested
+import Filterizr from '../app/Filterizr';
 import FilterContainer from '../app/FilterContainer';
 import FilterItem from '../app/FilterItem';
 import DefaultOptions from '../app/options';
 
-// Basic setup before all tests
-const filterContainer = new FilterContainer('.filtr-container', DefaultOptions);
+// General setup
+window.$ = $;
+$('body').html(fakeDom);
 
-describe("FilterContainer", () => {
+describe('FilterContainer', () => {
+  // Basic setup before all tests
+  let filterizr;
+  let filterContainer;
 
-  describe("#constructor", () => {
+  beforeEach(() => {
+    filterizr = new Filterizr('.filtr-container', DefaultOptions);
+    filterContainer = new FilterContainer('.filtr-container', DefaultOptions);
+  });
+
+  describe('#constructor', () => {
     it('should take an optional parameter selector which defaults to ".filtr-container"', () => {
       expect(new FilterContainer('.non-existent-container', DefaultOptions).$node.length).toEqual(0);
       expect(filterContainer.$node.length).toBeGreaterThan(0);
@@ -24,7 +32,53 @@ describe("FilterContainer", () => {
     });
   })
 
-  describe("#getFilterItems", () => {
+  describe('#destroy', () => {
+    beforeEach(() => {
+      filterizr.filter('1');
+    });
+
+    it('should reset all inline styles on the .filtr-container', () => {
+      const oldInlineStyles = filterContainer.$node.attr('style');
+      filterContainer.destroy();
+      const newInlineStyles = filterContainer.$node.attr('style');
+
+      expect(oldInlineStyles).toBeTruthy();
+      expect(newInlineStyles).toEqual('');
+    });
+
+    it('should reset all inline styles on its .filtr-item children', () => {
+      const oldInlineStyles = filterContainer.$node.find('.filtr-item').attr('style');
+      filterContainer.destroy();
+      const newInlineStyles = filterContainer.$node.find('.filtr-item').attr('style');
+
+      expect(oldInlineStyles).toBeTruthy();
+      expect(newInlineStyles).toEqual('');
+    });
+  });
+
+  describe('#push', () => {
+    let cloned;
+
+    beforeEach(() => {
+      cloned = filterContainer.$node.find('.filtr-item:last').clone();
+    });
+
+    it('should increase the length of the FilterItems array by 1', () => {
+      const oldLength = filterContainer.props.FilterItems.length;
+      filterContainer.push(cloned, DefaultOptions);
+      const newLength = filterContainer.props.FilterItems.length;
+      expect(newLength).toBeGreaterThan(oldLength);
+    });
+
+    it('should set the index property of the newly added FilterItem in the array to array.length', () => {
+      const oldLength = filterContainer.props.FilterItems.length;
+      filterContainer.push(cloned, DefaultOptions);
+      const newlyAddedFilterItem = filterContainer.props.FilterItems[oldLength];
+      expect(newlyAddedFilterItem.props.index).toEqual(oldLength);
+    });
+  });
+
+  describe('#getFilterItems', () => {
     it('should return an array of FilterItems with length equal to the .filtr-item elements of the DOM', () => {
       expect(filterContainer.getFilterItems(DefaultOptions).length).toEqual($('.filtr-item').length);
     });
@@ -35,7 +89,7 @@ describe("FilterContainer", () => {
     });
   });
 
-  describe("#calcColumns", () => {
+  describe('#calcColumns', () => {
     it('should return the number of columns that can fit in the FilterContainer', () => {
       // make necessary set up to get 4 columns
       const containerWidth = 1000;
@@ -45,7 +99,7 @@ describe("FilterContainer", () => {
     });
   });
 
-  describe("#updateHeight", () => {
+  describe('#updateHeight', () => {
     it('should update the height property of FilterContainer in props', () => {
       // set the new width via inline css and call the method
       const height = 1500;
@@ -55,7 +109,7 @@ describe("FilterContainer", () => {
     });
   });
 
-  describe("#updateWidth", () => {
+  describe('#updateWidth', () => {
     it('should update the width property of FilterContainer in props', () => {
       // set the new width via inline css and call the method
       const width = '1500px';
@@ -66,7 +120,7 @@ describe("FilterContainer", () => {
     });
   });
 
-  describe("#getWidth", () => {
+  describe('#getWidth', () => {
     it('should return the .innerWidth() of the FilterContainer jQuery node', () => {
       expect(filterContainer.getWidth()).toEqual(filterContainer.$node.innerWidth());
     });
