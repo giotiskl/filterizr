@@ -3,7 +3,8 @@
     "start": "webpack-dev-server --progress --inline --hot",
     "build": "webpack -p --progress --env=production",
     "analyze": "webpack -p --progress --env=analyze",
-    "test": "jest"
+    "test": "jest",
+    "lint": "./node_modules/.bin/eslint ."
   },
   "dependencies": {},
   "devDependencies": {
