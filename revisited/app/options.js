@@ -1,12 +1,12 @@
 const options = {
   animationDuration: 0.5,
   callbacks: {
-    onFilteringStart: function() { },
-    onFilteringEnd: function() { },
-    onShufflingStart: function() { },
-    onShufflingEnd: function() { },
-    onSortingStart: function() { },
-    onSortingEnd: function() { }
+    onFilteringStart: () => { },
+    onFilteringEnd: () => { },
+    onShufflingStart: () => { },
+    onShufflingEnd: () => { },
+    onSortingStart: () => { },
+    onSortingEnd: () => { },
   },
   controlsSelector: '',
   delay: 0,
