@@ -187,7 +187,7 @@ class Filterizr {
       'string',
       ['progressive', 'alternate']
     );
-    checkOptionForErrors('filter', newOptions.filter, 'string|number');
+    checkOptionForErrors('filter', newOptions.filter, 'string|number|array');
     checkOptionForErrors('filterOutCss', newOptions.filterOutCss, 'object');
     checkOptionForErrors('filterInCss', newOptions.filterOutCss, 'object');
     checkOptionForErrors(
