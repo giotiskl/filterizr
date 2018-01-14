@@ -209,7 +209,7 @@ class Filterizr {
 
     // if callbacks defined then reregister events
     if ('callbacks' in newOptions)
-      this.resetFilterContainerEvents();
+      this.rebindFilterContainerEvents();
   }
 
   /**
@@ -351,7 +351,7 @@ class Filterizr {
     });
   }
 
-  resetFilterContainerEvents() {
+  rebindFilterContainerEvents() {
     const { FilterContainer } = this.props;
     const { callbacks } = this.options;
     // cancel existing evts
@@ -362,7 +362,7 @@ class Filterizr {
 
   bindEvents() {
     //- FilterContainer events
-    this.resetFilterContainerEvents();
+    this.rebindFilterContainerEvents();
     //- Generic Filterizr events
     // set up a window resize event to fire refiltering
     $(window).on('resize.Filterizr', debounce(() => {
