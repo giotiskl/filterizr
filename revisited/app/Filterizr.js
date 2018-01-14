@@ -15,13 +15,12 @@ import {
 } from './utils';
 
 class Filterizr {
-  constructor(selector = ".filtr-container", options) {
+  constructor(selector = '.filtr-container', options) {
     // make the options a property of the Filterizr instance
     // so that we can later easily modify them
     this.options = options;
 
-    // setup FilterControls and FilterContainer
-    const filterControls  = new FilterControls(this, options.controlsSelector);
+    // Try to find and instantiate the FilterContainer
     const filterContainer = new FilterContainer(selector, options);
 
     if (!filterContainer.$node.length) {
@@ -29,6 +28,9 @@ class Filterizr {
       // found to initialize a FilterContainer.
       throw new Error(`Filterizr: could not find a container with the selector ${selector}, to initialize Filterizr.`);
     }
+
+    // Setup FilterControls
+    new FilterControls(this, options.controlsSelector);
 
     // define props
     this.props = {
@@ -38,7 +40,7 @@ class Filterizr {
       FilterContainer: filterContainer,
       FilterItems: filterContainer.props.FilterItems,
       FilteredItems: [],
-    }
+    };
 
     // set up events needed by Filterizr
     this.bindEvents();
@@ -69,7 +71,7 @@ class Filterizr {
     // filter items and optionally apply search if a search term exists
     const FilteredItems = this.searchFilterItems(
       this.filterFilterItems(FilterItems, category), 
-      searchTerm,
+      searchTerm
     );
     this.props.FilteredItems = FilteredItems;
 
@@ -183,7 +185,7 @@ class Filterizr {
       'delayMode', 
       newOptions.delayMode, 
       'string',
-      ['progressive', 'alternate'],
+      ['progressive', 'alternate']
     );
     checkOptionForErrors('filter', newOptions.filter, 'string|number');
     checkOptionForErrors('filterOutCss', newOptions.filterOutCss, 'object');
@@ -192,13 +194,13 @@ class Filterizr {
       'layout', 
       newOptions.layout, 
       'string',
-      ['sameSize', 'vertical', 'horizontal', 'sameHeight', 'sameWidth', 'packed'],
+      ['sameSize', 'vertical', 'horizontal', 'sameHeight', 'sameWidth', 'packed']
     );
     checkOptionForErrors(
       'multifilterLogicalOperator', 
       newOptions.multifilterLogicalOperator, 
       'string',
-      ['and', 'or'],
+      ['and', 'or']
     );
     checkOptionForErrors('setupControls', newOptions.setupControls, 'boolean');
 
@@ -242,10 +244,10 @@ class Filterizr {
         // check if the toggledFilter is the active one
         if (activeFilters === toggledFilter)
           // in this case revert to all
-          activeFilters = "all";
+          activeFilters = 'all';
         else
           // otherwise form an array with the two values
-          activeFilters = [activeFilters, toggledFilter]
+          activeFilters = [activeFilters, toggledFilter];
       }
     }
 
@@ -261,7 +263,7 @@ class Filterizr {
   filterFilterItems(FilterItems, filters) {
     const { multifilterLogicalOperator } = this.options;
     // Get filtered items
-    const FilteredItems = (filters === "all") ?
+    const FilteredItems = (filters === 'all') ?
       // in this case return all items
       FilterItems :
       // otherwise return filtered array
@@ -309,10 +311,10 @@ class Filterizr {
   }
 
   shuffleFilterItems(FilterItems) {
-    let ShuffledItems = shuffle(FilterItems)
+    let ShuffledItems = shuffle(FilterItems);
     // shuffle items until they are different from the initial FilteredItems
     while (FilterItems.length > 1 && filterItemArraysHaveSameSorting(FilterItems, ShuffledItems)) {
-      ShuffledItems = shuffle(FilterItems)
+      ShuffledItems = shuffle(FilterItems);
     }
 
     return ShuffledItems;
@@ -363,7 +365,7 @@ class Filterizr {
     this.resetFilterContainerEvents();
     //- Generic Filterizr events
     // set up a window resize event to fire refiltering
-    $(window).on('resize.Filterizr', debounce((evt) => {
+    $(window).on('resize.Filterizr', debounce(() => {
       // update dimensions of items based on new window size
       this.props.FilterContainer.updateWidth();
       this.props.FilterContainer.updateFilterItemsDimensions();

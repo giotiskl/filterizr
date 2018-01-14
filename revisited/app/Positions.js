@@ -28,7 +28,6 @@ const Positions = (Layout, Filterizr) => {
     default:
       return SameSizeLayout(Filterizr);
   }
-}
-
+};
 
 export default Positions;
