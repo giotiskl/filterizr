@@ -189,16 +189,22 @@ export { sortBy };
 const checkOptionForErrors = (name, value, type, allowed, furtherHelpLink) => {
   if (typeof value === 'undefined') return; // exit case, missing from options
 
-  // Check the type of the option
+  // Define exception for type error
   const typeError = new Error(`Filterizr: expected type of option "${name}" to be "${type}", but its type is: "${typeof value}"`);
-  if (type === 'array') {
-    if (!Array.isArray(value)) {
-      throw typeError;
-    }
-  } else {
-    if (!(typeof value).match(type)) {
-      throw typeError;
-    }
+  let matchesOtherTypes = false;
+  let isArray = false;
+  const couldBeArray = ~type.lastIndexOf('array');
+  // Perform type checking
+  if ((typeof value).match(type)) {
+    matchesOtherTypes = true;
+  } else if (!matchesOtherTypes && couldBeArray) {
+    isArray = Array.isArray(value);
+  }
+  // Throw the errors for invalid types
+  if (!matchesOtherTypes && !couldBeArray) {
+    throw typeError;
+  } else if (!matchesOtherTypes && couldBeArray && !isArray) {
+    throw typeError;
   }
 
   // Make sure that the value of the option is within the accepted values

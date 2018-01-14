@@ -111,7 +111,44 @@ describe('Filterizr', () => {
     });
   });
 
-  describe('#toggleFilter', () => {});
+  describe('#toggleFilter', () => {
+    it('should set the filter back to "all" if it was set to only 1 category and that category is toggled', () => {
+      filterizr.toggleFilter('1');
+      const activeFilter = filterizr.options.filter;
+      filterizr.toggleFilter('1');
+      const { filter } = filterizr.options;
+      expect(filter).toEqual('all');
+    });
+
+    it('should create an array of active filters if multiple filters are toggled', () => {
+      filterizr.toggleFilter('1');
+      filterizr.toggleFilter('2');
+      const { filter } = filterizr.options;
+      expect(filter).toEqual(['1', '2']);
+    });
+
+    it('should set the filter to be of type string if there is only 1 active filter', () => {
+      filterizr.toggleFilter('1');
+      const { filter } = filterizr.options;
+      expect(typeof filter).toEqual('string');
+    });
+
+    it('should set the filter to be of type array if there are many active filters', () => {
+      filterizr.toggleFilter('1');
+      filterizr.toggleFilter('2');
+      const { filter } = filterizr.options;
+      expect(Array.isArray(filter)).toEqual(true);
+    });
+
+    it('should turn off an active filter if toggled', () => {
+      filterizr.toggleFilter('1');
+      filterizr.toggleFilter('2');
+      filterizr.toggleFilter('3');
+      filterizr.toggleFilter('3');
+      const { filter } = filterizr.options;
+      expect(filter).toEqual(['1', '2']);
+    });
+  });
 
   describe('#insertItem', () => {
     let $nodeToAdd, oldLength;
@@ -134,9 +171,39 @@ describe('Filterizr', () => {
     });
   });
 
-  describe('#sort', () => {});
+  describe('#sort', () => {
+    it('should return a sorted grid', () => {
+      filterizr.sort('index', 'desc');
+      const { FilterItems } = filterizr.props;
+      const { length } = FilterItems;
+      for (let i = 0; i < length; i++) {
+        expect(FilterItems[i].props.index).toEqual((length - 1) - i);
+      }
+    });
+  });
 
-  describe('#search', () => {});
+  describe('#search', () => {
+    it('should apply an extra layer of filtering based on the search term', () => {
+      filterizr.filter('1'); // by this point 3 items should be visible
+      filterizr.search('city'); // by this point 2 items should be visible
+      expect(filterizr.props.FilteredItems.length).toEqual(2);
+    });
+
+    it('should render an empty grid if no item was found', () => {
+      filterizr.search('term not contained anywhere in the grid');
+      expect(filterizr.props.FilteredItems.length).toEqual(0);
+    });
+
+    it('should render only items containing the search term', () => {
+      const term = 'city';
+      filterizr.search('city');
+      filterizr.props.FilteredItems.forEach((FilteredItem) => {
+        const contents = FilteredItem.$node.find('.item-desc').text().toLowerCase();
+        const termFound = ~contents.lastIndexOf(term);
+        expect(termFound).toBeTruthy();
+      });
+    });
+  });
 
   describe('#shuffle', () => {
     let oldIndex1, oldIndex2;
@@ -178,7 +245,13 @@ describe('Filterizr', () => {
       layout: 'packed',
       multifilterLogicalOperator: 'and',
       setupControls: false,
-    }
+    };
+
+    const callToSetOptions = (options) => {
+      return () => {
+        filterizr.setOptions(options);
+      };
+    };
 
     it('should update the options of the Filterizr with valid values', () => {
       filterizr.setOptions(newOptions);
@@ -188,12 +261,42 @@ describe('Filterizr', () => {
       expect(options.animationDuration).toEqual(0.25);
       expect(options.controlsSelector).toEqual('.new-controls');
       expect(options.delay).toEqual(1150);
-      expect(options.delayMode).toEqual('alternate');
-      expect(options.easing).toEqual('ease-in-out');
+      expect(options.delayMode).toEqual('alternate'); expect(options.easing).toEqual('ease-in-out');
       expect(options.filter).toEqual('2');
       expect(options.layout).toEqual('packed');
       expect(options.multifilterLogicalOperator).toEqual('and');
       expect(options.setupControls).toEqual(false);
+    });
+
+    it('should throw an exception if an invalid type is passed in the options', () => {
+      expect(callToSetOptions({ animationDuration: 'string' })).toThrowError(/expected type/);
+      expect(callToSetOptions({ callbacks: 5 })).toThrowError(/expected type/);
+      expect(callToSetOptions({ controlsSelector: 5 })).toThrowError(/expected type/);
+      expect(callToSetOptions({ delay: 'string' })).toThrowError(/expected type/);
+      expect(callToSetOptions({ delayMode: 5 })).toThrowError(/expected type/);
+      expect(callToSetOptions({ easing: 5 })).toThrowError(/expected type/);
+      expect(callToSetOptions({ filter: () => {} })).toThrowError(/expected type/);
+      expect(callToSetOptions({ layout: 5 })).toThrowError(/expected type/);
+      expect(callToSetOptions({ multifilterLogicalOperator: 5 })).toThrowError(/expected type/);
+      expect(callToSetOptions({ setupControls: 'string' })).toThrowError(/expected type/);
+    });
+
+    it('should not throw an exception if an acceptable value is passed to the option delayMode', () => {
+      expect(callToSetOptions({ delayMode: 'alternate' })).not.toThrowError(/allowed values for option/);
+      expect(callToSetOptions({ delayMode: 'progressive' })).not.toThrowError(/allowed values for option/);
+    });
+
+    it('should throw an exception if a non-acceptable value is passed to the option delayMode', () => {
+      expect(callToSetOptions({ delayMode: 'slow' })).toThrowError(/allowed values for option/);
+    });
+
+    it('should not throw an exception if an acceptable value is passed to the option multifilterLogicalOperator', () => {
+      expect(callToSetOptions({ multifilterLogicalOperator: 'and' })).not.toThrowError(/allowed values for option/);
+      expect(callToSetOptions({ multifilterLogicalOperator: 'or' })).not.toThrowError(/allowed values for option/);
+    });
+
+    it('should throw an exception if a non-acceptable value is passed to the option multifilterLogicalOperator', () => {
+      expect(callToSetOptions({ multifilterLogicalOperator: 'eitheror' })).toThrowError(/allowed values for option/);
     });
   });
 });
