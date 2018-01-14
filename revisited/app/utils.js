@@ -35,8 +35,6 @@ const allStringsOfArray1InArray2 = (arr1, arr2) => {
 
 export { allStringsOfArray1InArray2 };
 
-window.allStringsOfArray1InArray2 = allStringsOfArray1InArray2;
-
 /**
  * A very simple function to perform a basic
  * deep clone of an object.

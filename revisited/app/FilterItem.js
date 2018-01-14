@@ -38,7 +38,7 @@ class FilterItem {
       filteredOut: false, // used for the onTransitionEnd event
       w: this.getWidth(),
       h: this.getHeight(),
-    }
+    };
 
     // set initial styles
     this.$node
@@ -97,11 +97,12 @@ class FilterItem {
   calcDelay(delay, delayMode) {
     let ret = 0;
 
-    if (delayMode === 'progressive')
+    if (delayMode === 'progressive') {
       ret = delay * this.props.index;
-    else
-      if (this.props.index % 2 === 0)
-        ret = delay;
+    }
+    else {
+      if (this.props.index % 2 === 0) ret = delay;
+    }
 
     return ret;
   }
@@ -155,7 +156,7 @@ class FilterItem {
    * Sets up the events related to the FilterItem instance
    */
   bindEvents() {
-    this.$node.on(transitionEndEvt, (evt) => {
+    this.$node.on(transitionEndEvt, () => {
       // On transitionEnd determine if the item is filtered out or not,
       // in case it is add the .filteredOut class for easy targeting by
       // the user and set the z-index to -1000 to prevent mouse events

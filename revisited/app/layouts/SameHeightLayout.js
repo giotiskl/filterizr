@@ -5,7 +5,7 @@
 const SameHeightLayout = (Filterizr) => {
   const {
     FilterContainer,
-    FilterItems
+    FilterItems,
   } = Filterizr.props;
   const gridWidth  = FilterContainer.props.w,
         itemHeight = FilterItems[0].props.h;
