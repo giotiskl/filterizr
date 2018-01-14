@@ -9,16 +9,18 @@ You can install Filterizr by downloading the minified version from its website o
 ```
 npm install filterizr
 ```
-or
-```
-bower install filterizr
-```
 
 ## Documentation & Tutorials
 You can find Filterizr's documentation as well as a series of tutorials on how to install and operate Filterizr on [the Filterizr website](http://yiotis.net/filterizr).
 
 ## Why Filterizr?
-There is a number of similar plugins some of which are very well-tested and feature-rich (such as Isotope, MixItUp etc). In my opinion the advantages of Filterizr is that despite its minute filesize (about 10.5kb), it comes with many features. It is very easy to use and setup, highly customizable and its performance is very fast and smooth (try it on mobile!).
+There is a number of similar plugins some of which are very well-tested and feature-rich (such as Isotope, MixItUp etc). 
+However, Filterizr comes with the following advantages:
+* Small filesize with compact functionality (~20kb).
+* Thoroughly documented and easy to use.
+* Performs great on mobile.
+* Written in ES6
+* Tested with Jest.
 
 ## Browser support
 IE10+ and all modern browsers.
