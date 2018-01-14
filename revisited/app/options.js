@@ -24,6 +24,6 @@ const options = {
   layout: 'sameSize',
   multifilterLogicalOperator: 'or',
   setupControls: true,
-}
+};
 
 export default options;

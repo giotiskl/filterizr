@@ -1,6 +1,11 @@
 import FilterItem from './FilterItem';
 
 class FilterContainer {
+  /**
+   * Instantiates a FilterContainer
+   * @param {String} selector of the FilterContainer instance
+   * @param {Object} options with which to instantiate the container
+   */
   constructor(selector = '.filtr-container', options) {
     // cache jQuery node
     this.$node = $(selector);
@@ -11,7 +16,7 @@ class FilterContainer {
       FilterItems: this.getFilterItems(options),
       w: this.getWidth(),
       h: 0,
-    }
+    };
 
     // set up initial styles of container
     this.$node.css({
@@ -20,6 +25,9 @@ class FilterContainer {
     });
   }
 
+  /**
+   * Destroys the FilterContainer instance by unbinding all events and resetting inline styles.
+   */
   destroy() {
     // Remove all inline styles and unbind all events
     this.$node
@@ -29,6 +37,10 @@ class FilterContainer {
     this.unbindEvents();
   }
 
+  /**
+   * Iterates over the FilterContainer creating FilterItem 
+   * instances for every .filtr-item element found.
+   */
   getFilterItems(options) {
     const FilterItems = $.map(this.$node.find('.filtr-item'), (item, index) => {
       return new FilterItem($(item), index, options);
@@ -37,6 +49,9 @@ class FilterContainer {
     return FilterItems;
   }
 
+  /**
+   * Pushes a new item into the FilterItem array in the properties of the FilterContainer
+   */
   push($node, options) {
     const { FilterItems } = this.props;
     // Add new item to DOM
@@ -47,32 +62,47 @@ class FilterContainer {
     this.props.FilterItems.push(filterItem);
   }
 
+  /**
+   * Calculates the amount of columns the Filterizr grid should have
+   */
   calcColumns() {
     return Math.round(this.props.w / this.props.FilterItems[0].props.w);
   }
 
-  // Helpers determining dimensions
+  /**
+   * Updates the height of the FilterContainer prop and sets it as an inline style
+   */
   updateHeight(newHeight) {
     this.props.h = newHeight;
     this.$node.css('height', newHeight);    
   }
 
+  /**
+   * Updates the width of the FilterContainer prop
+   */
   updateWidth() {
     this.props.w = this.getWidth();
   }
 
+  /**
+   * Updates the dimensions of all FilterItems, used for resizing
+   */
   updateFilterItemsDimensions() {
-    const {
-      FilterItems
-    } = this.props;
-
-    this.props.FilterItems.forEach(FilterItem => FilterItem.updateDimensions());
+    const { FilterItems } = this.props;
+    FilterItems.forEach(FilterItem => FilterItem.updateDimensions());
   }
 
+  /**
+   * Wrapper call around jQuery's innerWidth
+   */
   getWidth() {
     return this.$node.innerWidth();
   }
 
+  /**
+   * Binds all Filterizr related events.
+   * @param {Object} callbacks object containing all callback functions
+   */
   bindEvents(callbacks) {
     this.$node.on('filteringStart.Filterizr', callbacks.onFilteringStart);
     this.$node.on('filteringEnd.Filterizr', callbacks.onFilteringEnd);
@@ -82,6 +112,9 @@ class FilterContainer {
     this.$node.on('sortingEnd.Filterizr', callbacks.onSortingEnd);
   }
 
+  /**
+   * Unbinds all Filterizr related events.
+   */
   unbindEvents() {
     this.$node.off(
       `filteringStart.Filterizr 
@@ -93,7 +126,6 @@ class FilterContainer {
     );
   }
 
-  //- Event helpers
   /**
    * Method wrapper around jQuery's trigger
    * @param {string} evt name of the event
