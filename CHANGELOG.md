@@ -1,3 +1,13 @@
+## Version 1.3.0
+* Gave a corerewrite to the plugin, with ES6 and Babel, maintaining a backwards compatible API.
+* Added tests for most important methods.
+* Dropped support for Bower.
+* Added new API method ````.filterizr('insertItem', $node)````, which is used add a new item into the Filterizr grid.
+* Added new API method ````.filterizr('destroy')````, which is used to destroy the Filterizr instance.
+* Added new option ````multifilterLogicalOperator: ('or'|'and')```` to support different multifiltering modes.
+* Added new option ````controlsSelector: ''```` allowing to easily target multiple controls if many Filterizr instances exist.
+* Filtered out items will now receive a z-index: -1000 on top of the .filteredOut class making them non-clickable when not visible.
+
 ## Version 1.2.5
 * Fixed the bug caused by selector property which was removed in jQuery version 3.
 * Removed ````selector```` from configuration options.
