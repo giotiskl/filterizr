@@ -111,4 +111,89 @@ describe('Filterizr', () => {
     });
   });
 
+  describe('#toggleFilter', () => {});
+
+  describe('#insertItem', () => {
+    let $nodeToAdd, oldLength;
+
+    beforeEach(() => {
+      $nodeToAdd = filterContainer.$node.find('.filtr-item:last');
+      oldLength = filterizr.props.FilterItems.length;
+    });
+
+    it ('should increase the length of the FilterItems array by 1', () => {
+      filterizr.insertItem($nodeToAdd);
+      const newLength = filterizr.props.FilterItems.length;
+      expect(newLength).toBeGreaterThan(oldLength);
+    });
+
+    it ('should add into the grid a new FilterItem with the index property equal to the length of the FilterItems array', () => {
+      filterizr.insertItem($nodeToAdd);
+      const indexOfNewLastItem = filterizr.props.FilterItems[oldLength].props.index;
+      expect(indexOfNewLastItem).toEqual(oldLength);
+    });
+  });
+
+  describe('#sort', () => {});
+
+  describe('#search', () => {});
+
+  describe('#shuffle', () => {
+    let oldIndex1, oldIndex2;
+
+    beforeEach(() => {
+      oldIndex1 = filterizr.props.FilterItems[0].props.index;
+      oldIndex2 = filterizr.props.FilterItems[1].props.index;
+    });
+
+    it('should shuffle the grid until all elements have different positions', () => {
+      filterizr.shuffle();
+      const index1 = filterizr.props.FilteredItems[0].props.index;
+      const index2 = filterizr.props.FilteredItems[1].props.index;
+      expect(index1).not.toEqual(oldIndex1);
+      expect(index2).not.toEqual(oldIndex2);
+    });
+  });
+
+  describe('#setOptions', () => {
+    const newOptions = {
+      animationDuration: 0.25,
+      callbacks: {
+        onFilteringStart: () => { console.log('hi') },
+        onFilteringEnd: () => { console.log('hi') },
+      },
+      controlsSelector: '.new-controls',
+      delay: 1150,
+      delayMode: 'alternate',
+      easing: 'ease-in-out',
+      filter: '2',
+      filterOutCss: {
+        'opacity': 0.25,
+        'transform': 'scale(0.5)'
+      },
+      filterInCss: {
+        'opacity': 1,
+        'transform': 'scale(1)'
+      },
+      layout: 'packed',
+      multifilterLogicalOperator: 'and',
+      setupControls: false,
+    }
+
+    it('should update the options of the Filterizr with valid values', () => {
+      filterizr.setOptions(newOptions);
+      const { options } = filterizr;
+      expect(typeof options).toBe('object');
+      expect(typeof options.callbacks).toBe('object');
+      expect(options.animationDuration).toEqual(0.25);
+      expect(options.controlsSelector).toEqual('.new-controls');
+      expect(options.delay).toEqual(1150);
+      expect(options.delayMode).toEqual('alternate');
+      expect(options.easing).toEqual('ease-in-out');
+      expect(options.filter).toEqual('2');
+      expect(options.layout).toEqual('packed');
+      expect(options.multifilterLogicalOperator).toEqual('and');
+      expect(options.setupControls).toEqual(false);
+    });
+  });
 });
