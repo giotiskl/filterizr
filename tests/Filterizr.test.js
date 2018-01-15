@@ -2,11 +2,11 @@
 import $ from 'jquery';
 import { fakeDom } from './testUtils';
 // import items to be tested
-import Filterizr from '../app/Filterizr';
-import DefaultOptions from '../app/options';
+import Filterizr from '../src/Filterizr';
+import DefaultOptions from '../src/options';
 import { 
   stringInArray,
-} from '../app/utils';
+} from '../src/utils';
 
 // General setup
 window.$ = $;

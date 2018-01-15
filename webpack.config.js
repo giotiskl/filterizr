@@ -6,12 +6,12 @@ var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
 module.exports = env => {
   let config = {
     entry: [
-      // set our app.js as the entry point
-      './app/index',
+      // set our index.js as the entry point
+      './src/index',
     ],
     output: {
       path: __dirname,
-      filename: './dist/filterizr.min.js',
+      filename: './dist/jquery.filterizr.min.js',
     },
     module: {
       loaders: [
