@@ -10,7 +10,6 @@ import {
 
 // General setup
 window.$ = $;
-$('body').html(fakeDom);
 
 // Test suite for Filterizr
 describe('Filterizr', () => {
@@ -19,6 +18,7 @@ describe('Filterizr', () => {
   let filterContainer;
 
   beforeEach(() => {
+    $('body').html(fakeDom);
     filterizr = new Filterizr('.filtr-container', DefaultOptions);
     filterContainer = filterizr.props.FilterContainer;
   });
