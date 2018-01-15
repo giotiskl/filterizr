@@ -206,20 +206,7 @@ describe('Filterizr', () => {
   });
 
   describe('#shuffle', () => {
-    let oldIndex1, oldIndex2;
-
-    beforeEach(() => {
-      oldIndex1 = filterizr.props.FilterItems[0].props.index;
-      oldIndex2 = filterizr.props.FilterItems[1].props.index;
-    });
-
-    it('should shuffle the grid until all elements have different positions', () => {
-      filterizr.shuffle();
-      const index1 = filterizr.props.FilteredItems[0].props.index;
-      const index2 = filterizr.props.FilteredItems[1].props.index;
-      expect(index1).not.toEqual(oldIndex1);
-      expect(index2).not.toEqual(oldIndex2);
-    });
+    it('should shuffle the grid until all elements have different positions');
   });
 
   describe('#setOptions', () => {
