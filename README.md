@@ -1,11 +1,11 @@
-# [Filterizr](http://yiotis.net/filterizr)
+# [Filterizr](http://yiotis.net/filterizr) [![Build Status](https://travis-ci.org/giotiskl/Filterizr.svg?branch=filterizr_revisited)](https://travis-ci.org/giotiskl/Filterizr)
 If you use Filterizr in your project and wish to get it featured on Filterizr's website, let me know!
 
 ## Description
 Filterizr is a jQuery plugin that sorts, shuffles, searches and applies stunning filters over responsive galleries using CSS3 transitions. Write your very own, custom effects in CSS and watch your gallery come to life!
 
 ## Install
-You can install Filterizr by downloading the minified version from its website or through NPM or Bower:
+You can install Filterizr by downloading the minified version on its website or through NPM:
 ```
 npm install filterizr
 ```
@@ -26,4 +26,4 @@ However, Filterizr comes with the following advantages:
 IE10+ and all modern browsers.
 
 ## License
-Filterizr is licensed under [the MIT License](https://opensource.org/licenses/MIT) (i.e. you do whatever you want with it). Enjoy!
+Filterizr is licensed under [the MIT License](https://opensource.org/licenses/MIT). Enjoy!
