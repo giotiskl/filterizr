@@ -9,7 +9,6 @@ import DefaultOptions from '../app/options';
 
 // General setup
 window.$ = $;
-$('body').html(fakeDom);
 
 describe('FilterContainer', () => {
   // Basic setup before all tests
@@ -17,6 +16,7 @@ describe('FilterContainer', () => {
   let filterContainer;
 
   beforeEach(() => {
+    $('body').html(fakeDom);
     filterizr = new Filterizr('.filtr-container', DefaultOptions);
     filterContainer = new FilterContainer('.filtr-container', DefaultOptions);
   });
