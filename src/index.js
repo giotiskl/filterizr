@@ -58,7 +58,7 @@ import DefaultOptions from './options';
           delete this._fltr;
           return this;
         default:
-          throw new Error(`${method} is not part of the Filterizr API. Please refer to the docs for more information.`);
+          throw new Error(`Filterizr: ${method} is not part of the Filterizr API. Please refer to the docs for more information.`);
           return;
       }
     }
