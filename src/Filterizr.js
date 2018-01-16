@@ -2,6 +2,7 @@ import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
 import { 
+  FILTERIZR_STATE,
   allStringsOfArray1InArray2,
   checkOptionForErrors,
   cssEasingValuesRegexp,
@@ -34,6 +35,7 @@ class Filterizr {
 
     // define props
     this.props = {
+      filterizrState: FILTERIZR_STATE.IDLE,
       searchTerm: '',
       sort: 'index',
       sortOrder: 'asc',
@@ -48,7 +50,10 @@ class Filterizr {
     this.filter(this.options.filter);
   }
 
-  // Public API of Filterizr
+  /**
+   * Public API of Filterizr
+   */
+
   /**
    * Filters the items in the grid by a category
    * @param {String} category by which to filter
@@ -60,27 +65,26 @@ class Filterizr {
       FilterItems,
     } = this.props;
 
-    // trigger filtering start event
+    // Trigger filteringStart event
     FilterContainer.trigger('filteringStart');
 
-    // cast category to string or array of strings
+    // Set animation state to trigger callbacks
+    this.props.filterizrState = FILTERIZR_STATE.FILTERING;
+
+    // Cast category to string or array of strings
     category = Array.isArray(category) ?
       category.map(c => c.toString()) :
       category.toString();
     
-    // filter items and optionally apply search if a search term exists
+    // Filter items and optionally apply search if a search term exists
     const FilteredItems = this.searchFilterItems(
       this.filterFilterItems(FilterItems, category), 
       searchTerm
     );
     this.props.FilteredItems = FilteredItems;
 
-    // set up events needed by Filterizr
-    // render the items
+    // Render the items
     this.render(FilteredItems);
-
-    // trigger filtering end event
-    FilterContainer.trigger('filteringEnd');
   }
 
   /**
@@ -122,10 +126,20 @@ class Filterizr {
    * @param {String} sortOrder ascending or descending
    */
   sort(sortAttr = 'index', sortOrder = 'asc') {
-    const { FilterItems } = this.props;
+    const { 
+      FilterContainer,
+      FilterItems,
+    } = this.props;
+
+    // Trigger filteringStart event
+    FilterContainer.trigger('sortingStart');
+
+    // Set animation state to trigger callbacks
+    this.props.filterizrState = FILTERIZR_STATE.SORTING;
 
     // sort main array
     this.props.FilterItems = this.sortFilterItems(FilterItems, sortAttr, sortOrder);
+
     // apply filters
     const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
     this.props.FilteredItems = FilteredItems;
@@ -154,8 +168,15 @@ class Filterizr {
    */
   shuffle() {
     const {
-      FilteredItems
+      FilterContainer,
+      FilteredItems,
     } = this.props;
+
+    // Trigger filteringStart event
+    FilterContainer.trigger('shufflingStart');
+
+    // Set animation state to trigger callbacks
+    this.props.filterizrState = FILTERIZR_STATE.SHUFFLING;
 
     const ShuffledItems = this.shuffleFilterItems(FilteredItems);
     this.props.FilteredItems = ShuffledItems;
@@ -351,24 +372,51 @@ class Filterizr {
     });
   }
 
+  onTransitionEndCallback() {
+    const { 
+      filterizrState,
+      FilterContainer,
+    } = this.props;
+
+    switch(filterizrState) {
+      case FILTERIZR_STATE.FILTERING:
+        FilterContainer.trigger('filteringEnd');
+        break;
+      case FILTERIZR_STATE.SORTING:
+        FilterContainer.trigger('sortingEnd');
+        break;
+      case FILTERIZR_STATE.SHUFFLING:
+        FilterContainer.trigger('shufflingEnd');
+        break;
+    }
+
+    // Reset filterizrState to idle
+    this.props.filterizrState = FILTERIZR_STATE.IDLE;
+  }
+
   rebindFilterContainerEvents() {
     const { FilterContainer } = this.props;
-    const { callbacks } = this.options;
+    const { 
+      animationDuration,
+      callbacks,
+    } = this.options;
     // cancel existing evts
     FilterContainer.unbindEvents();
     // rebind evts
     FilterContainer.bindEvents(callbacks);
+    FilterContainer.bindTransitionEnd(() => { this.onTransitionEndCallback() }, animationDuration);
   }
 
   bindEvents() {
+    const { FilterContainer } = this.props;
     //- FilterContainer events
     this.rebindFilterContainerEvents();
     //- Generic Filterizr events
     // set up a window resize event to fire refiltering
     $(window).on('resize.Filterizr', debounce(() => {
       // update dimensions of items based on new window size
-      this.props.FilterContainer.updateWidth();
-      this.props.FilterContainer.updateFilterItemsDimensions();
+      FilterContainer.updateWidth();
+      FilterContainer.updateFilterItemsDimensions();
       // refilter the grid to assume new positions
       this.filter(this.options.filter);
     }, 250));
