@@ -1,4 +1,8 @@
 import FilterItem from './FilterItem';
+import { 
+  debounce,
+  transitionEndEvt,
+} from './utils';
 
 class FilterContainer {
   /**
@@ -100,6 +104,18 @@ class FilterContainer {
   }
 
   /**
+   * Binds the FilterContainer transitionEnd event, which serves as the
+   * space to trigger Filterizr related events, e.g. onFilteringEnd etc.
+   * @param {Function} callback for the transitionEnd event
+   * @param {Number} debounceDuration in milliseconds
+   */
+  bindTransitionEnd(callback, debounceDuration) {
+    this.$node.on(transitionEndEvt, debounce(() => {
+      callback();
+    }, debounceDuration));
+  }
+
+  /**
    * Binds all Filterizr related events.
    * @param {Object} callbacks object containing all callback functions
    */
@@ -117,7 +133,8 @@ class FilterContainer {
    */
   unbindEvents() {
     this.$node.off(
-      `filteringStart.Filterizr 
+      `${transitionEndEvt}
+      filteringStart.Filterizr 
       filteringEnd.Filterizr 
       shufflingStart.Filterizr 
       shufflingEnd.Filterizr 

@@ -252,3 +252,15 @@ const transitionEndEvt = `
 `;
 
 export { transitionEndEvt };
+
+/**
+ * Possible animation states for Filterizr
+ */
+const FILTERIZR_STATE = {
+  IDLE: 'IDLE',
+  FILTERING: 'FILTERING',
+  SORTING: 'SORTING',
+  SHUFFLING: 'SHUFFLING',
+}
+
+export { FILTERIZR_STATE };
