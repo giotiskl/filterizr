@@ -225,12 +225,27 @@ class Filterizr {
     );
     checkOptionForErrors('setupControls', newOptions.setupControls, 'boolean');
 
-    // merge options
+    // Merge options
     this.options = merge(newOptions, this.options);
 
-    // if callbacks defined then reregister events
-    if ('callbacks' in newOptions)
+    // If one of the options that updates the transition properties
+    // of the .filtr-item elements is set, call the update method
+    if (newOptions.animationDuration || newOptions.delay || newOptions.delayMode || newOptions.easing) {
+      this.props.FilterContainer.updateFilterItemsTransitionStyle(
+        newOptions.animationDuration,
+        newOptions.easing,
+        newOptions.delay,
+        newOptions.delayMode
+      );
+    }
+
+    // If inside the new options the callbacks object has been defined
+    // then the FilterContainer events need to be reset.
+    // Same if the animationDuration is defined as it is a parameter to
+    // the debounce wrapper of the transitionEnd callback.
+    if (newOptions.callbacks || newOptions.animationDuration) {
       this.rebindFilterContainerEvents();
+    }
   }
 
   /**

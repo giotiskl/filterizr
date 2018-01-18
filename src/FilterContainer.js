@@ -74,6 +74,21 @@ class FilterContainer {
   }
 
   /**
+   * Updates the transition inline styles of all contained .filtr-item children
+   * @param {Number} animationDuration duration of the animation in seconds
+   * @param {String} easing function for the animation
+   * @param {Number} delay in ms
+   * @param {String} delayMode alternate or progressive
+   */
+  updateFilterItemsTransitionStyle(animationDuration, easing, delay, delayMode) {
+    const { FilterItems } = this.props;
+
+    FilterItems.forEach(FilterItem => FilterItem.$node.css({
+      'transition': `all ${animationDuration}s ${easing} ${FilterItem.calcDelay(delay, delayMode)}ms`,
+    }));
+  }
+
+  /**
    * Updates the height of the FilterContainer prop and sets it as an inline style
    */
   updateHeight(newHeight) {
