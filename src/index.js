@@ -9,6 +9,8 @@
 */
 
 import Filterizr from './Filterizr';
+import FilterContainer from './FilterContainer';
+import FilterItem from './FilterItem';
 import DefaultOptions from './options';
 
 (function($) {
@@ -66,3 +68,10 @@ import DefaultOptions from './options';
     return this;
   }
 })(jQuery);
+
+export {
+  Filterizr,
+  FilterContainer,
+  FilterItem,
+  DefaultOptions,
+}
