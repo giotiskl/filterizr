@@ -14,26 +14,26 @@ const PackedLayout = (Filterizr) => {
     return {
       w: FilterItem.props.w, 
       h: FilterItem.props.h
-    }
+    };
   });
   // enhance array with coordinates
   // added in an extra object named fit
   // by the packing algorithm
-  packer.fit(filterItemsDimensions)
+  packer.fit(filterItemsDimensions);
 
   const targetPositions = filterItemsDimensions.map(filterItemDimensions => {
     const filterItemCoords = filterItemDimensions.fit;
     return {
       left: filterItemCoords.x,
       top : filterItemCoords.y,
-    }
+    };
   });
 
   // set height of container
   FilterContainer.updateHeight(packer.root.h);
 
   return targetPositions;
-}
+};
 
 /**
  * Modified version of Jake Gordon's Bin Packing algorithm used for Filterizr's 'packed' layout

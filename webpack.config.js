@@ -29,7 +29,7 @@ module.exports = env => {
     plugins: [
       new HtmlWebpackPlugin({
         title: "Filterizr revisited",
-        template: "showcase/index.html",
+        template: "demo/index.html",
       }),
       // uglify plugin for JS
       new UglifyJsPlugin(),

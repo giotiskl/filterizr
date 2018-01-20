@@ -7,16 +7,14 @@ const HorizontalLayout = (Filterizr) => {
     FilterContainer,
     FilterItems
   } = Filterizr.props;
-  let row = 1, 
-      left = 0, 
-      // target height of FilterContainer
-      containerHeight = 0;
+  let left = 0, 
+    containerHeight = 0; // target height of FilterContainer
 
-  const targetPositions = FilterItems.map((FilterItem, index) => {
+  const targetPositions = FilterItems.map((FilterItem) => {
     const pos = {
       left: left,
       top: 0,
-    }
+    };
 
     // update left for next item
     left += FilterItem.props.w;
@@ -31,6 +29,6 @@ const HorizontalLayout = (Filterizr) => {
   FilterContainer.updateHeight(containerHeight);
 
   return targetPositions;
-}
+};
 
 export default HorizontalLayout;
