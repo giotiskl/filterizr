@@ -5,7 +5,7 @@ import { fakeDom } from './testUtils';
 import Filterizr from '../src/Filterizr';
 import FilterContainer from '../src/FilterContainer';
 import FilterItem from '../src/FilterItem';
-import DefaultOptions from '../src/options';
+import DefaultOptions from '../src/DefaultOptions';
 
 // General setup
 window.$ = $;

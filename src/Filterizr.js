@@ -1,7 +1,7 @@
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
-import DefaultOptions from './options';
+import DefaultOptions from './DefaultOptions';
 import { 
   FILTERIZR_STATE,
   allStringsOfArray1InArray2,
