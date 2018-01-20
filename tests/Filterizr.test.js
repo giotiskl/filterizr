@@ -3,10 +3,8 @@ import $ from 'jquery';
 import { fakeDom } from './testUtils';
 // import items to be tested
 import Filterizr from '../src/Filterizr';
-import DefaultOptions from '../src/options';
-import { 
-  stringInArray,
-} from '../src/utils';
+import DefaultOptions from '../src/DefaultOptions';
+import { stringInArray } from '../src/utils';
 
 // General setup
 window.$ = $;
