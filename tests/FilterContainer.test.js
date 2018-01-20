@@ -30,7 +30,7 @@ describe('FilterContainer', () => {
     it('should return a new instance of the FilterContainer class', () => {
       expect(filterContainer instanceof FilterContainer).toBe(true);
     });
-  })
+  });
 
   describe('#destroy', () => {
     beforeEach(() => {

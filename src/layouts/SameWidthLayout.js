@@ -9,9 +9,9 @@ const SameWidthLayout = (Filterizr) => {
   } = Filterizr.props;
   // calculate number of columns and rows the grid should have
   let cols = FilterContainer.calcColumns(),
-      row  = 0,
-      heightOfTallestInRow = 0,
-      containerHeight = 0;
+    row  = 0,
+    heightOfTallestInRow = 0,
+    containerHeight = 0;
 
   // calculate array of positions
   const targetPositions = FilterItems.map((FilterItem, index) => {
@@ -33,7 +33,7 @@ const SameWidthLayout = (Filterizr) => {
     return {
       left: spot * FilterItem.props.w,
       top:  calcItemTop(FilterItems, cols, index),
-    }
+    };
   });
   // increment the container height by the final
   // value of the height of the tallest item in row
@@ -43,7 +43,7 @@ const SameWidthLayout = (Filterizr) => {
   FilterContainer.updateHeight(containerHeight);
   // return the array of new positions
   return targetPositions;
-}
+};
 
 /**
  * Helper method used to calculate what the top
@@ -68,6 +68,6 @@ const calcItemTop = (FilterItems, cols, index) => {
     index   -= cols;
   }
   return itemTop;
-}
+};
 
 export default SameWidthLayout;

@@ -2,7 +2,6 @@
 import $ from 'jquery';
 import { fakeDom } from './testUtils';
 // import items to be tested
-import Filterizr from '../src/Filterizr';
 import FilterItem from '../src/FilterItem';
 import DefaultOptions from '../src/options';
 

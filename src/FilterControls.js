@@ -12,7 +12,7 @@ class FilterControls {
     this.props = {
       Filterizr,
       selector,
-    }
+    };
 
     this.setupFilterControls();
     this.setupShuffleControls();
@@ -30,7 +30,7 @@ class FilterControls {
     } = this.props;
 
     // Single filter mode controls
-    $(`${selector} *[data-filter]`).on('click.Filterizr', (evt) => {
+    $(`${selector}[data-filter]`).on('click.Filterizr', (evt) => {
       const $ctrl = $(evt.target);
       const targetFilter = $ctrl.attr('data-filter');
 
@@ -43,7 +43,7 @@ class FilterControls {
     });
 
     // Multifilter mode controls
-    $(`${selector} *[data-multifilter]`).on('click.Filterizr', (evt) => {
+    $(`${selector}[data-multifilter]`).on('click.Filterizr', (evt) => {
       const $ctrl        = $(evt.target);
       const targetFilter = $ctrl.attr('data-multifilter');
       
@@ -60,7 +60,7 @@ class FilterControls {
       selector,
     } = this.props;
 
-    $(`${selector} *[data-shuffle]`).on('click.Filterizr', (evt) => {
+    $(`${selector}[data-shuffle]`).on('click.Filterizr', () => {
       Filterizr.shuffle();
     });
   }
@@ -74,7 +74,7 @@ class FilterControls {
       selector,
     } = this.props;
 
-    $(`${selector} *[data-search]`).on('keyup.Filterizr', debounce((evt) => {
+    $(`${selector}[data-search]`).on('keyup.Filterizr', debounce((evt) => {
       const $textfield = $(evt.target);
       const val = $textfield.val();
       
@@ -92,13 +92,13 @@ class FilterControls {
       selector,
     } = this.props;
 
-    $(`${selector} *[data-sortAsc]`).on('click.Filterizr', (evt) => {
-      const sortAttr = $(`${selector} *[data-sortOrder]`).val();
+    $(`${selector}[data-sortAsc]`).on('click.Filterizr', () => {
+      const sortAttr = $(`${selector}[data-sortOrder]`).val();
       Filterizr.props.sortOrder = 'asc';
       Filterizr.sort(sortAttr, 'asc');
     });
-    $(`${selector} *[data-sortDesc]`).on('click.Filterizr', (evt) => {
-      const sortAttr = $(`${selector} *[data-sortOrder]`).val();
+    $(`${selector}[data-sortDesc]`).on('click.Filterizr', () => {
+      const sortAttr = $(`${selector}[data-sortOrder]`).val();
       Filterizr.props.sortOrder = 'desc';
       Filterizr.sort(sortAttr, 'desc');
     });
@@ -108,17 +108,14 @@ class FilterControls {
    * Destroys all controls
    */
   destroy() {
-    const {
-      Filterizr,
-      selector
-    } = this.props;
+    const { selector } = this.props;
 
-    $(`${selector} *[data-filter]`).off('click.Filterizr');
-    $(`${selector} *[data-multifilter]`).off('click.Filterizr');
-    $(`${selector} *[data-shuffle]`).off('click.Filterizr');
-    $(`${selector} *[data-search]`).off('keyup.Filterizr');
-    $(`${selector} *[data-sortAsc]`).off('click.Filterizr');
-    $(`${selector} *[data-sortDesc]`).off('click.Filterizr');
+    $(`${selector}[data-filter]`).off('click.Filterizr');
+    $(`${selector}[data-multifilter]`).off('click.Filterizr');
+    $(`${selector}[data-shuffle]`).off('click.Filterizr');
+    $(`${selector}[data-search]`).off('keyup.Filterizr');
+    $(`${selector}[data-sortAsc]`).off('click.Filterizr');
+    $(`${selector}[data-sortDesc]`).off('click.Filterizr');
   }
 }
 
