@@ -11,7 +11,7 @@
 import Filterizr from './Filterizr';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
-import DefaultOptions from './options';
+import DefaultOptions from './DefaultOptions';
 
 (function($) {
   //Make sure jQuery exists

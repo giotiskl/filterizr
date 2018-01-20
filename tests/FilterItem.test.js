@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { fakeDom } from './testUtils';
 // import items to be tested
 import FilterItem from '../src/FilterItem';
-import DefaultOptions from '../src/options';
+import DefaultOptions from '../src/DefaultOptions';
 
 // General setup
 window.$ = $;
