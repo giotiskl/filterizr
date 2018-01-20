@@ -25,5 +25,10 @@ However, Filterizr comes with the following advantages:
 ## Browser support
 IE10+ and all modern browsers.
 
+## Donate
+Did you enjoy Filterizr? Filterizr is and will always be 100% free, if you would like to show your support feel free to donate:
+* **BTC**: 1JdpKt3aeNQuKF9CrUKeq3XkPswcqgAFpt
+* **ETH**: 0xdb259cf059faf286e5834e95c8f3a973438276e8
+
 ## License
 Filterizr is licensed under [the MIT License](https://opensource.org/licenses/MIT). Enjoy!
