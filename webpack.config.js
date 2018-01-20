@@ -1,5 +1,4 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ProvidePlugin = require('webpack').ProvidePlugin;
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
 

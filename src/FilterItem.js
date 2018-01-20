@@ -93,6 +93,9 @@ class FilterItem {
 
   /**
    * Helper method to calculate the animation delay for a given .filtr-item
+   * @param {Number} delay in ms
+   * @param {String} delayMode can be 'alternate' or 'progressive'
+   * @return {Number} delay in ms
    */
   calcDelay(delay, delayMode) {
     let ret = 0;
