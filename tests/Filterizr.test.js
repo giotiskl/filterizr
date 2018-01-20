@@ -114,7 +114,6 @@ describe('Filterizr', () => {
   describe('#toggleFilter', () => {
     it('should set the filter back to "all" if it was set to only 1 category and that category is toggled', () => {
       filterizr.toggleFilter('1');
-      const activeFilter = filterizr.options.filter;
       filterizr.toggleFilter('1');
       const { filter } = filterizr.options;
       expect(filter).toEqual('all');
@@ -213,8 +212,8 @@ describe('Filterizr', () => {
     const newOptions = {
       animationDuration: 0.25,
       callbacks: {
-        onFilteringStart: () => { console.log('hi') },
-        onFilteringEnd: () => { console.log('hi') },
+        onFilteringStart: () => { return 'filtering started'; },
+        onFilteringEnd: () => { return 'filtering ended'; },
       },
       controlsSelector: '.new-controls',
       delay: 1150,

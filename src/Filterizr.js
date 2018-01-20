@@ -1,6 +1,7 @@
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
+import DefaultOptions from './options';
 import { 
   FILTERIZR_STATE,
   allStringsOfArray1InArray2,
@@ -16,13 +17,13 @@ import {
 } from './utils';
 
 class Filterizr {
-  constructor(selector = '.filtr-container', options) {
-    // make the options a property of the Filterizr instance
-    // so that we can later easily modify them
-    this.options = options;
+  constructor(selector = '.filtr-container', userOptions) {
+    // Make the options a property of the Filterizr instance
+    // so that we can later easily modify/update them.
+    this.options = merge(DefaultOptions, userOptions);
 
     // Try to find and instantiate the FilterContainer
-    const filterContainer = new FilterContainer(selector, options);
+    const filterContainer = new FilterContainer(selector, this.options);
 
     if (!filterContainer.$node.length) {
       // Throw because the selector given was not
@@ -31,7 +32,7 @@ class Filterizr {
     }
 
     // Setup FilterControls
-    new FilterControls(this, options.controlsSelector);
+    new FilterControls(this, this.options.controlsSelector);
 
     // define props
     this.props = {
@@ -226,7 +227,7 @@ class Filterizr {
     checkOptionForErrors('setupControls', newOptions.setupControls, 'boolean');
 
     // Merge options
-    this.options = merge(newOptions, this.options);
+    this.options = merge(this.options, newOptions);
 
     // If one of the options that updates the transition properties
     // of the .filtr-item elements is set, call the update method
@@ -245,6 +246,17 @@ class Filterizr {
     // the debounce wrapper of the transitionEnd callback.
     if (newOptions.callbacks || newOptions.animationDuration) {
       this.rebindFilterContainerEvents();
+    }
+
+    // If the filter is explicitly set in the new options object, trigger a refiltering.
+    if (newOptions.filter) {
+      this.filter(newOptions.filter);
+    }
+
+    // If the multifilterLogicalOperator has been defined and its
+    // value changed then a refilter should be trigger.
+    if (newOptions.multifilterLogicalOperator) {
+      this.filter(this.options.filter);
     }
   }
 
@@ -419,7 +431,7 @@ class Filterizr {
     FilterContainer.unbindEvents();
     // rebind evts
     FilterContainer.bindEvents(callbacks);
-    FilterContainer.bindTransitionEnd(() => { this.onTransitionEndCallback() }, animationDuration);
+    FilterContainer.bindTransitionEnd(() => { this.onTransitionEndCallback(); }, animationDuration);
   }
 
   bindEvents() {

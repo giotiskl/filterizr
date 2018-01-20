@@ -21,13 +21,13 @@ const SameSizeLayout = (Filterizr) => {
     return {
       left: spot * FilterItem.props.w,
       top: row * FilterItem.props.h,
-    }
+    };
   });
   // update the height of the FilterContainer
   // before returning from the method
   FilterContainer.updateHeight((row+1) * FilterItems[0].props.h);
   // return the array of new positions
   return targetPositions;
-}
+};
 
 export default SameSizeLayout;

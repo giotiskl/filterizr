@@ -54,10 +54,10 @@ export { cloneDeep };
  * A function to recursively merge to object, copying over all
  * properties of the old object missing from the target object.
  * In case a prop in is an object, the method is called recursively.
- * @param {Object} target is the target object with the updates values.
  * @param {Object} old is the old object from which the missing props are copied.
+ * @param {Object} target is the target object with the updates values.
  */
-const merge = (target, old) => {
+const merge = (old, target) => {
   // iterate over props of old
   for (let p in old) {
     if (!(p in target)) {
@@ -261,6 +261,6 @@ const FILTERIZR_STATE = {
   FILTERING: 'FILTERING',
   SORTING: 'SORTING',
   SHUFFLING: 'SHUFFLING',
-}
+};
 
 export { FILTERIZR_STATE };

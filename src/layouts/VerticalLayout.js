@@ -11,11 +11,11 @@ const VerticalLayout = (Filterizr) => {
   // be the total height of the FilterContainer
   let top = 0;
 
-  const targetPositions = FilterItems.map((FilterItem, index) => {
+  const targetPositions = FilterItems.map((FilterItem) => {
     const pos = {
       left: 0,
       top: top,
-    }
+    };
 
     top += FilterItem.props.h;
 
@@ -26,6 +26,6 @@ const VerticalLayout = (Filterizr) => {
   FilterContainer.updateHeight(top);
 
   return targetPositions;
-}
+};
 
 export default VerticalLayout;

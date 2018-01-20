@@ -61,12 +61,11 @@ import DefaultOptions from './options';
           return this;
         default:
           throw new Error(`Filterizr: ${method} is not part of the Filterizr API. Please refer to the docs for more information.`);
-          return;
       }
     }
 
     return this;
-  }
+  };
 })(jQuery);
 
 export {
@@ -74,4 +73,4 @@ export {
   FilterContainer,
   FilterItem,
   DefaultOptions,
-}
+};

@@ -84,7 +84,7 @@ const fakeDom = `
         </div>
     </div>
 </div>
-`
+`;
 
 export {
   fakeDom,
