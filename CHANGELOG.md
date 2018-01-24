@@ -1,3 +1,6 @@
+## Version 1.3.1
+* Fix bug where Filterizr would not be instantiated if the .filtr-container had more than one class names
+
 ## Version 1.3.0
 * Gave a corerewrite to the plugin, with ES6 and Babel, maintaining a backwards compatible API.
 * Added tests for most important methods.
