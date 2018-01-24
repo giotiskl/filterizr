@@ -36,6 +36,14 @@ describe('Filterizr', () => {
     it('should return a new instance of the Filterizr class', () => {
       expect(filterizr instanceof Filterizr).toBe(true);
     });
+
+    it('should still work on containers with multiple class names', () => {
+      $('.filtr-container').addClass('randomclass1 randomclass2');
+      const instantiateFreshFilterizr = () => {
+        new Filterizr('.filtr-container', DefaultOptions);
+      };
+      expect(instantiateFreshFilterizr).not.toThrowError();
+    });
   });
 
   describe('#destroy', () => {

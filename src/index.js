@@ -4,7 +4,7 @@
 *
 * @author Yiotis Kaltsikis
 * @see {@link http://yiotis.net/filterizr}
-* @version 1.3.0
+* @version 1.3.1
 * @license MIT License
 */
 
@@ -19,7 +19,7 @@ import DefaultOptions from './DefaultOptions';
 
   // Extract .filterizr method on jQuery prototype
   $.fn.filterizr = function() {
-    const selector  = `.${this.get(0).className}`;
+    const selector = `.${$.trim(this.get(0).className).replace(/\s+/g, '.')}`;
     const args = arguments;
 
     // user is instantiating Filterizr
