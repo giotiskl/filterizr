@@ -1,1 +1,10 @@
 dev_example
+tests/
+.babelrc
+.eslintignore
+.eslintrc.yml
+.travis.yml
+webpack.config.js
+README.md
+LICENSE
+CHANGELOG.md
