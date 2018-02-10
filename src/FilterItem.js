@@ -111,6 +111,15 @@ class FilterItem {
   }
 
   /**
+   * Returns true if the text contents of the FilterItem match the search term
+   * @param {String} searchTerm - the search term
+   * @return {Boolean} if the innerText matches the term
+   */
+  contentsMatchSearch(searchTerm) {
+    return ~this.getContentsLowercase().lastIndexOf(searchTerm);
+  }
+
+  /**
    * Helper method for the search method of Filterizr
    */
   getContentsLowercase() {
