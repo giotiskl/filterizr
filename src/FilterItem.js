@@ -116,7 +116,7 @@ class FilterItem {
    * @return {Boolean} if the innerText matches the term
    */
   contentsMatchSearch(searchTerm) {
-    return ~this.getContentsLowercase().lastIndexOf(searchTerm);
+    return Boolean(~this.getContentsLowercase().lastIndexOf(searchTerm));
   }
 
   /**

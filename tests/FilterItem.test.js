@@ -29,6 +29,19 @@ describe('Filterizr', () => {
     });
   });
 
+  describe('#contentsMatchSearch', () => {
+    it('should return true when the innerText of the FilterItem matches the search term', () => {
+      const filterItem = new FilterItem($('.filtr-item:first'), 0, DefaultOptions);
+      expect(filterItem.contentsMatchSearch('streets')).toEqual(true);
+    });
+
+
+    it('should return false when the innerText of the FilterItem does not match the search term', () => {
+      const filterItem = new FilterItem($('.filtr-item:first'), 0, DefaultOptions);
+      expect(filterItem.contentsMatchSearch('iamnotthere')).toEqual(false);
+    });
+  });
+
   describe('#getContentsLowercase', () => {
     it('should return the contents of the .filtr-item container in lowercase', () => {
       const filterItem = new FilterItem($('.filtr-item:first'), 0, DefaultOptions);
