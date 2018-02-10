@@ -350,10 +350,7 @@ class Filterizr {
   searchFilterItems(FilterItems, searchTerm = this.props.searchTerm) {
     if (!searchTerm) return FilterItems; // exit case when no search is applied
 
-    const SoughtItems =  FilterItems.filter(FilterItem => {
-      const contents = FilterItem.getContentsLowercase();
-      return ~contents.lastIndexOf(searchTerm);
-    });
+    const SoughtItems = FilterItems.filter(FilterItem => FilterItem.contentsMatchSearch(searchTerm));
 
     return SoughtItems;
   }
@@ -369,33 +366,43 @@ class Filterizr {
   }  
 
   render(FilterItems) {
-    const { multifilterLogicalOperator } = this.options;
-    // get items to be filtered out
+    const {
+      filter,
+      filterInCss,
+      filterOutCss,
+      layout,
+      multifilterLogicalOperator,
+    } = this.options;
+
+    // Get items to be filtered out
     const FilteredOutItems = this.props.FilterItems.filter(FilterItem => {
       const categories = FilterItem.getCategories();
-      const filters = this.options.filter;
-      const multiFilteringEnabled = Array.isArray(filters);
+      const multiFilteringEnabled = Array.isArray(filter);
+      // Flags that determine whether item should be filtered out
+      let filtersMatch;
+      const contentsMatchSearch = FilterItem.contentsMatchSearch(this.props.searchTerm);
+
       if (multiFilteringEnabled) {
-        if (multifilterLogicalOperator === 'or') {
-          return !intersection(categories, filters).length;
-        } else {
-          return !allStringsOfArray1InArray2(filters, categories);
-        }
+        filtersMatch = multifilterLogicalOperator === 'or'
+          ? intersection(categories, filter).length
+          : allStringsOfArray1InArray2(filter, categories);
       } else {
-        return !stringInArray(categories, filters);
+        filtersMatch = stringInArray(categories, filter);
       }
+
+      return !filtersMatch || !contentsMatchSearch;
     });
     // filter out old items
     FilteredOutItems.forEach(FilterItem => {
-      FilterItem.filterOut(this.options.filterOutCss);
+      FilterItem.filterOut(filterOutCss);
     });
 
     // Determine target positions for items to be filtered in
-    const PositionsArray = Positions(this.options.layout, this);
+    const PositionsArray = Positions(layout, this);
 
     // filter in new items
     FilterItems.forEach((FilterItem, index) => {
-      FilterItem.filterIn(PositionsArray[index], this.options.filterInCss);
+      FilterItem.filterIn(PositionsArray[index], filterInCss);
     });
   }
 
