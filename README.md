@@ -5,9 +5,13 @@ If you use Filterizr in your project and wish to get it featured on Filterizr's 
 Filterizr is a jQuery plugin that sorts, shuffles, searches and applies stunning filters over responsive galleries using CSS3 transitions. Write your very own, custom effects in CSS and watch your gallery come to life!
 
 ## Install
-You can install Filterizr by downloading the minified version on its website or through NPM:
+You can install Filterizr by downloading the minified version on its website or through NPM or Yarn:
 ```
 npm install filterizr
+```
+or
+```
+yarn add filterizr
 ```
 
 ## Documentation & Tutorials
@@ -21,6 +25,14 @@ However, Filterizr comes with the following advantages:
 * Performs great on mobile.
 * Written in ES6
 * Tested with Jest.
+
+## Contributing
+If you would like to contribute to Filterizr, please make sure to follow the steps described:
+* Create a fork from `master` branch
+* Add your feature or bug fix
+* If you're implementing a method, add tests
+* Run the tests and ESLint to make sure everything is ok
+* Make your PR and set the base branch to develop
 
 ## Browser support
 IE10+ and all modern browsers.
