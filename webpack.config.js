@@ -1,8 +1,12 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
+var DefinePlugin = require('webpack').DefinePlugin;
 
 module.exports = env => {
+  const withjquery = env.withjquery;
+  env = env.env;
+
   let config = {
     entry: [
       // set our index.js as the entry point
@@ -10,7 +14,7 @@ module.exports = env => {
     ],
     output: {
       path: __dirname,
-      filename: './dist/jquery.filterizr.min.js',
+      filename: `./dist/jquery.filterizr${withjquery === 'true' ? '-with-jquery' : ''}.min.js`,
     },
     module: {
       loaders: [
@@ -27,19 +31,25 @@ module.exports = env => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: "Filterizr revisited",
-        template: "demo/index.html",
+        title: `Filterizr demo - ${withjquery === 'true' ? 'with' : 'without'} jQuery in bundle`,
+        template: `demo/index${withjquery === 'true' ? '' : '-without-jquery-in-bundle'}.html`,
       }),
       // uglify plugin for JS
       new UglifyJsPlugin(),
+      // Expose whether jQuery should be imported or not
+      new DefinePlugin({
+        IMPORT_JQUERY: JSON.stringify(withjquery === 'true'),
+      }),
     ],
     resolve: {
       extensions: ['.js'],
     }
   }
 
-  if (env === 'analyze')
+  if (env === 'analyze') {
+    // When the env is analyze, generate bundle analysis
     config.plugins.push(new BundleAnalyzerPlugin());
+  }
 
   return config;
 }
