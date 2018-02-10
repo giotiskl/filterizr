@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Filterizr Demo - With jQuery in Bundle</title>
+    <title>Filterizr Demo - Without jQuery in Bundle</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -109,5 +109,17 @@
             </div>
         </div>
     </div>
+  
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="demo/controls.js"></script>
+    <script>
+      $(function() {
+        var f = $('.filtr-container').filterizr();
+        window.filterizr = f;
+      });
+    </script>  
   </body>
 </html>

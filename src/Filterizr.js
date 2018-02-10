@@ -1,3 +1,4 @@
+let $ = IMPORT_JQUERY ? require('jquery') : window.jQuery;
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';

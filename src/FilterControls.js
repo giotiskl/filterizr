@@ -1,6 +1,5 @@
-import { 
-  debounce,
-} from './utils';
+let $ = IMPORT_JQUERY ? require('jquery') : window.jQuery;
+import { debounce } from './utils';
 
 class FilterControls {
   /**

@@ -1,3 +1,4 @@
+let $ = IMPORT_JQUERY ? require('jquery') : window.jQuery;
 import { 
   cloneDeep,
   transitionEndEvt,

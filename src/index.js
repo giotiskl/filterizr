@@ -1,13 +1,15 @@
 /**
-* Filterizr is a jQuery plugin that sorts, shuffles and applies stunning filters over
-* responsive galleries using CSS3 transitions and custom CSS effects.
-*
-* @author Yiotis Kaltsikis
-* @see {@link http://yiotis.net/filterizr}
-* @version 1.3.2
-* @license MIT License
-*/
+ * Filterizr is a jQuery plugin that sorts, shuffles and applies stunning filters over
+ * responsive galleries using CSS3 transitions and custom CSS effects.
+ *
+ * @author Yiotis Kaltsikis
+ * @see {@link http://yiotis.net/filterizr}
+ * @version 1.3.2
+ * @license MIT License
+ */
 
+let $, jQuery;
+$ = jQuery = IMPORT_JQUERY ? require('jquery') : window.jQuery;
 import Filterizr from './Filterizr';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
@@ -68,9 +70,17 @@ import DefaultOptions from './DefaultOptions';
   };
 })(jQuery);
 
+// Export all Filterizr classes
 export {
   Filterizr,
   FilterContainer,
   FilterItem,
   DefaultOptions,
 };
+
+// Set default export to jQuery object extended with Filterizr plugin
+export default $;
+
+// Required for development purposes when JQUERY_IMPORT is set to true
+// so that the Filterizr and its controls for demo/index.html are initialized.
+require('../demo/demoInit');
