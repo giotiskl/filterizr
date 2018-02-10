@@ -14,6 +14,11 @@
     "test": "jest",
     "lint": "./node_modules/.bin/eslint ."
   },
+  "jest": {
+    "globals": {
+      "IMPORT_JQUERY": "false"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/giotiskl/Filterizr.git"

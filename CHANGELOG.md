@@ -1,5 +1,7 @@
 ## Version 1.3.2
 * Fix bug where if a filter was already active the `search` method did not correctly filter out items
+* Set `jquery@^1.9.0` as `peerDependency` to Filterizr
+* Set entry point of package.json to `./dist/jquery.filterizr-with-jquery.min.js` where Filterizr is bundled with jQuery and exports the jQuery objects with the Filterizr function registered on it.
 
 ## Version 1.3.1
 * Fix bug where Filterizr would not be instantiated if the .filtr-container had more than one class names
