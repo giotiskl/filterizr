@@ -1,3 +1,6 @@
+## Version 1.3.2
+* Fix bug where if a filter was already active the `search` method did not correctly filter out items
+
 ## Version 1.3.1
 * Fix bug where Filterizr would not be instantiated if the .filtr-container had more than one class names
 
