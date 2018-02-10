@@ -1,8 +1,8 @@
 {
   "name": "filterizr",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "Filterizr is a jQuery plugin that sorts, shuffles, searches and applies stunning filters over responsive galleries using CSS3 transitions and custom CSS effects",
-  "main": "src/index.js",
+  "main": "dist/jquery.filterizr.min.js",
   "scripts": {
     "start": "webpack-dev-server --progress --inline --hot",
     "build": "webpack -p --progress --env=production",
@@ -14,6 +14,9 @@
     "type": "git",
     "url": "git+ssh://git@github.com/giotiskl/Filterizr.git"
   },
+  "peerDependencies": {
+    "jquery": "^1.9.0"
+  },
   "dependencies": {},
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -24,7 +27,6 @@
     "eslint-loader": "^1.9.0",
     "html-webpack-plugin": "^2.30.1",
     "jest": "^20.0.4",
-    "jquery": "^3.2.1",
     "webpack": "^3.5.2",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.7.1"
