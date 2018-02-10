@@ -32,7 +32,7 @@ If you would like to contribute to Filterizr, please make sure to follow the ste
 * Add your feature or bug fix
 * If you're implementing a method, add tests
 * Run the tests and ESLint to make sure everything is ok
-* Make your PR and set the base branch to develop
+* Make your PR and set the base branch to `develop`
 
 ## Browser support
 IE10+ and all modern browsers.
