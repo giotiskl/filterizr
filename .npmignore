@@ -1,4 +1,4 @@
-dev_example
+demo/
 tests/
 .babelrc
 .eslintignore
