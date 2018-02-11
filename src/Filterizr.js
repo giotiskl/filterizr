@@ -324,8 +324,8 @@ class Filterizr {
         const multiFilteringEnabled = Array.isArray(filters);
         if (multiFilteringEnabled) {
           return multifilterLogicalOperator === 'or'
-          ? intersection(categories, filters).length
-          : allStringsOfArray1InArray2(filters, categories);
+            ? intersection(categories, filters).length
+            : allStringsOfArray1InArray2(filters, categories);
         }
         return stringInArray(categories, filters);
       });
