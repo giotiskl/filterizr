@@ -1,3 +1,7 @@
+## Version 1.3.4
+* Fix bug where filter would be triggered multiple times through the controls
+* Fix bug where the control event handlers would not be deregistered on `.destroy()` due to problematic selector
+
 ## Version 1.3.3
 * Fix bug where items might overlap when the container is instantiated, by calling `updateFilterItemsDimensions` on instantiating the FilterContainer
 * Fix all layout related bugs, stemming from inspecting the wrong collection, causing overlaps or incorrect container height
