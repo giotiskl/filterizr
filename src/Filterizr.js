@@ -48,6 +48,7 @@ class Filterizr {
 
     // set up events needed by Filterizr
     this.bindEvents();
+
     // Init Filterizr
     this.filter(this.options.filter);
   }
@@ -74,9 +75,9 @@ class Filterizr {
     this.props.filterizrState = FILTERIZR_STATE.FILTERING;
 
     // Cast category to string or array of strings
-    category = Array.isArray(category) ?
-      category.map(c => c.toString()) :
-      category.toString();
+    category = Array.isArray(category)
+      ? category.map(c => c.toString())
+      : category.toString();
     
     // Filter items and optionally apply search if a search term exists
     const FilteredItems = this.searchFilterItems(

@@ -5,7 +5,7 @@
 const PackedLayout = (Filterizr) => {
   const {
     FilterContainer,
-    FilterItems
+    FilterItems,
   } = Filterizr.props;
 
   //Instantiate new Packer, set up grid
@@ -13,7 +13,7 @@ const PackedLayout = (Filterizr) => {
   let filterItemsDimensions = FilterItems.map(FilterItem => { 
     return {
       w: FilterItem.props.w, 
-      h: FilterItem.props.h
+      h: FilterItem.props.h,
     };
   });
   // enhance array with coordinates
