@@ -12,6 +12,8 @@
     "build-without-jquery": "webpack -p --progress --env.env=production",
     "analyze": "webpack -p --progress --env.env=analyze",
     "test": "jest",
+    "coverage": "jest --coverage",
+    "showcoverage": "xdg-open ./coverage/lcov-report/index.html",
     "lint": "./node_modules/.bin/eslint ."
   },
   "jest": {

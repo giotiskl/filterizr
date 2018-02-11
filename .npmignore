@@ -1,5 +1,6 @@
 demo/
 tests/
+coverage/
 .babelrc
 .eslintignore
 .eslintrc.yml
