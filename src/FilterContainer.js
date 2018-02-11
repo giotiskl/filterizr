@@ -28,6 +28,9 @@ class FilterContainer {
       'padding' : 0,
       'position': 'relative'
     });
+
+    // Update dimensions of contained items on instantiation
+    this.updateFilterItemsDimensions();
   }
 
   /**
