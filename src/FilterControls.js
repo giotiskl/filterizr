@@ -30,14 +30,13 @@ class FilterControls {
 
     // Single filter mode controls
     $(`${selector}[data-filter]`).on('click.Filterizr', (evt) => {
-      const $ctrl = $(evt.target);
+      const $ctrl = $(evt.currentTarget);
       const targetFilter = $ctrl.attr('data-filter');
 
-      // update active filter in Filterizr's options
-      Filterizr.setOptions({
-        filter: targetFilter,
-      });
+      // Update active filter in Filterizr's options
+      Filterizr.options.filter = targetFilter;
 
+      // Trigger filter
       Filterizr.filter(Filterizr.options.filter);
     });
 
@@ -101,20 +100,6 @@ class FilterControls {
       Filterizr.props.sortOrder = 'desc';
       Filterizr.sort(sortAttr, 'desc');
     });
-  }
-
-  /**
-   * Destroys all controls
-   */
-  destroy() {
-    const { selector } = this.props;
-
-    $(`${selector}[data-filter]`).off('click.Filterizr');
-    $(`${selector}[data-multifilter]`).off('click.Filterizr');
-    $(`${selector}[data-shuffle]`).off('click.Filterizr');
-    $(`${selector}[data-search]`).off('keyup.Filterizr');
-    $(`${selector}[data-sortAsc]`).off('click.Filterizr');
-    $(`${selector}[data-sortDesc]`).off('click.Filterizr');
   }
 }
 
