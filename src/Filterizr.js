@@ -98,10 +98,12 @@ class Filterizr {
   destroy() {
     const { FilterContainer } = this.props;
     const { controlsSelector } = this.options;
+
     // Unbind all events of FilterContainer and Filterizr
     // and remove inline styles.
     FilterContainer.destroy();
     $(window).off('resize.Filterizr');
+
     // Destroy all controls of the instance
     $(`${controlsSelector}[data-filter]`).off('click.Filterizr');
     $(`${controlsSelector}[data-multifilter]`).off('click.Filterizr');
@@ -117,11 +119,15 @@ class Filterizr {
    */
   insertItem($node) {
     const { FilterContainer } = this.props;
+
     // Add the item to the FilterContainer
     const $nodeModified = $node.clone().attr('style', '');
+
     FilterContainer.push($nodeModified, this.options);
+
     // Retrigger filter for new item to assume position in the grid
     const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
+
     this.render(FilteredItems);
   }
 
@@ -147,6 +153,7 @@ class Filterizr {
 
     // apply filters
     const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
+
     this.props.FilteredItems = FilteredItems;
 
     // Update and render the sorted items
@@ -160,11 +167,12 @@ class Filterizr {
   search(searchTerm = this.props.searchTerm) {
     const { FilterItems } = this.props;
 
-    // filter items and optionally apply search if a search term exists
+    // Filter items and optionally apply search if a search term exists
     const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, this.options.filter), searchTerm);
+
     this.props.FilteredItems = FilteredItems;
 
-    // render the items
+    // Render the items
     this.render(FilteredItems);
   }
 
@@ -183,9 +191,13 @@ class Filterizr {
     // Set animation state to trigger callbacks
     this.props.filterizrState = FILTERIZR_STATE.SHUFFLING;
 
+    // Generate array of shuffled items
     const ShuffledItems = this.shuffleFilterItems(FilteredItems);
+
+    // Update the FilteredItems to equal the array of the shuffled items
     this.props.FilteredItems = ShuffledItems;
 
+    // Render the items after shuffling
     this.render(ShuffledItems);
   }
 
@@ -296,30 +308,26 @@ class Filterizr {
     // Update active filter in Filterizr's options
     this.options.filter = activeFilters;
 
-    // Trigger filter
+    // Trigger a refilter
     this.filter(this.options.filter);
   }
 
   // Helper methods
   filterFilterItems(FilterItems, filters) {
     const { multifilterLogicalOperator } = this.options;
+
     // Get filtered items
-    const FilteredItems = (filters === 'all') ?
-      // in this case return all items
-      FilterItems :
-      // otherwise return filtered array
-      FilterItems.filter(FilterItem => {
+    const FilteredItems = (filters === 'all')
+      ? FilterItems // Return all items
+      : FilterItems.filter(FilterItem => { // Return filtered array
         const categories = FilterItem.getCategories();
         const multiFilteringEnabled = Array.isArray(filters);
         if (multiFilteringEnabled) {
-          if (multifilterLogicalOperator === 'or') {
-            return intersection(categories, filters).length;
-          } else {
-            return allStringsOfArray1InArray2(filters, categories);
-          }
-        } else {
-          return stringInArray(categories, filters);
+          return multifilterLogicalOperator === 'or'
+          ? intersection(categories, filters).length
+          : allStringsOfArray1InArray2(filters, categories);
         }
+        return stringInArray(categories, filters);
       });
 
     return FilteredItems;
@@ -328,12 +336,9 @@ class Filterizr {
   sortFilterItems(FilterItems ,sortAttr = 'index', sortOrder = 'asc') {
     // Sort the FilterItems and reverse the array if order is descending
     let SortedItems = sortBy(FilterItems, (FilterItem) => {
-      return (sortAttr !== 'index' && sortAttr !== 'sortData') ?
-        // if the user has not used one of the two default sort attributes
-        // then search for custom data attributes on the filter items to sort
-        FilterItem.props.data[sortAttr] :
-        // otherwise use the defaults
-        FilterItem.props[sortAttr];
+      return (sortAttr !== 'index' && sortAttr !== 'sortData')
+        ? FilterItem.props.data[sortAttr] // Search for custom data attrs to sort
+        : FilterItem.props[sortAttr]; // Otherwise use defaults
     });
 
     // Return the sorted items with correct order
@@ -352,7 +357,8 @@ class Filterizr {
 
   shuffleFilterItems(FilterItems) {
     let ShuffledItems = shuffle(FilterItems);
-    // shuffle items until they are different from the initial FilteredItems
+
+    // Shuffle items until they are different from the initial FilteredItems
     while (FilterItems.length > 1 && filterItemArraysHaveSameSorting(FilterItems, ShuffledItems)) {
       ShuffledItems = shuffle(FilterItems);
     }
@@ -429,24 +435,29 @@ class Filterizr {
       animationDuration,
       callbacks,
     } = this.options;
+
     // cancel existing evts
     FilterContainer.unbindEvents();
-    // rebind evts
+
+    // Rebind evts
     FilterContainer.bindEvents(callbacks);
     FilterContainer.bindTransitionEnd(() => { this.onTransitionEndCallback(); }, animationDuration);
   }
 
   bindEvents() {
     const { FilterContainer } = this.props;
+
     //- FilterContainer events
     this.rebindFilterContainerEvents();
+
     //- Generic Filterizr events
     // set up a window resize event to fire refiltering
     $(window).on('resize.Filterizr', debounce(() => {
-      // update dimensions of items based on new window size
+      // Update dimensions of items based on new window size
       FilterContainer.updateWidth();
       FilterContainer.updateFilterItemsDimensions();
-      // refilter the grid to assume new positions
+      
+      // Refilter the grid to assume new positions
       this.filter(this.options.filter);
     }, 250));
   }
