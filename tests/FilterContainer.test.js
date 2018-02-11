@@ -10,6 +10,9 @@ import DefaultOptions from '../src/DefaultOptions';
 // General setup
 window.$ = $;
 
+/**
+ * Test suite for FilterContainer
+ */
 describe('FilterContainer', () => {
   // Basic setup before all tests
   let filterizr;
