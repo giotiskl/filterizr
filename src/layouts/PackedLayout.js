@@ -5,29 +5,19 @@
 const PackedLayout = (Filterizr) => {
   const {
     FilterContainer,
-    FilterItems,
+    FilteredItems,
   } = Filterizr.props;
 
   //Instantiate new Packer, set up grid
   const packer = new Packer(FilterContainer.props.w);
-  let filterItemsDimensions = FilterItems.map(FilterItem => { 
-    return {
-      w: FilterItem.props.w, 
-      h: FilterItem.props.h,
-    };
-  });
-  // enhance array with coordinates
+  const filterItemsDimensions = FilteredItems.map(({ props }) => ({ w: props.w, h: props.h }));
+
+  // Enhance array with coordinates
   // added in an extra object named fit
   // by the packing algorithm
   packer.fit(filterItemsDimensions);
 
-  const targetPositions = filterItemsDimensions.map(filterItemDimensions => {
-    const filterItemCoords = filterItemDimensions.fit;
-    return {
-      left: filterItemCoords.x,
-      top : filterItemCoords.y,
-    };
-  });
+  const targetPositions = filterItemsDimensions.map(({ fit }) => ({ left: fit.x, top: fit.y }));
 
   // set height of container
   FilterContainer.updateHeight(packer.root.h);

@@ -5,14 +5,14 @@
 const SameHeightLayout = (Filterizr) => {
   const {
     FilterContainer,
-    FilterItems,
+    FilteredItems,
   } = Filterizr.props;
   const gridWidth  = FilterContainer.props.w,
-    itemHeight = FilterItems[0].props.h;
+    itemHeight = FilteredItems[0].props.h;
   let row = 0, left = 0;
 
   // calculate array of positions
-  const targetPositions = FilterItems.map((FilterItem) => {
+  const targetPositions = FilteredItems.map((FilterItem) => {
     const w = FilterItem.props.w;
     // in case the item exceeds the grid then move to next row and reset left
     if (left + w > gridWidth) {
@@ -31,7 +31,7 @@ const SameHeightLayout = (Filterizr) => {
   });
 
   // update the height of the FilterContainer
-  FilterContainer.updateHeight((row+1) * FilterItems[0].props.h);
+  FilterContainer.updateHeight((row+1) * FilteredItems[0].props.h);
   // return the array of new positions
   return targetPositions;
 };
