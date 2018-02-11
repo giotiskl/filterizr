@@ -270,34 +270,24 @@ class Filterizr {
     let activeFilters = this.options.filter;
 
     if (activeFilters === 'all') {
-      // if set to all then just set to new category
+      // If set to all then just set to new category
       activeFilters = toggledFilter;
-    }
-    else {
+    } else {
       if (Array.isArray(activeFilters)) {
-        // if the toggledFilter is already included in the array
+        // If the activeFilters are an array
         if (stringInArray(activeFilters, toggledFilter)) {
-          // then remove it
-          activeFilters = activeFilters.filter(f => f !== toggledFilter);          
-          // and check if there is now only 1 item left in the array
-          if (activeFilters.length === 1)
-            // in that case flatten it
-            activeFilters = activeFilters[0];
-        }
-        else {
-          // if the item is not in the array then simply push it
+          // Check if the toggledFilter is in the array and remove it
+          activeFilters = activeFilters.filter(f => f !== toggledFilter);
+          // In case there is only 1 item now left in the array, flatten it
+          if (activeFilters.length === 1) activeFilters = activeFilters[0];
+        } else {
+          // If the item is not in the array then simply push it
           activeFilters.push(toggledFilter);
         }
-      }
-      else {
-        // in case the filter is NOT set to "all" 
-        // check if the toggledFilter is the active one
-        if (activeFilters === toggledFilter)
-          // in this case revert to all
-          activeFilters = 'all';
-        else
-          // otherwise form an array with the two values
-          activeFilters = [activeFilters, toggledFilter];
+      } else {
+        activeFilters = activeFilters === toggledFilter
+          ? 'all' // If the activeFilters === toggledFilter revert to 'all'
+          : [activeFilters, toggledFilter]; // Otherwise start array
       }
     }
 
@@ -344,9 +334,11 @@ class Filterizr {
         // otherwise use the defaults
         FilterItem.props[sortAttr];
     });
-    SortedItems = sortOrder === 'asc' ? SortedItems : SortedItems.reverse();
 
-    return SortedItems;
+    // Return the sorted items with correct order
+    return sortOrder === 'asc'
+      ? SortedItems
+      : SortedItems.reverse();
   }
 
   searchFilterItems(FilterItems, searchTerm = this.props.searchTerm) {
