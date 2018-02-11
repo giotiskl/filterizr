@@ -83,4 +83,4 @@ export default $;
 
 // Required for development purposes when JQUERY_IMPORT is set to true
 // so that the Filterizr and its controls for demo/index.html are initialized.
-require('../demo/demoInit');
+require('./demoInit');

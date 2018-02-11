@@ -38,6 +38,7 @@ module.exports = env => {
       new UglifyJsPlugin(),
       // Expose whether jQuery should be imported or not
       new DefinePlugin({
+        FILTERIZR_ENV: JSON.stringify(env),
         IMPORT_JQUERY: JSON.stringify(withjquery === 'true'),
       }),
     ],
