@@ -54,25 +54,27 @@ export { cloneDeep };
  * A function to recursively merge to object, copying over all
  * properties of the old object missing from the target object.
  * In case a prop in is an object, the method is called recursively.
+ * This is a non-mutating method.
  * @param {Object} old is the old object from which the missing props are copied.
  * @param {Object} target is the target object with the updates values.
  */
 const merge = (old, target) => {
-  // iterate over props of old
+  const ret = cloneDeep(target);
+  // Iterate over props of old
   for (let p in old) {
-    if (!(p in target)) {
-      //otherwise copy it over
-      target[p] = old[p];
+    if (!(p in ret)) {
+      // Otherwise copy it over
+      ret[p] = old[p];
     }
     else {
       // in case the prop itself is an obj,
       // call method recursively,
-      if (typeof target[p] === 'object' && typeof old[p] === 'object' && !Array.isArray(old[p])) {
-        target[p] = merge((typeof target[p] === 'object' ? target[p] : {}), old[p]);
+      if (typeof ret[p] === 'object' && typeof old[p] === 'object' && !Array.isArray(old[p])) {
+        ret[p] = merge((typeof ret[p] === 'object' ? ret[p] : {}), old[p]);
       }
     }
   }
-  return target;
+  return ret;
 };
 
 export { merge };
