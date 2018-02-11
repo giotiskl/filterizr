@@ -18,6 +18,9 @@ body {
 }
 
 /* Filter controls */
+.simplefilter, .multifilter, .sortandshuffle, .search-row {
+  padding-left: 0;
+}
 .simplefilter li, .multifilter li, .sortandshuffle li {
     color: white;
     cursor: pointer;
@@ -54,9 +57,6 @@ select {
 }
 
 /* Search control */
-.search-row {
-    margin-left: 2.5rem;
-}
 .filtr-search {
     padding: 0.5rem;
     text-transform: uppercase;
@@ -67,12 +67,12 @@ select {
   box-shadow: 0 1px 4px rgba(0,0,0,.75) inset;
   color: white;
   text-align: center;
-  height: 50px;
+  height: 80px;
   position: relative;
 }
 .block > .text {
   display: inline-block;
-  font-size: 32px;
+  font-size: 24px;
   font-weight: bold;
   position: absolute;
   left: 50%;
@@ -80,13 +80,13 @@ select {
   transform: translate(-50%, -50%);
 }
 .block.xs {
-  height: 25px;
+  height: 40px;
 }
 .block.md {
-  height: 75px;
+  height: 120px;
 }
 .block.lg {
-  height: 100px;
+  height: 160px;
 }
 .block.purple {
   background-color: purple;
@@ -107,4 +107,12 @@ select {
 /* Helpers */
 .push-down {
   margin-bottom: 50px;
+}
+
+.filtr-container,
+.color-container-1,
+.color-container-2,
+.color-container-3,
+.color-container-4 {
+  transition: height 500ms ease-out;
 }
