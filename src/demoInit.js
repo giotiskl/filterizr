@@ -25,5 +25,7 @@ if (FILTERIZR_ENV === 'development' && IMPORT_JQUERY) {
       $(this).addClass('active');
     });
   });
-  $('.filtr-container').filterizr();
+  $('.filtr-container').filterizr({ controlsSelector: '.fltr-controls' });
+  $('.color-container-1').filterizr({ controlsSelector: '.color-controls-1' });
+  $('.color-container-2').filterizr({ controlsSelector: '.color-controls-2', layout: 'packed' });
 }

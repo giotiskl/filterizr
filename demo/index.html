@@ -13,101 +13,157 @@
   <body>
 
     <div class="container">
-        <!-- Filter Controls - Simple Mode -->
-        <div class="row">
-            <!-- A basic setup of simple mode filter controls, all you have to do is use data-filter="all"
-            for an unfiltered gallery and then the values of your categories to filter between them -->
-            <ul class="simplefilter">
-                Simple filter controls:
-                <li class="fltr-controls active" data-filter="all">All</li>
-                <li class="fltr-controls" data-filter="1">Cityscape</li>
-                <li class="fltr-controls" data-filter="2">Landscape</li>
-                <li class="fltr-controls" data-filter="3">Industrial</li>
-                <li class="fltr-controls" data-filter="4">Daylight</li>
-                <li class="fltr-controls" data-filter="5">Nightscape</li>
-            </ul>
-        </div>
+      <!-- Filter Controls - Simple Mode -->
+      <div class="row">
+        <!-- A basic setup of simple mode filter controls, all you have to do is use data-filter="all"
+        for an unfiltered gallery and then the values of your categories to filter between them -->
+        <ul class="simplefilter">
+          Simple filter controls:
+          <li class="fltr-controls active" data-filter="all">All</li>
+          <li class="fltr-controls" data-filter="1">Cityscape</li>
+          <li class="fltr-controls" data-filter="2">Landscape</li>
+          <li class="fltr-controls" data-filter="3">Industrial</li>
+          <li class="fltr-controls" data-filter="4">Daylight</li>
+          <li class="fltr-controls" data-filter="5">Nightscape</li>
+        </ul>
+      </div>
 
-        <!-- Filter Controls - Multifilter Mode -->
-        <div class="row">
-            <!-- A basic setup of multifilter controls, when the user toggles a category
-            the corresponding items are rendered or hidden -->
-            <ul class="multifilter">
-                Multifilter controls:
-                <li class="fltr-controls" data-multifilter="1">Cityscape</li>
-                <li class="fltr-controls" data-multifilter="2">Landscape</li>
-                <li data-multifilter="3">Industrial</li>
-            </ul>
-        </div>
+      <!-- Filter Controls - Multifilter Mode -->
+      <div class="row">
+        <!-- A basic setup of multifilter controls, when the user toggles a category
+        the corresponding items are rendered or hidden -->
+        <ul class="multifilter">
+          Multifilter controls:
+          <li class="fltr-controls" data-multifilter="1">Cityscape</li>
+          <li class="fltr-controls" data-multifilter="2">Landscape</li>
+          <li class="fltr-controls" data-multifilter="3">Industrial</li>
+        </ul>
+      </div>
 
-        <!-- Shuffle & Sort Controls -->
-        <div class="row">
-            <ul class="sortandshuffle">
-                Sort &amp; Shuffle controls:
-                <!-- Basic shuffle control -->
-                <li class="fltr-controls shuffle-btn" data-shuffle>Shuffle</li>
-                <!-- Basic sort controls consisting of asc/desc button and a select -->
-                <li class="fltr-controls sort-btn active" data-sortAsc>Asc</li>
-                <li class="fltr-controls sort-btn" data-sortDesc>Desc</li>
-                <select data-sortOrder>
-                    <option value="index">
-                        Position
-                    </option>
-                    <option value="sortData">
-                        Description
-                    </option>
-                </select>
-            </ul>
-        </div>
+      <!-- Shuffle & Sort Controls -->
+      <div class="row">
+        <ul class="sortandshuffle">
+          Sort &amp; Shuffle controls:
+          <!-- Basic shuffle control -->
+          <li class="fltr-controls shuffle-btn" data-shuffle>Shuffle</li>
+          <!-- Basic sort controls consisting of asc/desc button and a select -->
+          <li class="fltr-controls sort-btn active" data-sortAsc>Asc</li>
+          <li class="fltr-controls sort-btn" data-sortDesc>Desc</li>
+          <select class="fltr-controls" data-sortOrder>
+            <option value="index">
+              Position
+            </option>
+            <option value="sortData">
+              Description
+            </option>
+          </select>
+        </ul>
+      </div>
 
-        <!-- Search control -->
-        <div class="row search-row">
-            Search control:
-            <input type="text" class="fltr-controls filtr-search" name="filtr-search" data-search>
-        </div>
+      <!-- Search control -->
+      <div class="row search-row">
+        Search control:
+        <input type="text" class="fltr-controls filtr-search" name="filtr-search" data-search>
+      </div>
 
-        <div class="row">
-            <!-- This is the set up of a basic gallery, your items must have the categories they belong to in a data-category
-            attribute, which starts from the value 1 and goes up from there -->
-            <div class="filtr-container">
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="Busy streets">
-                    <img class="img-responsive" src="demo/img/city_1.jpg" alt="sample image">
-                    <span class="item-desc">Busy Streets</span>
-                </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 5" data-sort="Luminous night">
-                    <img class="img-responsive" src="demo/img/nature_2.jpg" alt="sample image">
-                    <span class="item-desc">Luminous night</span>
-                </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 4" data-sort="City wonders">
-                    <img class="img-responsive" src="demo/img/city_3.jpg" alt="sample image">
-                    <span class="item-desc">city wonders</span>
-                </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="In production">
-                    <img class="img-responsive" src="demo/img/industrial_1.jpg" alt="sample image">
-                    <span class="item-desc">in production</span>
-                </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3, 4" data-sort="Industrial site">
-                    <img class="img-responsive" src="demo/img/industrial_2.jpg" alt="sample image">
-                    <span class="item-desc">industrial site</span>
-                </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Peaceful lake">
-                    <img class="img-responsive" src="demo/img/nature_1.jpg" alt="sample image">
-                    <span class="item-desc">peaceful lake</span>
-                </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="City lights">
-                    <img class="img-responsive" src="demo/img/city_2.jpg" alt="sample image">
-                    <span class="item-desc">city lights</span>
-                </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Dreamhouse">
-                    <img class="img-responsive" src="demo/img/nature_3.jpg" alt="sample image">
-                    <span class="item-desc">dreamhouse</span>
-                </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="Restless machines">
-                    <img class="img-responsive" src="demo/img/industrial_3.jpg" alt="sample image">
-                    <span class="item-desc">restless machines</span>
-                </div>
-            </div>
+      <div class="row push-down">
+        <!-- This is the set up of a basic gallery, your items must have the categories they belong to in a data-category
+        attribute, which starts from the value 1 and goes up from there -->
+        <div class="filtr-container">
+          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="Busy streets">
+            <img class="img-responsive" src="demo/img/city_1.jpg" alt="sample image">
+            <span class="item-desc">Busy Streets</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 5" data-sort="Luminous night">
+            <img class="img-responsive" src="demo/img/nature_2.jpg" alt="sample image">
+            <span class="item-desc">Luminous night</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 4" data-sort="City wonders">
+            <img class="img-responsive" src="demo/img/city_3.jpg" alt="sample image">
+            <span class="item-desc">city wonders</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="In production">
+            <img class="img-responsive" src="demo/img/industrial_1.jpg" alt="sample image">
+            <span class="item-desc">in production</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3, 4" data-sort="Industrial site">
+            <img class="img-responsive" src="demo/img/industrial_2.jpg" alt="sample image">
+            <span class="item-desc">industrial site</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Peaceful lake">
+            <img class="img-responsive" src="demo/img/nature_1.jpg" alt="sample image">
+            <span class="item-desc">peaceful lake</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="City lights">
+            <img class="img-responsive" src="demo/img/city_2.jpg" alt="sample image">
+            <span class="item-desc">city lights</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Dreamhouse">
+            <img class="img-responsive" src="demo/img/nature_3.jpg" alt="sample image">
+            <span class="item-desc">dreamhouse</span>
+          </div>
+          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="Restless machines">
+            <img class="img-responsive" src="demo/img/industrial_3.jpg" alt="sample image">
+            <span class="item-desc">restless machines</span>
+          </div>
         </div>
+      </div>
+
+      <div class="row push-down">
+        <div class="color-controls-1">
+          <ul class="simplefilter">
+            <li class="color-controls-1 active" data-filter="all">All</li>
+            <li class="color-controls-1" data-filter="red">Red</li>
+            <li class="color-controls-1" data-filter="yellow">Yellow</li>
+            <li class="color-controls-1" data-filter="green">Green</li>
+            <li class="color-controls-1" data-filter="purple">Purple</li>
+            <li class="color-controls-1" data-filter="blue">Blue</li>
+          </ul>
+        </div>
+        <div class="color-container-1 col-xs-12">
+          <div class="filtr-item block red col-sm-3" data-category="red"><span class="text">01</span></div>
+          <div class="filtr-item block blue col-sm-3" data-category="blue"><span class="text">02</span></div>
+          <div class="filtr-item block green col-sm-3" data-category="green"><span class="text">03</span></div>
+          <div class="filtr-item block purple col-sm-3" data-category="purple"><span class="text">04</span></div>
+          <div class="filtr-item block purple col-sm-3" data-category="purple"><span class="text">05</span></div>
+          <div class="filtr-item block yellow col-sm-3" data-category="yellow"><span class="text">06</span></div>
+          <div class="filtr-item block green col-sm-3" data-category="green"><span class="text">07</span></div>
+          <div class="filtr-item block green col-sm-3" data-category="green"><span class="text">08</span></div>
+          <div class="filtr-item block yellow col-sm-3" data-category="yellow"><span class="text">09</span></div>
+          <div class="filtr-item block purple col-sm-3" data-category="purple"><span class="text">10</span></div>
+          <div class="filtr-item block red col-sm-3" data-category="red"><span class="text">11</span></div>
+          <div class="filtr-item block blue col-sm-3" data-category="blue"><span class="text">12</span></div>
+        </div>
+      </div>
+
+      <!-- Packed layout -->
+      <div class="row push-down">
+        <div class="color-controls-2">
+          <ul class="simplefilter">
+            <li class="color-controls-2 active" data-filter="all">All</li>
+            <li class="color-controls-2" data-filter="red">Red</li>
+            <li class="color-controls-2" data-filter="yellow">Yellow</li>
+            <li class="color-controls-2" data-filter="green">Green</li>
+            <li class="color-controls-2" data-filter="purple">Purple</li>
+            <li class="color-controls-2" data-filter="blue">Blue</li>
+          </ul>
+        </div>
+        <div class="color-container-2 col-xs-12">
+          <div class="filtr-item block red lg col-sm-4" data-category="red"><span class="text">01</span></div>
+          <div class="filtr-item block blue md col-sm-4" data-category="blue"><span class="text">02</span></div>
+          <div class="filtr-item block green col-sm-4" data-category="green"><span class="text">03</span></div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">04</span></div>
+          <div class="filtr-item block purple xs col-sm-4" data-category="purple"><span class="text">05</span></div>
+          <div class="filtr-item block yellow md col-sm-4" data-category="yellow"><span class="text">06</span></div>
+          <div class="filtr-item block green col-sm-4" data-category="green"><span class="text">07</span></div>
+          <div class="filtr-item block green lg col-sm-4" data-category="green"><span class="text">08</span></div>
+          <div class="filtr-item block yellow xs col-sm-4" data-category="yellow"><span class="text">09</span></div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">10</span></div>
+          <div class="filtr-item block red col-sm-4" data-category="red"><span class="text">11</span></div>
+          <div class="filtr-item block blue lg col-sm-4" data-category="blue"><span class="text">12</span></div>
+        </div>
+      </div>
+
     </div>
   </body>
 </html>

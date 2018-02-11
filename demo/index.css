@@ -61,3 +61,50 @@ select {
     padding: 0.5rem;
     text-transform: uppercase;
 }
+
+/* Colored divs */
+.block {
+  box-shadow: 0 1px 4px rgba(0,0,0,.75) inset;
+  color: white;
+  text-align: center;
+  height: 50px;
+  position: relative;
+}
+.block > .text {
+  display: inline-block;
+  font-size: 32px;
+  font-weight: bold;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.block.xs {
+  height: 25px;
+}
+.block.md {
+  height: 75px;
+}
+.block.lg {
+  height: 100px;
+}
+.block.purple {
+  background-color: purple;
+}
+.block.yellow {
+  background-color: #dec800;
+}
+.block.red {
+  background-color: crimson;
+}
+.block.green {
+  background-color: lightgreen;
+}
+.block.blue {
+  background-color: #4b9eff;
+}
+
+/* Helpers */
+.push-down {
+  margin-bottom: 50px;
+}
