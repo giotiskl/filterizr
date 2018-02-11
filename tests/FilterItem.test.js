@@ -8,8 +8,10 @@ import DefaultOptions from '../src/DefaultOptions';
 // General setup
 window.$ = $;
 
-// Test suite for Filterizr
-describe('Filterizr', () => {
+/**
+ * Test suite for FilterItem
+ */
+describe('FilterItem', () => {
   beforeEach(() => {
     $('body').html(fakeDom);
   });
@@ -26,6 +28,32 @@ describe('Filterizr', () => {
       new FilterItem($('.filtr-item:first'), 0, DefaultOptions);
       const afterInlineStyles = filtrItem.attr('style');
       expect(beforeInlineStyles).not.toEqual(afterInlineStyles);
+    });
+  });
+
+  describe('#filterIn', () => {
+    it('should update the inner lastPosition property to equal the position argument', () => {
+      const filterItem = new FilterItem($('.filtr-item:first'), 0, DefaultOptions);
+      const position = { left: 15, top: 100 };
+      filterItem.filterIn(position, { });
+      expect(filterItem.props.lastPosition.left).toEqual(15);
+      expect(filterItem.props.lastPosition.top).toEqual(100);
+    });
+
+    it('should set the filteredOut property to false', () => {
+      const filterItem = new FilterItem($('.filtr-item:first'), 0, DefaultOptions);
+      const position = { left: 15, top: 100 };
+      filterItem.filterIn(position, { });
+      expect(filterItem.props.filteredOut).toEqual(false);
+    });
+  });
+
+  describe('#filterOut', () => {
+    it('should set the filteredOut property to true', () => {
+      const filterItem = new FilterItem($('.filtr-item:first'), 0, DefaultOptions);
+      const position = { left: 15, top: 100 };
+      filterItem.filterOut(position, { });
+      expect(filterItem.props.filteredOut).toEqual(true);
     });
   });
 
