@@ -84,6 +84,8 @@ class Filterizr {
       this.filterFilterItems(FilterItems, category), 
       searchTerm
     );
+
+    // Update props
     this.props.FilteredItems = FilteredItems;
 
     // Render the items
@@ -101,12 +103,12 @@ class Filterizr {
     FilterContainer.destroy();
     $(window).off('resize.Filterizr');
     // Destroy all controls of the instance
-    $(`${controlsSelector} *[data-filter]`).off('click.Filterizr');
-    $(`${controlsSelector} *[data-multifilter]`).off('click.Filterizr');
-    $(`${controlsSelector} *[data-shuffle]`).off('click.Filterizr');
-    $(`${controlsSelector} *[data-search]`).off('keyup.Filterizr');
-    $(`${controlsSelector} *[data-sortAsc]`).off('click.Filterizr');
-    $(`${controlsSelector} *[data-sortDesc]`).off('click.Filterizr');
+    $(`${controlsSelector}[data-filter]`).off('click.Filterizr');
+    $(`${controlsSelector}[data-multifilter]`).off('click.Filterizr');
+    $(`${controlsSelector}[data-shuffle]`).off('click.Filterizr');
+    $(`${controlsSelector}[data-search]`).off('keyup.Filterizr');
+    $(`${controlsSelector}[data-sortAsc]`).off('click.Filterizr');
+    $(`${controlsSelector}[data-sortDesc]`).off('click.Filterizr');
   }
 
   /**
@@ -291,11 +293,10 @@ class Filterizr {
       }
     }
 
-    // update active filter in Filterizr's options
-    this.setOptions({
-      filter: activeFilters,
-    });
+    // Update active filter in Filterizr's options
+    this.options.filter = activeFilters;
 
+    // Trigger filter
     this.filter(this.options.filter);
   }
 
