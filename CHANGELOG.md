@@ -1,3 +1,7 @@
+## Version 1.3.3
+* Fix bug where items might overlap when the container is instantiated, by calling `updateFilterItemsDimensions` on instantiating the FilterContainer
+* Fix all layout related bugs, stemming from inspecting the wrong collection, causing overlaps or incorrect container height
+
 ## Version 1.3.2
 * Fix bug where if a filter was already active the `search` method did not correctly filter out items
 * Set `jquery@^1.9.0` as `peerDependency` to Filterizr
