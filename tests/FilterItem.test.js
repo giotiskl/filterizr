@@ -57,6 +57,31 @@ describe('FilterItem', () => {
     });
   });
 
+  describe('#calcDelay', () => {
+    let filterItem1, filterItem2, filterItem3;
+    beforeEach(() => {
+      filterItem1 = new FilterItem($('.filtr-item:first'), 0, DefaultOptions);
+      filterItem2 = new FilterItem($('.filtr-item:first'), 1, DefaultOptions);
+      filterItem3 = new FilterItem($('.filtr-item:first'), 2, DefaultOptions);
+    });
+
+    it('should return delay multiplied by index for "progressive" mode', () => {
+      const delay = 150;
+      const mode = 'progressive';
+      expect(filterItem1.calcDelay(delay, mode)).toEqual(0);
+      expect(filterItem2.calcDelay(delay, mode)).toEqual(150);
+      expect(filterItem3.calcDelay(delay, mode)).toEqual(300);
+    });
+
+    it('should return delay for even items and 0 for odd items for "alternate" mode', () => {
+      const delay = 150;
+      const mode = 'alternate';
+      expect(filterItem1.calcDelay(delay, mode)).toEqual(150);
+      expect(filterItem2.calcDelay(delay, mode)).toEqual(0);
+      expect(filterItem3.calcDelay(delay, mode)).toEqual(150);
+    });
+  });
+
   describe('#contentsMatchSearch', () => {
     it('should return true when the innerText of the FilterItem matches the search term', () => {
       const filterItem = new FilterItem($('.filtr-item:first'), 0, DefaultOptions);
