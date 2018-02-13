@@ -18,7 +18,7 @@ export { stringInArray };
 /**
  * A function to check that all elements of an array are found within another array.
  * @param {Array} arr1 is the array of strings to be checked
- * @param {Array} arr1 is the array of strings to check against
+ * @param {Array} arr2 is the array of strings to check against
  * @return {Boolean} whether all string of arr1 are contained in arr2
  */
 const allStringsOfArray1InArray2 = (arr1, arr2) => {
@@ -41,14 +41,14 @@ export { allStringsOfArray1InArray2 };
  * @param {Object} o is the object to perform the deep clone on
  * @return {Object} deep clone
  */
-const cloneDeep = (o) => {
+const makeShallowClone = (o) => {
   let ret = {};
   for (const p in o)
     ret[p] = o[p];
   return ret;
 };
 
-export { cloneDeep };
+export { makeShallowClone };
 
 /**
  * A function to recursively merge to object, copying over all
@@ -56,10 +56,10 @@ export { cloneDeep };
  * In case a prop in is an object, the method is called recursively.
  * This is a non-mutating method.
  * @param {Object} old is the old object from which the missing props are copied.
- * @param {Object} target is the target object with the updates values.
+ * @param {Object} target is the target object with the updated values.
  */
 const merge = (old, target) => {
-  const ret = cloneDeep(target);
+  const ret = makeShallowClone(target);
   // Iterate over props of old
   for (let p in old) {
     if (!(p in ret)) {

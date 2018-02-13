@@ -1,5 +1,5 @@
 import { 
-  cloneDeep,
+  makeShallowClone,
   transitionEndEvt,
 } from './utils';
 
@@ -64,7 +64,7 @@ class FilterItem {
    */
   filterIn(targetPos, cssOptions) {
     // perform a deep clone of the filtering in css
-    let filterInCss = cloneDeep(cssOptions);
+    let filterInCss = makeShallowClone(cssOptions);
     // enhance it with the target position towards which the item should animate
     filterInCss.transform += ' translate3d(' + targetPos.left + 'px,' + targetPos.top + 'px, 0)';
     // animate
@@ -81,7 +81,7 @@ class FilterItem {
    */
   filterOut(cssOptions) {
     // perform a deep clone of the filtering out css
-    let filterOutCss = cloneDeep(cssOptions);
+    let filterOutCss = makeShallowClone(cssOptions);
     const { lastPosition } = this.props;
     //Auto add translate to transform over user-defined filterOut styles
     filterOutCss.transform += ' translate3d(' + lastPosition.left + 'px,' + lastPosition.top + 'px, 0)';
@@ -102,8 +102,7 @@ class FilterItem {
 
     if (delayMode === 'progressive') {
       ret = delay * this.props.index;
-    }
-    else {
+    } else {
       if (this.props.index % 2 === 0) ret = delay;
     }
 
