@@ -9,6 +9,8 @@ import {
   intersection,
   debounce,
   shuffle,
+  cssEasingValuesRegexp,
+  sortBy,
 } from '../src/utils';
 
 describe('utils', () => {
@@ -83,4 +85,57 @@ describe('utils', () => {
       expect(arr1 === arr2).toEqual(false);
     });
   });
+
+  describe('#sortBy', () => {
+    let sortFn, unsorted, sorted;
+    beforeEach(() => {
+      sortFn = (a => a);
+      unsorted = [3, 4, 1, 8];
+      sorted = sortBy(unsorted, sortFn);
+    });
+      
+    it('should return a sorted array', () => {
+      for (let i = 0; i < unsorted.length - 2; i++) {
+        expect(sorted[i]).toBeLessThan(sorted[i+1]);
+      }
+    });
+
+    it ('should not mutate the array', () => {
+      expect(unsorted === sorted).toEqual(false);
+    });
+  });
+
+  describe('#cssEasingValuesRegexp', () => {
+    it('should match all acceptable values for for the CSS transition-timing-function property', () => {
+      expect('linear'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('ease'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('ease-in'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('ease-out'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('ease-in-out'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('step-start'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('step-end'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('steps(1, start)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('steps(1,start)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('steps(1 ,start)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('steps(1 , start)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('steps(1, end)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('steps(1,end)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('steps(1 ,end)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('steps(1 , end)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('cubic-bezier(0.42,0,0.58,1)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect('cubic-bezier(0.42 , 0,0.58, 1)'.match(cssEasingValuesRegexp)).toBeTruthy();
+    });
+
+    it('should return null for non-acceptable values for the CSS transition-timing-function property', () => {
+      expect('random-value'.match(cssEasingValuesRegexp)).toEqual(null);
+      expect('linear-in'.match(cssEasingValuesRegexp)).toEqual(null);
+      expect('ase'.match(cssEasingValuesRegexp)).toEqual(null);
+      expect('eas'.match(cssEasingValuesRegexp)).toEqual(null);
+      expect('istep-start'.match(cssEasingValuesRegexp)).toEqual(null);
+      expect('cubicbezier(0.42,0,0.58,1)'.match(cssEasingValuesRegexp)).toEqual(null);
+      expect('cuicbezer(0.0,0.58,1)'.match(cssEasingValuesRegexp)).toEqual(null);
+      expect('cubic-bezie(0.42 , 0,0.58, 1)'.match(cssEasingValuesRegexp)).toEqual(null);
+    });
+  });
+
 });
