@@ -1,6 +1,6 @@
 // import test utils
 import $ from 'jquery';
-import { fakeDom } from './testUtils';
+import { fakeDom } from './testSetup';
 // import items to be tested
 import Filterizr from '../src/Filterizr';
 import DefaultOptions from '../src/DefaultOptions';

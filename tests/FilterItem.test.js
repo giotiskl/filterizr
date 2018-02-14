@@ -1,6 +1,6 @@
 // import test utils
 import $ from 'jquery';
-import { fakeDom } from './testUtils';
+import { fakeDom } from './testSetup';
 // import items to be tested
 import FilterItem from '../src/FilterItem';
 import DefaultOptions from '../src/DefaultOptions';
