@@ -7,7 +7,6 @@ import {
   makeShallowClone,
   merge,
   intersection,
-  debounce,
   shuffle,
   cssEasingValuesRegexp,
   sortBy,
