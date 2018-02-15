@@ -1,26 +1,29 @@
 /**
  * Horizontal layout algorithm that arranges all FilterItems in one row. Their width may vary.
- * @param {object} Filterizr instance.
+ * @param {Object} Filterizr instance.
+ * @return {Object[]} positions for the items to assume.
  */
 const HorizontalLayout = (Filterizr) => {
   const {
     FilterContainer,
     FilteredItems,
   } = Filterizr.props;
+
   let left = 0, 
-    containerHeight = 0; // target height of FilterContainer
+    containerHeight = 0;
 
   const targetPositions = FilteredItems.map((FilterItem) => {
+    const { w, h } = FilterItem.props;
     const pos = {
       left: left,
       top: 0,
     };
 
     // update left for next item
-    left += FilterItem.props.w;
+    left += w;
     // check if target height of FilterContainer should be increased
-    if (FilterItem.props.h > containerHeight)
-      containerHeight = FilterItem.props.h;
+    if (h > containerHeight)
+      containerHeight = h;
 
     return pos;
   });
