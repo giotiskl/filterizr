@@ -1,21 +1,4 @@
 /**
- * A simple function to check if an array of strings includes a certain value.
- * @param {Array} arr is the array of strings
- * @param {String} s is the value to be checked if included
- * @return {Boolean} whether the string is found or not
- */
-const stringInArray = (arr, s) => {
-  let found = false;
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === s)
-      found = true;
-  }
-  return found;
-};
-
-export { stringInArray };
-
-/**
  * A function to check that all elements of an array are found within another array.
  * @param {Array} arr1 is the array of strings to be checked
  * @param {Array} arr2 is the array of strings to check against
@@ -195,7 +178,7 @@ const checkOptionForErrors = (name, value, type, allowed, furtherHelpLink) => {
   const typeError = new Error(`Filterizr: expected type of option "${name}" to be "${type}", but its type is: "${typeof value}"`);
   let matchesOtherTypes = false;
   let isArray = false;
-  const couldBeArray = ~type.lastIndexOf('array');
+  const couldBeArray = type.includes('array');
   // Perform type checking
   if ((typeof value).match(type)) {
     matchesOtherTypes = true;

@@ -4,7 +4,6 @@ import { fakeDom } from './testSetup';
 // import items to be tested
 import Filterizr from '../src/Filterizr';
 import DefaultOptions from '../src/DefaultOptions';
-import { stringInArray } from '../src/utils';
 
 // General setup
 window.$ = $;
@@ -78,11 +77,11 @@ describe('Filterizr', () => {
       filterizr.filter(filter);
       FilteredOutItems = filterizr.props.FilterItems.filter((FilterItem) => {
         const categories = FilterItem.getCategories();
-        return !stringInArray(categories, filter);
+        return !categories.includes(filter);
       });
       FilteredInItems = filterizr.props.FilterItems.filter(FilterItem => {
         const categories = FilterItem.getCategories();
-        return stringInArray(categories, filter);
+        return categories.includes(filter);
       });
     });
 
@@ -91,7 +90,7 @@ describe('Filterizr', () => {
       setTimeout(() => {
         FilteredInItems.forEach((FilterItem) => {
           const categories = FilterItem.getCategories();
-          const belongsToCategory = stringInArray(categories, filter);
+          const belongsToCategory = categories.includes(filter);
           expect(belongsToCategory).toEqual(true);
         });
       }, 1000);

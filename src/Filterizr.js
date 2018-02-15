@@ -14,7 +14,6 @@ import {
   merge,
   shuffle,
   sortBy,
-  stringInArray,
 } from './utils';
 
 class Filterizr {
@@ -35,7 +34,7 @@ class Filterizr {
     // Setup FilterControls
     new FilterControls(this, this.options.controlsSelector);
 
-    // define props
+    // Define props
     this.props = {
       filterizrState: FILTERIZR_STATE.IDLE,
       searchTerm: '',
@@ -46,7 +45,7 @@ class Filterizr {
       FilteredItems: [],
     };
 
-    // set up events needed by Filterizr
+    // Set up events needed by Filterizr
     this.bindEvents();
 
     // Init Filterizr
@@ -289,7 +288,7 @@ class Filterizr {
     } else {
       if (Array.isArray(activeFilters)) {
         // If the activeFilters are an array
-        if (stringInArray(activeFilters, toggledFilter)) {
+        if (activeFilters.includes(toggledFilter)) {
           // Check if the toggledFilter is in the array and remove it
           activeFilters = activeFilters.filter(f => f !== toggledFilter);
           // In case there is only 1 item now left in the array, flatten it
@@ -327,7 +326,7 @@ class Filterizr {
             ? intersection(categories, filters).length
             : allStringsOfArray1InArray2(filters, categories);
         }
-        return stringInArray(categories, filters);
+        return categories.includes(filters);
       });
 
     return FilteredItems;
@@ -388,12 +387,13 @@ class Filterizr {
           ? intersection(categories, filter).length
           : allStringsOfArray1InArray2(filter, categories);
       } else {
-        filtersMatch = stringInArray(categories, filter);
+        filtersMatch = categories.includes(filter);
       }
 
       return !filtersMatch || !contentsMatchSearch;
     });
-    // filter out old items
+
+    // Filter out old items
     FilteredOutItems.forEach(FilterItem => {
       FilterItem.filterOut(filterOutCss);
     });
@@ -401,7 +401,7 @@ class Filterizr {
     // Determine target positions for items to be filtered in
     const PositionsArray = Positions(layout, this);
 
-    // filter in new items
+    // Filter in new items
     FilterItems.forEach((FilterItem, index) => {
       FilterItem.filterIn(PositionsArray[index], filterInCss);
     });
@@ -436,7 +436,7 @@ class Filterizr {
       callbacks,
     } = this.options;
 
-    // cancel existing evts
+    // Cancel existing evts
     FilterContainer.unbindEvents();
 
     // Rebind evts
@@ -447,11 +447,11 @@ class Filterizr {
   bindEvents() {
     const { FilterContainer } = this.props;
 
-    //- FilterContainer events
+    // FilterContainer events
     this.rebindFilterContainerEvents();
 
-    //- Generic Filterizr events
-    // set up a window resize event to fire refiltering
+    // Generic Filterizr events
+    // Set up a window resize event to fire refiltering
     $(window).on('resize.Filterizr', debounce(() => {
       // Update dimensions of items based on new window size
       FilterContainer.updateWidth();

@@ -2,7 +2,6 @@
  * Test suite for the utils module, containing helper methods for Filterizr.
  */
 import { 
-  stringInArray,
   allStringsOfArray1InArray2,
   makeShallowClone,
   merge,
@@ -13,18 +12,6 @@ import {
 } from '../src/utils';
 
 describe('utils', () => {
-  describe('#stringInArray', () => {
-    it('should return true if a given string is found in an array of strings', () => {
-      const array = ['first', 'second', 'third', 'fourth'];
-      expect(stringInArray(array, 'second')).toEqual(true);
-    });
-
-    it('should return false if a given string is not found in an array of strings', () => {
-      const array = ['first', 'second', 'third', 'fourth'];
-      expect(stringInArray(array, 'i am not there')).toEqual(false);
-    });
-  });
-
   describe('#allStringsOfArray1InArray2', () => {
     it('should return true if all items in the first array exist in the second array, regardless of order, or if there are extra items', () => {
       const arr1 = ['first', 'second', 'third', 'fourth'];
