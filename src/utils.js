@@ -68,7 +68,7 @@ export { merge };
  * @param {Array} arr2 is the second array of which to get the intersection
  */
 const intersection = (arr1, arr2) => {
-  return Array.prototype.filter.call(arr1, (n) => ~arr2.indexOf(n));
+  return Array.prototype.filter.call(arr1, (n) => arr2.includes(n));
 };
 
 export { intersection };
