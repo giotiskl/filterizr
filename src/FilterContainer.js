@@ -10,20 +10,21 @@ class FilterContainer {
    * Instantiates a FilterContainer
    * @param {String} selector of the FilterContainer instance
    * @param {Object} options with which to instantiate the container
+   * @return {Object} FilterContainer instance
    */
   constructor(selector = '.filtr-container', options) {
-    // cache jQuery node
+    // Cache jQuery node
     this.$node = $(selector);
 
-    // set props
+    // Set props
     this.props = {
-      // other props
+      // Other props
       FilterItems: this.getFilterItems(options),
       w: this.getWidth(),
       h: 0,
     };
 
-    // set up initial styles of container
+    // Set up initial styles of container
     this.$node.css({
       'padding' : 0,
       'position': 'relative'
@@ -48,6 +49,8 @@ class FilterContainer {
   /**
    * Iterates over the FilterContainer creating FilterItem 
    * instances for every .filtr-item element found.
+   * @param {Object} options - of Filterizr instance
+   * @return {Object[]} array of FilterItem instances
    */
   getFilterItems(options) {
     const FilterItems = $.map(this.$node.find('.filtr-item'), (item, index) => {
@@ -59,6 +62,8 @@ class FilterContainer {
 
   /**
    * Pushes a new item into the FilterItem array in the properties of the FilterContainer
+   * @param {Object} $node - jQuery node to instantiate as FilterItem and append to the grid
+   * @param {Object} options - Filterizr instance options
    */
   push($node, options) {
     const { FilterItems } = this.props;
@@ -94,6 +99,7 @@ class FilterContainer {
 
   /**
    * Updates the height of the FilterContainer prop and sets it as an inline style
+   * @param {Number} newHeight - the new value of the CSS height property
    */
   updateHeight(newHeight) {
     this.props.h = newHeight;
@@ -164,7 +170,7 @@ class FilterContainer {
 
   /**
    * Method wrapper around jQuery's trigger
-   * @param {string} evt name of the event
+   * @param {string} evt - name of the event
    */
   trigger(evt) {
     this.$node.trigger(evt);

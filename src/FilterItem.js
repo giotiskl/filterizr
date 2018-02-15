@@ -9,6 +9,7 @@ class FilterItem {
    * @param {Object} $node is the jQuery node to create the FilterItem out of
    * @param {Number} index is the index of the FilterItem when iterating over them
    * @param {Object} options the options Filterizr was initialized with
+   * @return {Object} FilterItem instance
    */
   constructor($node, index, options) {
     const {
@@ -19,15 +20,15 @@ class FilterItem {
       easing
     } = options;
 
-    // cache jQuery node
+    // Cache jQuery node
     this.$node = $node;
 
-    // set props
+    // Set props
     this.props = {
       data: (() => {
-        // all data-attributes defined by the user, can be used for sorting
+        // All data-attributes defined by the user, can be used for sorting
         const data = this.$node.data();
-        // remove category and sort which could be there by API design
+        // Remove category and sort which could be there by API design
         delete data.category;
         delete data.sort;
         return data;
@@ -35,16 +36,16 @@ class FilterItem {
       index,
       sortData: this.$node.data('sort'),
       lastPosition: { left: 0, top: 0 },
-      filteredOut: false, // used for the onTransitionEnd event
+      filteredOut: false, // Used for the onTransitionEnd event
       w: this.getWidth(),
       h: this.getHeight(),
     };
 
-    // set initial styles
+    // Set initial styles
     this.$node
-    // init to filtered out
+    // Init to filtered out
       .css(filterOutCss)
-    // additional styles needed by filterizr 
+    // Additional styles needed by filterizr 
       .css({
         '-webkit-backface-visibility': 'hidden',
         'perspective': '1000px',
@@ -54,7 +55,7 @@ class FilterItem {
         'transition': `all ${animationDuration}s ${easing} ${this.calcDelay(delay, delayMode)}ms`,
       });
 
-    // finally bind events
+    // Finally bind events
     this.bindEvents();
   }
 
@@ -63,15 +64,15 @@ class FilterItem {
    * @param {Object} cssOptions for the animation
    */
   filterIn(targetPos, cssOptions) {
-    // perform a deep clone of the filtering in css
+    // Perform a shallow clone of the filtering in css
     let filterInCss = makeShallowClone(cssOptions);
-    // enhance it with the target position towards which the item should animate
+    // Enhance it with the target position towards which the item should animate
     filterInCss.transform += ' translate3d(' + targetPos.left + 'px,' + targetPos.top + 'px, 0)';
-    // animate
+    // Animate
     this.$node.css(filterInCss);
-    // update last position to be the targetPos
+    // Update last position to be the targetPos
     this.props.lastPosition = targetPos;
-    // update state
+    // Update state
     this.props.filteredOut = false;
   }
 
@@ -80,14 +81,14 @@ class FilterItem {
    * @param {Object} cssOptions for the animation
    */
   filterOut(cssOptions) {
-    // perform a deep clone of the filtering out css
+    // Perform a shallow clone of the filtering out css
     let filterOutCss = makeShallowClone(cssOptions);
     const { lastPosition } = this.props;
-    //Auto add translate to transform over user-defined filterOut styles
+    // Auto add translate to transform over user-defined filterOut styles
     filterOutCss.transform += ' translate3d(' + lastPosition.left + 'px,' + lastPosition.top + 'px, 0)';
-    //Play animation
+    // Play animation
     this.$node.css(filterOutCss);
-    // update state
+    // Update state
     this.props.filteredOut = true;
   }
 
@@ -115,11 +116,12 @@ class FilterItem {
    * @return {Boolean} if the innerText matches the term
    */
   contentsMatchSearch(searchTerm) {
-    return Boolean(~this.getContentsLowercase().lastIndexOf(searchTerm));
+    return Boolean(this.getContentsLowercase().includes(searchTerm));
   }
 
   /**
    * Helper method for the search method of Filterizr
+   * @return {String} innerText of the FilterItem in lowercase
    */
   getContentsLowercase() {
     return this.$node.text().toLowerCase();
@@ -128,6 +130,7 @@ class FilterItem {
   /**
    * Returns all categories of the .filtr-item data-category attribute
    * with a regexp regarding all whitespace.
+   * @return {String[]} an array of the categories the item belongs to
    */
   getCategories() {
     return this.$node.attr('data-category').split(/\s*,\s*/g);
@@ -135,6 +138,7 @@ class FilterItem {
 
   /**
    * Wrapper around jQuery's innerHeight to calculate the item's width
+   * @return {Number} height of FilterItem node
    */
   getHeight() {
     return this.$node.innerHeight();
@@ -142,6 +146,7 @@ class FilterItem {
 
   /**
    * Wrapper around jQuery's innerWidth to calculate the item's width
+   * @return {Number} width of FilterItem node
    */
   getWidth() {
     return this.$node.innerWidth();
