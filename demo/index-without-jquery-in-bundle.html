@@ -226,6 +226,56 @@
         </div>
       </div>
 
+      <!-- Horizontal layout -->
+      <div class="row push-down">
+        <h3>Horizontal layout</h3>
+        <div class="color-controls-5">
+          <ul class="simplefilter">
+            <li class="color-controls-5 active" data-filter="all">All</li>
+            <li class="color-controls-5" data-filter="red">Red</li>
+            <li class="color-controls-5" data-filter="yellow">Yellow</li>
+            <li class="color-controls-5" data-filter="green">Green</li>
+            <li class="color-controls-5" data-filter="purple">Purple</li>
+            <li class="color-controls-5" data-filter="blue">Blue</li>
+          </ul>
+        </div>
+        <div class="color-container-5 col-xs-12">
+          <div class="filtr-item block red xs col-sm-2" data-category="red"><span class="text">01</span></div>
+          <div class="filtr-item block blue col-sm-4" data-category="blue"><span class="text">02</span></div>
+          <div class="filtr-item block green md col-sm-2" data-category="green"><span class="text">03</span></div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">04</span></div>
+        </div>
+      </div>
+
+      <!-- Vertical layout -->
+      <div class="row push-down">
+        <h3>Vertical layout</h3>
+        <div class="color-controls-6">
+          <ul class="simplefilter">
+            <li class="color-controls-6 active" data-filter="all">All</li>
+            <li class="color-controls-6" data-filter="red">Red</li>
+            <li class="color-controls-6" data-filter="yellow">Yellow</li>
+            <li class="color-controls-6" data-filter="green">Green</li>
+            <li class="color-controls-6" data-filter="purple">Purple</li>
+            <li class="color-controls-6" data-filter="blue">Blue</li>
+          </ul>
+        </div>
+        <div class="color-container-6 col-xs-12">
+          <div class="filtr-item block red xs col-sm-8" data-category="red"><span class="text">01</span></div>
+          <div class="filtr-item block blue col-sm-4" data-category="blue"><span class="text">02</span></div>
+          <div class="filtr-item block green md col-sm-2" data-category="green"><span class="text">03</span></div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">04</span></div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">05</span></div>
+          <div class="filtr-item block yellow md col-sm-2" data-category="yellow"><span class="text">06</span></div>
+          <div class="filtr-item block green md col-sm-6" data-category="green"><span class="text">07</span></div>
+          <div class="filtr-item block green col-sm-4" data-category="green"><span class="text">08</span></div>
+          <div class="filtr-item block yellow lg col-sm-2" data-category="yellow"><span class="text">09</span></div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">10</span></div>
+          <div class="filtr-item block red xs col-sm-4" data-category="red"><span class="text">11</span></div>
+          <div class="filtr-item block blue col-sm-8" data-category="blue"><span class="text">12</span></div>
+        </div>
+      </div>
+
     </div>
   
     <script
@@ -240,6 +290,8 @@
         $('.color-container-2').filterizr({ controlsSelector: '.color-controls-2', layout: 'packed' });
         $('.color-container-3').filterizr({ controlsSelector: '.color-controls-3', layout: 'sameHeight' });
         $('.color-container-4').filterizr({ controlsSelector: '.color-controls-4', layout: 'packed' });
+        $('.color-container-5').filterizr({ controlsSelector: '.color-controls-5', layout: 'horizontal' });
+        $('.color-container-6').filterizr({ controlsSelector: '.color-controls-6', layout: 'vertical' });
         window.filterizr = f;
       });
     </script>  
