@@ -8,8 +8,8 @@ import PackedLayout from './layouts/PackedLayout';
 /**
  * Calculates and returns an array of objects representing
  * the next positions the FilterItems are supposed to assume.
- * @param {String} name of layout to decide the helper method to be used
- * @param {Object} container is the FilterContainer
+ * @param {String} Layout - name of helper method to be used
+ * @param {Object} Filterizr - instance
  * @return {Object} layout to be used by Filterizr
  */
 const Positions = (Layout, Filterizr) => {
