@@ -3,7 +3,7 @@ import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
 import DefaultOptions from './DefaultOptions';
-import { 
+import {
   FILTERIZR_STATE,
   allStringsOfArray1InArray2,
   checkOptionForErrors,
@@ -61,7 +61,7 @@ class Filterizr {
    * @param {String} category by which to filter
    */
   filter(category) {
-    const { 
+    const {
       searchTerm,
       FilterContainer,
       FilterItems,
@@ -77,12 +77,12 @@ class Filterizr {
     category = Array.isArray(category)
       ? category.map(c => c.toString())
       : category.toString();
-    
+
     // Filter items and optionally apply search if a search term exists
     const FilteredItems = this.searchFilterItems(
-      this.filterFilterItems(FilterItems, category), 
+      this.filterFilterItems(FilterItems, category),
       searchTerm
-    );
+    ); 
 
     // Update props
     this.props.FilteredItems = FilteredItems;
@@ -136,7 +136,7 @@ class Filterizr {
    * @param {String} sortOrder ascending or descending
    */
   sort(sortAttr = 'index', sortOrder = 'asc') {
-    const { 
+    const {
       FilterContainer,
       FilterItems,
     } = this.props;
@@ -147,10 +147,10 @@ class Filterizr {
     // Set animation state to trigger callbacks
     this.props.filterizrState = FILTERIZR_STATE.SORTING;
 
-    // sort main array
+    // Sort main array
     this.props.FilterItems = this.sortFilterItems(FilterItems, sortAttr, sortOrder);
 
-    // apply filters
+    // Apply filters
     const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
 
     this.props.FilteredItems = FilteredItems;
@@ -212,15 +212,15 @@ class Filterizr {
     checkOptionForErrors('controlsSelector', newOptions.controlsSelector, 'string');
     checkOptionForErrors('delay', newOptions.delay, 'number');
     checkOptionForErrors(
-      'easing', 
-      newOptions.easing, 
-      'string', 
-      cssEasingValuesRegexp, 
+      'easing',
+      newOptions.easing,
+      'string',
+      cssEasingValuesRegexp,
       'https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp'
     );
     checkOptionForErrors(
-      'delayMode', 
-      newOptions.delayMode, 
+      'delayMode',
+      newOptions.delayMode,
       'string',
       ['progressive', 'alternate']
     );
@@ -228,14 +228,14 @@ class Filterizr {
     checkOptionForErrors('filterOutCss', newOptions.filterOutCss, 'object');
     checkOptionForErrors('filterInCss', newOptions.filterOutCss, 'object');
     checkOptionForErrors(
-      'layout', 
-      newOptions.layout, 
+      'layout',
+      newOptions.layout,
       'string',
       ['sameSize', 'vertical', 'horizontal', 'sameHeight', 'sameWidth', 'packed']
     );
     checkOptionForErrors(
-      'multifilterLogicalOperator', 
-      newOptions.multifilterLogicalOperator, 
+      'multifilterLogicalOperator',
+      newOptions.multifilterLogicalOperator,
       'string',
       ['and', 'or']
     );
@@ -332,7 +332,7 @@ class Filterizr {
     return FilteredItems;
   }
 
-  sortFilterItems(FilterItems ,sortAttr = 'index', sortOrder = 'asc') {
+  sortFilterItems(FilterItems, sortAttr = 'index', sortOrder = 'asc') {
     // Sort the FilterItems and reverse the array if order is descending
     let SortedItems = sortBy(FilterItems, (FilterItem) => {
       return (sortAttr !== 'index' && sortAttr !== 'sortData')
@@ -363,7 +363,7 @@ class Filterizr {
     }
 
     return ShuffledItems;
-  }  
+  }
 
   render(FilterItems) {
     const {
@@ -408,12 +408,12 @@ class Filterizr {
   }
 
   onTransitionEndCallback() {
-    const { 
+    const {
       filterizrState,
       FilterContainer,
     } = this.props;
 
-    switch(filterizrState) {
+    switch (filterizrState) {
       case FILTERIZR_STATE.FILTERING:
         FilterContainer.trigger('filteringEnd');
         break;
@@ -431,7 +431,7 @@ class Filterizr {
 
   rebindFilterContainerEvents() {
     const { FilterContainer } = this.props;
-    const { 
+    const {
       animationDuration,
       callbacks,
     } = this.options;
@@ -456,7 +456,7 @@ class Filterizr {
       // Update dimensions of items based on new window size
       FilterContainer.updateWidth();
       FilterContainer.updateFilterItemsDimensions();
-      
+
       // Refilter the grid to assume new positions
       this.filter(this.options.filter);
     }, 250));
