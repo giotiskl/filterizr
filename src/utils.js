@@ -34,7 +34,7 @@ const makeShallowClone = (o) => {
 export { makeShallowClone };
 
 /**
- * A function to recursively merge to object, copying over all
+ * A function to recursively merge an object, copying over all
  * properties of the old object missing from the target object.
  * In case a prop in is an object, the method is called recursively.
  * This is a non-mutating method.
@@ -50,8 +50,7 @@ const merge = (old, target) => {
       ret[p] = old[p];
     }
     else {
-      // in case the prop itself is an obj,
-      // call method recursively,
+      // In case the prop itself is an obj, call method recursively.
       if (typeof ret[p] === 'object' && typeof old[p] === 'object' && !Array.isArray(old[p])) {
         ret[p] = merge((typeof ret[p] === 'object' ? ret[p] : {}), old[p]);
       }
