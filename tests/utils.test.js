@@ -3,6 +3,7 @@
  */
 import { 
   allStringsOfArray1InArray2,
+  debounce,
   makeShallowClone,
   merge,
   intersection,
@@ -23,6 +24,19 @@ describe('utils', () => {
       const arr1 = ['first', 'second', 'fourth', 'hi'];
       const arr2 = ['zero', 'third', 'second', 'fourth', 'first'];
       expect(allStringsOfArray1InArray2(arr1, arr2)).toEqual(false);
+    });
+  });
+
+  describe('#debounce', () => {
+    const DEBOUNCE_TIME = 100;
+    const fn = () => 5;
+    const debouncedFn = debounce(fn, DEBOUNCE_TIME);
+
+    it('should debounce a function for a given amount of time', () => {
+      expect(debouncedFn()).not.toEqual(5);
+      setTimeout(() => {
+        expect(debouncedFn()).toEqual(5);
+      }, DEBOUNCE_TIME + 5);
     });
   });
 

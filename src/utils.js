@@ -77,7 +77,7 @@ export { intersection };
  */
 const debounce = function (func, wait, immediate) {
   let timeout;
-  return function() {
+  return function () {
     const context = this;
     const args = arguments;
     clearTimeout(timeout);
