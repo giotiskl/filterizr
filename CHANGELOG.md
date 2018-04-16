@@ -1,3 +1,7 @@
+## Version 1.3.5
+* Fix bug with infinite loop for sameWidth layout when window resizing and cols <= 0
+* Add polyfill for Array.prototype.includes and String.prototype.includes for IE11
+
 ## Version 1.3.4
 * Fix bug where filter would be triggered multiple times through the controls
 * Fix bug where the control event handlers would not be deregistered on `.destroy()` due to problematic selector
