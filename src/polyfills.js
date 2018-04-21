@@ -2,6 +2,22 @@
  * Sets up polyfills for older browsers if needed
  */
 export default function executePolyfills() {
+  // Needed for Filterizr support on IE11
+  // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
+  if (!String.prototype.includes) {
+    String.prototype.includes = function (search, start) {
+      'use strict';
+      if (typeof start !== 'number') {
+        start = 0;
+      }
+
+      if (start + search.length > this.length) {
+        return false;
+      } else {
+        return this.indexOf(search, start) !== -1;
+      }
+    };
+  }
   // https://tc39.github.io/ecma262/#sec-array.prototype.includes
   if (!Array.prototype.includes) {
     Object.defineProperty(Array.prototype, 'includes', {
