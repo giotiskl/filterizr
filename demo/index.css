@@ -1,6 +1,9 @@
 body {
     margin-top: 1rem;
 }
+img {
+  max-width: 100%;
+}
 .filtr-item {
     padding: 1rem;
 }
