@@ -16,6 +16,16 @@ class FilterContainer {
     // Cache jQuery node
     this.$node = $(selector);
 
+    // Set up initial styles of container
+    this.$node.css({
+      padding : 0,
+      position: 'relative',
+      // Needed for flex displays
+      width: '100%',
+      display: 'flex',
+      'flex-wrap': 'wrap',
+    });
+
     // Set props
     this.props = {
       // Other props
@@ -23,12 +33,6 @@ class FilterContainer {
       w: this.getWidth(),
       h: 0,
     };
-
-    // Set up initial styles of container
-    this.$node.css({
-      'padding' : 0,
-      'position': 'relative'
-    });
 
     // Update dimensions of contained items on instantiation
     this.updateFilterItemsDimensions();

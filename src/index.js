@@ -4,7 +4,7 @@
  *
  * @author Yiotis Kaltsikis
  * @see {@link http://yiotis.net/filterizr}
- * @version 1.3.4
+ * @version 1.3.5
  * @license MIT License
  */
 
@@ -14,10 +14,14 @@ import Filterizr from './Filterizr';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
 import DefaultOptions from './DefaultOptions';
+import executePolyfills from './polyfills';
 
 (function($) {
   //Make sure jQuery exists
   if (!$) throw new Error('Filterizr requires jQuery to work.');
+
+  // Execute polyfills
+  executePolyfills();
 
   // Extract .filterizr method on jQuery prototype
   $.fn.filterizr = function() {

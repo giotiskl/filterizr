@@ -10,7 +10,7 @@ const SameWidthLayout = (Filterizr) => {
 
   // Calculate number of columns and rows the grid should have
   let cols = FilterContainer.calcColumns(),
-    row  = 0,
+    row = 0,
     columnHeights = Array.apply(null, Array(cols)).map(Number.prototype.valueOf, 0);
 
   // Calculate array of positions
@@ -31,7 +31,7 @@ const SameWidthLayout = (Filterizr) => {
     // Return object with new position in array
     return {
       left: spot * w,
-      top:  calcItemTop(FilteredItems, cols, index),
+      top: calcItemTop(FilteredItems, cols, index),
     };
   });
 
@@ -51,18 +51,18 @@ const SameWidthLayout = (Filterizr) => {
  * @param {integer} index of current item in FilteredItems collection
  */
 const calcItemTop = (FilteredItems, cols, index) => {
+  // Prevent infinite loop on window resize when container is not visible
+  if (cols <= 0) return 0;
+
   let itemTop = 0;
-  // means we're still iterating over 
-  // the first row, top should be 0
+  // Means we're still iterating over the first row, top should be 0
   if (index < cols - 1) return 0;
-  // decrease index by cols to access the item
-  // located right above
+  // Decrease index by cols to access the item located right above
   index -= cols;
-  // if we're over the first row loop until
-  // we calculate the height of all items above
+  // If we're over the first row loop until we calculate the height of all items above
   while (index >= 0) {
     itemTop += FilteredItems[index].props.h;
-    index   -= cols;
+    index -= cols;
   }
   return itemTop;
 };
