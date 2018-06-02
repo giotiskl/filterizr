@@ -46,7 +46,7 @@ If you would like to contribute to Filterizr, please make sure to follow the ste
 * Make your PR and set the base branch to `develop`
 
 ## Browser support
-IE10+ and all modern browsers.
+IE11 and all modern browsers.
 
 ## Donate
 Did you enjoy Filterizr? Filterizr is and will always be 100% free, if you would like to show your support feel free to donate:

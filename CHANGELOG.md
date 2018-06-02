@@ -1,6 +1,8 @@
 ## Version 1.3.5
+* Add support for Bootstrap v4+ and flex layouts
 * Fix bug with infinite loop for sameWidth layout when window resizing and cols <= 0
 * Add polyfill for Array.prototype.includes and String.prototype.includes for IE11
+* Drop IE10 support, grids now use flex
 
 ## Version 1.3.4
 * Fix bug where filter would be triggered multiple times through the controls
