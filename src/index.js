@@ -4,7 +4,7 @@
  *
  * @author Yiotis Kaltsikis
  * @see {@link http://yiotis.net/filterizr}
- * @version 1.3.5
+ * @version 1.3.6
  * @license MIT License
  */
 
