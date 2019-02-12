@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Filterizr is a jQuery plugin. It allows you to set up custom filters for your responsive gallery, writing your own styles. It uses CSS3 transitions.">
+    <meta name="keywords" content="filter, shuffle, sort, search, jQuery, plugin, gallery, responsive, transition, CSS3, lightweight, customizable, Yiotis">
+    <title>Filterizr | Set up custom filters for responsive galleries</title>
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,300italic,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href="ext/css/ionicons.min.css" rel="stylesheet">
+    <link href="res/css/styles.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div class="container-fluid">
+
+        <div class="row">
+            <header class="main-header" id="main-header">
+                <nav class="navbar navbar-inverse navbar-custom navbar-fixed-top">
+                    <h6 class="sr-only">Main navigation</h6>
+                    <div class="container">
+                        <div class="navbar navbar-header">
+                            <a class="navbar-brand" href="#">
+                                <img src="res/img/logo.png" class="img-responsive nav-logo" alt="Filterizr logo white">
+                            </a>
+
+                            <button type="button" class="navbar-toggle custom-toggle-btn" data-toggle="collapse" data-target="#main-nav" aria-expanded="false">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="main-nav">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="plain-link active" id="home-link"><a href="#showcase">Showcase</a></li>
+                                <li class="dropdown tutorials">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tutorials<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li class="plain-link"><a href="#install">Install</a></li>
+                                        <li class="plain-link"><a href="#filtering">Filtering</a></li>
+                                        <li class="plain-link"><a href="#sorting">Sorting</a></li>
+                                        <li class="plain-link"><a href="#searching">Searching</a></li>
+                                        <li class="plain-link"><a href="#delaymodes">Delay Modes</a></li>
+                                        <li class="plain-link"><a href="#layouts">Layouts</a></li>
+                                    </ul>
+                                </li>
+                                <li class="plain-link"><a href="#docs">Docs</a></li>
+                                <li class="plain-link"><a href="#faq">FAQ &amp; Caveats</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </nav>
+            </header>
+        </div>
+
+        <div class="row"><div id="extra-margin"></div></div>
+        <div class="row content-section-js" id="showcase">
+            <div class="container showcase">
+                <div class="row customize-row">
+                    <section class="col-sm-7">
+                        <div class="row">
+                            <h1>Filter all night long</h1>
+                        </div>
+                        <div class="row">
+                            <p>
+                                Filterizr is a jQuery plugin that searches, sorts, shuffles and applies stunning filters over responsive galleries using CSS3 transitions.
+                            </p>
+                        </div>
+                        <div class="row">
+                            <ul class="filtr-feats">
+                                <li>Pluggable look &amp; feel (write your CSS effects in the box on the right and hit Filterize!)</li>
+                                <li>Smooth performance &mdash; optimized for smooth experience on mobile devices</li>
+                                <li>Lightweight &mdash; around 20kb, jQuery is its only dependency</li>
+                                <li>Responsive &mdash; with your Media Queries (resize the window!)</li>
+                                <li>Platform support:
+                                    <ul>
+                                        <li>Chrome, Firefox, Safari, Opera</li>
+                                        <li>Android and iOS browsers</li>
+                                        <li>Edge, IE(v.10+)</li>
+                                    </ul></li>
+                                    <li>Open source</li>
+                                    <li>MIT licensed (i.e. free for all uses)</li>
+                                </ul>
+                            </div>
+                            <div class="row">
+                                <p class="npm-p">Get on NPM: <code class="prettyprint">npm install filterizr</code></p>
+                            </div>
+                            <div class="row">
+                                <a href="https://github.com/giotiskl/Filterizr/archive/master.zip" target="_blank" class="filtr-button">
+                                    <span class="link-text">
+                                        <span class="ion-ios-download-outline icon download-icon"></span>
+                                        Download
+                                    </span>
+                                </a>
+                                <a href="https://github.com/giotiskl/Filterizr" target="_blank" class="filtr-button">
+                                    <span class="link-text">
+                                        <span class="ion-social-github icon"></span>
+                                        Source Code
+                                    </span>
+                                </a>
+                            </div>
+                        </section>
+                        <section class="col-sm-5">
+                            <div class="row">
+                                <h1>CSS3 filters in JSON</h1>
+                                <p>
+                                    Write your CSS in JSON in the textarea below. Hit Filterize and test your effects on the demo gallery!
+                                </p>
+                            </div>
+                            <form>
+                                <div class="row">
+                                    <textarea name="galstyles" id="galstyles" cols="30" rows="10" class="galstyles"></textarea>
+                                </div>
+                                <div class="row">
+                                    <input type="button" name="filterizeit" class="filtr-button pull-right" id="filterizeit" value="Filterize">
+                                </div>
+                                <div class="alert alert-success" id="successmsg">
+                                    <span class="alert alert-success alert-arrow"></span>
+                                    The gallery has been Filterizd!
+                                </div>
+                                <div class="alert alert-danger" id="errormsg">
+                                    <span class="alert alert-danger alert-arrow"></span>
+                                    Your JSON is not valid.
+                                </div>
+                                <div class="alert alert-warning" id="warnmsg">
+                                    <span class="alert alert-warning alert-arrow"></span>
+                                    Both <code class="prettyprint">filterOutCss</code> and <code class="prettyprint">filterInCss</code> must have the same properties, with varying values for CSS3 transitions to work.
+                                </div>
+                            </form>
+                        </section>
+                        <div class="row">
+                            <!-- Demo Gallery -->
+                            <section class="col-xs-12">
+                                <div class="row">
+                                    <h1>Demo Gallery</h1>
+                                </div>
+                                <div class="row">
+                                    <ul class="nav nav-gallery filters">
+                                        <li class="filtr-button filtr filtr-active" data-filter="all">All</li><!--
+                                        --><li class="filtr-button filtr" data-filter="1">Cities</li><!--
+                                    --><li class="filtr-button filtr" data-filter="2">Nature</li><!--
+                                --><li class="filtr-button filtr" data-filter="3">Industrial</li><!--
+                            --><li class="filtr-button filtr" data-filter="4">Daylight</li><!--
+                        --><li class="filtr-button filtr" data-filter="5">Nightscape</li>
+                    </ul>
+                    <div class="container">
+                        <button class="filtr-button filtr-shuffle" data-shuffle>Shuffle</button>
+                        <ul class="nav nav-gallery sorting">
+                            <li class="filtr-button filtr-sort filtr-active filtr" data-sortAsc>Asc</li><!--
+                            --><li class="filtr-button filtr-sort filtr" data-sortDesc>Desc</li>
+                        </ul>
+                        <select class="select-order" data-sortOrder>
+                            <option value="domIndex">
+                                Position
+                            </option>
+                            <option value="sortData">
+                                Description
+                            </option>
+                        </select>
+                        <input type="text" name="filtr-search" class="filtr-search" value="" placeholder="Your search" data-search>
+                    </div>
+                </div>
+
+                <div class="row container filtr-container">
+                    <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="Busy streets">
+                        <img class="img-responsive" src="res/img/city_1.jpg" alt="sample image">
+                        <div class="item-position">1</div>
+                        <span class="item-desc">Busy Streets</span>
+                    </div>
+
+                    <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 5" data-sort="Luminous night">
+                        <img class="img-responsive" src="res/img/nature_2.jpg" alt="sample image">
+                        <div class="item-position">2</div>
+                        <span class="item-desc">Luminous night</span>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 4" data-sort="City wonders">
+                        <img class="img-responsive" src="res/img/city_3.jpg" alt="sample image">
+                        <div class="item-position">3</div>
+                        <span class="item-desc">City wonders</span>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="In production">
+                        <img class="img-responsive" src="res/img/industrial_1.jpg" alt="sample image">
+                        <div class="item-position">4</div>
+                        <span class="item-desc">In production</span>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3, 4" data-sort="Industrial site">
+                        <img class="img-responsive" src="res/img/industrial_2.jpg" alt="sample image">
+                        <div class="item-position">5</div>
+                        <span class="item-desc">Industrial site</span>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Peaceful lake">
+                        <img class="img-responsive" src="res/img/nature_1.jpg" alt="sample image">
+                        <div class="item-position">6</div>
+                        <span class="item-desc">Peaceful lake</span>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="City lights">
+                        <img class="img-responsive" src="res/img/city_2.jpg" alt="sample image">
+                        <div class="item-position">7</div>
+                        <span class="item-desc">City lights</span>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Dreamhouse">
+                        <img class="img-responsive" src="res/img/nature_3.jpg" alt="sample image">
+                        <div class="item-position">8</div>
+                        <span class="item-desc">Dreamhouse</span>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="Restless machines">
+                        <img class="img-responsive" src="res/img/industrial_3.jpg" alt="sample image">
+                        <div class="item-position">9</div>
+                        <span class="item-desc">Restless Machines</span>
+                    </div>
+                </div>
+            </section>
+            <!-- Demo Gallery end -->
+
+            <!-- Filterizr in Action -->
+            <section class="filterizr-in-action col-xs-12">
+                <div class="row">
+                    <h1>Filterizr in Action</h1>
+                </div>
+                <div class="row">
+                    <p>Here are some of the people who have put Filterizr to use</p>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 in-use-item-wrapper">
+                        <section class="in-use-item">
+                            <a href="http://jonathanjcastro.com/" target="_blank">
+                                <img class="img-responsive" src="res/img/inaction_castro.jpg" alt="Portfolio of Jonathan J. Castro">
+                                <div class="in-use-desc">
+                                    <h3>Jonathan J. Castro</h3>
+                                    <p>
+                                        Web designer portfolio
+                                    </p>
+                                </div>
+                            </a>
+                        </section>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 in-use-item-wrapper">
+                        <section class="in-use-item">
+                            <a href="http://al2.gr/products.php" target="_blank">
+                                <img class="img-responsive" src="res/img/inaction_al2.png" alt="Furniture retailer, Greece">
+                                <div class="in-use-desc">
+                                    <h3>al2</h3>
+                                    <p>
+                                        Furnite retailer in Greece
+                                    </p>
+                                </div>
+                            </a>
+                        </section>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 in-use-item-wrapper">
+                        <section class="in-use-item">
+                            <a href="http://kinono.gr/program.php" target="_blank">
+                                <img class="img-responsive" src="res/img/inaction_kinono.png" alt="Art events blog, Greece">
+                                <div class="in-use-desc">
+                                    <h3>Kinono</h3>
+                                    <p>
+                                        Art events blog, Greece
+                                    </p>
+                                </div>
+                            </a>
+                        </section>
+                    </div>
+                </div>
+
+                <div class="row new-row">
+                  <div class="visible-md visible-lg" style="margin-top: 30px;"></div>
+                    <div class="col-sm-6 col-md-4 in-use-item-wrapper">
+                        <section class="in-use-item">
+                            <a href="http://www.shankariasacademy.com/gallery" target="_blank">
+                                <img class="img-responsive" src="res/img/inaction_shankaria.jpg" alt="Shankar Ias Academy, South India">
+                                <div class="in-use-desc">
+                                    <h3>Shankar Ias</h3>
+                                    <p>
+                                        Civil servant training academy in South India
+                                    </p>
+                                </div>
+                            </a>
+                        </section>
+                    </div>
+                </div>
+                    
+            </section>
+            <!-- Filterizr in Action end -->
+        </div>
+    </div>
+</div>
+
+</div>
+
+<!-- Install Section -->
+<div class="row bg-lightgray content-section-js" id="install">
+    <section class="container install">
+        <div class="row">
+            <h1>Install Filterizr</h1>
+            <p class="header-p">
+                Include Filterizr in your project: <code class="prettyprint">&lt;script src="js/jquery.filterizr.min.js"&gt;&lt;/script&gt;</code>
+            </p>
+        </div>
+        <div class="row">
+            <!-- Instruction HTML Container -->
+            <section class="col-sm-6">
+                <h2>Create your gallery</h2>
+                <p>To set up your own gallery, modify your HTML as follows:</p>
+                <ol>
+                    <li>Add to your items the class <code class="prettyprint">filtr-item</code></li>
+                    <li>Give your items a <code class="prettyprint">data-category</code> attribute. Multiple categories must be delimited by ", ".</li>
+                    <li>To sort your items by custom data, include the <code class="prettyprint">data-sort</code> attribute.</li>
+                </ol>
+                <pre class="prettyprint code-snippet">&lt;div class="filtr-container"&gt;<br>&emsp;&emsp;&emsp; &lt;div class="filtr-item" data-category="1" data-sort="value"&gt;<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &lt;img src="img/sample.jpg" alt="sample"&gt;<br>&emsp;&emsp;&emsp; &lt;/div&gt;<br>&emsp;&emsp;&emsp; &lt;div class="filtr-item" data-category="2, 1" data-sort="value"&gt;<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &lt;img src="img/sample.jpg" alt="sample"&gt;<br>&emsp;&emsp;&emsp; &lt;/div&gt;<br>&emsp;&emsp;&emsp; &lt;div class="filtr-item" data-category="1, 3" data-sort="value"&gt;<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &lt;img src="img/sample.jpg" alt="sample"&gt;<br>&emsp;&emsp;&emsp; &lt;/div&gt;<br>&lt;/div&gt;
+                </pre>
+            </section>
+            <!-- Instruction HTML Controls -->
+            <section class="col-sm-6">
+                <h2>Set up your controls</h2>
+                <p>Setting up your filter controls is a matter of seconds:</p>
+                <ol>
+                    <li>Create your controls, with the markup of your preference. Style them the way you want with your CSS.</li>
+                    <li>Make sure to include the appropriate data attributes as below. This is what Filterizr looks for. Use the value <code class="prettyprint">all</code> for an unfiltered gallery.</li>
+                </ol>
+                <pre class="prettyprint code-snippet">&lt;ul&gt;<br>&emsp;&emsp;&emsp;&lt;!-- For filtering controls add --&gt;<br>&emsp;&emsp;&emsp;&lt;li data-filter="all"&gt; All items &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-filter="1"&gt; Category 1 &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-filter="2"&gt; Category 2 &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-filter="3"&gt; Category 3 &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;!-- For a shuffle control add --&gt;<br>&emsp;&emsp;&emsp;&lt;li data-shuffle&gt; Shuffle items &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;!-- For sorting controls add --&gt;<br>&emsp;&emsp;&emsp;&lt;li data-sortAsc&gt; Ascending &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-sortDesc&gt; Descending &lt;/li&gt;<br>&lt;/ul&gt;<br>&lt;!-- To choose the value by which you want to sort add --&gt;<br />&lt;select data-sortOrder&gt;<br />&emsp;&emsp;&emsp;&lt;option value="domIndex"&gt; Position &lt;/option&gt;<br />&emsp;&emsp;&emsp;&lt;option value="sortData"&gt; Custom Data &lt;/option&gt;<br />&lt;/select&gt;
+                </pre>
+            </section>
+        </div>
+        <div class="row">
+            <!-- Instruction JS Install -->
+            <section class="col-sm-6">
+                <h2>Instantiate Filterizr</h2>
+                <p>To instantiate and use Filterizr in your app's script, you can:</p>
+                <ol>
+                    <li>Use the jQuery extension method to call the constructor</li>
+                </ol>
+                <pre class="prettyprint code-snippet">var filterizd = $('.filtr-container').filterizr({<br>&emsp;&emsp;&emsp;//options object<br>});</pre>
+            </section>
+            <!-- Instruction JS Modify -->
+            <section class="col-sm-6">
+                <h2>Customizing Filterizr</h2>
+                <p>Filterizr's magic lies in <em>filterInCss</em> and <em>filterOutCss</em>. If you override any options:</p>
+                <ol>
+                    <li>Pass the options object to any of the constructor methods or...</li>
+                    <li>If you have a Filterizr, call its method <code class="prettyprint">setOptions(options)</code>.</li>
+                </ol>
+                <pre class="prettyprint code-snippet">// Default options<br>var options = {<br>&emsp;&emsp;&emsp;animationDuration: 0.5, // in seconds<br>&emsp;&emsp;&emsp;filter: 'all', // Initial filter<br>&emsp;&emsp;&emsp;callbacks: { <br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onFilteringStart: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onFilteringEnd: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onShufflingStart: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onShufflingEnd: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onSortingStart: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onSortingEnd: function() { }<br>&emsp;&emsp;&emsp;},<br>&emsp;&emsp;&emsp;controlsSelector: '', // Selector for custom controls<br>&emsp;&emsp;&emsp;delay: 0, // Transition delay in ms<br>&emsp;&emsp;&emsp;delayMode: 'progressive', // 'progressive' or 'alternate'<br>&emsp;&emsp;&emsp;easing: 'ease-out',<br>&emsp;&emsp;&emsp;filterOutCss: { // Filtering out animation<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;opacity: 0,<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;transform: 'scale(0.5)'<br>&emsp;&emsp;&emsp;},<br>&emsp;&emsp;&emsp;filterInCss: { // Filtering in animation<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;opacity: 0,<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;transform: 'scale(1)'<br>&emsp;&emsp;&emsp;},<br>&emsp;&emsp;&emsp;layout: 'sameSize', // See layouts<br>&emsp;&emsp;&emsp;multifilterLogicalOperator: 'or',<br>&emsp;&emsp;&emsp;selector: '.filtr-container',<br>&emsp;&emsp;&emsp;setupControls: true // Should be false if controlsSelector is set <br>} <br>// You can override any of these options and then call...<br>var filterizd = $('.filtr-container').filterizr(options);<br>// If you have already instantiated your Filterizr then call...<br>filterizd.filterizr('setOptions', options);
+                </pre>
+            </section>
+        </div>
+    </section>
+</div>
+
+<!-- Filtering Tutorial Section -->
+<div class="row content-section-js layout-row" id="filtering">
+    <section class="layouts container">
+        <div class="row">
+            <h1>Filtering Tutorial</h1>
+            <p class="section-desc">
+                Filterizr offers two distinct options when it comes to the aesthetics of filtering items. All you have to do is use the appropriate preset Filterizr control for each one of the options and Filterizr will handle the rest for you. In the section below you can find examples of both modes, what they look like as well as how to set them up.
+            </p>
+        </div>
+        <div class="row first-layout-row">
+            <div class="col-sm-6">
+                <h2>Active Filter Mode</h2>
+                <h3>Control setup</h3>
+                <pre class="prettyprint">&lt;ul&gt;<br>&emsp;&emsp;&emsp;&lt;li data-filter="all"&gt; All &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-filter="1"&gt; Green &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-filter="2"&gt; Orange &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-filter="3"&gt; Purple &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-filter="4"&gt; Mix &lt;/li&gt;<br>&lt;/ul&gt;
+                </pre>
+                <h3>Description</h3>
+                <p>
+                    For this filtering mode all you need to do is to include the <code class="prettyprint">data-filter</code> attribute in your controls as depicted above. Each time you switch between filters by clicking a button, items of the corresponding <code class="prettyprint">data-category</code> will be shown. This mode uses the <code class="prettyprint">.filterizr('filter', targetFilter)</code> method in the background to switch between categories.
+                </p>
+            </div>
+            <div class="col-sm-6 layout-col">
+                <ul class="nav nav-gallery filters-filteringModeSingle" id="filteringModeSingle">
+                    <li class="filtr-button filtr filtr-active" data-fltr="all">All</li><!--
+                    --><li class="filtr-button filtr" data-fltr="1">Green</li><!--
+                    --><li class="filtr-button filtr" data-fltr="2">Orange</li><!--
+                    --><li class="filtr-button filtr" data-fltr="3">Purple</li><!--
+                --><li class="filtr-button filtr" data-fltr="4">Mix</li>
+            </ul>
+            <div class="layout-padding-wrapper">
+                <div class="layout-pane filteringModeSingle">
+                    <div class="col-xs-4 filtr-item orange" data-category="2, 4"><div class="item-number">1</div></div>
+                    <div class="col-xs-4 filtr-item green" data-category="1, 4"><div class="item-number">2</div></div>
+                    <div class="col-xs-4 filtr-item purple" data-category="3"><div class="item-number">3</div></div>
+                    <div class="col-xs-4 filtr-item green" data-category="1, 4"><div class="item-number">4</div></div>
+                    <div class="col-xs-4 filtr-item orange" data-category="2, 4"><div class="item-number">5</div></div>
+                    <div class="col-xs-4 filtr-item purple" data-category="3"><div class="item-number">6</div></div>
+                    <div class="col-xs-4 filtr-item orange" data-category="2, 4"><div class="item-number">7</div></div>
+                    <div class="col-xs-4 filtr-item green" data-category="1, 4"><div class="item-number">8</div></div>
+                    <div class="col-xs-4 filtr-item purple" data-category="3"><div class="item-number">9</div></div>
+                    <div class="col-xs-4 filtr-item purple" data-category="3"><div class="item-number">10</div></div>
+                    <div class="col-xs-4 filtr-item orange" data-category="2, 4"><div class="item-number">11</div></div>
+                    <div class="col-xs-4 filtr-item green" data-category="1, 4"><div class="item-number">12</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Toggle Filter Mode</h2>
+            <h3>Control setup</h3>
+            <pre class="prettyprint">&lt;ul&gt;<br>&emsp;&emsp;&emsp;&lt;li data-multifilter="all"&gt; All &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-multifilter="1"&gt; Green &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-multifilter="2"&gt; Orange &lt;/li&gt;<br>&emsp;&emsp;&emsp;&lt;li data-multifilter="3"&gt; Purple &lt;/li&gt;<br>&lt;/ul&gt;
+            </pre>
+            <h3>Description</h3>
+            <p>
+                For this filtering mode you need to include the <code class="prettyprint">data-multifilter</code> attribute in your controls. Each time you toggle a button, items of the corresponding <code class="prettyprint">data-category</code> will be shown or hidden. When all buttons are switched off an unfiltered gallery is shown. This mode uses the <code class="prettyprint">.filterizr('toggleFilter', toggledFilter)</code> method in the background to display or hide categories.
+            </p>
+        </div>
+        <div class="col-sm-6 layout-col">
+            <ul class="nav nav-gallery filters-filteringModeMulti" id="filteringModeMulti">
+                <li class="filtr-button filtr-multi filtr-active" data-multifltr="all">All</li><!--
+            --><li class="filtr-button filtr-multi" data-multifltr="1">Green</li><!--
+            --><li class="filtr-button filtr-multi" data-multifltr="2">Orange</li><!--
+            --><li class="filtr-button filtr-multi" data-multifltr="3">Purple</li>
+        </ul>
+        <div class="layout-padding-wrapper">
+            <div class="layout-pane filteringModeMulti">
+                <div class="col-xs-4 filtr-item orange" data-category="2"><div class="item-number">1</div></div>
+                <div class="col-xs-4 filtr-item green" data-category="1"><div class="item-number">2</div></div>
+                <div class="col-xs-4 filtr-item purple" data-category="3"><div class="item-number">3</div></div>
+                <div class="col-xs-4 filtr-item green" data-category="1"><div class="item-number">4</div></div>
+                <div class="col-xs-4 filtr-item orange" data-category="2"><div class="item-number">5</div></div>
+                <div class="col-xs-4 filtr-item purple" data-category="3"><div class="item-number">6</div></div>
+                <div class="col-xs-4 filtr-item orange" data-category="2"><div class="item-number">7</div></div>
+                <div class="col-xs-4 filtr-item green" data-category="1"><div class="item-number">8</div></div>
+                <div class="col-xs-4 filtr-item purple" data-category="3"><div class="item-number">9</div></div>
+                <div class="col-xs-4 filtr-item purple" data-category="3"><div class="item-number">10</div></div>
+                <div class="col-xs-4 filtr-item orange" data-category="2"><div class="item-number">11</div></div>
+                <div class="col-xs-4 filtr-item green" data-category="1"><div class="item-number">12</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+</div>
+<!--  Filtering Tutorial Section  end -->
+
+<!-- Sorting Tutorial Section -->
+<div class="row content-section-js layout-row" id="sorting">
+    <section class="layouts container">
+        <div class="row">
+            <h1>Sorting Tutorial</h1>
+            <p class="section-desc text-center">
+                Filterizr offers both some preset options for sorting and enables you sort your items with your own data, using data-attributes.
+            </p>
+        </div>
+        <div class="row">
+            <ul class="nav nav-gallery filters-sorting" id="sortingNav">
+                   <li class="filtr-button filtr-sort filtr filtr-active" data-fltrsortorder="asc">Asc</li><!--
+                --><li class="filtr-button filtr-sort filtr" data-fltrsortorder="desc">Desc</li>
+            </ul>
+            <select class="select-order" data-sortSelect>
+                <option value="domIndex">Index</option>
+                <option value="sortData">Color</option>
+                <option value="black">Black letter (Custom)</option>
+                <option value="blue">Blue letter (Custom)</option>
+            </select>
+            <div class="layout-padding-wrapper">
+                <div class="layout-pane sortingFltr">
+                    <div class="col-xs-4 filtr-item" data-sort="orange" data-category="1" data-black="C" data-blue="X">
+                        <div class="item-number">
+                            1-<span style="color: black;">C</span>-<span style="color: blue;">X</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 filtr-item" data-sort="green" data-category="1" data-black="R" data-blue="B">
+                        <div class="item-number">
+                            2-<span style="color: black;">R</span>-<span style="color: blue;">B</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 filtr-item" data-sort="orange" data-category="1" data-black="A" data-blue="D">
+                        <div class="item-number">
+                            3-<span style="color: black;">A</span>-<span style="color: blue;">D</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 filtr-item" data-sort="green" data-category="1" data-black="F" data-blue="J">
+                        <div class="item-number">
+                            4-<span style="color: black;">F</span>-<span style="color: blue;">J</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 filtr-item" data-sort="orange" data-category="1" data-black="N" data-blue="Y">
+                        <div class="item-number">
+                            5-<span style="color: black;">N</span>-<span style="color: blue;">Y</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 filtr-item" data-sort="green" data-category="1" data-black="M" data-blue="Q">
+                        <div class="item-number">
+                            6-<span style="color: black;">M</span>-<span style="color: blue;">Q</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 filtr-item" data-sort="orange" data-category="1" data-black="S" data-blue="I">
+                        <div class="item-number">
+                            7-<span style="color: black;">S</span>-<span style="color: blue;">I</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 filtr-item" data-sort="green" data-category="1" data-black="O" data-blue="P">
+                        <div class="item-number">
+                            8-<span style="color: black;">O</span>-<span style="color: blue;">P</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <h2>Basic Sorting</h2>
+                <p>
+                    Filterizr has some preset options for sorting. In the <strong>Install</strong> tutorial, in the preset sorting controls
+                    a select input element is used to determine the value by which Filterizr's elements are order. The full built-in options
+                    are would be as follows:
+                </p>
+                <pre class="prettyprint">&lt;select data-sortOrder&gt;<br />&emsp;&emsp;&emsp;&lt;option value="domIndex"&gt; Position in DOM &lt;/option&gt;<br />&emsp;&emsp;&emsp;&lt;option value="sortData"&gt; data-sort Attribute &lt;/option&gt;<br />&emsp;&emsp;&emsp;&lt;!-- Next two can be used for layouts of varying widths/heights --&gt;<br />&emsp;&emsp;&emsp;&lt;option value="w"&gt; Item Width &lt;/option&gt;<br />&emsp;&emsp;&emsp;&lt;option value="h"&gt; Item Height &lt;/option&gt;<br />&lt;/select&gt;
+                </pre>
+                <p>
+                    Then you can either use Filterizr's preset controls to sort your elements by that value, or call the corresponding public method like this:
+                </p>
+                <pre class="prettyprint"><br />//Example 1: sort by item width, descending.<br />fltr.filterizr('sort', 'w', 'desc');<br />//Example 2: sort by the value of data-sort attribute, ascending.<br />fltr.filterizr('sort', 'sortData', 'asc');
+                </pre>
+            </div>
+            <div class="col-sm-6">
+                <h2>Advanced Sorting</h2>
+                <p>
+                    In case you want to have a variety of values by which to sort your elements, Filterizr allows you to add data-attributes with custom names and
+                    values to your items and use them for sorting. For example you could have items looking like this:
+                </p>
+                <pre class="prettyprint">&lt;div class="filtr-container"&gt;<br>&emsp;&emsp;&emsp; &lt;div class="filtr-item" data-category="1" data-author="John Doe" data-year="1998" data-novel="Cool book 1"&gt;<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &lt;img src="img/sample.jpg" alt="sample"&gt;<br>&emsp;&emsp;&emsp; &lt;/div&gt;<br>&emsp;&emsp;&emsp; &lt;div class="filtr-item" data-category="1" data-author="Jane Doe" data-year="2003" data-novel="Cooler book"&gt;<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &lt;img src="img/sample.jpg" alt="sample"&gt;<br>&emsp;&emsp;&emsp; &lt;/div&gt;<br>&emsp;&emsp;&emsp; &lt;div class="filtr-item" data-category="1" data-author="Jake Doe" data-year="2008" data-novel="Coolest book"&gt;<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; &lt;img src="img/sample.jpg" alt="sample"&gt;<br>&emsp;&emsp;&emsp; &lt;/div&gt;<br>&lt;/div&gt;
+                </pre>
+                <p>
+                    Then all you have to do is add those private data-attribute names to your <strong>select</strong> input element:
+                </p>
+                <pre class="prettyprint">&lt;select data-sortOrder&gt;<br />&emsp;&emsp;&emsp;&lt;option value="domIndex"&gt; Position in DOM &lt;/option&gt;<br />&emsp;&emsp;&emsp;&lt;!-- Other options and then... --&gt;<br />&emsp;&emsp;&emsp;&lt;option value="author"&gt; Author Name &lt;/option&gt;<br />&emsp;&emsp;&emsp;&lt;option value="year"&gt; Year Published &lt;/option&gt;<br />&emsp;&emsp;&emsp;&lt;option value="novel"&gt; Book Title &lt;/option&gt;<br />&lt;/select&gt;
+                </pre>
+                <p>
+                    Once again, your sorting controls will take care of the rest. If you wish to use the public API once again you simply pass the value of the <strong>option</strong> elements as the <strong>attr</strong> parameter. Just remember to omit the <strong>data-</strong> part. For example:
+                </p>
+                <pre class="prettyprint">//Example 1: sort by author name, descending.<br />fltr.filterizr('sort', 'author', 'desc');<br />//Example 2: sort by book title, ascending.<br />fltr.filterizr('sort', 'novel', 'asc');
+                </pre>
+            </div>
+    </div>
+</section>
+</div>
+<!--  Sorting Tutorial Section  end -->
+
+<!-- Searching Tutorial Section -->
+<div class="row content-section-js layout-row" id="searching">
+    <section class="layouts container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>Searching Tutorial</h1>
+                <p class="section-desc text-center">
+                    Apart from filtering between categories, since v1.2.1 Filterizr now offers you the ability to apply a dynamic filter while typing in a search term as exhibited on the demo page of this website. Setting up the search control of Filterizr is a matter of seconds. All you have to do is include the corresponding control if you would like this added functionality as follows:
+                </p>
+                <pre class="prettyprint text-center">&lt;!-- This is what the search control looks like --&gt;<br />&lt;input type="text" name="search" placeholder="Search..." data-search&gt;
+                </pre>
+                <p class="text-center">
+                    Done! Once your search control is added, Filterizr will handle the rest of the magic!
+                </p>
+            </div>
+        </div>
+    </section>
+</div>
+<!--  Searching Tutorial Section  end -->
+
+<!-- Delaymode Section -->
+<div class="row content-section-js layout-row" id="delaymodes">
+    <section class="layouts container">
+        <div class="row">
+            <h1>Delay Modes Tutorial</h1>
+            <p class="section-desc">
+                If you would like to spice up the effect of your Filterizr by making it less synchronous, you could experiment with adding delays between
+                your gallery's items. Filterizr uses by default <code class="prettyprint">delayMode: 'progressive'</code> but the value of <code class="prettyprint">delay</code> in the options is set to 0. Thus, there is no delay effect by default.
+            </p>
+        </div>
+        <div class="row first-layout-row">
+            <div class="col-sm-6">
+                <h2>Progressive delay mode</h2>
+                <pre class="prettyprint">fltr.filterizr('setOptions', { delay: 50, delayMode: 'progressive' });</pre>
+                <p>
+                    This delay mode increases the transition-delay property of your items consecutively by the amount you've set the <code class="prettyprint">delay</code> option in Filterizr's options. I would suggest a value between 25-50 ms for an optimal effect.
+                </p>
+            </div>
+            <div class="col-sm-6 layout-col">
+                <ul class="nav nav-gallery filters-delayModeProgressive" id="delayModeProgressive">
+                    <li class="filtr-button filtr filtr-active" data-fltr="all">All</li><!--
+                    --><li class="filtr-button filtr" data-fltr="1">Odd</li><!--
+                --><li class="filtr-button filtr" data-fltr="2">Even</li>
+            </ul>
+            <div class="layout-padding-wrapper">
+                <div class="layout-pane delayModeProgressive">
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">1</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">2</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">3</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">4</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">5</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">6</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">7</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">8</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">9</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">10</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">11</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">12</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Alternate delay mode</h2>
+            <pre class="prettyprint">fltr.filterizr('setOptions', { delay: 350, delayMode: 'alternate' });</pre>
+            <p>
+                This delay mode sets the transition-delay property of every other item to the amount you've set the <code class="prettyprint">delay</code> option in Filterizr's options. I would suggest a value between 250-400 ms for an optimal effect if you choose this delay mode.
+            </p>
+        </div>
+        <div class="col-sm-6 layout-col">
+            <ul class="nav nav-gallery filters-delayModeAlternate" id="delayModeAlternate">
+                <li class="filtr-button filtr filtr-active" data-fltr="all">All</li><!--
+                --><li class="filtr-button filtr" data-fltr="1">Odd</li><!--
+            --><li class="filtr-button filtr" data-fltr="2">Even</li>
+        </ul>
+        <div class="layout-padding-wrapper">
+            <div class="layout-pane delayModeAlternate">
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">1</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">2</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">3</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">4</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">5</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">6</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">7</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">8</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">9</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">10</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">11</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">12</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+</div>
+<!-- Delaymode end -->
+
+<!-- Layouts section -->
+<div class="row content-section-js layout-row" id="layouts">
+    <section class="layouts container">
+        <div class="row">
+            <h1>Layouts Tutorial</h1>
+        </div>
+        <div class="row first-layout-row">
+            <div class="col-sm-6">
+                <h2>Same size layout</h2>
+                <pre class="prettyprint">fltr.filterizr('setOptions', {layout: 'sameSize'});</pre>
+                <p>
+                    This layout should be used with items having the same width and height.
+                </p>
+            </div>
+            <div class="col-sm-6 layout-col">
+                <ul class="nav nav-gallery filters-sameSize" id="sameSizeNav">
+                    <li class="filtr-button filtr filtr-active" data-fltr="all">All</li><!--
+                    --><li class="filtr-button filtr" data-fltr="1">Odd</li><!--
+                --><li class="filtr-button filtr" data-fltr="2">Even</li>
+            </ul>
+            <div class="layout-padding-wrapper">
+                <div class="layout-pane sameSize">
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">1</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">2</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">3</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">4</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">5</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">6</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">7</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">8</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">9</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">10</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">11</div></div>
+                    <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">12</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row layout-row">
+        <div class="col-sm-6">
+            <h2>Packed layout</h2>
+            <pre class="prettyprint">fltr.filterizr('setOptions', {layout: 'packed'});</pre>
+            <p>
+                This layout can be used with items of any size and it will make smart decisions about where to place them.
+                It makes use of <a href="https://github.com/jakesgordon/bin-packing" target="_blank">Jake Gordon's Bin Packing algorithm</a>
+                to place the items in the container.
+            </p>
+        </div>
+        <div class="col-sm-6 layout-col">
+            <ul class="nav nav-gallery filters-packed" id="packedNav">
+                <li class="filtr-button filtr filtr-active" data-fltr="all">All</li><!--
+                --><li class="filtr-button filtr" data-fltr="1">Odd</li><!--
+            --><li class="filtr-button filtr" data-fltr="2">Even</li>
+        </ul>
+        <div class="layout-padding-wrapper">
+            <div class="layout-pane packed">
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">1</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">2</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">3</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">4</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">5</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">6</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">7</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">8</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">9</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">10</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">11</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">12</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">13</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">14</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">15</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">16</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">17</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">18</div></div>
+                <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">19</div></div>
+                <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">20</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row layout-row">
+    <div class="col-sm-6">
+        <h2>Same height layout</h2>
+        <pre class="prettyprint">fltr.filterizr('setOptions', {layout: 'sameHeight'});</pre>
+        <p>
+            This layout should be used with items having the same height and a varying width.
+        </p>
+    </div>
+    <div class="col-sm-6 layout-col">
+        <ul class="nav nav-gallery filters-sameHeight" id="sameHeightNav">
+            <li class="filtr-button filtr filtr-active" data-fltr="all">All</li><!--
+            --><li class="filtr-button filtr" data-fltr="1">Odd</li><!--
+        --><li class="filtr-button filtr" data-fltr="2">Even</li>
+    </ul>
+    <div class="layout-padding-wrapper">
+        <div class="layout-pane sameHeight">
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">1</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">2</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">3</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">4</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">5</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">6</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">7</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">8</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">9</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">10</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">11</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">12</div></div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="row layout-row">
+    <div class="col-sm-6">
+        <h2>Same width layout</h2>
+        <pre class="prettyprint">fltr.filterizr('setOptions', {layout: 'sameWidth'});</pre>
+        <p>
+            This layout should be used with items having the same width and a varying height.
+        </p>
+    </div>
+    <div class="col-sm-6 layout-col">
+        <ul class="nav nav-gallery filters-sameWidth" id="sameWidthNav">
+            <li class="filtr-button filtr filtr-active" data-fltr="all">All</li><!--
+            --><li class="filtr-button filtr" data-fltr="1">Odd</li><!--
+        --><li class="filtr-button filtr" data-fltr="2">Even</li>
+    </ul>
+    <div class="layout-padding-wrapper">
+        <div class="layout-pane sameWidth">
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">1</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">2</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">3</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">4</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">5</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">6</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">7</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">8</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">9</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">10</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">11</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">12</div></div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="row layout-row">
+    <div class="col-sm-6">
+        <h2>Horizontal layout</h2>
+        <pre class="prettyprint">fltr.filterizr('setOptions', {layout: 'horizontal'});</pre>
+        <p>
+            This layout can be used to lay out your elements horizontally.
+        </p>
+    </div>
+    <div class="col-sm-6 layout-col">
+        <ul class="nav nav-gallery filters-horizontalLayout" id="horizontalLayoutNav">
+            <li class="filtr-button filtr filtr-active" data-fltr="all">All</li><!--
+            --><li class="filtr-button filtr" data-fltr="1">Odd</li><!--
+        --><li class="filtr-button filtr" data-fltr="2">Even</li>
+    </ul>
+    <div class="layout-padding-wrapper">
+        <div class="layout-pane horizontalLayout">
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">1</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">2</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">3</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">4</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">5</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">6</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">7</div></div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="row layout-row">
+    <div class="col-sm-6">
+        <h2>Vertical layout</h2>
+        <pre class="prettyprint">fltr.filterizr('setOptions', {layout: 'vertical'});</pre>
+        <p>
+            This layout can be used to lay out your elements vertically.
+        </p>
+    </div>
+    <div class="col-sm-6 layout-col">
+        <ul class="nav nav-gallery filters-verticalLayout" id="verticalLayoutNav">
+            <li class="filtr-button filtr filtr-active" data-fltr="all">All</li><!--
+            --><li class="filtr-button filtr" data-fltr="1">Odd</li><!--
+        --><li class="filtr-button filtr" data-fltr="2">Even</li>
+    </ul>
+    <div class="layout-padding-wrapper">
+        <div class="layout-pane verticalLayout">
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">1</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">2</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">3</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">4</div></div>
+            <div class="col-xs-4 filtr-item" data-category="1"><div class="item-number">5</div></div>
+            <div class="col-xs-4 filtr-item" data-category="2"><div class="item-number">6</div></div>
+        </div>
+    </div>
+</div>
+</div>
+</section>
+</div>
+
+<!-- Documentation -->
+<div class="row content-section-js" id="docs">
+    <section class="container docs">
+        <div class="row">
+            <h1>Documentation</h1>
+        </div>
+        <div class="row docs-container">
+            <div class="col-sm-2 docs-contents">
+                <div class="row">
+                    <h3>Objects</h3>
+                    <ul class="api-list">
+                        <li class="api-method api-options active">options</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <h3>Methods</h3>
+                    <ul class="api-list">
+                        <li class="api-method api-filter">filter</li>
+                        <li class="api-method api-filterizr">filterizr</li>
+                        <li class="api-method api-destroy">destroy</li>
+                        <li class="api-method api-insertItem">insertItem</li>
+                        <li class="api-method api-search">search</li>
+                        <li class="api-method api-shuffle">shuffle</li>
+                        <li class="api-method api-sort">sort</li>
+                        <li class="api-method api-setOptions">setOptions</li>
+                        <li class="api-method api-toggleFilter">toggleFilter</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <h3>Events</h3>
+                    <ul class="api-list">
+                        <li class="api-method api-filteringStart">filteringStart</li>
+                        <li class="api-method api-filteringEnd">filteringEnd</li>
+                        <li class="api-method api-shufflingStart">shufflingStart</li>
+                        <li class="api-method api-shufflingEnd">shufflingEnd</li>
+                        <li class="api-method api-sortingStart">sortingStart</li>
+                        <li class="api-method api-sortingEnd">sortingEnd</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-10 doc-window">
+                <!-- options object -->
+                <article class="row method" id="options">
+                    <div class="row">
+                        <h3>options</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">//Default options<br>options = {<br>&emsp;&emsp;&emsp;animationDuration: 0.5,<br>&emsp;&emsp;&emsp;callbacks: {<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onFilteringStart: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onFilteringEnd: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onShufflingStart: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onShufflingEnd: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onSortingStart: function() { },<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onSortingEnd: function() { }<br>&emsp;&emsp;&emsp;},<br>&emsp;&emsp;&emsp;controlsSelector: '',<br>&emsp;&emsp;&emsp;delay: 0,<br>&emsp;&emsp;&emsp;delayMode: 'progressive',<br>&emsp;&emsp;&emsp;easing: 'ease-out',<br>&emsp;&emsp;&emsp;filter: 'all',<br>&emsp;&emsp;&emsp;filterOutCss: {<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;opacity: 0,<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;transform: 'scale(0.5)'<br>&emsp;&emsp;&emsp;},<br>&emsp;&emsp;&emsp;filterInCss: {<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;opacity: 0,<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;transform: 'scale(1)'<br>&emsp;&emsp;&emsp;},<br>&emsp;&emsp;&emsp;layout: 'sameSize',<br>&emsp;&emsp;&emsp;multifilterLogicalOperator: 'or',<br>&emsp;&emsp;&emsp;selector: '.filtr-container',<br>&emsp;&emsp;&emsp;setupControls: true<br>}
+                        </pre>
+                    </div>
+                    <div class="row">
+                        <p>The properties of Filterizr's <span class="method-link">options</span> object are:</p>
+                    </div>
+                    <div class="row">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>animationDuration</strong> (typeof: <strong>Number</strong> / Default: <strong>0.5</strong>)
+                                </p>
+                                <p>
+                                    The duration of CSS3 transitions, taking place for your effects.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>callbacks</strong> (typeof: <strong>Object</strong>)
+                                </p>
+                                <p>Used as the namespace for your callbacks.</p>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <p>
+                                            <strong>onFilteringStart</strong> (typeof: <strong>Function</strong> / Default: <strong>Empty function</strong>)
+                                        </p>
+                                        <p>
+                                            Called when you fire the <span class="method-link">filter</span> method.
+                                        </p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <p>
+                                            <strong>onFilteringEnd</strong> (typeof: <strong>Function</strong> / Default: <strong>Empty function</strong>)
+                                        </p>
+                                        <p>
+                                            Called when the filtering animation is complete.
+                                        </p>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>controlsSelector</strong> (typeof: <strong>String</strong> / Default: <strong>''</strong>)
+                                </p>
+                                <p>
+                                  In case there is the need to have more than one Filterizr instance on the same page then you need to set up different controls for them. This is where this option comes in handy. When instantiating your Filterizr you will need to set the following options: <pre class="prettyprint">{ controlsSelector: '.filtr-controls', setupControls: false }</pre>
+                                  Then you will have to set the same class on all of your Filterizr controls, i.e. in this case <code class="prettyprint">.filtr-controls</code>.<br>
+                                  The option <code class="prettyprint">setupControls: false</code> will prevent the default controls from being set up and by defining the <code class="prettyprint">controlsSelector</code> you target a specific set of controls for this Filterizr instance.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>delay</strong> (typeof: <strong>Number</strong> / Default: <strong>0</strong>)
+                                </p>
+                                <p>
+                                    Measured in milliseconds and used to set the value of the <a href="http://www.w3schools.com/cssref/css3_pr_transition-delay.asp" target="_blank">transition-delay</a> property of every item. The value of the <a href="http://www.w3schools.com/cssref/css3_pr_transition-delay.asp" target="_blank">transition-delay</a> is incremented progressively by the value of <span class="method-link" data-target="options">delay</span> for every item to create a more progressive version of your effect.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>delayMode</strong> (typeof: <strong>String</strong> / Default: <strong>'progressive'</strong>)
+                                </p>
+                                <p>
+                                    Determines how delay is applied to the transition between items. The two possible values are <strong>progressive</strong> and <strong>alternate</strong>. The value of <span class="method-link" data-target="options">delayMode</span> makes no difference if <span class="method-link" data-target="options">delay</span> is <strong>0</strong>.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>easing</strong> (typeof: <strong>String</strong> / Default: <strong>'ease-out'</strong>)
+                                </p>
+                                <p>
+                                    The easing algorithm used for CSS3 transitions. Look up the CSS3 <a href="http://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp" target="_blank">transition-timing-function</a> property for possible values.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>filter</strong> (typeof: <strong>String</strong> or <strong>Number</strong> / Default: <strong>'all'</strong>)
+                                </p>
+                                <p>
+                                    The default value can be used for an unfiltered gallery. To initialize a filtered gallery, set this property to your category of choice before instantiating Filterizr.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>filterOutCss</strong> (typeof: <strong>Object</strong> / Default: <strong>{ opacity: 0, transform: 'scale(0,0)' }</strong>)
+                                </p>
+                                <p>
+                                    An object with CSS properties, written the same way you would write it for jQuery's <code class="prettyprint">.css()</code> function. This the transition that plays when your items are being filtered out.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>filterInCss</strong> (typeof: <strong>Object</strong> / Default: <strong>{ opacity: 1, transform: 'scale(1,1)' }</strong>)
+                                </p>
+                                <p>
+                                    An object with CSS properties, written the same way you would write it for jQuery's <code class="prettyprint">.css()</code> function. This the transition that plays when your items are being filtered in.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>layout</strong> (typeof: <strong>String</strong> / Default: <strong>'sameSize'</strong>)
+                                </p>
+                                <p>
+                                    By default sets the layout for items with same width and height. Other possible values are: <code class="prettyprint">'packed'</code> for a layout of items of varying width and height, <code class="prettyprint">'sameWidth'</code> for a layout of items with the same width but varying height. <code class="prettyprint">'sameHeight'</code> for a layout of items with the same height but varying width. <code class="prettyprint">'horizontal'</code> for a layout of items laid out horizontally. <code class="prettyprint">'vertical'</code> for a layout of items laid out vertically. To see a demo of each and every layout, check the <strong>Tutorials</strong> section.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>multifilterLogicalOperator</strong> (typeof: <strong>String</strong> / Default: <strong>'or'</strong>)
+                                </p>
+                                <p>
+                                    This option defines the logic in which multifiltering will be applied in case it's enabled. If set to <code class="prettyprint">'or'</code> then it will render all items that belong to one of the active categories e.g. 3 or 4. If set to <code class="prettyprint">'and'</code> then it will render all items that belong to both categories i.e. 3 and 4.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>selector</strong> (typeof: <strong>String</strong> / Default: <strong>'.filtr-container'</strong>)
+                                </p>
+                                <p>
+                                    The selector of the container used for your gallery.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>setupControls</strong> (typeof: <strong>Boolean</strong> / Default: <strong>true</strong>)
+                                </p>
+                                <p>
+                                    If set to <strong>true</strong> then Filterizr will try to detect and set up filtering, shuffling and sorting controls. In case you have multiple Filterizrs in your view, you might decide to set this to <strong>false</strong> and set up your own controls, using the public API, so as to avoid interference the controls of your Filterizrs.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="div row">
+                        <p>
+                            Filterizr is set up to work out of the box. If you wish to override the default options you can either:
+                        </p>
+                        <ol>
+                            <li>Pass an options object to the jQuery constructor: <pre class="prettyprint">var filterizd = $('.filtr-container').filterizr({<br>&emsp;&emsp;&emsp;//your options here<br>})</pre></li>
+                            <li>Override the options using the <span class="method-link">setOptions</span> method on your Filterizr object: <pre class="prettyprint">filterizd.filterizr('setOptions', {<br>&emsp;&emsp;&emsp;//your options here<br>})</pre></li>
+                        </ol>
+                        <div class="alert alert-warning">Please note that if you wish to override the visual effects of Filterizr, you will have to include the same CSS properties with different values in both <span class="method-link" data-target="options">filterInCss</span> and <span class="method-link" data-target="options">filterOutCss</span> for CSS3 transitions to work.
+                        </div>
+                    </div>
+                </article>
+                <!-- end of options object -->
+                <!-- filter method -->
+                <article class="row method" id="filter">
+                    <div class="row">
+                        <h3>filter</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.filterizr('filter', targetFilter)</pre>
+                    </div>
+                    <div class="row">
+                        <p>Filter the container to hide/show and rearrange the elements on screen, while switching between categories.</p>
+                    </div>
+                    <div class="row">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>targetFilter</strong> (typeof: <strong>String</strong> or <strong>Number</strong>)
+                                </p>
+                                <p>
+                                    The target filter towards which to filter the visible category, should be a numerical value based on the data-category attribute of .filtr-item elements. The value <code class="prettyprint">'all'</code> can be used for an unfiltered gallery.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="div row">
+                        <p>Each time your filter the items the <code class="prettyprint">options.filter</code> property of the <strong>options</strong> object is updated to the value of the new filter applied. This method also fires the <span class="method-link" data-target="options">onFilteringStart</span> callback if defined.</p>
+                    </div>
+                </article>
+                <!-- end of filter -->
+                <!-- filterizr method -->
+                <article class="row method" id="filterizr">
+                    <div class="row">
+                        <h3>filterizr</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.filterizr([options])</pre>
+                    </div>
+                    <div class="row">
+                        <p>A jQuery extension method registered on <code class="prettyprint">jQuery.fn</code>. It can be used on all DOM elements serving as the gallery's container to initialize Filterizr. It returns the jQuery object to facilitate method-chaining.</p>
+                    </div>
+                    <div class="row">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>options</strong> (typeof: <strong>Object</strong> / Default: <span class="method-link">options</span>)
+                                </p>
+                                <p>
+                                    This optional parameter can be passed to set the Filterizr's options. For more information on defaults look into the <span class="method-link">options</span> object documentation.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="div row">
+                        The <code class="prettyprint">.filterizr()</code> method can be used to call all Filterizr methods of the public API. For example:
+                        <pre class="prettyprint">//Filter items<br />fltr.filterizr('filter', 'all');<br />//Sort items<br />fltr.filterizr('sort', 'domIndex', 'asc');<br />//Shuffle items<br />fltr.filterizr('shuffle');<br />//Override options<br />fltr.filterizr('setOptions', { /* Options */ });</pre>
+                    </div>
+                </article>
+                <!-- end of filterizeIt -->
+                <!-- destroy method -->
+                <article class="row method" id="destroy">
+                    <div class="row">
+                        <h3>destroy</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.filterizr('destroy')</pre>
+                    </div>
+                    <div class="row">
+                        <p>Destroy your Filterizr instance. Resets all inline styles and unbinds all Filterizr related events.</p>
+                    </div>
+                </article>
+                <!-- end of destroy -->
+                <!-- insertItem method -->
+                <article class="row method" id="insertItem">
+                    <div class="row">
+                        <h3>search</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.filterizr('insertItem', $node)</pre>
+                    </div>
+                    <div class="row">
+                        <p>Insert a new item at the end of Filterizr's grid.</p>
+                    </div>
+                    <div class="row">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>$node</strong> (typeof: <strong>Object</strong>)
+                                </p>
+                                <p>
+                                    A new <code class="prettyprint">.filtr-item</code> element in the form of a jQuery node.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="div row">
+                        <p>This method can be conveniently used when there is the need to load new items into the grid after an AJAX request.</p>
+                    </div>
+                </article>
+                <!-- end of insertItem -->
+                <!-- search method -->
+                <article class="row method" id="search">
+                    <div class="row">
+                        <h3>search</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.filterizr('search', text)</pre>
+                    </div>
+                    <div class="row">
+                        <p>Filter your .filtr-item based on whether the value of the string you define exists in their contents.</p>
+                    </div>
+                    <div class="row">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>text</strong> (typeof: <strong>String</strong>)
+                                </p>
+                                <p>
+                                    The string for which to search in the contents of .filtr-item elements while filtering them.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="div row">
+                        <p>If you pass an empty string to this method, then it will display an unfiltered gallery.</p>
+                    </div>
+                </article>
+                <!-- end of search -->
+                <!-- shuffle method -->
+                <article class="row method" id="shuffle">
+                    <div class="row">
+                        <h3>Shuffle</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.filterizr('shuffle')</pre>
+                    </div>
+                    <div class="row">
+                        <p>Use to shuffle the elements in random order and rearrange them on screen.</p>
+                    </div>
+                </article>
+                <!-- end of shuffle -->
+                <!-- sort method -->
+                <article class="row method" id="sort">
+                    <div class="row">
+                        <h3>sort</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.filterizr('sort' [,attr] [,sortOrder])</pre>
+                    </div>
+                    <div class="row">
+                        <p>Sort your elements based on a certain attribute in ascending or descending order and rearrange them on screen.</p>
+                    </div>
+                    <div class="row">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>attr</strong> (typeof: <strong>String</strong> / Default: <strong>'domIndex'</strong>)
+                                </p>
+                                <p>
+                                    The attribute based on which the elements are sorted. If not provided it defaults to value <code class="prettyprint">'domIndex'</code> and the elements are sorted based on their initial position in the DOM. If its value is set to <code class="prettyprint">'sortData'</code>, the elements are sorted based on the value of the user-defined <code class="prettyprint">data-sort</code> attribute. Other possible values includes <code class="prettyprint">'w'</code> or <code class="prettyprint">'h'</code> if you wish to sort your elements by width or height (used for layouts of items of different size). Moreover, it is possible to sort by any custom data-attribute, see below for more information.
+                                </p>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>sortOrder</strong> (typeof: <strong>String</strong> / Default: <strong>'asc'</strong>)
+                                </p>
+                                <p>
+                                    Determines whether the elements will be sorted in ascending or descending order. Possible values are <code class="prettyprint">'asc'</code> and <code class="prettyprint">'desc'</code>.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="div row">
+                        <p>If you pass no arguments to this method, then it will sort your elements based on <strong>domOrder</strong> in <strong>ascending</strong> order. If you pass only the first argument, then your elements will be sorted by the attribute value you provided, in <strong>ascending</strong> order. If you wish to sort your elements by multiple, custom data-attributes (e.g. <strong>data-myFirstAttr</strong> and <strong>data-mySecondAttr</strong>) then:</p>
+                        <pre class="prettyprint">.filterizr('sort', 'myFirstAttr', 'asc'); //just remember to omit the "data-" part<br />.filterizr('sort', 'mySecondAttr', 'asc');</pre>
+                    </div>
+                </article>
+                <!-- end of sort -->
+                <!-- setOptions method -->
+                <article class="row method" id="setOptions">
+                    <div class="row">
+                        <h3>setOptions</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.filterizr('setOptions', options)</pre>
+                    </div>
+                    <div class="row">
+                        <p>Overrides the default for customized options. Use to change the transition effects of the gallery.</p>
+                    </div>
+                    <div class="row">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>options</strong> (typeof: <strong>Object</strong> / Default: see <span class="method-link">options</span> in the docs)
+                                </p>
+                                <p>
+                                    An object overriding some or all of Filterizr's properties.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="div row">
+                        <p>This method can be used to change the visual effects of the gallery on the fly, simply by overriding the <span class="method-link" data-target="options">filterInCss</span> and <span class="method-link" data-target="options">filterOutCss</span> of the options object.</p>
+                    </div>
+                </article>
+                <!-- end of setOptions -->
+                <!-- toggleFilter method -->
+                <article class="row method" id="toggleFilter">
+                    <div class="row">
+                        <h3>toggleFilter</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.filterizr('toggleFilter', toggledFilter)</pre>
+                    </div>
+                    <div class="row">
+                        <p>Filters the visible items based on a collection of filters toggled on. If all filters are toggled off then an unfiltered gallery is rendered.</p>
+                    </div>
+                    <div class="row">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <p>
+                                    <strong>toggledFilter</strong> (typeof: <strong>Number</strong>)
+                                </p>
+                                <p>
+                                    The number of the category whose corresponding filter is to be toggled on/off.
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="div row">
+                        <p>This method filters the item based on a collection of toggled on filters. If all of the filters are toggled off then an unfiltered gallery is rendered. The default controls that come with this method are the controls with a <code class="prettyprint">data-multifilter</code> attribute. This method also fires the <span class="method-link" data-target="options">onFilteringStart</span> callback if defined.</p>
+                    </div>
+                </article>
+                <!-- end of toggleFilter -->
+                <!-- filteringStart event -->
+                <article class="row method" id="filteringStart">
+                    <div class="row">
+                        <h3>filteringStart</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.on('filteringStart', callback)</pre>
+                    </div>
+                    <div class="row">
+                        <p>This event is thrown in the <span class="method-link">filter</span> method to indicate that filtering has started.</p>
+                    </div>
+                    <div class="row">
+                        <p>To intercept this event you can either override the <span class="method-link" data-target="options">onFilteringStart</span> callback in the <span class="method-link">options</span> object:</p>
+                        <pre class="prettyprint">fltr.filterizr('setOptions', {<br />&emsp;&emsp;&emsp;callbacks: {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onFilteringStart: function() {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;//your code here <br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;}<br />&emsp;&emsp;&emsp;}<br />})</pre>
+                        <p>Or use jQuery:</p>
+                        <pre class="prettyprint">filtrizr.on('filteringStart', function() {<br />&emsp;&emsp;&emsp;//Your code<br />})</pre>
+                    </div>
+                </article>
+                <!-- end of filteringStart -->
+                <!-- filteringEnd event -->
+                <article class="row method" id="filteringEnd">
+                    <div class="row">
+                        <h3>filteringEnd</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.on('filteringEnd', callback)</pre>
+                    </div>
+                    <div class="row">
+                        <p>This event is thrown in the <span class="method-link">filter</span> method to indicate that filtering has ended.</p>
+                    </div>
+                    <div class="row">
+                        <p>To intercept this event you can either override the <span class="method-link" data-target="options">onFilteringStart</span> callback in the <span class="method-link">options</span> object:</p>
+                        <pre class="prettyprint">fltr.filterizr('setOptions', {<br />&emsp;&emsp;&emsp;callbacks: {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onFilteringEnd: function() {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;//your code here <br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;}<br />&emsp;&emsp;&emsp;}<br />})</pre>
+                        <p>Or use jQuery:</p>
+                        <pre class="prettyprint">filtrizr.on('filteringEnd', function() {<br />&emsp;&emsp;&emsp;//Your code<br />})</pre>
+                    </div>
+                </article>
+                <!-- end of filteringEnd -->
+                <!-- shufflingStart event -->
+                <article class="row method" id="shufflingStart">
+                    <div class="row">
+                        <h3>shufflingStart</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.on('shufflingStart', callback)</pre>
+                    </div>
+                    <div class="row">
+                        <p>This event is thrown in the <span class="method-link">shuffle</span> method to indicate that shuffling has begun.</p>
+                    </div>
+                    <div class="row">
+                        <p>To intercept this event you can either override the <span class="method-link" data-target="options">onShufflingStart</span> callback in the <span class="method-link">options</span> object:</p>
+                        <pre class="prettyprint">fltr.filterizr('setOptions', {<br />&emsp;&emsp;&emsp;callbacks: {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onShufflingStart: function() {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;//your code here <br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;}<br />&emsp;&emsp;&emsp;}<br />})</pre>
+                        <p>Or use jQuery:</p>
+                        <pre class="prettyprint">filtrizr.on('shufflingStart', function() {<br />&emsp;&emsp;&emsp;//Your code<br />})</pre>
+                    </div>
+                </article>
+                <!-- end of shufflingStart -->
+                <!-- shufflingEnd event -->
+                <article class="row method" id="shufflingEnd">
+                    <div class="row">
+                        <h3>shufflingEnd</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.on('shufflingEnd', callback)</pre>
+                    </div>
+                    <div class="row">
+                        <p>This event is thrown to indicate that shuffling has ended.</p>
+                    </div>
+                    <div class="row">
+                        <p>To intercept this event you can either override the <span class="method-link" data-target="options">onShufflingEnd</span> callback in the <span class="method-link">options</span> object:</p>
+                        <pre class="prettyprint">fltr.filterizr('setOptions', {<br />&emsp;&emsp;&emsp;callbacks: {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onShufflingEnd: function() {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;//your code here <br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;}<br />&emsp;&emsp;&emsp;}<br />})</pre>
+                        <p>Or use jQuery:</p>
+                        <pre class="prettyprint">filtrizr.on('shufflingEnd', function() {<br />&emsp;&emsp;&emsp;//Your code<br />})</pre>
+                    </div>
+                </article>
+                <!-- end of shufflingEnd -->
+                <!-- sortingStart event -->
+                <article class="row method" id="sortingStart">
+                    <div class="row">
+                        <h3>sortingStart</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.on('sortingStart', callback)</pre>
+                    </div>
+                    <div class="row">
+                        <p>This event is thrown in the <span class="method-link">sort</span> method to indicate that sorting has begun.</p>
+                    </div>
+                    <div class="row">
+                        <p>To intercept this event you can either override the <span class="method-link" data-target="options">onSortingStart</span> callback in the <span class="method-link">options</span> object:</p>
+                        <pre class="prettyprint">fltr.filterizr('setOptions', {<br />&emsp;&emsp;&emsp;callbacks: {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onSortingStart: function() {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;//your code here <br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;}<br />&emsp;&emsp;&emsp;}<br />})</pre>
+                        <p>Or use jQuery:</p>
+                        <pre class="prettyprint">filtrizr.on('sortingStart', function() {<br />&emsp;&emsp;&emsp;//Your code<br />})</pre>
+                    </div>
+                </article>
+                <!-- end of sortingStart -->
+                <!-- sortingEnd event -->
+                <article class="row method" id="sortingEnd">
+                    <div class="row">
+                        <h3>sortingEnd</h3>
+                    </div>
+                    <div class="row">
+                        <pre class="prettyprint">.on('sortingEnd', callback)</pre>
+                    </div>
+                    <div class="row">
+                        <p>This event is thrown to indicate that sorting has ended.</p>
+                    </div>
+                    <div class="row">
+                        <p>To intercept this event you can either override the <span class="method-link" data-target="options">onSortingEnd</span> callback in the <span class="method-link">options</span> object:</p>
+                        <pre class="prettyprint">fltr.filterizr('setOptions', {<br />&emsp;&emsp;&emsp;callbacks: {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;onSortingEnd: function() {<br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;//your code here <br />&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;}<br />&emsp;&emsp;&emsp;}<br />})</pre>
+                        <p>Or use jQuery:</p>
+                        <pre class="prettyprint">filtrizr.on('sortingEnd', function() {<br />&emsp;&emsp;&emsp;//Your code<br />})</pre>
+                    </div>
+                </article>
+                <!-- end of sortingEnd -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- FAQ Section -->
+<div class="row">
+    <section class="container content-section-js faq" id="faq">
+        <div class="row">
+            <h1>FAQ &amp; Caveats</h1>
+        </div>
+        <div class="row">
+            <section class="col-sm-4">
+                <div class="row">
+                    <h2>Contents</h2>
+                </div>
+                <div class="row list-row">
+                    <h3>FAQ</h3>
+                    <ol>
+                        <li><a href="#why-did-you-create-filterizr">Why did you create Filterizr?</a></li>
+                        <li><a href="#what-makes-filterizr-different">What makes Filterizr different?</a></li>
+                        <li><a href="#what-if-i-need-support-for-ie-v-7to9">What if I need support for IE v7-9?</a></li>
+                        <li><a href="#can-i-redistribute-sell-or-alter-filterizr">Can I redistribute, sell or alter Filterizr?</a></li>
+                        <li><a href="#how-can-i-contribute-to-filterizr">How can I contribute to Filterizr?</a></li>
+                    </ol>
+                </div>
+                <div class="row list-row">
+                    <h3>Caveats</h3>
+                    <ol>
+                        <li><a href="#margins-dont-work">Margins don't work for me?</a></li>
+                        <li><a href="#there-are-gaps-at-the-end-of-my-container">There are gaps at the end of my container</a></li>
+                        <li><a href="#my-custom-effects-performance-is-slow">My custom effect's performance is slow</a></li>
+                        <li><a href="#images-have-no-height">My images appear without height</a></li>
+                    </ol>
+                </div>
+            </section>
+            <div class="col-sm-8">
+                <div class="row">
+                    <h2>FAQ</h2>
+                </div>
+                <div class="row">
+                    <section id="why-did-you-create-filterizr">
+                        <h3>Why did you create filterizr?</h3>
+                        <p>While setting up my portfolio I wanted to divide my works into sections and add a transition effect while browsing between them. I came across numerous gallery plugins such as <a href="http://isotope.metafizzy.co/" target="_blank">Isotope</a>, <a href="https://mixitup.kunkalabs.com/" target="_blank">MixItUp</a> and even <a href="http://vestride.github.io/Shuffle/" target="_blank">Shuffle.js</a>. All of them are very feature-rich and battle-tested but they didn't quite suit my needs in terms of their filesize, dependencies and/or licensing. Thus, I decided to set up my own gallery plugin.</p>
+                    </section>
+                    <section id="what-makes-filterizr-different">
+                        <h3>What makes filterizr different?</h3>
+                        <p>Filterizr is higly customizable, with a pluggable look and feel, feature-rich and comes with preset controls. It's filesize is around 20kb and its only dependency is jQuery. It performs well on mobile as it tries to minimize the amount of repaint events. Overall, I'd say it is quick, responsive and lightweight. It is open-source and licensed under MIT. Nonetheless, if you need a well-tested plugin with lots of options and a rich community I would suggest taking a look at the aforementioned solutions.</p>
+                    </section>
+                    <section id="what-if-i-need-support-for-ie-v-7to9">
+                        <h3>What if I need support for IE 7-9</h3>
+                        <p>Filterizr works with CSS3 transitions and as such works for IE10+. If you need support for a similar effect for IE 7-9 I would suggest taking a look into <a href="http://vestride.github.io/Shuffle/" target="_blank">Shuffle.js</a>.</p>
+                    </section>
+                    <section id="can-i-redistribute-sell-or-alter-filterizr">
+                        <h3>Can I redistribute, sell or alter Filterizr?</h3>
+                        <p>As I said Filterizr is licensed under the MIT license. Essentially, this means that you can tamper with it to your heart's content, use it for any sort of project and even sell your modified version of it.</p>
+                    </section>
+                    <section id="how-can-i-contribute-to-filterizr">
+                        <h3>How can I contribute to Filterizr?</h3>
+                        <p>If you would like to help build Filterizr into something better, you can find its GitHub repo right <a href="#">here</a>. If you used Filterizr I would appreciate if you could star the repo on GitHub, as well as let me know about your project through this site's contact form! If you wish I could even feature it here!</p>
+                    </section>
+                </div>
+                <div class="row">
+                    <h2>Caveats</h2>
+                </div>
+                <div class="row">
+                    <section id="margins-dont-work">
+                        <h3>Margins don't work for me?</h3>
+                        <p>Please bare in mind that Filterizr has no notion of margins. If you wish to create whitespace I suggest using a wrapper element and set padding on it, both for your items and your container. The width of your items will have to sum up to 100% per row.</p>
+                    </section>
+                    <section id="there-are-gaps-at-the-end-of-my-container">
+                        <h3>There are gaps at the end of my container</h3>
+                        <p>Some Filterizr layouts (e.g. sameSize) expect your items' width to sum up to 100% of the container width, which is why you should use relative sizing. In case you need a fluid layout, please set the layout to packed like this: <code class="prettyprint">fltr.filterizr({layout: 'packed'})</code>.</p>
+                    </section>
+                    <section id="my-custom-effects-performance-is-slow">
+                        <h3>My custom effect's performance is slow</h3>
+                        <p>If the performance of your Filterizr's effect is not silky smooth, please make sure to read on <a href="https://developers.google.com/web/fundamentals/performance/rendering/stick-to-compositor-only-properties-and-manage-layer-count">compositor-only properties</a> as well as <a href="https://www.smashingmagazine.com/2012/06/play-with-hardware-accelerated-css/">hardware-accelerated CSS</a> and go through your code again.</p>
+                    </section>
+                    <section id="images-have-no-height">
+                        <h3>My images appear without height</h3>
+                        <p>If the height of your <code class="prettyprint">.filtr-item</code> elements depends on images then you might have trouble, because their loading might be slow the height of your items might be messed up. To solve this issue you can either set the height of your images explicitly or perhaps make use of <a href="http://desandro.github.io/imagesloaded/">DeSandro's imagesLoaded script</a> which is only 5kb!</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Contact -->
+<div class="row dark-container">
+    <section class="container contact" id="contact">
+        <div class="row">
+            <h1>Get in touch</h1>
+            <p>If you happen to use Filterizr in your project, please let me know!</p>
+        </div>
+        <div class="row">
+            <form id="contact-form" method="post" action="http://formspree.io/yiotiskal@gmail.com" target="_blank">
+                <div class="row">
+                    <input name="form-name" id="form-name" type="text" placeholder="your name" required>
+                </div>
+                <div class="row">
+                    <input name="form-email" id="form-email" type="email" placeholder="your email" required>
+                </div>
+                <div class="row">
+                    <textarea name="form-msg" id="form-msg" placeholder="your message" required></textarea>
+                </div>
+                <div class="row">
+                    <button type="submit" class="filtr-button">Submit</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+
+<!-- Footer -->
+<div class="row dark-container">
+    <footer class="footer-main">
+        <p>Filterizr is released under the <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a>. Developed by <a href="http://yiotis.net" target="_blank">Yiotis Kaltsikis</a>.</p>
+    </footer>
+</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.2.0/imagesloaded.pkgd.min.js"></script>
+<script src="res/js/jquery.filterizr.js"></script>
+<script src="res/js/app.js"></script>
+</body>
+
+</html>
