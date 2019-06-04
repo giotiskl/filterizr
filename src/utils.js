@@ -19,6 +19,41 @@ const allStringsOfArray1InArray2 = (arr1, arr2) => {
 export { allStringsOfArray1InArray2 };
 
 /**
+ * Given a CSS prop it will normalize the syntax for JS
+ * e.g. transform background-color to backgroundColor
+ * @param {String} cssProp prop name
+ * @return {String} normalized name
+ */
+const getNormalizedCssPropName = (cssProp) => {
+  if (!cssProp.includes('-')) {
+    return cssProp;
+  }
+
+  const splitProp = cssProp.split('-');
+
+  const first = splitProp[0];
+  const rest = splitProp.slice(1, splitProp.length).map((word) => word[0].toUpperCase() + word.slice(1, word.length)).join('');
+
+  return `${first}${rest}`;
+};
+
+export { getNormalizedCssPropName };
+
+/**
+ * Set inline styles on an HTML node
+ * @param {Object} node - HTML node
+ * @param {Object} styles - object with styles
+ * @returns {undefined}
+ */
+function setStylesOnHTMLNode(node, styles) {
+  Object.entries(styles).forEach(([key, value]) => {
+    node.style[getNormalizedCssPropName(key)] = value;
+  });
+}
+
+export { setStylesOnHTMLNode };
+
+/**
  * A very simple function to perform a basic
  * deep clone of an object.
  * @param {Object} o is the object to perform the deep clone on

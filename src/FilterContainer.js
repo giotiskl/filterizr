@@ -2,7 +2,7 @@ let $ = IMPORT_JQUERY ? require('jquery') : window.jQuery;
 import FilterItem from './FilterItem';
 import { 
   debounce,
-  transitionEndEvt,
+  setStylesOnHTMLNode
 } from './utils';
 
 class FilterContainer {
@@ -15,15 +15,16 @@ class FilterContainer {
   constructor(selector = '.filtr-container', options) {
     // Cache jQuery node
     this.$node = $(selector);
+    this.node = document.querySelector(selector);
 
     // Set up initial styles of container
-    this.$node.css({
-      padding : 0,
+    setStylesOnHTMLNode(this.node, {
+      padding: 0,
       position: 'relative',
       // Needed for flex displays
       width: '100%',
       display: 'flex',
-      'flex-wrap': 'wrap',
+      flexWrap: 'wrap',
     });
 
     // Set props
@@ -96,7 +97,7 @@ class FilterContainer {
   updateFilterItemsTransitionStyle(animationDuration, easing, delay, delayMode) {
     const { FilterItems } = this.props;
 
-    FilterItems.forEach(FilterItem => FilterItem.$node.css({
+    FilterItems.forEach(FilterItem => setStylesOnHTMLNode(FilterItem.node, {
       'transition': `all ${animationDuration}s ${easing} ${FilterItem.calcDelay(delay, delayMode)}ms`,
     }));
   }
@@ -107,7 +108,7 @@ class FilterContainer {
    */
   updateHeight(newHeight) {
     this.props.h = newHeight;
-    this.$node.css('height', newHeight);    
+    setStylesOnHTMLNode(this.node, { height: `${newHeight}px`});
   }
 
   /**
@@ -129,7 +130,7 @@ class FilterContainer {
    * Wrapper call around jQuery's innerWidth
    */
   getWidth() {
-    return this.$node.innerWidth();
+    return this.node.clientWidth;
   }
 
   /**
@@ -139,9 +140,15 @@ class FilterContainer {
    * @param {Number} debounceDuration in milliseconds
    */
   bindTransitionEnd(callback, debounceDuration) {
-    this.$node.on(transitionEndEvt, debounce(() => {
+    this.props.onTransitionEndHandler = debounce(() => {
       callback();
-    }, debounceDuration));
+    }, debounceDuration);
+
+    this.node.addEventListener('webkitTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.addEventListener('otransitionend', this.props.onTransitionEndHandler);
+    this.node.addEventListener('oTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.addEventListener('msTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.addEventListener('transitionend', this.props.onTransitionEndHandler);
   }
 
   /**
@@ -149,35 +156,40 @@ class FilterContainer {
    * @param {Object} callbacks object containing all callback functions
    */
   bindEvents(callbacks) {
-    this.$node.on('filteringStart.Filterizr', callbacks.onFilteringStart);
-    this.$node.on('filteringEnd.Filterizr', callbacks.onFilteringEnd);
-    this.$node.on('shufflingStart.Filterizr', callbacks.onShufflingStart);
-    this.$node.on('shufflingEnd.Filterizr', callbacks.onShufflingEnd);
-    this.$node.on('sortingStart.Filterizr', callbacks.onSortingStart);
-    this.$node.on('sortingEnd.Filterizr', callbacks.onSortingEnd);
+    this.node.addEventListener('filteringStart', callbacks.addEventListenerFilteringStart);
+    this.node.addEventListener('filteringEnd', callbacks.addEventListenerFilteringEnd);
+    this.node.addEventListener('shufflingStart', callbacks.addEventListenerShufflingStart);
+    this.node.addEventListener('shufflingEnd', callbacks.addEventListenerShufflingEnd);
+    this.node.addEventListener('sortingStart', callbacks.addEventListenerSortingStart);
+    this.node.addEventListener('sortingEnd', callbacks.addEventListenerSortingEnd);
   }
 
   /**
    * Unbinds all Filterizr related events.
    */
-  unbindEvents() {
-    this.$node.off(
-      `${transitionEndEvt}
-      filteringStart.Filterizr 
-      filteringEnd.Filterizr 
-      shufflingStart.Filterizr 
-      shufflingEnd.Filterizr 
-      sortingStart.Filterizr 
-      sortingEnd.Filterizr`
-    );
+  unbindEvents(callbacks) {
+    // Transition end
+    this.node.removeEventListener('webkitTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.removeEventListener('otransitionend', this.props.onTransitionEndHandler);
+    this.node.removeEventListener('oTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.removeEventListener('msTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.removeEventListener('transitionend', this.props.onTransitionEndHandler);
+    // Rest
+    this.node.removeEventListener('filteringStart', callbacks.removeEventListenerFilteringStart);
+    this.node.removeEventListener('filteringEnd', callbacks.removeEventListenerFilteringEnd);
+    this.node.removeEventListener('shufflingStart', callbacks.removeEventListenerShufflingStart);
+    this.node.removeEventListener('shufflingEnd', callbacks.removeEventListenerShufflingEnd);
+    this.node.removeEventListener('sortingStart', callbacks.removeEventListenerSortingStart);
+    this.node.removeEventListener('sortingEnd', callbacks.removeEventListenerSortingEnd);
   }
 
   /**
    * Method wrapper around jQuery's trigger
-   * @param {string} evt - name of the event
+   * @param {string} eventType - name of the event
    */
-  trigger(evt) {
-    this.$node.trigger(evt);
+  trigger(eventType) {
+    const event = new Event(eventType);
+    this.node.dispatchEvent(event);
   }
 }
 

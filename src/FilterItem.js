@@ -1,5 +1,5 @@
 import { 
-  makeShallowClone,
+  setStylesOnHTMLNode,
   transitionEndEvt,
 } from './utils';
 
@@ -22,6 +22,7 @@ class FilterItem {
 
     // Cache jQuery node
     this.$node = $node;
+    this.node = $node.get(0);
 
     // Set props
     this.props = {
@@ -42,18 +43,14 @@ class FilterItem {
     };
 
     // Set initial styles
-    this.$node
-    // Init to filtered out
-      .css(filterOutCss)
-    // Additional styles needed by filterizr 
-      .css({
-        '-webkit-backface-visibility': 'hidden',
-        'perspective': '1000px',
-        '-webkit-perspective': '1000px',
-        '-webkit-transform-style': 'preserve-3d',
-        'position': 'absolute',
-        'transition': `all ${animationDuration}s ${easing} ${this.calcDelay(delay, delayMode)}ms`,
-      });
+    setStylesOnHTMLNode(this.node, Object.assign({}, filterOutCss,{
+      '-webkit-backface-visibility': 'hidden',
+      'perspective': '1000px',
+      '-webkit-perspective': '1000px',
+      '-webkit-transform-style': 'preserve-3d',
+      'position': 'absolute',
+      'transition': `all ${animationDuration}s ${easing} ${this.calcDelay(delay, delayMode)}ms`,
+    }));
 
     // Finally bind events
     this.bindEvents();
@@ -61,17 +58,16 @@ class FilterItem {
 
   /**
    * Filters in a specific FilterItem out of the grid.
+   * @param {Object} targetPosition the position towards which the element should animate
    * @param {Object} cssOptions for the animation
    */
-  filterIn(targetPos, cssOptions) {
-    // Perform a shallow clone of the filtering in css
-    let filterInCss = makeShallowClone(cssOptions);
-    // Enhance it with the target position towards which the item should animate
-    filterInCss.transform += ' translate3d(' + targetPos.left + 'px,' + targetPos.top + 'px, 0)';
-    // Animate
-    this.$node.css(filterInCss);
-    // Update last position to be the targetPos
-    this.props.lastPosition = targetPos;
+  filterIn(targetPosition, cssOptions) {
+    // Enhance the cssOptions with the target position before animating
+    setStylesOnHTMLNode(this.node, Object.assign({}, cssOptions, {
+      transform: `${cssOptions.transform || ''} translate3d(${targetPosition.left}px, ${targetPosition.top}px, 0)`,
+    }));
+    // Update last position to be the targetPosition
+    this.props.lastPosition = targetPosition;
     // Update state
     this.props.filteredOut = false;
   }
@@ -81,13 +77,11 @@ class FilterItem {
    * @param {Object} cssOptions for the animation
    */
   filterOut(cssOptions) {
-    // Perform a shallow clone of the filtering out css
-    let filterOutCss = makeShallowClone(cssOptions);
-    const { lastPosition } = this.props;
-    // Auto add translate to transform over user-defined filterOut styles
-    filterOutCss.transform += ' translate3d(' + lastPosition.left + 'px,' + lastPosition.top + 'px, 0)';
-    // Play animation
-    this.$node.css(filterOutCss);
+    const { lastPosition: targetPosition } = this.props;
+    // Enhance the cssOptions with the target position before animating
+    setStylesOnHTMLNode(this.node, Object.assign({}, cssOptions, {
+      transform: `${cssOptions.transform || ''} translate3d(${targetPosition.left}px, ${targetPosition.top}px, 0)`,
+    }));
     // Update state
     this.props.filteredOut = true;
   }
@@ -137,27 +131,28 @@ class FilterItem {
   }
 
   /**
-   * Wrapper around jQuery's innerHeight to calculate the item's width
+   * Calculates the clientHeight (excluding border) of an element
    * @return {Number} height of FilterItem node
    */
   getHeight() {
-    return this.$node.innerHeight();
+    return this.node.clientHeight;
   }
 
   /**
-   * Wrapper around jQuery's innerWidth to calculate the item's width
+   * Calculates the clientWidth (excluding border) of an element
    * @return {Number} width of FilterItem node
    */
   getWidth() {
-    return this.$node.innerWidth();
+    return this.node.clientWidth;
   }
 
   /**
-   * Wrapper around jQuery's trigger
+   * Triggers an event on the encapsulated node
    * @param {String} evt the name of the event to trigger
    */
-  trigger(evt) {
-    this.$node.trigger(evt);
+  trigger(eventType) {
+    const event = new Event(eventType);
+    this.node.dispatch(event);
   }
 
   /**
@@ -179,7 +174,7 @@ class FilterItem {
       // from being intercepted.
       const { filteredOut } = this.props;
       this.$node.toggleClass('filteredOut', filteredOut);
-      this.$node.css('z-index', filteredOut ? -1000 : '');
+      setStylesOnHTMLNode(this.node, { zIndex: filteredOut ? -1000: '' });
     });
   }
 

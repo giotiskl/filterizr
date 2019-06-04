@@ -437,7 +437,7 @@ class Filterizr {
     } = this.options;
 
     // Cancel existing evts
-    FilterContainer.unbindEvents();
+    FilterContainer.unbindEvents(callbacks);
 
     // Rebind evts
     FilterContainer.bindEvents(callbacks);
