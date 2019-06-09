@@ -1,17 +1,17 @@
 import { 
-  setStylesOnHTMLNode,
-  transitionEndEvt,
+  getDataAttributesOfHTMLNode,
+  setStylesOnHTMLNode
 } from './utils';
 
 class FilterItem {
   /**
    * Constructor of FilterItem
-   * @param {Object} $node is the jQuery node to create the FilterItem out of
+   * @param {Object} node is the HTML node to create the FilterItem out of
    * @param {Number} index is the index of the FilterItem when iterating over them
    * @param {Object} options the options Filterizr was initialized with
    * @return {Object} FilterItem instance
    */
-  constructor($node, index, options) {
+  constructor(node, index, options) {
     const {
       delay,
       delayMode,
@@ -20,22 +20,27 @@ class FilterItem {
       easing
     } = options;
 
-    // Cache jQuery node
-    this.$node = $node;
-    this.node = $node.get(0);
+    // Cache element node
+    this.node = node;
 
     // Set props
     this.props = {
-      data: (() => {
-        // All data-attributes defined by the user, can be used for sorting
-        const data = this.$node.data();
-        // Remove category and sort which could be there by API design
-        delete data.category;
-        delete data.sort;
-        return data;
-      })(),
+      data: getDataAttributesOfHTMLNode(this.node),
+      onTransitionEndHandler: () => {
+        // On transitionEnd determine if the item is filtered out or not,
+        // in case it is add the .filteredOut class for easy targeting by
+        // the user and set the z-index to -1000 to prevent mouse events
+        // from being intercepted.
+        const { filteredOut } = this.props;
+        if (filteredOut) {
+          this.node.classList.add('filteredOut');
+        } else {
+          this.node.classList.remove('filteredOut');
+        }
+        setStylesOnHTMLNode(this.node, { zIndex: filteredOut ? -1000: '' });
+      },
       index,
-      sortData: this.$node.data('sort'),
+      sortData: this.node.getAttribute('data-sort'),
       lastPosition: { left: 0, top: 0 },
       filteredOut: false, // Used for the onTransitionEnd event
       w: this.getWidth(),
@@ -118,7 +123,7 @@ class FilterItem {
    * @return {String} innerText of the FilterItem in lowercase
    */
   getContentsLowercase() {
-    return this.$node.text().toLowerCase();
+    return this.node.textContent.toLowerCase();
   }
 
   /**
@@ -127,7 +132,7 @@ class FilterItem {
    * @return {String[]} an array of the categories the item belongs to
    */
   getCategories() {
-    return this.$node.attr('data-category').split(/\s*,\s*/g);
+    return this.node.getAttribute('data-category').split(/\s*,\s*/g);
   }
 
   /**
@@ -167,23 +172,24 @@ class FilterItem {
    * Sets up the events related to the FilterItem instance
    */
   bindEvents() {
-    this.$node.on(transitionEndEvt, () => {
-      // On transitionEnd determine if the item is filtered out or not,
-      // in case it is add the .filteredOut class for easy targeting by
-      // the user and set the z-index to -1000 to prevent mouse events
-      // from being intercepted.
-      const { filteredOut } = this.props;
-      this.$node.toggleClass('filteredOut', filteredOut);
-      setStylesOnHTMLNode(this.node, { zIndex: filteredOut ? -1000: '' });
-    });
+    this.node.addEventListener('webkitTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.addEventListener('otransitionend', this.props.onTransitionEndHandler);
+    this.node.addEventListener('oTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.addEventListener('msTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.addEventListener('transitionend', this.props.onTransitionEndHandler);
   }
 
   /**
    * Removes all events related to the FilterItem instance
    */
   unbindEvents() {
-    this.$node.off(transitionEndEvt);
+    this.node.removeEventListener('webkitTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.removeEventListener('otransitionend', this.props.onTransitionEndHandler);
+    this.node.removeEventListener('oTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.removeEventListener('msTransitionEnd', this.props.onTransitionEndHandler);
+    this.node.removeEventListener('transitionend', this.props.onTransitionEndHandler);
   }
 }
 
 export default FilterItem;
+

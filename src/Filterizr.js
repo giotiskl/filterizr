@@ -25,7 +25,7 @@ class Filterizr {
     // Try to find and instantiate the FilterContainer
     const filterContainer = new FilterContainer(selector, this.options);
 
-    if (!filterContainer.$node.length) {
+    if (!filterContainer.node) {
       // Throw because the selector given was not
       // found to initialize a FilterContainer.
       throw new Error(`Filterizr: could not find a container with the selector ${selector}, to initialize Filterizr.`);
@@ -122,7 +122,7 @@ class Filterizr {
     // Add the item to the FilterContainer
     const $nodeModified = $node.clone().attr('style', '');
 
-    FilterContainer.push($nodeModified, this.options);
+    FilterContainer.push($nodeModified.get(0), this.options);
 
     // Retrigger filter for new item to assume position in the grid
     const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);

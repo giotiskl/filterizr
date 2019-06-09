@@ -1,4 +1,3 @@
-let $ = IMPORT_JQUERY ? require('jquery') : window.jQuery;
 import FilterItem from './FilterItem';
 import { 
   debounce,
@@ -14,7 +13,6 @@ class FilterContainer {
    */
   constructor(selector = '.filtr-container', options) {
     // Cache jQuery node
-    this.$node = $(selector);
     this.node = document.querySelector(selector);
 
     // Set up initial styles of container
@@ -44,10 +42,9 @@ class FilterContainer {
    */
   destroy() {
     // Remove all inline styles and unbind all events
-    this.$node
-      .attr('style', '')
-      .find('.filtr-item')
-      .attr('style', '');
+    this.node.removeAttribute('style');
+    const filterItemNodes = Array.from(this.node.querySelectorAll('.filtr-item'));
+    filterItemNodes.forEach((node) => node.removeAttribute('style'));
     this.unbindEvents();
   }
 
@@ -58,25 +55,22 @@ class FilterContainer {
    * @return {Object[]} array of FilterItem instances
    */
   getFilterItems(options) {
-    const FilterItems = $.map(this.$node.find('.filtr-item'), (item, index) => {
-      return new FilterItem($(item), index, options);
-    });
-
-    return FilterItems;
+    const filterItems = Array.from(this.node.querySelectorAll('.filtr-item'));
+    return filterItems.map((node, index) => new FilterItem(node, index, options));
   }
 
   /**
    * Pushes a new item into the FilterItem array in the properties of the FilterContainer
-   * @param {Object} $node - jQuery node to instantiate as FilterItem and append to the grid
+   * @param {Object} node - jQuery node to instantiate as FilterItem and append to the grid
    * @param {Object} options - Filterizr instance options
    */
-  push($node, options) {
+  push(node, options) {
     const { FilterItems } = this.props;
     // Add new item to DOM
-    this.$node.append($node);
+    this.node.appendChild(node);
     // Initialize it as a FilterItem and push into array
     const index = FilterItems.length;
-    const filterItem = new FilterItem($node, index, options);
+    const filterItem = new FilterItem(node, index, options);
     this.props.FilterItems.push(filterItem);
   }
 
