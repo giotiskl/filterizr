@@ -1,5 +1,6 @@
-let $ = IMPORT_JQUERY ? require('jquery') : window.jQuery;
-import { debounce } from './utils';
+import {
+  debounce 
+} from './utils';
 
 class FilterControls {
   /**
@@ -29,24 +30,31 @@ class FilterControls {
     } = this.props;
 
     // Single filter mode controls
-    $(`${selector}[data-filter]`).on('click.Filterizr', (evt) => {
-      const $ctrl = $(evt.currentTarget);
-      const targetFilter = $ctrl.attr('data-filter');
-
-      // Update active filter in Filterizr's options
-      Filterizr.options.filter = targetFilter;
-
-      // Trigger filter
-      Filterizr.filter(Filterizr.options.filter);
-    });
+    const filterControls = document.querySelectorAll(`${selector}[data-filter]`);
+    if (filterControls) {
+      filterControls.forEach((control) => {
+        control.addEventListener('click', (evt) => {
+          const ctrl = evt.currentTarget;
+          const targetFilter = ctrl.getAttribute('data-filter');
+          // Update active filter in Filterizr's options
+          Filterizr.options.filter = targetFilter;
+          // Trigger filter
+          Filterizr.filter(Filterizr.options.filter);
+        });
+      });
+    }
 
     // Multifilter mode controls
-    $(`${selector}[data-multifilter]`).on('click.Filterizr', (evt) => {
-      const $ctrl        = $(evt.target);
-      const targetFilter = $ctrl.attr('data-multifilter');
-      
-      Filterizr.toggleFilter(targetFilter);
-    });
+    const multiFilterControls = document.querySelectorAll(`${selector}[data-multifilter]`);
+    if (multiFilterControls) {
+      multiFilterControls.forEach((control) => {
+        control.addEventListener('click', (evt) => {
+          const ctrl = evt.target;
+          const targetFilter = ctrl.getAttribute('data-multifilter');
+          Filterizr.toggleFilter(targetFilter);
+        });
+      });
+    }
   }
 
   /**
@@ -58,9 +66,14 @@ class FilterControls {
       selector,
     } = this.props;
 
-    $(`${selector}[data-shuffle]`).on('click.Filterizr', () => {
-      Filterizr.shuffle();
-    });
+    const controls = document.querySelectorAll(`${selector}[data-shuffle]`);
+    if (controls) {
+      controls.forEach((control) => {
+        control.addEventListener('click', () => {
+          Filterizr.shuffle();
+        });
+      });
+    }
   }
 
   /**
@@ -72,13 +85,17 @@ class FilterControls {
       selector,
     } = this.props;
 
-    $(`${selector}[data-search]`).on('keyup.Filterizr', debounce((evt) => {
-      const $textfield = $(evt.target);
-      const val = $textfield.val();
-      
-      Filterizr.props.searchTerm = val.toLowerCase();
-      Filterizr.search(Filterizr.props.searchTerm);
-    }, 250));
+    const controls = document.querySelectorAll(`${selector}[data-search]`);
+    if (controls) {
+      controls.forEach((control) => {
+        control.addEventListener('keyup', debounce((evt) => {
+          const textfield = evt.target;
+          const val = textfield.value;
+          Filterizr.props.searchTerm = val.toLowerCase();
+          Filterizr.search(Filterizr.props.searchTerm);
+        }, 250));
+      });
+    }
   }
 
   /**
@@ -90,17 +107,29 @@ class FilterControls {
       selector,
     } = this.props;
 
-    $(`${selector}[data-sortAsc]`).on('click.Filterizr', () => {
-      const sortAttr = $(`${selector}[data-sortOrder]`).val();
-      Filterizr.props.sortOrder = 'asc';
-      Filterizr.sort(sortAttr, 'asc');
-    });
-    $(`${selector}[data-sortDesc]`).on('click.Filterizr', () => {
-      const sortAttr = $(`${selector}[data-sortOrder]`).val();
-      Filterizr.props.sortOrder = 'desc';
-      Filterizr.sort(sortAttr, 'desc');
-    });
+    const sortAscControls = document.querySelectorAll(`${selector}[data-sortAsc]`);
+    if (sortAscControls) {
+      sortAscControls.forEach((control) => {
+        control.addEventListener('click', () => {
+          const sortAttr = document.querySelector(`${selector}[data-sortOrder]`).value;
+          Filterizr.props.sortOrder = 'asc';
+          Filterizr.sort(sortAttr, 'asc');
+        });
+      });
+    }
+
+    const sortDescControls = document.querySelectorAll(`${selector}[data-sortDesc]`);
+    if (sortDescControls) {
+      sortDescControls.forEach((control) => {
+        control.addEventListener('click', () => {
+          const sortAttr = document.querySelector(`${selector}[data-sortOrder]`).value;
+          Filterizr.props.sortOrder = 'desc';
+          Filterizr.sort(sortAttr, 'desc');
+        });
+      });
+    }
   }
 }
 
 export default FilterControls;
+

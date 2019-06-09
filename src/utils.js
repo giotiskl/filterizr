@@ -77,6 +77,22 @@ function getDataAttributesOfHTMLNode(node) {
 export { getDataAttributesOfHTMLNode };
 
 /**
+ * Check that a DOM element has a data-attribute present
+ * @param {Object} node element
+ * @param {String} dataAttributeName name of data attribute
+ * @return {Boolean} data attribute exists
+ */
+function checkDataAttributeExists(node, dataAttributeName) {
+  const atts = Array.from(node.attributes);
+  if (atts.length) {
+    return atts.filter(({ nodeName }) => nodeName === dataAttributeName).length > 0;
+  }
+  return false;
+}
+
+export { checkDataAttributeExists };
+
+/**
  * A very simple function to perform a basic
  * deep clone of an object.
  * @param {Object} o is the object to perform the deep clone on
