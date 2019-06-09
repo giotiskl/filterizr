@@ -54,6 +54,29 @@ function setStylesOnHTMLNode(node, styles) {
 export { setStylesOnHTMLNode };
 
 /**
+ * Returns an object with value/key pairs of all data
+ * attributes on an HTML element, disregarding the
+ * two data attributes that are reserved for internal
+ * usage by Filterizr
+ * @param {Object} node - HTML node
+ * @returns {Object} map of data attributes / values
+ */
+function getDataAttributesOfHTMLNode(node) {
+  const data = {};
+  for (let i = 0, atts = node.attributes, n = atts.length; i < n; i++) {
+    const { nodeName, nodeValue } = atts[i];
+    if (nodeName.includes('data')) {
+      data[nodeName.slice(5, nodeName.length)] = nodeValue;
+    }
+  }
+  delete data.category;
+  delete data.sort;
+  return data;
+}
+
+export { getDataAttributesOfHTMLNode };
+
+/**
  * A very simple function to perform a basic
  * deep clone of an object.
  * @param {Object} o is the object to perform the deep clone on
@@ -258,19 +281,6 @@ export { checkOptionForErrors };
 const cssEasingValuesRegexp = /(^linear$)|(^ease-in-out$)|(^ease-in$)|(^ease-out$)|(^ease$)|(^step-start$)|(^step-end$)|(^steps\(\d\s*,\s*(end|start)\))$|(^cubic-bezier\((\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\))$/;
 
 export { cssEasingValuesRegexp };
-
-/**
- * The name of the transitionEnd event namespaced as a const
- */
-const transitionEndEvt = `
-  webkitTransitionEnd.Filterizr 
-  otransitionend.Filterizr 
-  oTransitionEnd.Filterizr 
-  msTransitionEnd.Filterizr 
-  transitionend.Filterizr
-`;
-
-export { transitionEndEvt };
 
 /**
  * Possible animation states for Filterizr
