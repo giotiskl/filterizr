@@ -32,7 +32,8 @@ class Filterizr {
     }
 
     // Setup FilterControls
-    new FilterControls(this, this.options.controlsSelector);
+    const filterControls = new FilterControls(this, this.options.controlsSelector);
+    filterControls.initialize();
 
     // Define props
     this.props = {
@@ -41,6 +42,7 @@ class Filterizr {
       sort: 'index',
       sortOrder: 'asc',
       FilterContainer: filterContainer,
+      FilterControls: filterControls,
       FilterItems: filterContainer.props.FilterItems,
       FilteredItems: [],
     };
@@ -88,8 +90,7 @@ class Filterizr {
    * Destroys the Filterizr instance and unbinds all events.
    */
   destroy() {
-    const { FilterContainer } = this.props;
-    const { controlsSelector } = this.options;
+    const { FilterControls, FilterContainer } = this.props;
 
     // Unbind all events of FilterContainer and Filterizr
     // and remove inline styles.
@@ -97,12 +98,7 @@ class Filterizr {
     $(window).off('resize.Filterizr');
 
     // Destroy all controls of the instance
-    $(`${controlsSelector}[data-filter]`).off('click.Filterizr');
-    $(`${controlsSelector}[data-multifilter]`).off('click.Filterizr');
-    $(`${controlsSelector}[data-shuffle]`).off('click.Filterizr');
-    $(`${controlsSelector}[data-search]`).off('keyup.Filterizr');
-    $(`${controlsSelector}[data-sortAsc]`).off('click.Filterizr');
-    $(`${controlsSelector}[data-sortDesc]`).off('click.Filterizr');
+    FilterControls.destroy();
   }
 
   /**
