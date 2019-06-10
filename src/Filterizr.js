@@ -1,4 +1,3 @@
-let $ = IMPORT_JQUERY ? require('jquery') : window.jQuery;
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import Positions from './Positions';
@@ -37,14 +36,15 @@ class Filterizr {
 
     // Define props
     this.props = {
-      filterizrState: FILTERIZR_STATE.IDLE,
-      searchTerm: '',
-      sort: 'index',
-      sortOrder: 'asc',
       FilterContainer: filterContainer,
       FilterControls: filterControls,
       FilterItems: filterContainer.props.FilterItems,
       FilteredItems: [],
+      filterizrState: FILTERIZR_STATE.IDLE,
+      searchTerm: '',
+      sort: 'index',
+      sortOrder: 'asc',
+      windowResizeHandler: () => {},
     };
 
     // Set up events needed by Filterizr
@@ -95,7 +95,7 @@ class Filterizr {
     // Unbind all events of FilterContainer and Filterizr
     // and remove inline styles.
     FilterContainer.destroy();
-    $(window).off('resize.Filterizr');
+    window.removeEventListener('resize', this.props.windowResizeHandler);
 
     // Destroy all controls of the instance
     FilterControls.destroy();
@@ -103,15 +103,17 @@ class Filterizr {
 
   /**
    * Inserts a new FilterItem in the Filterizr grid
-   * @param {Object} $node the jQuery of the HTML item to append
+   * @param {Object} node DOM node to append
    */
-  insertItem($node) {
+  insertItem(node) {
     const { FilterContainer } = this.props;
 
     // Add the item to the FilterContainer
-    const $nodeModified = $node.clone().attr('style', '');
+    const nodeModified = node.cloneNode(true);
+    nodeModified.removeAttribute('style');
+    
 
-    FilterContainer.push($nodeModified.get(0), this.options);
+    FilterContainer.push(nodeModified, this.options);
 
     // Retrigger filter for new item to assume position in the grid
     const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
@@ -442,18 +444,16 @@ class Filterizr {
     this.rebindFilterContainerEvents();
 
     // Generic Filterizr events
-    // Set up a window resize event to fire refiltering
-    $(window).on(
-      'resize.Filterizr',
-      debounce(() => {
-        // Update dimensions of items based on new window size
-        FilterContainer.updateWidth();
-        FilterContainer.updateFilterItemsDimensions();
+    // Filter grid again on window resize
+    this.props.windowResizeHandler = debounce(() => {
+      // Update dimensions of items based on new window size
+      FilterContainer.updateWidth();
+      FilterContainer.updateFilterItemsDimensions();
+      // Refilter the grid to assume new positions
+      this.filter(this.options.filter);
+    }, 250);
 
-        // Refilter the grid to assume new positions
-        this.filter(this.options.filter);
-      }, 250)
-    );
+    window.addEventListener('resize', this.props.windowResizeHandler);
   }
 }
 
