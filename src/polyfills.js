@@ -66,7 +66,7 @@ export default function executePolyfills() {
 
         // 8. Return false
         return false;
-      }
+      },
     });
   }
 }

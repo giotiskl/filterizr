@@ -5,7 +5,7 @@
 const SameSizeLayout = (Filterizr) => {
   const {
     FilterContainer,
-    FilteredItems
+    FilteredItems,
   } = Filterizr.props;
   // calculate number of columns and rows the grid should have
   let cols = FilterContainer.calcColumns();

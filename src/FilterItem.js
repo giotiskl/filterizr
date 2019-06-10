@@ -1,6 +1,6 @@
 import { 
   getDataAttributesOfHTMLNode,
-  setStylesOnHTMLNode
+  setStylesOnHTMLNode,
 } from './utils';
 
 class FilterItem {
@@ -17,7 +17,7 @@ class FilterItem {
       delayMode,
       filterOutCss,
       animationDuration,
-      easing
+      easing,
     } = options;
 
     // Cache element node

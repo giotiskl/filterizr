@@ -1,5 +1,5 @@
 import {
-  debounce 
+  debounce, 
 } from './utils';
 
 class FilterControls {
@@ -26,7 +26,7 @@ class FilterControls {
   setupFilterControls() {
     const {
       Filterizr,
-      selector
+      selector,
     } = this.props;
 
     // Single filter mode controls

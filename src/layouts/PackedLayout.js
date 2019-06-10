@@ -72,13 +72,13 @@ Packer.prototype = {
       w: this.root.w,
       h: this.root.h + h,
       down:  { x: 0, y: this.root.h, w: this.root.w, h: h },
-      right: this.root
+      right: this.root,
     };
     if ((node = this.findNode(this.root, w, h)))
       return this.splitNode(node, w, h);
     else
       return null;
-  }
+  },
 };
 
 export default PackedLayout;

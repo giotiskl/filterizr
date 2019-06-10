@@ -28,7 +28,7 @@ class Filterizr {
     if (!filterContainer.node) {
       // Throw because the selector given was not
       // found to initialize a FilterContainer.
-      throw new Error(`Filterizr: could not find a container with the selector ${selector}, to initialize Filterizr.`);
+      throw new Error('Filterizr: could not find a container with '+ `the selector ${selector}, to initialize Filterizr.`);
     }
 
     // Setup FilterControls
@@ -61,11 +61,7 @@ class Filterizr {
    * @param {String} category by which to filter
    */
   filter(category) {
-    const {
-      searchTerm,
-      FilterContainer,
-      FilterItems,
-    } = this.props;
+    const { searchTerm, FilterContainer, FilterItems } = this.props;
 
     // Trigger filteringStart event
     FilterContainer.trigger('filteringStart');
@@ -79,10 +75,7 @@ class Filterizr {
       : category.toString();
 
     // Filter items and optionally apply search if a search term exists
-    const FilteredItems = this.searchFilterItems(
-      this.filterFilterItems(FilterItems, category),
-      searchTerm
-    ); 
+    const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, category), searchTerm);
 
     // Update props
     this.props.FilteredItems = FilteredItems;
@@ -136,10 +129,7 @@ class Filterizr {
    * @param {String} sortOrder ascending or descending
    */
   sort(sortAttr = 'index', sortOrder = 'asc') {
-    const {
-      FilterContainer,
-      FilterItems,
-    } = this.props;
+    const { FilterContainer, FilterItems } = this.props;
 
     // Trigger filteringStart event
     FilterContainer.trigger('sortingStart');
@@ -176,13 +166,10 @@ class Filterizr {
   }
 
   /**
-   * Shuffles the FilterItems in the grid, making sure their positions have changed. 
+   * Shuffles the FilterItems in the grid, making sure their positions have changed.
    */
   shuffle() {
-    const {
-      FilterContainer,
-      FilteredItems,
-    } = this.props;
+    const { FilterContainer, FilteredItems } = this.props;
 
     // Trigger filteringStart event
     FilterContainer.trigger('shufflingStart');
@@ -218,21 +205,21 @@ class Filterizr {
       cssEasingValuesRegexp,
       'https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp'
     );
-    checkOptionForErrors(
-      'delayMode',
-      newOptions.delayMode,
-      'string',
-      ['progressive', 'alternate']
-    );
+    checkOptionForErrors('delayMode', newOptions.delayMode, 'string', [
+      'progressive',
+      'alternate',
+    ]);
     checkOptionForErrors('filter', newOptions.filter, 'string|number|array');
     checkOptionForErrors('filterOutCss', newOptions.filterOutCss, 'object');
     checkOptionForErrors('filterInCss', newOptions.filterOutCss, 'object');
-    checkOptionForErrors(
-      'layout',
-      newOptions.layout,
-      'string',
-      ['sameSize', 'vertical', 'horizontal', 'sameHeight', 'sameWidth', 'packed']
-    );
+    checkOptionForErrors('layout', newOptions.layout, 'string', [
+      'sameSize',
+      'vertical',
+      'horizontal',
+      'sameHeight',
+      'sameWidth',
+      'packed',
+    ]);
     checkOptionForErrors(
       'multifilterLogicalOperator',
       newOptions.multifilterLogicalOperator,
@@ -246,7 +233,12 @@ class Filterizr {
 
     // If one of the options that updates the transition properties
     // of the .filtr-item elements is set, call the update method
-    if (newOptions.animationDuration || newOptions.delay || newOptions.delayMode || newOptions.easing) {
+    if (
+      newOptions.animationDuration ||
+      newOptions.delay ||
+      newOptions.delayMode ||
+      newOptions.easing
+    ) {
       this.props.FilterContainer.updateFilterItemsTransitionStyle(
         newOptions.animationDuration,
         newOptions.easing,
@@ -298,9 +290,10 @@ class Filterizr {
           activeFilters.push(toggledFilter);
         }
       } else {
-        activeFilters = activeFilters === toggledFilter
-          ? 'all' // If the activeFilters === toggledFilter revert to 'all'
-          : [activeFilters, toggledFilter]; // Otherwise start array
+        activeFilters =
+          activeFilters === toggledFilter
+            ? 'all' // If the activeFilters === toggledFilter revert to 'all'
+            : [activeFilters, toggledFilter]; // Otherwise start array
       }
     }
 
@@ -316,38 +309,40 @@ class Filterizr {
     const { multifilterLogicalOperator } = this.options;
 
     // Get filtered items
-    const FilteredItems = (filters === 'all')
-      ? FilterItems // Return all items
-      : FilterItems.filter(FilterItem => { // Return filtered array
-        const categories = FilterItem.getCategories();
-        const multiFilteringEnabled = Array.isArray(filters);
-        if (multiFilteringEnabled) {
-          return multifilterLogicalOperator === 'or'
-            ? intersection(categories, filters).length
-            : allStringsOfArray1InArray2(filters, categories);
-        }
-        return categories.includes(filters);
-      });
+    const FilteredItems =
+      filters === 'all'
+        ? FilterItems // Return all items
+        : FilterItems.filter(FilterItem => {
+          // Return filtered array
+          const categories = FilterItem.getCategories();
+          const multiFilteringEnabled = Array.isArray(filters);
+          if (multiFilteringEnabled) {
+            return multifilterLogicalOperator === 'or'
+              ? intersection(categories, filters).length
+              : allStringsOfArray1InArray2(filters, categories);
+          }
+          return categories.includes(filters);
+        });
 
     return FilteredItems;
   }
 
   sortFilterItems(FilterItems, sortAttr = 'index', sortOrder = 'asc') {
     // Sort the FilterItems and reverse the array if order is descending
-    let SortedItems = sortBy(FilterItems, (FilterItem) => {
-      return (sortAttr !== 'index' && sortAttr !== 'sortData')
+    let SortedItems = sortBy(FilterItems, FilterItem => {
+      return sortAttr !== 'index' && sortAttr !== 'sortData'
         ? FilterItem.props.data[sortAttr] // Search for custom data attrs to sort
         : FilterItem.props[sortAttr]; // Otherwise use defaults
     });
 
     // Return the sorted items with correct order
-    return sortOrder === 'asc'
-      ? SortedItems
-      : SortedItems.reverse();
+    return sortOrder === 'asc' ? SortedItems : SortedItems.reverse();
   }
 
   searchFilterItems(FilterItems, searchTerm = this.props.searchTerm) {
-    if (!searchTerm) return FilterItems; // exit case when no search is applied
+    if (!searchTerm) {
+      return FilterItems;
+    }
 
     const SoughtItems = FilterItems.filter(FilterItem => FilterItem.contentsMatchSearch(searchTerm));
 
@@ -358,7 +353,10 @@ class Filterizr {
     let ShuffledItems = shuffle(FilterItems);
 
     // Shuffle items until they are different from the initial FilteredItems
-    while (FilterItems.length > 1 && filterItemArraysHaveSameSorting(FilterItems, ShuffledItems)) {
+    while (
+      FilterItems.length > 1 &&
+      filterItemArraysHaveSameSorting(FilterItems, ShuffledItems)
+    ) {
       ShuffledItems = shuffle(FilterItems);
     }
 
@@ -383,9 +381,10 @@ class Filterizr {
       const contentsMatchSearch = FilterItem.contentsMatchSearch(this.props.searchTerm);
 
       if (multiFilteringEnabled) {
-        filtersMatch = multifilterLogicalOperator === 'or'
-          ? intersection(categories, filter).length
-          : allStringsOfArray1InArray2(filter, categories);
+        filtersMatch =
+          multifilterLogicalOperator === 'or'
+            ? intersection(categories, filter).length
+            : allStringsOfArray1InArray2(filter, categories);
       } else {
         filtersMatch = categories.includes(filter);
       }
@@ -408,10 +407,7 @@ class Filterizr {
   }
 
   onTransitionEndCallback() {
-    const {
-      filterizrState,
-      FilterContainer,
-    } = this.props;
+    const { filterizrState, FilterContainer } = this.props;
 
     switch (filterizrState) {
       case FILTERIZR_STATE.FILTERING:
@@ -431,17 +427,16 @@ class Filterizr {
 
   rebindFilterContainerEvents() {
     const { FilterContainer } = this.props;
-    const {
-      animationDuration,
-      callbacks,
-    } = this.options;
+    const { animationDuration, callbacks } = this.options;
 
     // Cancel existing evts
     FilterContainer.unbindEvents(callbacks);
 
     // Rebind evts
     FilterContainer.bindEvents(callbacks);
-    FilterContainer.bindTransitionEnd(() => { this.onTransitionEndCallback(); }, animationDuration);
+    FilterContainer.bindTransitionEnd(() => {
+      this.onTransitionEndCallback();
+    }, animationDuration);
   }
 
   bindEvents() {
@@ -452,14 +447,17 @@ class Filterizr {
 
     // Generic Filterizr events
     // Set up a window resize event to fire refiltering
-    $(window).on('resize.Filterizr', debounce(() => {
-      // Update dimensions of items based on new window size
-      FilterContainer.updateWidth();
-      FilterContainer.updateFilterItemsDimensions();
+    $(window).on(
+      'resize.Filterizr',
+      debounce(() => {
+        // Update dimensions of items based on new window size
+        FilterContainer.updateWidth();
+        FilterContainer.updateFilterItemsDimensions();
 
-      // Refilter the grid to assume new positions
-      this.filter(this.options.filter);
-    }, 250));
+        // Refilter the grid to assume new positions
+        this.filter(this.options.filter);
+      }, 250)
+    );
   }
 }
 

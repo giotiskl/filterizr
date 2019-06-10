@@ -1,7 +1,7 @@
 import FilterItem from './FilterItem';
 import { 
   debounce,
-  setStylesOnHTMLNode
+  setStylesOnHTMLNode,
 } from './utils';
 
 class FilterContainer {
@@ -102,7 +102,7 @@ class FilterContainer {
    */
   updateHeight(newHeight) {
     this.props.h = newHeight;
-    setStylesOnHTMLNode(this.node, { height: `${newHeight}px`});
+    setStylesOnHTMLNode(this.node, { height: `${newHeight}px` });
   }
 
   /**
