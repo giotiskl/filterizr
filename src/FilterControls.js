@@ -8,11 +8,19 @@ class FilterControls {
    */
   constructor(Filterizr, selector = '') {
     this.filterControls = document.querySelectorAll(`${selector}[data-filter]`);
-    this.multiFilterControls = document.querySelectorAll(`${selector}[data-multifilter]`);
-    this.shuffleControls = document.querySelectorAll(`${selector}[data-shuffle]`);
+    this.multiFilterControls = document.querySelectorAll(
+      `${selector}[data-multifilter]`
+    );
+    this.shuffleControls = document.querySelectorAll(
+      `${selector}[data-shuffle]`
+    );
     this.searchControls = document.querySelectorAll(`${selector}[data-search]`);
-    this.sortAscControls = document.querySelectorAll(`${selector}[data-sortAsc]`);
-    this.sortDescControls = document.querySelectorAll(`${selector}[data-sortDesc]`);
+    this.sortAscControls = document.querySelectorAll(
+      `${selector}[data-sortAsc]`
+    );
+    this.sortDescControls = document.querySelectorAll(
+      `${selector}[data-sortDesc]`
+    );
 
     this.props = {
       Filterizr,
@@ -46,11 +54,15 @@ class FilterControls {
    * Sets up the controls for filtering
    */
   setupFilterControls() {
-    const { filterControls, multiFilterControls, props: { Filterizr } } = this;
+    const {
+      filterControls,
+      multiFilterControls,
+      props: { Filterizr },
+    } = this;
 
     // Single filter mode controls
     if (filterControls) {
-      this.props.handlers.filterControlsHandler = (evt) => {
+      this.props.handlers.filterControlsHandler = evt => {
         const ctrl = evt.currentTarget;
         const targetFilter = ctrl.getAttribute('data-filter');
         // Update active filter in Filterizr's options
@@ -59,18 +71,28 @@ class FilterControls {
         Filterizr.filter(Filterizr.options.filter);
       };
 
-      filterControls.forEach((control) => control.addEventListener('click', this.props.handlers.filterControlsHandler));
+      filterControls.forEach(control =>
+        control.addEventListener(
+          'click',
+          this.props.handlers.filterControlsHandler
+        )
+      );
     }
 
     // Multifilter mode controls
     if (multiFilterControls) {
-      this.props.handlers.multiFilterControlsHandler = (evt) => {
+      this.props.handlers.multiFilterControlsHandler = evt => {
         const ctrl = evt.target;
         const targetFilter = ctrl.getAttribute('data-multifilter');
         Filterizr.toggleFilter(targetFilter);
       };
 
-      multiFilterControls.forEach((control) => control.addEventListener('click', this.props.handlers.multiFilterControlsHandler));
+      multiFilterControls.forEach(control =>
+        control.addEventListener(
+          'click',
+          this.props.handlers.multiFilterControlsHandler
+        )
+      );
     }
   }
 
@@ -79,12 +101,22 @@ class FilterControls {
 
     // Single filter mode controls
     if (filterControls) {
-      filterControls.forEach((control) => control.removeEventListener('click', this.props.handlers.filterControlsHandler));
+      filterControls.forEach(control =>
+        control.removeEventListener(
+          'click',
+          this.props.handlers.filterControlsHandler
+        )
+      );
     }
 
     // Multifilter mode controls
     if (multiFilterControls) {
-      multiFilterControls.forEach((control) => control.removeEventListener('click', this.props.handlers.multiFilterControlsHandler));
+      multiFilterControls.forEach(control =>
+        control.removeEventListener(
+          'click',
+          this.props.handlers.multiFilterControlsHandler
+        )
+      );
     }
   }
 
@@ -92,14 +124,22 @@ class FilterControls {
    * Sets up the controls for shuffling
    */
   setupShuffleControls() {
-    const { shuffleControls: controls, props: { Filterizr } } = this;
+    const {
+      shuffleControls: controls,
+      props: { Filterizr },
+    } = this;
 
     if (controls) {
       this.props.handlers.shuffleControlsHandler = () => {
         Filterizr.shuffle();
       };
 
-      controls.forEach((control) => control.addEventListener('click', this.props.handlers.shuffleControlsHandler));
+      controls.forEach(control =>
+        control.addEventListener(
+          'click',
+          this.props.handlers.shuffleControlsHandler
+        )
+      );
     }
   }
 
@@ -107,24 +147,37 @@ class FilterControls {
     const { shuffleControls: controls } = this;
 
     if (controls) {
-      controls.forEach((control) => control.removeEventListener('click', this.props.handlers.shuffleControlsHandler));
+      controls.forEach(control =>
+        control.removeEventListener(
+          'click',
+          this.props.handlers.shuffleControlsHandler
+        )
+      );
     }
   }
   /**
    * Sets up the controls for searching
    */
   setupSearchControls() {
-    const { searchControls: controls, props: { Filterizr } } = this;
+    const {
+      searchControls: controls,
+      props: { Filterizr },
+    } = this;
 
     if (controls) {
-      this.props.handlers.searchControlsHandler = debounce((evt) => {
+      this.props.handlers.searchControlsHandler = debounce(evt => {
         const textfield = evt.target;
         const val = textfield.value;
         Filterizr.props.searchTerm = val.toLowerCase();
         Filterizr.search(Filterizr.props.searchTerm);
       }, 250);
 
-      controls.forEach((control) => control.addEventListener('keyup', this.props.handlers.searchControlsHandler));
+      controls.forEach(control =>
+        control.addEventListener(
+          'keyup',
+          this.props.handlers.searchControlsHandler
+        )
+      );
     }
   }
 
@@ -132,7 +185,12 @@ class FilterControls {
     const { searchControls: controls } = this;
 
     if (controls) {
-      controls.forEach((control) => control.removeEventListener('keyup', this.props.handlers.searchControlsHandler));
+      controls.forEach(control =>
+        control.removeEventListener(
+          'keyup',
+          this.props.handlers.searchControlsHandler
+        )
+      );
     }
   }
 
@@ -140,26 +198,42 @@ class FilterControls {
    * Sets up the controls for sorting
    */
   setupSortControls() {
-    const { sortAscControls, sortDescControls, props: { Filterizr, selector } } = this;
+    const {
+      sortAscControls,
+      sortDescControls,
+      props: { Filterizr, selector },
+    } = this;
 
     if (sortAscControls) {
       this.props.handlers.sortAscControlsHandler = () => {
-        const sortAttr = document.querySelector(`${selector}[data-sortOrder]`).value;
+        const sortAttr = document.querySelector(`${selector}[data-sortOrder]`)
+          .value;
         Filterizr.props.sortOrder = 'asc';
         Filterizr.sort(sortAttr, 'asc');
       };
 
-      sortAscControls.forEach((control) => control.addEventListener('click', this.props.handlers.sortAscControlsHandler));
+      sortAscControls.forEach(control =>
+        control.addEventListener(
+          'click',
+          this.props.handlers.sortAscControlsHandler
+        )
+      );
     }
 
     if (sortDescControls) {
       this.props.handlers.sortDescControlsHandler = () => {
-        const sortAttr = document.querySelector(`${selector}[data-sortOrder]`).value;
+        const sortAttr = document.querySelector(`${selector}[data-sortOrder]`)
+          .value;
         Filterizr.props.sortOrder = 'desc';
         Filterizr.sort(sortAttr, 'desc');
       };
 
-      sortDescControls.forEach((control) => control.addEventListener('click', this.props.handlers.sortDescControlsHandler));
+      sortDescControls.forEach(control =>
+        control.addEventListener(
+          'click',
+          this.props.handlers.sortDescControlsHandler
+        )
+      );
     }
   }
 
@@ -167,14 +241,23 @@ class FilterControls {
     const { sortAscControls, sortDescControls } = this;
 
     if (sortAscControls) {
-      sortAscControls.forEach((control) => control.removeEventListener('click', this.props.handlers.sortAscControlsHandler));
+      sortAscControls.forEach(control =>
+        control.removeEventListener(
+          'click',
+          this.props.handlers.sortAscControlsHandler
+        )
+      );
     }
 
     if (sortDescControls) {
-      sortDescControls.forEach((control) => control.removeEventListener('click', this.props.handlers.sortDescControlsHandler));
+      sortDescControls.forEach(control =>
+        control.removeEventListener(
+          'click',
+          this.props.handlers.sortDescControlsHandler
+        )
+      );
     }
   }
 }
 
 export default FilterControls;
-

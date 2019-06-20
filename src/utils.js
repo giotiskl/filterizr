@@ -24,7 +24,7 @@ export { allStringsOfArray1InArray2 };
  * @param {String} cssProp prop name
  * @return {String} normalized name
  */
-const getNormalizedCssPropName = (cssProp) => {
+const getNormalizedCssPropName = cssProp => {
   if (!cssProp.includes('-')) {
     return cssProp;
   }
@@ -32,7 +32,10 @@ const getNormalizedCssPropName = (cssProp) => {
   const splitProp = cssProp.split('-');
 
   const first = splitProp[0];
-  const rest = splitProp.slice(1, splitProp.length).map((word) => word[0].toUpperCase() + word.slice(1, word.length)).join('');
+  const rest = splitProp
+    .slice(1, splitProp.length)
+    .map(word => word[0].toUpperCase() + word.slice(1, word.length))
+    .join('');
 
   return `${first}${rest}`;
 };
@@ -85,7 +88,9 @@ export { getDataAttributesOfHTMLNode };
 function checkDataAttributeExists(node, dataAttributeName) {
   const atts = Array.from(node.attributes);
   if (atts.length) {
-    return atts.filter(({ nodeName }) => nodeName === dataAttributeName).length > 0;
+    return (
+      atts.filter(({ nodeName }) => nodeName === dataAttributeName).length > 0
+    );
   }
   return false;
 }
@@ -98,10 +103,9 @@ export { checkDataAttributeExists };
  * @param {Object} o is the object to perform the deep clone on
  * @return {Object} deep clone
  */
-const makeShallowClone = (o) => {
+const makeShallowClone = o => {
   let ret = {};
-  for (const p in o)
-    ret[p] = o[p];
+  for (const p in o) ret[p] = o[p];
   return ret;
 };
 
@@ -122,11 +126,14 @@ const merge = (old, target) => {
     if (!(p in ret)) {
       // Otherwise copy it over
       ret[p] = old[p];
-    }
-    else {
+    } else {
       // In case the prop itself is an obj, call method recursively.
-      if (typeof ret[p] === 'object' && typeof old[p] === 'object' && !Array.isArray(old[p])) {
-        ret[p] = merge((typeof ret[p] === 'object' ? ret[p] : {}), old[p]);
+      if (
+        typeof ret[p] === 'object' &&
+        typeof old[p] === 'object' &&
+        !Array.isArray(old[p])
+      ) {
+        ret[p] = merge(typeof ret[p] === 'object' ? ret[p] : {}, old[p]);
       }
     }
   }
@@ -141,7 +148,7 @@ export { merge };
  * @param {Array} arr2 is the second array of which to get the intersection
  */
 const intersection = (arr1, arr2) => {
-  return Array.prototype.filter.call(arr1, (n) => arr2.includes(n));
+  return Array.prototype.filter.call(arr1, n => arr2.includes(n));
 };
 
 export { intersection };
@@ -149,9 +156,9 @@ export { intersection };
 /**
  * Debounce of Underscore.js
  */
-const debounce = function (func, wait, immediate) {
+const debounce = function(func, wait, immediate) {
   let timeout;
-  return function () {
+  return function() {
     const context = this;
     const args = arguments;
     clearTimeout(timeout);
@@ -170,7 +177,7 @@ export { debounce };
  * @param {Array} array the array to shuffle
  * @return {Array} shuffled array without mutating the initial array.
  */
-const shuffle = (array) => {
+const shuffle = array => {
   // perform deep clone on array to mutate
   let cloned = array.slice(0);
   // array to return
@@ -217,7 +224,7 @@ export { filterItemArraysHaveSameSorting };
 const sortBy = (array, propFn) => {
   let cloned = array.slice(0); // perform deep copy of array
 
-  const comparator = (propFn) => {
+  const comparator = propFn => {
     return (a, b) => {
       const propA = propFn(a);
       const propB = propFn(b);
@@ -248,7 +255,9 @@ const checkOptionForErrors = (name, value, type, allowed, furtherHelpLink) => {
   if (typeof value === 'undefined') return; // exit case, missing from options
 
   // Define exception for type error
-  const typeError = new Error(`Filterizr: expected type of option "${name}" to be "${type}", but its type is: "${typeof value}"`);
+  const typeError = new Error(
+    `Filterizr: expected type of option "${name}" to be "${type}", but its type is: "${typeof value}"`
+  );
   let matchesOtherTypes = false;
   let isArray = false;
   const couldBeArray = type.includes('array');
@@ -266,7 +275,7 @@ const checkOptionForErrors = (name, value, type, allowed, furtherHelpLink) => {
   }
 
   // Make sure that the value of the option is within the accepted values
-  const referTo = (link) => {
+  const referTo = link => {
     if (link) {
       return ` For further help read here: ${link}`;
     }
@@ -275,16 +284,24 @@ const checkOptionForErrors = (name, value, type, allowed, furtherHelpLink) => {
 
   if (Array.isArray(allowed)) {
     let validValue = false;
-    allowed.forEach((el) => {
+    allowed.forEach(el => {
       if (el === value) validValue = true;
     });
     if (!validValue) {
-      throw new Error(`Filterizr: allowed values for option "${name}" are: ${allowed.map(el => `"${el}"`).join(', ')}. Value received: "${value}".${referTo(furtherHelpLink)}`);
+      throw new Error(
+        `Filterizr: allowed values for option "${name}" are: ${allowed
+          .map(el => `"${el}"`)
+          .join(', ')}. Value received: "${value}".${referTo(furtherHelpLink)}`
+      );
     }
   } else if (allowed instanceof RegExp) {
     const isValid = value.match(allowed);
     if (!isValid) {
-      throw new Error(`Filterizr: invalid value "${value}" for option "${name}" received.${referTo(furtherHelpLink)}`);
+      throw new Error(
+        `Filterizr: invalid value "${value}" for option "${name}" received.${referTo(
+          furtherHelpLink
+        )}`
+      );
     }
   }
 };

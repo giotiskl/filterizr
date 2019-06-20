@@ -27,11 +27,17 @@ class Filterizr {
     if (!filterContainer.node) {
       // Throw because the selector given was not
       // found to initialize a FilterContainer.
-      throw new Error('Filterizr: could not find a container with '+ `the selector ${selector}, to initialize Filterizr.`);
+      throw new Error(
+        'Filterizr: could not find a container with ' +
+          `the selector ${selector}, to initialize Filterizr.`
+      );
     }
 
     // Setup FilterControls
-    const filterControls = new FilterControls(this, this.options.controlsSelector);
+    const filterControls = new FilterControls(
+      this,
+      this.options.controlsSelector
+    );
     filterControls.initialize();
 
     // Define props
@@ -77,7 +83,10 @@ class Filterizr {
       : category.toString();
 
     // Filter items and optionally apply search if a search term exists
-    const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, category), searchTerm);
+    const FilteredItems = this.searchFilterItems(
+      this.filterFilterItems(FilterItems, category),
+      searchTerm
+    );
 
     // Update props
     this.props.FilteredItems = FilteredItems;
@@ -111,12 +120,14 @@ class Filterizr {
     // Add the item to the FilterContainer
     const nodeModified = node.cloneNode(true);
     nodeModified.removeAttribute('style');
-    
 
     FilterContainer.push(nodeModified, this.options);
 
     // Retrigger filter for new item to assume position in the grid
-    const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
+    const FilteredItems = this.filterFilterItems(
+      this.props.FilterItems,
+      this.options.filter
+    );
 
     this.render(FilteredItems);
   }
@@ -136,10 +147,17 @@ class Filterizr {
     this.props.filterizrState = FILTERIZR_STATE.SORTING;
 
     // Sort main array
-    this.props.FilterItems = this.sortFilterItems(FilterItems, sortAttr, sortOrder);
+    this.props.FilterItems = this.sortFilterItems(
+      FilterItems,
+      sortAttr,
+      sortOrder
+    );
 
     // Apply filters
-    const FilteredItems = this.filterFilterItems(this.props.FilterItems, this.options.filter);
+    const FilteredItems = this.filterFilterItems(
+      this.props.FilterItems,
+      this.options.filter
+    );
 
     this.props.FilteredItems = FilteredItems;
 
@@ -155,7 +173,10 @@ class Filterizr {
     const { FilterItems } = this.props;
 
     // Filter items and optionally apply search if a search term exists
-    const FilteredItems = this.searchFilterItems(this.filterFilterItems(FilterItems, this.options.filter), searchTerm);
+    const FilteredItems = this.searchFilterItems(
+      this.filterFilterItems(FilterItems, this.options.filter),
+      searchTerm
+    );
 
     this.props.FilteredItems = FilteredItems;
 
@@ -192,9 +213,17 @@ class Filterizr {
    */
   setOptions(newOptions) {
     // error checking
-    checkOptionForErrors('animationDuration', newOptions.animationDuration, 'number');
+    checkOptionForErrors(
+      'animationDuration',
+      newOptions.animationDuration,
+      'number'
+    );
     checkOptionForErrors('callbacks', newOptions.callbacks, 'object');
-    checkOptionForErrors('controlsSelector', newOptions.controlsSelector, 'string');
+    checkOptionForErrors(
+      'controlsSelector',
+      newOptions.controlsSelector,
+      'string'
+    );
     checkOptionForErrors('delay', newOptions.delay, 'number');
     checkOptionForErrors(
       'easing',
@@ -311,16 +340,16 @@ class Filterizr {
       filters === 'all'
         ? FilterItems // Return all items
         : FilterItems.filter(FilterItem => {
-          // Return filtered array
-          const categories = FilterItem.getCategories();
-          const multiFilteringEnabled = Array.isArray(filters);
-          if (multiFilteringEnabled) {
-            return multifilterLogicalOperator === 'or'
-              ? intersection(categories, filters).length
-              : allStringsOfArray1InArray2(filters, categories);
-          }
-          return categories.includes(filters);
-        });
+            // Return filtered array
+            const categories = FilterItem.getCategories();
+            const multiFilteringEnabled = Array.isArray(filters);
+            if (multiFilteringEnabled) {
+              return multifilterLogicalOperator === 'or'
+                ? intersection(categories, filters).length
+                : allStringsOfArray1InArray2(filters, categories);
+            }
+            return categories.includes(filters);
+          });
 
     return FilteredItems;
   }
@@ -342,7 +371,9 @@ class Filterizr {
       return FilterItems;
     }
 
-    const SoughtItems = FilterItems.filter(FilterItem => FilterItem.contentsMatchSearch(searchTerm));
+    const SoughtItems = FilterItems.filter(FilterItem =>
+      FilterItem.contentsMatchSearch(searchTerm)
+    );
 
     return SoughtItems;
   }
@@ -376,7 +407,9 @@ class Filterizr {
       const multiFilteringEnabled = Array.isArray(filter);
       // Flags that determine whether item should be filtered out
       let filtersMatch;
-      const contentsMatchSearch = FilterItem.contentsMatchSearch(this.props.searchTerm);
+      const contentsMatchSearch = FilterItem.contentsMatchSearch(
+        this.props.searchTerm
+      );
 
       if (multiFilteringEnabled) {
         filtersMatch =

@@ -2,28 +2,28 @@
  * Same width layout for items that have the same width, but can have varying height
  * @param {object} Filterizr instance.
  */
-const SameWidthLayout = (Filterizr) => {
-  const {
-    FilterContainer,
-    FilteredItems,
-  } = Filterizr.props;
+const SameWidthLayout = Filterizr => {
+  const { FilterContainer, FilteredItems } = Filterizr.props;
 
   // Calculate number of columns and rows the grid should have
   let cols = FilterContainer.calcColumns(),
     row = 0,
-    columnHeights = Array.apply(null, Array(cols)).map(Number.prototype.valueOf, 0);
+    columnHeights = Array.apply(null, Array(cols)).map(
+      Number.prototype.valueOf,
+      0
+    );
 
   // Calculate array of positions
   const targetPositions = FilteredItems.map((FilterItem, index) => {
     // Update height of tallest item in row if needed
     const { w, h } = FilterItem.props;
 
-    // Update current row, increment container 
+    // Update current row, increment container
     // height and  reset height of tallest in row
     if (index % cols === 0 && index >= cols) row++;
 
     // Determine pos in grid
-    const spot = index - (cols * row);
+    const spot = index - cols * row;
 
     // Update height of column
     columnHeights[spot] += h;

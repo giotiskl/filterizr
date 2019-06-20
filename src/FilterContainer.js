@@ -1,8 +1,5 @@
 import FilterItem from './FilterItem';
-import { 
-  debounce,
-  setStylesOnHTMLNode,
-} from './utils';
+import { debounce, setStylesOnHTMLNode } from './utils';
 
 class FilterContainer {
   /**
@@ -43,20 +40,24 @@ class FilterContainer {
   destroy() {
     // Remove all inline styles and unbind all events
     this.node.removeAttribute('style');
-    const filterItemNodes = Array.from(this.node.querySelectorAll('.filtr-item'));
-    filterItemNodes.forEach((node) => node.removeAttribute('style'));
+    const filterItemNodes = Array.from(
+      this.node.querySelectorAll('.filtr-item')
+    );
+    filterItemNodes.forEach(node => node.removeAttribute('style'));
     this.unbindEvents();
   }
 
   /**
-   * Iterates over the FilterContainer creating FilterItem 
+   * Iterates over the FilterContainer creating FilterItem
    * instances for every .filtr-item element found.
    * @param {Object} options - of Filterizr instance
    * @return {Object[]} array of FilterItem instances
    */
   getFilterItems(options) {
     const filterItems = Array.from(this.node.querySelectorAll('.filtr-item'));
-    return filterItems.map((node, index) => new FilterItem(node, index, options));
+    return filterItems.map(
+      (node, index) => new FilterItem(node, index, options)
+    );
   }
 
   /**
@@ -88,12 +89,22 @@ class FilterContainer {
    * @param {Number} delay in ms
    * @param {String} delayMode alternate or progressive
    */
-  updateFilterItemsTransitionStyle(animationDuration, easing, delay, delayMode) {
+  updateFilterItemsTransitionStyle(
+    animationDuration,
+    easing,
+    delay,
+    delayMode
+  ) {
     const { FilterItems } = this.props;
 
-    FilterItems.forEach(FilterItem => setStylesOnHTMLNode(FilterItem.node, {
-      'transition': `all ${animationDuration}s ${easing} ${FilterItem.calcDelay(delay, delayMode)}ms`,
-    }));
+    FilterItems.forEach(FilterItem =>
+      setStylesOnHTMLNode(FilterItem.node, {
+        transition: `all ${animationDuration}s ${easing} ${FilterItem.calcDelay(
+          delay,
+          delayMode
+        )}ms`,
+      })
+    );
   }
 
   /**
@@ -138,11 +149,26 @@ class FilterContainer {
       callback();
     }, debounceDuration);
 
-    this.node.addEventListener('webkitTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.addEventListener('otransitionend', this.props.onTransitionEndHandler);
-    this.node.addEventListener('oTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.addEventListener('msTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.addEventListener('transitionend', this.props.onTransitionEndHandler);
+    this.node.addEventListener(
+      'webkitTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.addEventListener(
+      'otransitionend',
+      this.props.onTransitionEndHandler
+    );
+    this.node.addEventListener(
+      'oTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.addEventListener(
+      'msTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.addEventListener(
+      'transitionend',
+      this.props.onTransitionEndHandler
+    );
   }
 
   /**
@@ -150,12 +176,30 @@ class FilterContainer {
    * @param {Object} callbacks object containing all callback functions
    */
   bindEvents(callbacks) {
-    this.node.addEventListener('filteringStart', callbacks.addEventListenerFilteringStart);
-    this.node.addEventListener('filteringEnd', callbacks.addEventListenerFilteringEnd);
-    this.node.addEventListener('shufflingStart', callbacks.addEventListenerShufflingStart);
-    this.node.addEventListener('shufflingEnd', callbacks.addEventListenerShufflingEnd);
-    this.node.addEventListener('sortingStart', callbacks.addEventListenerSortingStart);
-    this.node.addEventListener('sortingEnd', callbacks.addEventListenerSortingEnd);
+    this.node.addEventListener(
+      'filteringStart',
+      callbacks.addEventListenerFilteringStart
+    );
+    this.node.addEventListener(
+      'filteringEnd',
+      callbacks.addEventListenerFilteringEnd
+    );
+    this.node.addEventListener(
+      'shufflingStart',
+      callbacks.addEventListenerShufflingStart
+    );
+    this.node.addEventListener(
+      'shufflingEnd',
+      callbacks.addEventListenerShufflingEnd
+    );
+    this.node.addEventListener(
+      'sortingStart',
+      callbacks.addEventListenerSortingStart
+    );
+    this.node.addEventListener(
+      'sortingEnd',
+      callbacks.addEventListenerSortingEnd
+    );
   }
 
   /**
@@ -163,18 +207,51 @@ class FilterContainer {
    */
   unbindEvents(callbacks) {
     // Transition end
-    this.node.removeEventListener('webkitTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.removeEventListener('otransitionend', this.props.onTransitionEndHandler);
-    this.node.removeEventListener('oTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.removeEventListener('msTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.removeEventListener('transitionend', this.props.onTransitionEndHandler);
+    this.node.removeEventListener(
+      'webkitTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.removeEventListener(
+      'otransitionend',
+      this.props.onTransitionEndHandler
+    );
+    this.node.removeEventListener(
+      'oTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.removeEventListener(
+      'msTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.removeEventListener(
+      'transitionend',
+      this.props.onTransitionEndHandler
+    );
     // Rest
-    this.node.removeEventListener('filteringStart', callbacks.removeEventListenerFilteringStart);
-    this.node.removeEventListener('filteringEnd', callbacks.removeEventListenerFilteringEnd);
-    this.node.removeEventListener('shufflingStart', callbacks.removeEventListenerShufflingStart);
-    this.node.removeEventListener('shufflingEnd', callbacks.removeEventListenerShufflingEnd);
-    this.node.removeEventListener('sortingStart', callbacks.removeEventListenerSortingStart);
-    this.node.removeEventListener('sortingEnd', callbacks.removeEventListenerSortingEnd);
+    this.node.removeEventListener(
+      'filteringStart',
+      callbacks.removeEventListenerFilteringStart
+    );
+    this.node.removeEventListener(
+      'filteringEnd',
+      callbacks.removeEventListenerFilteringEnd
+    );
+    this.node.removeEventListener(
+      'shufflingStart',
+      callbacks.removeEventListenerShufflingStart
+    );
+    this.node.removeEventListener(
+      'shufflingEnd',
+      callbacks.removeEventListenerShufflingEnd
+    );
+    this.node.removeEventListener(
+      'sortingStart',
+      callbacks.removeEventListenerSortingStart
+    );
+    this.node.removeEventListener(
+      'sortingEnd',
+      callbacks.removeEventListenerSortingEnd
+    );
   }
 
   /**

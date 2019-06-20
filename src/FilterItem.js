@@ -1,7 +1,4 @@
-import { 
-  getDataAttributesOfHTMLNode,
-  setStylesOnHTMLNode,
-} from './utils';
+import { getDataAttributesOfHTMLNode, setStylesOnHTMLNode } from './utils';
 
 class FilterItem {
   /**
@@ -37,7 +34,7 @@ class FilterItem {
         } else {
           this.node.classList.remove('filteredOut');
         }
-        setStylesOnHTMLNode(this.node, { zIndex: filteredOut ? -1000: '' });
+        setStylesOnHTMLNode(this.node, { zIndex: filteredOut ? -1000 : '' });
       },
       index,
       sortData: this.node.getAttribute('data-sort'),
@@ -48,14 +45,20 @@ class FilterItem {
     };
 
     // Set initial styles
-    setStylesOnHTMLNode(this.node, Object.assign({}, filterOutCss,{
-      '-webkit-backface-visibility': 'hidden',
-      'perspective': '1000px',
-      '-webkit-perspective': '1000px',
-      '-webkit-transform-style': 'preserve-3d',
-      'position': 'absolute',
-      'transition': `all ${animationDuration}s ${easing} ${this.calcDelay(delay, delayMode)}ms`,
-    }));
+    setStylesOnHTMLNode(
+      this.node,
+      Object.assign({}, filterOutCss, {
+        '-webkit-backface-visibility': 'hidden',
+        perspective: '1000px',
+        '-webkit-perspective': '1000px',
+        '-webkit-transform-style': 'preserve-3d',
+        position: 'absolute',
+        transition: `all ${animationDuration}s ${easing} ${this.calcDelay(
+          delay,
+          delayMode
+        )}ms`,
+      })
+    );
 
     // Finally bind events
     this.bindEvents();
@@ -68,9 +71,14 @@ class FilterItem {
    */
   filterIn(targetPosition, cssOptions) {
     // Enhance the cssOptions with the target position before animating
-    setStylesOnHTMLNode(this.node, Object.assign({}, cssOptions, {
-      transform: `${cssOptions.transform || ''} translate3d(${targetPosition.left}px, ${targetPosition.top}px, 0)`,
-    }));
+    setStylesOnHTMLNode(
+      this.node,
+      Object.assign({}, cssOptions, {
+        transform: `${cssOptions.transform || ''} translate3d(${
+          targetPosition.left
+        }px, ${targetPosition.top}px, 0)`,
+      })
+    );
     // Update last position to be the targetPosition
     this.props.lastPosition = targetPosition;
     // Update state
@@ -84,9 +92,14 @@ class FilterItem {
   filterOut(cssOptions) {
     const { lastPosition: targetPosition } = this.props;
     // Enhance the cssOptions with the target position before animating
-    setStylesOnHTMLNode(this.node, Object.assign({}, cssOptions, {
-      transform: `${cssOptions.transform || ''} translate3d(${targetPosition.left}px, ${targetPosition.top}px, 0)`,
-    }));
+    setStylesOnHTMLNode(
+      this.node,
+      Object.assign({}, cssOptions, {
+        transform: `${cssOptions.transform || ''} translate3d(${
+          targetPosition.left
+        }px, ${targetPosition.top}px, 0)`,
+      })
+    );
     // Update state
     this.props.filteredOut = true;
   }
@@ -172,24 +185,53 @@ class FilterItem {
    * Sets up the events related to the FilterItem instance
    */
   bindEvents() {
-    this.node.addEventListener('webkitTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.addEventListener('otransitionend', this.props.onTransitionEndHandler);
-    this.node.addEventListener('oTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.addEventListener('msTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.addEventListener('transitionend', this.props.onTransitionEndHandler);
+    this.node.addEventListener(
+      'webkitTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.addEventListener(
+      'otransitionend',
+      this.props.onTransitionEndHandler
+    );
+    this.node.addEventListener(
+      'oTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.addEventListener(
+      'msTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.addEventListener(
+      'transitionend',
+      this.props.onTransitionEndHandler
+    );
   }
 
   /**
    * Removes all events related to the FilterItem instance
    */
   unbindEvents() {
-    this.node.removeEventListener('webkitTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.removeEventListener('otransitionend', this.props.onTransitionEndHandler);
-    this.node.removeEventListener('oTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.removeEventListener('msTransitionEnd', this.props.onTransitionEndHandler);
-    this.node.removeEventListener('transitionend', this.props.onTransitionEndHandler);
+    this.node.removeEventListener(
+      'webkitTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.removeEventListener(
+      'otransitionend',
+      this.props.onTransitionEndHandler
+    );
+    this.node.removeEventListener(
+      'oTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.removeEventListener(
+      'msTransitionEnd',
+      this.props.onTransitionEndHandler
+    );
+    this.node.removeEventListener(
+      'transitionend',
+      this.props.onTransitionEndHandler
+    );
   }
 }
 
 export default FilterItem;
-

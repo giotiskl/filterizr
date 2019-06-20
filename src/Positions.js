@@ -13,7 +13,7 @@ import PackedLayout from './layouts/PackedLayout';
  * @return {Object} layout to be used by Filterizr
  */
 const Positions = (Layout, Filterizr) => {
-  switch(Layout) {
+  switch (Layout) {
     case 'horizontal':
       return HorizontalLayout(Filterizr);
     case 'vertical':

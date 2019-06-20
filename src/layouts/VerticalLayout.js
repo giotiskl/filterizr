@@ -3,17 +3,14 @@
  * @param {Object} Filterizr instance.
  * @return {Object[]} positions for the items to assume.
  */
-const VerticalLayout = (Filterizr) => {
-  const {
-    FilterContainer,
-    FilteredItems,
-  } = Filterizr.props;
+const VerticalLayout = Filterizr => {
+  const { FilterContainer, FilteredItems } = Filterizr.props;
 
   // In this layout top in the end will also
   // be the total height of the FilterContainer
   let top = 0;
 
-  const targetPositions = FilteredItems.map((FilterItem) => {
+  const targetPositions = FilteredItems.map(FilterItem => {
     const { h } = FilterItem.props;
     const pos = {
       left: 0,
