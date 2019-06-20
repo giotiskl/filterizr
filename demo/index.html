@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Filterizr Demo - With jQuery in Bundle</title>
 
     <!-- Bootstrap -->
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-      crossorigin="anonymous">
-    <link rel="stylesheet" href="demo/index.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./index.css" />
   </head>
   <body>
-
     <div class="container">
       <!-- Filter Controls - Simple Mode -->
       <div class="row">
@@ -65,47 +68,124 @@
       <!-- Search control -->
       <div class="row search-row">
         Search control:
-        <input type="text" class="fltr-controls filtr-search" name="filtr-search" data-search>
+        <input
+          type="text"
+          class="fltr-controls filtr-search"
+          name="filtr-search"
+          data-search
+        />
       </div>
 
       <div class="row push-down">
         <!-- This is the set up of a basic gallery, your items must have the categories they belong to in a data-category
         attribute, which starts from the value 1 and goes up from there -->
         <div class="filtr-container">
-          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="Busy streets">
-            <img class="img-responsive" src="demo/img/city_1.jpg" alt="sample image">
+          <div
+            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            data-category="1, 5"
+            data-sort="Busy streets"
+          >
+            <img
+              class="img-responsive"
+              src="./img/city_1.jpg"
+              alt="sample image"
+            />
             <span class="item-desc">Busy Streets</span>
           </div>
-          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 5" data-sort="Luminous night">
-            <img class="img-responsive" src="demo/img/nature_2.jpg" alt="sample image">
+          <div
+            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            data-category="2, 5"
+            data-sort="Luminous night"
+          >
+            <img
+              class="img-responsive"
+              src="./img/nature_2.jpg"
+              alt="sample image"
+            />
             <span class="item-desc">Luminous night</span>
           </div>
-          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 4" data-sort="City wonders">
-            <img class="img-responsive" src="demo/img/city_3.jpg" alt="sample image">
+          <div
+            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            data-category="1, 4"
+            data-sort="City wonders"
+          >
+            <img
+              class="img-responsive"
+              src="./img/city_3.jpg"
+              alt="sample image"
+            />
             <span class="item-desc">city wonders</span>
           </div>
-          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="In production">
-            <img class="img-responsive" src="demo/img/industrial_1.jpg" alt="sample image">
+          <div
+            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            data-category="3"
+            data-sort="In production"
+          >
+            <img
+              class="img-responsive"
+              src="./img/industrial_1.jpg"
+              alt="sample image"
+            />
             <span class="item-desc">in production</span>
           </div>
-          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3, 4" data-sort="Industrial site">
-            <img class="img-responsive" src="demo/img/industrial_2.jpg" alt="sample image">
+          <div
+            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            data-category="3, 4"
+            data-sort="Industrial site"
+          >
+            <img
+              class="img-responsive"
+              src="./img/industrial_2.jpg"
+              alt="sample image"
+            />
             <span class="item-desc">industrial site</span>
           </div>
-          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Peaceful lake">
-            <img class="img-responsive" src="demo/img/nature_1.jpg" alt="sample image">
+          <div
+            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            data-category="2, 4"
+            data-sort="Peaceful lake"
+          >
+            <img
+              class="img-responsive"
+              src="./img/nature_1.jpg"
+              alt="sample image"
+            />
             <span class="item-desc">peaceful lake</span>
           </div>
-          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="1, 5" data-sort="City lights">
-            <img class="img-responsive" src="demo/img/city_2.jpg" alt="sample image">
+          <div
+            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            data-category="1, 5"
+            data-sort="City lights"
+          >
+            <img
+              class="img-responsive"
+              src="./img/city_2.jpg"
+              alt="sample image"
+            />
             <span class="item-desc">city lights</span>
           </div>
-          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="2, 4" data-sort="Dreamhouse">
-            <img class="img-responsive" src="demo/img/nature_3.jpg" alt="sample image">
+          <div
+            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            data-category="2, 4"
+            data-sort="Dreamhouse"
+          >
+            <img
+              class="img-responsive"
+              src="./img/nature_3.jpg"
+              alt="sample image"
+            />
             <span class="item-desc">dreamhouse</span>
           </div>
-          <div class="col-xs-6 col-sm-4 col-md-3 filtr-item" data-category="3" data-sort="Restless machines">
-            <img class="img-responsive" src="demo/img/industrial_3.jpg" alt="sample image">
+          <div
+            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            data-category="3"
+            data-sort="Restless machines"
+          >
+            <img
+              class="img-responsive"
+              src="./img/industrial_3.jpg"
+              alt="sample image"
+            />
             <span class="item-desc">restless machines</span>
           </div>
         </div>
@@ -125,18 +205,42 @@
           </ul>
         </div>
         <div class="color-container-1 col-xs-12">
-          <div class="filtr-item block red col-sm-3" data-category="red"><span class="text">01</span></div>
-          <div class="filtr-item block blue col-sm-3" data-category="blue"><span class="text">02</span></div>
-          <div class="filtr-item block green col-sm-3" data-category="green"><span class="text">03</span></div>
-          <div class="filtr-item block purple col-sm-3" data-category="purple"><span class="text">04</span></div>
-          <div class="filtr-item block purple col-sm-3" data-category="purple"><span class="text">05</span></div>
-          <div class="filtr-item block yellow col-sm-3" data-category="yellow"><span class="text">06</span></div>
-          <div class="filtr-item block green col-sm-3" data-category="green"><span class="text">07</span></div>
-          <div class="filtr-item block green col-sm-3" data-category="green"><span class="text">08</span></div>
-          <div class="filtr-item block yellow col-sm-3" data-category="yellow"><span class="text">09</span></div>
-          <div class="filtr-item block purple col-sm-3" data-category="purple"><span class="text">10</span></div>
-          <div class="filtr-item block red col-sm-3" data-category="red"><span class="text">11</span></div>
-          <div class="filtr-item block blue col-sm-3" data-category="blue"><span class="text">12</span></div>
+          <div class="filtr-item block red col-sm-3" data-category="red">
+            <span class="text">01</span>
+          </div>
+          <div class="filtr-item block blue col-sm-3" data-category="blue">
+            <span class="text">02</span>
+          </div>
+          <div class="filtr-item block green col-sm-3" data-category="green">
+            <span class="text">03</span>
+          </div>
+          <div class="filtr-item block purple col-sm-3" data-category="purple">
+            <span class="text">04</span>
+          </div>
+          <div class="filtr-item block purple col-sm-3" data-category="purple">
+            <span class="text">05</span>
+          </div>
+          <div class="filtr-item block yellow col-sm-3" data-category="yellow">
+            <span class="text">06</span>
+          </div>
+          <div class="filtr-item block green col-sm-3" data-category="green">
+            <span class="text">07</span>
+          </div>
+          <div class="filtr-item block green col-sm-3" data-category="green">
+            <span class="text">08</span>
+          </div>
+          <div class="filtr-item block yellow col-sm-3" data-category="yellow">
+            <span class="text">09</span>
+          </div>
+          <div class="filtr-item block purple col-sm-3" data-category="purple">
+            <span class="text">10</span>
+          </div>
+          <div class="filtr-item block red col-sm-3" data-category="red">
+            <span class="text">11</span>
+          </div>
+          <div class="filtr-item block blue col-sm-3" data-category="blue">
+            <span class="text">12</span>
+          </div>
         </div>
       </div>
 
@@ -154,21 +258,60 @@
           </ul>
         </div>
         <div class="color-container-2 col-xs-12">
-          <div class="filtr-item block green xs col-sm-4" data-category="green"><span class="text">01</span></div>
-          <div class="filtr-item block red lg col-sm-4" data-category="red"><span class="text">02</span></div>
-          <div class="filtr-item block blue md col-sm-4" data-category="blue"><span class="text">03</span></div>
-          <div class="filtr-item block green col-sm-4" data-category="green"><span class="text">04</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">05</span></div>
-          <div class="filtr-item block purple xs col-sm-4" data-category="purple"><span class="text">06</span></div>
-          <div class="filtr-item block red lg col-sm-4" data-category="red"><span class="text">07</span></div>
-          <div class="filtr-item block yellow md col-sm-4" data-category="yellow"><span class="text">08</span></div>
-          <div class="filtr-item block red md col-sm-4" data-category="red"><span class="text">09</span></div>
-          <div class="filtr-item block green col-sm-4" data-category="green"><span class="text">10</span></div>
-          <div class="filtr-item block green lg col-sm-4" data-category="green"><span class="text">11</span></div>
-          <div class="filtr-item block yellow xs col-sm-4" data-category="yellow"><span class="text">12</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">13</span></div>
-          <div class="filtr-item block red col-sm-4" data-category="red"><span class="text">14</span></div>
-          <div class="filtr-item block blue lg col-sm-4" data-category="blue"><span class="text">15</span></div>
+          <div class="filtr-item block green xs col-sm-4" data-category="green">
+            <span class="text">01</span>
+          </div>
+          <div class="filtr-item block red lg col-sm-4" data-category="red">
+            <span class="text">02</span>
+          </div>
+          <div class="filtr-item block blue md col-sm-4" data-category="blue">
+            <span class="text">03</span>
+          </div>
+          <div class="filtr-item block green col-sm-4" data-category="green">
+            <span class="text">04</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">05</span>
+          </div>
+          <div
+            class="filtr-item block purple xs col-sm-4"
+            data-category="purple"
+          >
+            <span class="text">06</span>
+          </div>
+          <div class="filtr-item block red lg col-sm-4" data-category="red">
+            <span class="text">07</span>
+          </div>
+          <div
+            class="filtr-item block yellow md col-sm-4"
+            data-category="yellow"
+          >
+            <span class="text">08</span>
+          </div>
+          <div class="filtr-item block red md col-sm-4" data-category="red">
+            <span class="text">09</span>
+          </div>
+          <div class="filtr-item block green col-sm-4" data-category="green">
+            <span class="text">10</span>
+          </div>
+          <div class="filtr-item block green lg col-sm-4" data-category="green">
+            <span class="text">11</span>
+          </div>
+          <div
+            class="filtr-item block yellow xs col-sm-4"
+            data-category="yellow"
+          >
+            <span class="text">12</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">13</span>
+          </div>
+          <div class="filtr-item block red col-sm-4" data-category="red">
+            <span class="text">14</span>
+          </div>
+          <div class="filtr-item block blue lg col-sm-4" data-category="blue">
+            <span class="text">15</span>
+          </div>
         </div>
       </div>
 
@@ -186,18 +329,45 @@
           </ul>
         </div>
         <div class="color-container-3 col-xs-12">
-          <div class="filtr-item block red col-sm-8" data-category="red"><span class="text">01</span></div>
-          <div class="filtr-item block blue col-sm-4" data-category="blue"><span class="text">02</span></div>
-          <div class="filtr-item block green col-sm-2" data-category="green"><span class="text">03</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">04</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">05</span></div>
-          <div class="filtr-item block yellow md col-sm-2" data-category="yellow"><span class="text">06</span></div>
-          <div class="filtr-item block green col-sm-12" data-category="green"><span class="text">07</span></div>
-          <div class="filtr-item block green col-sm-4" data-category="green"><span class="text">08</span></div>
-          <div class="filtr-item block yellow col-sm-2" data-category="yellow"><span class="text">09</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">10</span></div>
-          <div class="filtr-item block red col-sm-4" data-category="red"><span class="text">11</span></div>
-          <div class="filtr-item block blue col-sm-8" data-category="blue"><span class="text">12</span></div>
+          <div class="filtr-item block red col-sm-8" data-category="red">
+            <span class="text">01</span>
+          </div>
+          <div class="filtr-item block blue col-sm-4" data-category="blue">
+            <span class="text">02</span>
+          </div>
+          <div class="filtr-item block green col-sm-2" data-category="green">
+            <span class="text">03</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">04</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">05</span>
+          </div>
+          <div
+            class="filtr-item block yellow md col-sm-2"
+            data-category="yellow"
+          >
+            <span class="text">06</span>
+          </div>
+          <div class="filtr-item block green col-sm-12" data-category="green">
+            <span class="text">07</span>
+          </div>
+          <div class="filtr-item block green col-sm-4" data-category="green">
+            <span class="text">08</span>
+          </div>
+          <div class="filtr-item block yellow col-sm-2" data-category="yellow">
+            <span class="text">09</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">10</span>
+          </div>
+          <div class="filtr-item block red col-sm-4" data-category="red">
+            <span class="text">11</span>
+          </div>
+          <div class="filtr-item block blue col-sm-8" data-category="blue">
+            <span class="text">12</span>
+          </div>
         </div>
       </div>
 
@@ -215,18 +385,48 @@
           </ul>
         </div>
         <div class="color-container-4 col-xs-12">
-          <div class="filtr-item block red xs col-sm-8" data-category="red"><span class="text">01</span></div>
-          <div class="filtr-item block blue col-sm-4" data-category="blue"><span class="text">02</span></div>
-          <div class="filtr-item block green md col-sm-2" data-category="green"><span class="text">03</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">04</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">05</span></div>
-          <div class="filtr-item block yellow md col-sm-2" data-category="yellow"><span class="text">06</span></div>
-          <div class="filtr-item block green md col-sm-6" data-category="green"><span class="text">07</span></div>
-          <div class="filtr-item block green col-sm-4" data-category="green"><span class="text">08</span></div>
-          <div class="filtr-item block yellow lg col-sm-2" data-category="yellow"><span class="text">09</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">10</span></div>
-          <div class="filtr-item block red xs col-sm-4" data-category="red"><span class="text">11</span></div>
-          <div class="filtr-item block blue col-sm-8" data-category="blue"><span class="text">12</span></div>
+          <div class="filtr-item block red xs col-sm-8" data-category="red">
+            <span class="text">01</span>
+          </div>
+          <div class="filtr-item block blue col-sm-4" data-category="blue">
+            <span class="text">02</span>
+          </div>
+          <div class="filtr-item block green md col-sm-2" data-category="green">
+            <span class="text">03</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">04</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">05</span>
+          </div>
+          <div
+            class="filtr-item block yellow md col-sm-2"
+            data-category="yellow"
+          >
+            <span class="text">06</span>
+          </div>
+          <div class="filtr-item block green md col-sm-6" data-category="green">
+            <span class="text">07</span>
+          </div>
+          <div class="filtr-item block green col-sm-4" data-category="green">
+            <span class="text">08</span>
+          </div>
+          <div
+            class="filtr-item block yellow lg col-sm-2"
+            data-category="yellow"
+          >
+            <span class="text">09</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">10</span>
+          </div>
+          <div class="filtr-item block red xs col-sm-4" data-category="red">
+            <span class="text">11</span>
+          </div>
+          <div class="filtr-item block blue col-sm-8" data-category="blue">
+            <span class="text">12</span>
+          </div>
         </div>
       </div>
 
@@ -244,10 +444,18 @@
           </ul>
         </div>
         <div class="color-container-5 col-xs-12">
-          <div class="filtr-item block red xs col-sm-2" data-category="red"><span class="text">01</span></div>
-          <div class="filtr-item block blue col-sm-4" data-category="blue"><span class="text">02</span></div>
-          <div class="filtr-item block green md col-sm-2" data-category="green"><span class="text">03</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">04</span></div>
+          <div class="filtr-item block red xs col-sm-2" data-category="red">
+            <span class="text">01</span>
+          </div>
+          <div class="filtr-item block blue col-sm-4" data-category="blue">
+            <span class="text">02</span>
+          </div>
+          <div class="filtr-item block green md col-sm-2" data-category="green">
+            <span class="text">03</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">04</span>
+          </div>
         </div>
       </div>
 
@@ -265,21 +473,107 @@
           </ul>
         </div>
         <div class="color-container-6 col-xs-12">
-          <div class="filtr-item block red xs col-sm-8" data-category="red"><span class="text">01</span></div>
-          <div class="filtr-item block blue col-sm-4" data-category="blue"><span class="text">02</span></div>
-          <div class="filtr-item block green md col-sm-2" data-category="green"><span class="text">03</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">04</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">05</span></div>
-          <div class="filtr-item block yellow md col-sm-2" data-category="yellow"><span class="text">06</span></div>
-          <div class="filtr-item block green md col-sm-6" data-category="green"><span class="text">07</span></div>
-          <div class="filtr-item block green col-sm-4" data-category="green"><span class="text">08</span></div>
-          <div class="filtr-item block yellow lg col-sm-2" data-category="yellow"><span class="text">09</span></div>
-          <div class="filtr-item block purple col-sm-4" data-category="purple"><span class="text">10</span></div>
-          <div class="filtr-item block red xs col-sm-4" data-category="red"><span class="text">11</span></div>
-          <div class="filtr-item block blue col-sm-8" data-category="blue"><span class="text">12</span></div>
+          <div class="filtr-item block red xs col-sm-8" data-category="red">
+            <span class="text">01</span>
+          </div>
+          <div class="filtr-item block blue col-sm-4" data-category="blue">
+            <span class="text">02</span>
+          </div>
+          <div class="filtr-item block green md col-sm-2" data-category="green">
+            <span class="text">03</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">04</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">05</span>
+          </div>
+          <div
+            class="filtr-item block yellow md col-sm-2"
+            data-category="yellow"
+          >
+            <span class="text">06</span>
+          </div>
+          <div class="filtr-item block green md col-sm-6" data-category="green">
+            <span class="text">07</span>
+          </div>
+          <div class="filtr-item block green col-sm-4" data-category="green">
+            <span class="text">08</span>
+          </div>
+          <div
+            class="filtr-item block yellow lg col-sm-2"
+            data-category="yellow"
+          >
+            <span class="text">09</span>
+          </div>
+          <div class="filtr-item block purple col-sm-4" data-category="purple">
+            <span class="text">10</span>
+          </div>
+          <div class="filtr-item block red xs col-sm-4" data-category="red">
+            <span class="text">11</span>
+          </div>
+          <div class="filtr-item block blue col-sm-8" data-category="blue">
+            <span class="text">12</span>
+          </div>
         </div>
       </div>
-
     </div>
   </body>
+  <script type="text/javascript" src="filterizr.min.js"></script>
+  <script type="text/javascript">
+    const simpleFilters = document.querySelectorAll('.simplefilter li');
+    Array.from(simpleFilters).forEach(node =>
+      node.addEventListener('click', function() {
+        simpleFilters.forEach(filter => filter.classList.remove('active'));
+        node.classList.add('active');
+      })
+    );
+
+    const multiFilters = document.querySelectorAll('.multifilter li');
+    Array.from(multiFilters).forEach(node =>
+      node.addEventListener('click', function() {
+        node.classList.toggle('active');
+      })
+    );
+
+    const sortControls = document.querySelectorAll('.sort-btn');
+    Array.from(sortControls).forEach(node =>
+      node.addEventListener('click', function() {
+        sortControls.forEach(control => control.classList.remove('active'));
+        node.classList.add('active');
+      })
+    );
+
+    const shuffleControl = document.querySelector('.shuffle-btn');
+    shuffleControl.addEventListener('click', function() {
+        sortControls.forEach(control => control.classList.remove('active'));
+    });
+
+    new filterizr.default('.filtr-container', {
+      controlsSelector: '.fltr-controls',
+    });
+    new filterizr.default('.color-container-1', {
+      controlsSelector: '.color-controls-1',
+    });
+    new filterizr.default('.color-container-2', {
+      controlsSelector: '.color-controls-2',
+      layout: 'sameWidth',
+    });
+    new filterizr.default('.color-container-3', {
+      controlsSelector: '.color-controls-3',
+      layout: 'sameHeight',
+    });
+    new filterizr.default('.color-container-4', {
+      controlsSelector: '.color-controls-4',
+      layout: 'packed',
+    });
+    new filterizr.default('.color-container-5', {
+      controlsSelector: '.color-controls-5',
+      layout: 'horizontal',
+    });
+    new filterizr.default('.color-container-6', {
+      controlsSelector: '.color-controls-6',
+      layout: 'vertical',
+    });
+  </script>
 </html>

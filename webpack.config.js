@@ -1,56 +1,51 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-var UglifyJsPlugin = require('webpack').optimize.UglifyJsPlugin;
-var DefinePlugin = require('webpack').DefinePlugin;
+const path = require('path');
 
-module.exports = env => {
-  const withjquery = env.withjquery;
-  env = env.env;
+const ENVIRONMENTS = {
+  DEVELOPMENT: 'development',
+  PRODUCTION: 'production',
+};
 
-  let config = {
-    entry: [
-      // set our index.js as the entry point
-      './src/index',
-    ],
-    output: {
-      path: __dirname,
-      filename: `./dist/jquery.filterizr${withjquery === 'true' ? '-with-jquery' : ''}.min.js`,
+module.exports = (env = {}) => {
+  const IS_DEVELOPMENT = env.env === ENVIRONMENTS.DEVELOPMENT;
+  const mode = IS_DEVELOPMENT
+    ? ENVIRONMENTS.DEVELOPMENT
+    : ENVIRONMENTS.PRODUCTION;
+  const libraryTarget = IS_DEVELOPMENT ? 'var' : 'commonjs';
+
+  return {
+    entry: {
+      filterizr: './src/index.ts',
+      demo: './src/demoInit.js',
     },
+    ...(IS_DEVELOPMENT && {
+      devtool: 'inline-source-map',
+      devServer: {
+        clientLogLevel: 'debug',
+        contentBase: path.join(__dirname, 'demo'),
+        inline: true,
+        hot: true,
+        open: true,
+        progress: true,
+      },
+    }),
+    mode,
     module: {
-      loaders: [
-        // JavaScript loader
+      rules: [
         {
-          test: /\.js$/,
-          exclude: /(node_modules|bower_components)/,
-          // run JS through Babel
-          use: {
-            loader: 'babel-loader'
-          }
+          test: /\.ts?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
         },
-      ]
+      ],
     },
-    plugins: [
-      new HtmlWebpackPlugin({
-        title: `Filterizr demo - ${withjquery === 'true' ? 'with' : 'without'} jQuery in bundle`,
-        template: `demo/index${withjquery === 'true' ? '' : '-without-jquery-in-bundle'}.html`,
-      }),
-      // uglify plugin for JS
-      new UglifyJsPlugin(),
-      // Expose whether jQuery should be imported or not
-      new DefinePlugin({
-        FILTERIZR_ENV: JSON.stringify(env),
-        IMPORT_JQUERY: JSON.stringify(withjquery === 'true'),
-      }),
-    ],
     resolve: {
-      extensions: ['.js'],
-    }
-  }
-
-  if (env === 'analyze') {
-    // When the env is analyze, generate bundle analysis
-    config.plugins.push(new BundleAnalyzerPlugin());
-  }
-
-  return config;
-}
+      extensions: ['.ts', '.js'],
+    },
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: '[name].min.js',
+      library: 'filterizr',
+      libraryTarget,
+    },
+  };
+};
