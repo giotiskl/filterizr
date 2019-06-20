@@ -1,16 +1,28 @@
+import { IDefaultOptions, IDefaultOptionsCallbacks } from './DefaultOptions';
 import FilterItem from './FilterItem';
 import { debounce, setStylesOnHTMLNode } from './utils';
 
-class FilterContainer {
+export default class FilterContainer {
+  node: Element;
+  options: IDefaultOptions;
+  props: {
+    FilterItems: FilterItem[];
+    w: number;
+    h: number;
+    onTransitionEndHandler?: EventListener;
+  };
+
   /**
    * Instantiates a FilterContainer
    * @param {String} selector of the FilterContainer instance
    * @param {Object} options with which to instantiate the container
    * @return {Object} FilterContainer instance
    */
-  constructor(selector = '.filtr-container', options) {
+  constructor(selector = '.filtr-container', options: IDefaultOptions) {
     // Cache jQuery node
     this.node = document.querySelector(selector);
+
+    this.options = options;
 
     // Set up initial styles of container
     setStylesOnHTMLNode(this.node, {
@@ -28,6 +40,7 @@ class FilterContainer {
       FilterItems: this.getFilterItems(options),
       w: this.getWidth(),
       h: 0,
+      onTransitionEndHandler: null,
     };
 
     // Update dimensions of contained items on instantiation
@@ -37,14 +50,14 @@ class FilterContainer {
   /**
    * Destroys the FilterContainer instance by unbinding all events and resetting inline styles.
    */
-  destroy() {
+  destroy(): void {
     // Remove all inline styles and unbind all events
     this.node.removeAttribute('style');
     const filterItemNodes = Array.from(
       this.node.querySelectorAll('.filtr-item')
     );
     filterItemNodes.forEach(node => node.removeAttribute('style'));
-    this.unbindEvents();
+    this.unbindEvents(this.options.callbacks);
   }
 
   /**
@@ -53,7 +66,7 @@ class FilterContainer {
    * @param {Object} options - of Filterizr instance
    * @return {Object[]} array of FilterItem instances
    */
-  getFilterItems(options) {
+  getFilterItems(options: IDefaultOptions) {
     const filterItems = Array.from(this.node.querySelectorAll('.filtr-item'));
     return filterItems.map(
       (node, index) => new FilterItem(node, index, options)
@@ -65,7 +78,7 @@ class FilterContainer {
    * @param {Object} node - jQuery node to instantiate as FilterItem and append to the grid
    * @param {Object} options - Filterizr instance options
    */
-  push(node, options) {
+  push(node: Element, options: IDefaultOptions): void {
     const { FilterItems } = this.props;
     // Add new item to DOM
     this.node.appendChild(node);
@@ -77,8 +90,9 @@ class FilterContainer {
 
   /**
    * Calculates the amount of columns the Filterizr grid should have
+   * @returns {number} number of columns for the grid
    */
-  calcColumns() {
+  calcColumns(): number {
     return Math.round(this.props.w / this.props.FilterItems[0].props.w);
   }
 
@@ -90,11 +104,11 @@ class FilterContainer {
    * @param {String} delayMode alternate or progressive
    */
   updateFilterItemsTransitionStyle(
-    animationDuration,
-    easing,
-    delay,
-    delayMode
-  ) {
+    animationDuration: number,
+    easing: string,
+    delay: number,
+    delayMode: 'progressive' | 'alternate'
+  ): void {
     const { FilterItems } = this.props;
 
     FilterItems.forEach(FilterItem =>
@@ -110,31 +124,35 @@ class FilterContainer {
   /**
    * Updates the height of the FilterContainer prop and sets it as an inline style
    * @param {Number} newHeight - the new value of the CSS height property
+   * @returns {undefined}
    */
-  updateHeight(newHeight) {
+  updateHeight(newHeight: number): void {
     this.props.h = newHeight;
     setStylesOnHTMLNode(this.node, { height: `${newHeight}px` });
   }
 
   /**
    * Updates the width of the FilterContainer prop
+   * @returns {undefined}
    */
-  updateWidth() {
+  updateWidth(): void {
     this.props.w = this.getWidth();
   }
 
   /**
    * Updates the dimensions of all FilterItems, used for resizing
+   * @returns {undefined}
    */
-  updateFilterItemsDimensions() {
+  updateFilterItemsDimensions(): void {
     const { FilterItems } = this.props;
     FilterItems.forEach(FilterItem => FilterItem.updateDimensions());
   }
 
   /**
    * Wrapper call around jQuery's innerWidth
+   * @returns {number} width of node
    */
-  getWidth() {
+  getWidth(): number {
     return this.node.clientWidth;
   }
 
@@ -143,8 +161,9 @@ class FilterContainer {
    * space to trigger Filterizr related events, e.g. onFilteringEnd etc.
    * @param {Function} callback for the transitionEnd event
    * @param {Number} debounceDuration in milliseconds
+   * @returns {undefined}
    */
-  bindTransitionEnd(callback, debounceDuration) {
+  bindTransitionEnd(callback: Function, debounceDuration: number): void {
     this.props.onTransitionEndHandler = debounce(() => {
       callback();
     }, debounceDuration);
@@ -175,37 +194,19 @@ class FilterContainer {
    * Binds all Filterizr related events.
    * @param {Object} callbacks object containing all callback functions
    */
-  bindEvents(callbacks) {
-    this.node.addEventListener(
-      'filteringStart',
-      callbacks.addEventListenerFilteringStart
-    );
-    this.node.addEventListener(
-      'filteringEnd',
-      callbacks.addEventListenerFilteringEnd
-    );
-    this.node.addEventListener(
-      'shufflingStart',
-      callbacks.addEventListenerShufflingStart
-    );
-    this.node.addEventListener(
-      'shufflingEnd',
-      callbacks.addEventListenerShufflingEnd
-    );
-    this.node.addEventListener(
-      'sortingStart',
-      callbacks.addEventListenerSortingStart
-    );
-    this.node.addEventListener(
-      'sortingEnd',
-      callbacks.addEventListenerSortingEnd
-    );
+  bindEvents(callbacks: IDefaultOptionsCallbacks): void {
+    this.node.addEventListener('filteringStart', callbacks.onFilteringStart);
+    this.node.addEventListener('filteringEnd', callbacks.onFilteringEnd);
+    this.node.addEventListener('shufflingStart', callbacks.onShufflingStart);
+    this.node.addEventListener('shufflingEnd', callbacks.onShufflingEnd);
+    this.node.addEventListener('sortingStart', callbacks.onSortingStart);
+    this.node.addEventListener('sortingEnd', callbacks.onSortingEnd);
   }
 
   /**
    * Unbinds all Filterizr related events.
    */
-  unbindEvents(callbacks) {
+  unbindEvents(callbacks: IDefaultOptionsCallbacks): void {
     // Transition end
     this.node.removeEventListener(
       'webkitTransitionEnd',
@@ -228,40 +229,21 @@ class FilterContainer {
       this.props.onTransitionEndHandler
     );
     // Rest
-    this.node.removeEventListener(
-      'filteringStart',
-      callbacks.removeEventListenerFilteringStart
-    );
-    this.node.removeEventListener(
-      'filteringEnd',
-      callbacks.removeEventListenerFilteringEnd
-    );
-    this.node.removeEventListener(
-      'shufflingStart',
-      callbacks.removeEventListenerShufflingStart
-    );
-    this.node.removeEventListener(
-      'shufflingEnd',
-      callbacks.removeEventListenerShufflingEnd
-    );
-    this.node.removeEventListener(
-      'sortingStart',
-      callbacks.removeEventListenerSortingStart
-    );
-    this.node.removeEventListener(
-      'sortingEnd',
-      callbacks.removeEventListenerSortingEnd
-    );
+    this.node.removeEventListener('filteringStart', callbacks.onFilteringStart);
+    this.node.removeEventListener('filteringEnd', callbacks.onFilteringEnd);
+    this.node.removeEventListener('shufflingStart', callbacks.onShufflingStart);
+    this.node.removeEventListener('shufflingEnd', callbacks.onShufflingEnd);
+    this.node.removeEventListener('sortingStart', callbacks.onSortingStart);
+    this.node.removeEventListener('sortingEnd', callbacks.onSortingEnd);
   }
 
   /**
    * Method wrapper around jQuery's trigger
    * @param {string} eventType - name of the event
+   * @returns {undefined}
    */
-  trigger(eventType) {
+  trigger(eventType: string): void {
     const event = new Event(eventType);
     this.node.dispatchEvent(event);
   }
 }
-
-export default FilterContainer;

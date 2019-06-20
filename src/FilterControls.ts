@@ -1,12 +1,32 @@
+import Filterizr from './Filterizr';
 import { debounce } from './utils';
 
 class FilterControls {
+  filterControls: NodeListOf<Element>;
+  multiFilterControls: NodeListOf<Element>;
+  shuffleControls: NodeListOf<Element>;
+  searchControls: NodeListOf<Element>;
+  sortAscControls: NodeListOf<Element>;
+  sortDescControls: NodeListOf<Element>;
+  props: {
+    Filterizr: Filterizr;
+    selector: string;
+    handlers: {
+      filterControlsHandler: EventListener;
+      multiFilterControlsHandler: EventListener;
+      shuffleControlsHandler: EventListener;
+      searchControlsHandler: EventListener;
+      sortAscControlsHandler: EventListener;
+      sortDescControlsHandler: EventListener;
+    };
+  };
+
   /**
    * @param {object} Filterizr keep a ref to the Filterizr object to control actions
    * @param {string} selector optionally the selector of the .filtr-controls, used when
    *                          there is a need to have multiple Filterizr instances
    */
-  constructor(Filterizr, selector = '') {
+  constructor(Filterizr: Filterizr, selector = '') {
     this.filterControls = document.querySelectorAll(`${selector}[data-filter]`);
     this.multiFilterControls = document.querySelectorAll(
       `${selector}[data-multifilter]`
@@ -26,12 +46,12 @@ class FilterControls {
       Filterizr,
       selector,
       handlers: {
-        filterControlsHandler: () => {},
-        multiFilterControlsHandler: () => {},
-        shuffleControlsHandler: () => {},
-        searchControlsHandler: () => {},
-        sortAscControlsHandler: () => {},
-        sortDescControlsHandler: () => {},
+        filterControlsHandler: null,
+        multiFilterControlsHandler: null,
+        shuffleControlsHandler: null,
+        searchControlsHandler: null,
+        sortAscControlsHandler: null,
+        sortDescControlsHandler: null,
       },
     };
   }
@@ -52,8 +72,9 @@ class FilterControls {
 
   /**
    * Sets up the controls for filtering
+   * @returns {undefined}
    */
-  setupFilterControls() {
+  setupFilterControls(): void {
     const {
       filterControls,
       multiFilterControls,
@@ -63,15 +84,15 @@ class FilterControls {
     // Single filter mode controls
     if (filterControls) {
       this.props.handlers.filterControlsHandler = evt => {
-        const ctrl = evt.currentTarget;
-        const targetFilter = ctrl.getAttribute('data-filter');
+        const ctrl: Element = <Element>evt.currentTarget;
+        const targetFilter: string = ctrl.getAttribute('data-filter');
         // Update active filter in Filterizr's options
         Filterizr.options.filter = targetFilter;
         // Trigger filter
         Filterizr.filter(Filterizr.options.filter);
       };
 
-      filterControls.forEach(control =>
+      filterControls.forEach((control: Element) =>
         control.addEventListener(
           'click',
           this.props.handlers.filterControlsHandler
@@ -82,7 +103,7 @@ class FilterControls {
     // Multifilter mode controls
     if (multiFilterControls) {
       this.props.handlers.multiFilterControlsHandler = evt => {
-        const ctrl = evt.target;
+        const ctrl: Element = <Element>evt.target;
         const targetFilter = ctrl.getAttribute('data-multifilter');
         Filterizr.toggleFilter(targetFilter);
       };
@@ -96,7 +117,7 @@ class FilterControls {
     }
   }
 
-  destroyFilterControls() {
+  destroyFilterControls(): void {
     const { filterControls, multiFilterControls } = this;
 
     // Single filter mode controls
@@ -122,8 +143,9 @@ class FilterControls {
 
   /**
    * Sets up the controls for shuffling
+   * @returns {undefined}
    */
-  setupShuffleControls() {
+  setupShuffleControls(): void {
     const {
       shuffleControls: controls,
       props: { Filterizr },
@@ -143,7 +165,7 @@ class FilterControls {
     }
   }
 
-  destroyShuffleControls() {
+  destroyShuffleControls(): void {
     const { shuffleControls: controls } = this;
 
     if (controls) {
@@ -157,16 +179,17 @@ class FilterControls {
   }
   /**
    * Sets up the controls for searching
+   * @returns {undefined}
    */
-  setupSearchControls() {
+  setupSearchControls(): void {
     const {
       searchControls: controls,
       props: { Filterizr },
     } = this;
 
     if (controls) {
-      this.props.handlers.searchControlsHandler = debounce(evt => {
-        const textfield = evt.target;
+      this.props.handlers.searchControlsHandler = debounce((evt: Event) => {
+        const textfield: HTMLInputElement = <HTMLInputElement>evt.target;
         const val = textfield.value;
         Filterizr.props.searchTerm = val.toLowerCase();
         Filterizr.search(Filterizr.props.searchTerm);
@@ -181,7 +204,7 @@ class FilterControls {
     }
   }
 
-  destroySearchControls() {
+  destroySearchControls(): void {
     const { searchControls: controls } = this;
 
     if (controls) {
@@ -196,8 +219,9 @@ class FilterControls {
 
   /**
    * Sets up the controls for sorting
+   * @returns {undefined}
    */
-  setupSortControls() {
+  setupSortControls(): void {
     const {
       sortAscControls,
       sortDescControls,
@@ -206,8 +230,9 @@ class FilterControls {
 
     if (sortAscControls) {
       this.props.handlers.sortAscControlsHandler = () => {
-        const sortAttr = document.querySelector(`${selector}[data-sortOrder]`)
-          .value;
+        const sortAttr: string = (<HTMLInputElement>(
+          document.querySelector(`${selector}[data-sortOrder]`)
+        )).value;
         Filterizr.props.sortOrder = 'asc';
         Filterizr.sort(sortAttr, 'asc');
       };
@@ -222,8 +247,9 @@ class FilterControls {
 
     if (sortDescControls) {
       this.props.handlers.sortDescControlsHandler = () => {
-        const sortAttr = document.querySelector(`${selector}[data-sortOrder]`)
-          .value;
+        const sortAttr = (<HTMLInputElement>(
+          document.querySelector(`${selector}[data-sortOrder]`)
+        )).value;
         Filterizr.props.sortOrder = 'desc';
         Filterizr.sort(sortAttr, 'desc');
       };
@@ -237,7 +263,7 @@ class FilterControls {
     }
   }
 
-  destroySortControls() {
+  destroySortControls(): void {
     const { sortAscControls, sortDescControls } = this;
 
     if (sortAscControls) {

@@ -1,6 +1,21 @@
 import { getDataAttributesOfHTMLNode, setStylesOnHTMLNode } from './utils';
+import { IDefaultOptions } from './DefaultOptions';
 
-class FilterItem {
+export default class FilterItem {
+  node: Element;
+  index: number;
+  options: IDefaultOptions;
+  props: {
+    data: string[];
+    onTransitionEndHandler: EventListener;
+    index: number;
+    sortData: string;
+    lastPosition: { left: number; top: number };
+    filteredOut: boolean;
+    w: number;
+    h: number;
+  };
+
   /**
    * Constructor of FilterItem
    * @param {Object} node is the HTML node to create the FilterItem out of
@@ -8,7 +23,7 @@ class FilterItem {
    * @param {Object} options the options Filterizr was initialized with
    * @return {Object} FilterItem instance
    */
-  constructor(node, index, options) {
+  constructor(node: Element, index: number, options: IDefaultOptions) {
     const {
       delay,
       delayMode,
@@ -68,8 +83,12 @@ class FilterItem {
    * Filters in a specific FilterItem out of the grid.
    * @param {Object} targetPosition the position towards which the element should animate
    * @param {Object} cssOptions for the animation
+   * @returns {undefined}
    */
-  filterIn(targetPosition, cssOptions) {
+  filterIn(
+    targetPosition: { left: number; top: number },
+    cssOptions: { transform: string }
+  ): void {
     // Enhance the cssOptions with the target position before animating
     setStylesOnHTMLNode(
       this.node,
@@ -89,7 +108,7 @@ class FilterItem {
    * Filters out a specific FilterItem out of the grid.
    * @param {Object} cssOptions for the animation
    */
-  filterOut(cssOptions) {
+  filterOut(cssOptions: { transform: string }): void {
     const { lastPosition: targetPosition } = this.props;
     // Enhance the cssOptions with the target position before animating
     setStylesOnHTMLNode(
@@ -110,7 +129,7 @@ class FilterItem {
    * @param {String} delayMode can be 'alternate' or 'progressive'
    * @return {Number} delay in ms
    */
-  calcDelay(delay, delayMode) {
+  calcDelay(delay: number, delayMode: 'progressive' | 'alternate'): number {
     let ret = 0;
 
     if (delayMode === 'progressive') {
@@ -127,7 +146,7 @@ class FilterItem {
    * @param {String} searchTerm - the search term
    * @return {Boolean} if the innerText matches the term
    */
-  contentsMatchSearch(searchTerm) {
+  contentsMatchSearch(searchTerm: string): boolean {
     return Boolean(this.getContentsLowercase().includes(searchTerm));
   }
 
@@ -135,7 +154,7 @@ class FilterItem {
    * Helper method for the search method of Filterizr
    * @return {String} innerText of the FilterItem in lowercase
    */
-  getContentsLowercase() {
+  getContentsLowercase(): string {
     return this.node.textContent.toLowerCase();
   }
 
@@ -144,7 +163,7 @@ class FilterItem {
    * with a regexp regarding all whitespace.
    * @return {String[]} an array of the categories the item belongs to
    */
-  getCategories() {
+  getCategories(): string[] {
     return this.node.getAttribute('data-category').split(/\s*,\s*/g);
   }
 
@@ -152,7 +171,7 @@ class FilterItem {
    * Calculates the clientHeight (excluding border) of an element
    * @return {Number} height of FilterItem node
    */
-  getHeight() {
+  getHeight(): number {
     return this.node.clientHeight;
   }
 
@@ -160,23 +179,24 @@ class FilterItem {
    * Calculates the clientWidth (excluding border) of an element
    * @return {Number} width of FilterItem node
    */
-  getWidth() {
+  getWidth(): number {
     return this.node.clientWidth;
   }
 
   /**
    * Triggers an event on the encapsulated node
    * @param {String} evt the name of the event to trigger
+   * @returns {undefined}
    */
-  trigger(eventType) {
+  trigger(eventType: string): void {
     const event = new Event(eventType);
-    this.node.dispatch(event);
+    this.node.dispatchEvent(event);
   }
 
   /**
    * Recalculates the dimensions of the element and updates them in the state
    */
-  updateDimensions() {
+  updateDimensions(): void {
     this.props.w = this.getWidth();
     this.props.h = this.getHeight();
   }
@@ -184,7 +204,7 @@ class FilterItem {
   /**
    * Sets up the events related to the FilterItem instance
    */
-  bindEvents() {
+  bindEvents(): void {
     this.node.addEventListener(
       'webkitTransitionEnd',
       this.props.onTransitionEndHandler
@@ -210,7 +230,7 @@ class FilterItem {
   /**
    * Removes all events related to the FilterItem instance
    */
-  unbindEvents() {
+  unbindEvents(): void {
     this.node.removeEventListener(
       'webkitTransitionEnd',
       this.props.onTransitionEndHandler
@@ -233,5 +253,3 @@ class FilterItem {
     );
   }
 }
-
-export default FilterItem;

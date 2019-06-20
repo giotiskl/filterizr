@@ -1,7 +1,8 @@
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
+import FilterItem from './FilterItem';
 import Positions from './Positions';
-import DefaultOptions from './DefaultOptions';
+import DefaultOptions, { IDefaultOptions } from './DefaultOptions';
 import {
   FILTERIZR_STATE,
   allStringsOfArray1InArray2,
@@ -16,7 +17,20 @@ import {
 } from './utils';
 
 class Filterizr {
-  constructor(selector = '.filtr-container', userOptions) {
+  options: IDefaultOptions;
+  props: {
+    FilterContainer: FilterContainer;
+    FilterControls: FilterControls;
+    FilterItems: FilterItem[];
+    FilteredItems: FilterItem[];
+    filterizrState: string;
+    searchTerm: string;
+    sort: string;
+    sortOrder: string;
+    windowResizeHandler?: EventListener;
+  };
+
+  constructor(selector = '.filtr-container', userOptions: IDefaultOptions) {
     // Make the options a property of the Filterizr instance
     // so that we can later easily modify/update them.
     this.options = merge(DefaultOptions, userOptions);
@@ -50,7 +64,7 @@ class Filterizr {
       searchTerm: '',
       sort: 'index',
       sortOrder: 'asc',
-      windowResizeHandler: () => {},
+      windowResizeHandler: null,
     };
 
     // Set up events needed by Filterizr
@@ -68,7 +82,7 @@ class Filterizr {
    * Filters the items in the grid by a category
    * @param {String} category by which to filter
    */
-  filter(category) {
+  filter(category: string | string[]): void {
     const { searchTerm, FilterContainer, FilterItems } = this.props;
 
     // Trigger filteringStart event
@@ -97,8 +111,9 @@ class Filterizr {
 
   /**
    * Destroys the Filterizr instance and unbinds all events.
+   * @returns {undefined}
    */
-  destroy() {
+  destroy(): void {
     const { FilterControls, FilterContainer } = this.props;
 
     // Unbind all events of FilterContainer and Filterizr
@@ -113,12 +128,13 @@ class Filterizr {
   /**
    * Inserts a new FilterItem in the Filterizr grid
    * @param {Object} node DOM node to append
+   * @returns {undefined}
    */
-  insertItem(node) {
+  insertItem(node: HTMLElement): void {
     const { FilterContainer } = this.props;
 
     // Add the item to the FilterContainer
-    const nodeModified = node.cloneNode(true);
+    const nodeModified = <Element>node.cloneNode(true);
     nodeModified.removeAttribute('style');
 
     FilterContainer.push(nodeModified, this.options);
@@ -137,7 +153,7 @@ class Filterizr {
    * @param {String} sortAttr the attribute by which to perform the sort
    * @param {String} sortOrder ascending or descending
    */
-  sort(sortAttr = 'index', sortOrder = 'asc') {
+  sort(sortAttr: string = 'index', sortOrder: string = 'asc'): void {
     const { FilterContainer, FilterItems } = this.props;
 
     // Trigger filteringStart event
@@ -169,7 +185,7 @@ class Filterizr {
    * Searches through the FilterItems for a given string and adds an additional filter layer.
    * @param {String} searchTerm the term for which to search
    */
-  search(searchTerm = this.props.searchTerm) {
+  search(searchTerm: string = this.props.searchTerm): void {
     const { FilterItems } = this.props;
 
     // Filter items and optionally apply search if a search term exists
@@ -187,7 +203,7 @@ class Filterizr {
   /**
    * Shuffles the FilterItems in the grid, making sure their positions have changed.
    */
-  shuffle() {
+  shuffle(): void {
     const { FilterContainer, FilteredItems } = this.props;
 
     // Trigger filteringStart event
@@ -210,8 +226,9 @@ class Filterizr {
    * Updates the perferences of the users for rendering the Filterizr grid,
    * additionally performs error checking on the new options passed.
    * @param {Object} newOptions to override the defaults.
+   * @returns {undefined}
    */
-  setOptions(newOptions) {
+  setOptions(newOptions: IDefaultOptions): void {
     // error checking
     checkOptionForErrors(
       'animationDuration',
@@ -297,9 +314,10 @@ class Filterizr {
   /**
    * Performs multifiltering with AND/OR logic.
    * @param {String} toggledFilter the filter to toggle
+   * @returns {undefined}
    */
-  toggleFilter(toggledFilter) {
-    let activeFilters = this.options.filter;
+  toggleFilter(toggledFilter: string): void {
+    let activeFilters: string | string[] = this.options.filter;
 
     if (activeFilters === 'all') {
       // If set to all then just set to new category
@@ -332,31 +350,41 @@ class Filterizr {
   }
 
   // Helper methods
-  filterFilterItems(FilterItems, filters) {
+  filterFilterItems(
+    FilterItems: FilterItem[],
+    filters: string | string[]
+  ): FilterItem[] {
     const { multifilterLogicalOperator } = this.options;
 
-    // Get filtered items
-    const FilteredItems =
-      filters === 'all'
-        ? FilterItems // Return all items
-        : FilterItems.filter(FilterItem => {
-            // Return filtered array
-            const categories = FilterItem.getCategories();
-            const multiFilteringEnabled = Array.isArray(filters);
-            if (multiFilteringEnabled) {
-              return multifilterLogicalOperator === 'or'
-                ? intersection(categories, filters).length
-                : allStringsOfArray1InArray2(filters, categories);
-            }
-            return categories.includes(filters);
-          });
+    if (filters === 'all') {
+      return FilterItems;
+    }
 
-    return FilteredItems;
+    const multiFilteringEnabled = Array.isArray(filters);
+
+    return FilterItems.filter(FilterItem => {
+      const categories = FilterItem.getCategories();
+
+      if (!multiFilteringEnabled) {
+        // Simple filtering
+        return categories.includes(filters);
+      }
+
+      // Multifiltering
+      if (multifilterLogicalOperator === 'or') {
+        return intersection(categories, filters).length;
+      }
+      return allStringsOfArray1InArray2(filters, categories);
+    });
   }
 
-  sortFilterItems(FilterItems, sortAttr = 'index', sortOrder = 'asc') {
+  sortFilterItems(
+    FilterItems: FilterItem[],
+    sortAttr: string = 'index',
+    sortOrder: string = 'asc'
+  ): FilterItem[] {
     // Sort the FilterItems and reverse the array if order is descending
-    let SortedItems = sortBy(FilterItems, FilterItem => {
+    let SortedItems = sortBy(FilterItems, (FilterItem: FilterItem) => {
       return sortAttr !== 'index' && sortAttr !== 'sortData'
         ? FilterItem.props.data[sortAttr] // Search for custom data attrs to sort
         : FilterItem.props[sortAttr]; // Otherwise use defaults
@@ -366,7 +394,10 @@ class Filterizr {
     return sortOrder === 'asc' ? SortedItems : SortedItems.reverse();
   }
 
-  searchFilterItems(FilterItems, searchTerm = this.props.searchTerm) {
+  searchFilterItems(
+    FilterItems: FilterItem[],
+    searchTerm: string = this.props.searchTerm
+  ): FilterItem[] {
     if (!searchTerm) {
       return FilterItems;
     }
@@ -378,7 +409,7 @@ class Filterizr {
     return SoughtItems;
   }
 
-  shuffleFilterItems(FilterItems) {
+  shuffleFilterItems(FilterItems: FilterItem[]): FilterItem[] {
     let ShuffledItems = shuffle(FilterItems);
 
     // Shuffle items until they are different from the initial FilteredItems
@@ -392,7 +423,7 @@ class Filterizr {
     return ShuffledItems;
   }
 
-  render(FilterItems) {
+  render(FilterItems: FilterItem[]): void {
     const {
       filter,
       filterInCss,
@@ -403,20 +434,21 @@ class Filterizr {
 
     // Get items to be filtered out
     const FilteredOutItems = this.props.FilterItems.filter(FilterItem => {
-      const categories = FilterItem.getCategories();
-      const multiFilteringEnabled = Array.isArray(filter);
+      const categories: string[] = FilterItem.getCategories();
+      const multiFilteringEnabled: boolean = Array.isArray(filter);
       // Flags that determine whether item should be filtered out
-      let filtersMatch;
-      const contentsMatchSearch = FilterItem.contentsMatchSearch(
+      let filtersMatch: boolean;
+      const contentsMatchSearch: boolean = FilterItem.contentsMatchSearch(
         this.props.searchTerm
       );
 
       if (multiFilteringEnabled) {
-        filtersMatch =
-          multifilterLogicalOperator === 'or'
-            ? intersection(categories, filter).length
-            : allStringsOfArray1InArray2(filter, categories);
-      } else {
+        if (multifilterLogicalOperator === 'or') {
+          filtersMatch = intersection(categories, filter).length;
+        } else {
+          filtersMatch = allStringsOfArray1InArray2(filter, categories);
+        }
+      } else if (!multiFilteringEnabled && typeof filter === 'string') {
         filtersMatch = categories.includes(filter);
       }
 
@@ -437,7 +469,7 @@ class Filterizr {
     });
   }
 
-  onTransitionEndCallback() {
+  onTransitionEndCallback(): void {
     const { filterizrState, FilterContainer } = this.props;
 
     switch (filterizrState) {
@@ -456,7 +488,7 @@ class Filterizr {
     this.props.filterizrState = FILTERIZR_STATE.IDLE;
   }
 
-  rebindFilterContainerEvents() {
+  rebindFilterContainerEvents(): void {
     const { FilterContainer } = this.props;
     const { animationDuration, callbacks } = this.options;
 
@@ -470,7 +502,7 @@ class Filterizr {
     }, animationDuration);
   }
 
-  bindEvents() {
+  bindEvents(): void {
     const { FilterContainer } = this.props;
 
     // FilterContainer events
@@ -478,13 +510,17 @@ class Filterizr {
 
     // Generic Filterizr events
     // Filter grid again on window resize
-    this.props.windowResizeHandler = debounce(() => {
-      // Update dimensions of items based on new window size
-      FilterContainer.updateWidth();
-      FilterContainer.updateFilterItemsDimensions();
-      // Refilter the grid to assume new positions
-      this.filter(this.options.filter);
-    }, 250);
+    this.props.windowResizeHandler = debounce(
+      () => {
+        // Update dimensions of items based on new window size
+        FilterContainer.updateWidth();
+        FilterContainer.updateFilterItemsDimensions();
+        // Refilter the grid to assume new positions
+        this.filter(this.options.filter);
+      },
+      250,
+      false
+    );
 
     window.addEventListener('resize', this.props.windowResizeHandler);
   }
