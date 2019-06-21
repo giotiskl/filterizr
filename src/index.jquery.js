@@ -4,8 +4,7 @@
  *
  * @author Yiotis Kaltsikis
  * @see {@link http://yiotis.net/filterizr}
- * @version 1.3.6
- * @license MIT License
+ * @license MIT
  */
 
 let $, jQuery;
@@ -80,7 +79,3 @@ export {
 
 // Set default export to jQuery object extended with Filterizr plugin
 export default $;
-
-// Required for development purposes when JQUERY_IMPORT is set to true
-// so that the Filterizr and its controls for demo/index.html are initialized.
-require('./demoInit');

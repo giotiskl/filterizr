@@ -16,9 +16,9 @@ export default class FilterContainer {
    * Instantiates a FilterContainer
    * @param {String} selector of the FilterContainer instance
    * @param {Object} options with which to instantiate the container
-   * @return {Object} FilterContainer instance
+   * @return {FilterContainer} FilterContainer instance
    */
-  constructor(selector = '.filtr-container', options: IDefaultOptions) {
+  constructor(selector: string = '.filtr-container', options: IDefaultOptions) {
     // Cache jQuery node
     this.node = document.querySelector(selector);
 
@@ -164,9 +164,13 @@ export default class FilterContainer {
    * @returns {undefined}
    */
   bindTransitionEnd(callback: Function, debounceDuration: number): void {
-    this.props.onTransitionEndHandler = debounce(() => {
-      callback();
-    }, debounceDuration);
+    this.props.onTransitionEndHandler = <EventListener>debounce(
+      () => {
+        callback();
+      },
+      debounceDuration,
+      false
+    );
 
     this.node.addEventListener(
       'webkitTransitionEnd',

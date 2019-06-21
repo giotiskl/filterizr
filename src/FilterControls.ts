@@ -188,12 +188,16 @@ class FilterControls {
     } = this;
 
     if (controls) {
-      this.props.handlers.searchControlsHandler = debounce((evt: Event) => {
-        const textfield: HTMLInputElement = <HTMLInputElement>evt.target;
-        const val = textfield.value;
-        Filterizr.props.searchTerm = val.toLowerCase();
-        Filterizr.search(Filterizr.props.searchTerm);
-      }, 250);
+      this.props.handlers.searchControlsHandler = <EventListener>debounce(
+        (evt: Event) => {
+          const textfield: HTMLInputElement = <HTMLInputElement>evt.target;
+          const val = textfield.value;
+          Filterizr.props.searchTerm = val.toLowerCase();
+          Filterizr.search(Filterizr.props.searchTerm);
+        },
+        250,
+        false
+      );
 
       controls.forEach(control =>
         control.addEventListener(

@@ -1,8 +1,10 @@
+import Filterizr from '../Filterizr';
+
 /**
  * Same size layout for items that have the same width/height
  * @param {object} Filterizr instance.
  */
-const SameSizeLayout = Filterizr => {
+const getSameSizeLayoutPosition = (Filterizr: Filterizr) => {
   const { FilterContainer, FilteredItems } = Filterizr.props;
   // calculate number of columns and rows the grid should have
   let cols = FilterContainer.calcColumns();
@@ -29,4 +31,4 @@ const SameSizeLayout = Filterizr => {
   return targetPositions;
 };
 
-export default SameSizeLayout;
+export default getSameSizeLayoutPosition;

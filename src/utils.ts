@@ -51,9 +51,9 @@ export { getNormalizedCssPropName };
  * @param {Object} styles - object with styles
  * @returns {undefined}
  */
-function setStylesOnHTMLNode(node: HTMLElement, styles: any) {
+function setStylesOnHTMLNode(node: Element, styles: any) {
   Object.entries(styles).forEach(([key, value]) => {
-    node.style[getNormalizedCssPropName(key)] = value;
+    (<any>(<HTMLElement>node).style)[getNormalizedCssPropName(key)] = value;
   });
 }
 
@@ -68,7 +68,7 @@ export { setStylesOnHTMLNode };
  * @returns {Object} map of data attributes / values
  */
 function getDataAttributesOfHTMLNode(node: Element) {
-  const data = {
+  const data: { [key: string]: any } = {
     category: '',
     sort: '',
   };
@@ -113,7 +113,7 @@ export { checkDataAttributeExists };
  * @return {Object} deep clone
  */
 const makeShallowClone = (o: any) => {
-  let ret = {};
+  let ret: { [key: string]: any } = {};
   for (const p in o) {
     ret[p] = o[p];
   }
@@ -158,8 +158,8 @@ export { merge };
  * @param {Array} arr1 is the first array of which to get the intersection
  * @param {Array} arr2 is the second array of which to get the intersection
  */
-const intersection = (arr1, arr2) => {
-  return Array.prototype.filter.call(arr1, n => arr2.includes(n));
+const intersection = (arr1: any[], arr2: any[]) => {
+  return Array.prototype.filter.call(arr1, (n: string) => arr2.includes(n));
 };
 
 export { intersection };
@@ -172,12 +172,12 @@ const debounce = function(
   wait: number,
   immediate: boolean
 ): Function {
-  let timeout: Timeout;
+  let timeout: number;
   return function() {
     const context = this;
     const args = arguments;
     clearTimeout(timeout);
-    timeout = setTimeout(() => {
+    timeout = window.setTimeout(() => {
       timeout = null;
       if (!immediate) func.apply(context, args);
     }, wait);

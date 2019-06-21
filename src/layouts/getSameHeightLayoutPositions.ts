@@ -1,8 +1,10 @@
+import Filterizr from '../Filterizr';
+
 /**
  * Same height layout for items that have the same height, but can have varying width
  * @param {object} Filterizr instance.
  */
-const SameHeightLayout = Filterizr => {
+const getSameHeightLayoutPositions = (Filterizr: Filterizr) => {
   const { FilterContainer, FilteredItems } = Filterizr.props;
   const gridWidth = FilterContainer.props.w,
     itemHeight = FilteredItems[0].props.h;
@@ -34,4 +36,4 @@ const SameHeightLayout = Filterizr => {
   return targetPositions;
 };
 
-export default SameHeightLayout;
+export default getSameHeightLayoutPositions;

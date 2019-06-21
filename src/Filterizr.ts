@@ -30,7 +30,10 @@ class Filterizr {
     windowResizeHandler?: EventListener;
   };
 
-  constructor(selector = '.filtr-container', userOptions: IDefaultOptions) {
+  constructor(
+    selector: string = '.filtr-container',
+    userOptions: IDefaultOptions
+  ) {
     // Make the options a property of the Filterizr instance
     // so that we can later easily modify/update them.
     this.options = merge(DefaultOptions, userOptions);
@@ -68,7 +71,7 @@ class Filterizr {
     };
 
     // Set up events needed by Filterizr
-    this.bindEvents();
+    this._bindEvents();
 
     // Init Filterizr
     this.filter(this.options.filter);
@@ -97,16 +100,14 @@ class Filterizr {
       : category.toString();
 
     // Filter items and optionally apply search if a search term exists
-    const FilteredItems = this.searchFilterItems(
-      this.filterFilterItems(FilterItems, category),
+    const FilteredItems = this._search(
+      this._filter(FilterItems, category),
       searchTerm
     );
 
-    // Update props
     this.props.FilteredItems = FilteredItems;
 
-    // Render the items
-    this.render(FilteredItems);
+    this._render(FilteredItems);
   }
 
   /**
@@ -140,12 +141,12 @@ class Filterizr {
     FilterContainer.push(nodeModified, this.options);
 
     // Retrigger filter for new item to assume position in the grid
-    const FilteredItems = this.filterFilterItems(
+    const FilteredItems = this._filter(
       this.props.FilterItems,
       this.options.filter
     );
 
-    this.render(FilteredItems);
+    this._render(FilteredItems);
   }
 
   /**
@@ -163,22 +164,17 @@ class Filterizr {
     this.props.filterizrState = FILTERIZR_STATE.SORTING;
 
     // Sort main array
-    this.props.FilterItems = this.sortFilterItems(
-      FilterItems,
-      sortAttr,
-      sortOrder
-    );
+    this.props.FilterItems = this._sort(FilterItems, sortAttr, sortOrder);
 
     // Apply filters
-    const FilteredItems = this.filterFilterItems(
+    const FilteredItems = this._filter(
       this.props.FilterItems,
       this.options.filter
     );
 
     this.props.FilteredItems = FilteredItems;
 
-    // Update and render the sorted items
-    this.render(FilteredItems);
+    this._render(FilteredItems);
   }
 
   /**
@@ -189,15 +185,14 @@ class Filterizr {
     const { FilterItems } = this.props;
 
     // Filter items and optionally apply search if a search term exists
-    const FilteredItems = this.searchFilterItems(
-      this.filterFilterItems(FilterItems, this.options.filter),
+    const FilteredItems = this._search(
+      this._filter(FilterItems, this.options.filter),
       searchTerm
     );
 
     this.props.FilteredItems = FilteredItems;
 
-    // Render the items
-    this.render(FilteredItems);
+    this._render(FilteredItems);
   }
 
   /**
@@ -213,13 +208,12 @@ class Filterizr {
     this.props.filterizrState = FILTERIZR_STATE.SHUFFLING;
 
     // Generate array of shuffled items
-    const ShuffledItems = this.shuffleFilterItems(FilteredItems);
+    const ShuffledItems = this._shuffle(FilteredItems);
 
     // Update the FilteredItems to equal the array of the shuffled items
     this.props.FilteredItems = ShuffledItems;
 
-    // Render the items after shuffling
-    this.render(ShuffledItems);
+    this._render(ShuffledItems);
   }
 
   /**
@@ -296,7 +290,7 @@ class Filterizr {
     // Same if the animationDuration is defined as it is a parameter to
     // the debounce wrapper of the transitionEnd callback.
     if (newOptions.callbacks || newOptions.animationDuration) {
-      this.rebindFilterContainerEvents();
+      this._rebindFilterContainerEvents();
     }
 
     // If the filter is explicitly set in the new options object, trigger a refiltering.
@@ -350,7 +344,7 @@ class Filterizr {
   }
 
   // Helper methods
-  filterFilterItems(
+  private _filter(
     FilterItems: FilterItem[],
     filters: string | string[]
   ): FilterItem[] {
@@ -365,20 +359,20 @@ class Filterizr {
     return FilterItems.filter(FilterItem => {
       const categories = FilterItem.getCategories();
 
-      if (!multiFilteringEnabled) {
+      if (!multiFilteringEnabled && typeof filters === 'string') {
         // Simple filtering
         return categories.includes(filters);
+      } else if (multiFilteringEnabled && Array.isArray(filters)) {
+        // Multifiltering
+        if (multifilterLogicalOperator === 'or') {
+          return intersection(categories, filters).length;
+        }
+        return allStringsOfArray1InArray2(filters, categories);
       }
-
-      // Multifiltering
-      if (multifilterLogicalOperator === 'or') {
-        return intersection(categories, filters).length;
-      }
-      return allStringsOfArray1InArray2(filters, categories);
     });
   }
 
-  sortFilterItems(
+  private _sort(
     FilterItems: FilterItem[],
     sortAttr: string = 'index',
     sortOrder: string = 'asc'
@@ -394,7 +388,7 @@ class Filterizr {
     return sortOrder === 'asc' ? SortedItems : SortedItems.reverse();
   }
 
-  searchFilterItems(
+  private _search(
     FilterItems: FilterItem[],
     searchTerm: string = this.props.searchTerm
   ): FilterItem[] {
@@ -409,7 +403,7 @@ class Filterizr {
     return SoughtItems;
   }
 
-  shuffleFilterItems(FilterItems: FilterItem[]): FilterItem[] {
+  private _shuffle(FilterItems: FilterItem[]): FilterItem[] {
     let ShuffledItems = shuffle(FilterItems);
 
     // Shuffle items until they are different from the initial FilteredItems
@@ -423,7 +417,7 @@ class Filterizr {
     return ShuffledItems;
   }
 
-  render(FilterItems: FilterItem[]): void {
+  private _render(FilterItems: FilterItem[]): void {
     const {
       filter,
       filterInCss,
@@ -442,7 +436,7 @@ class Filterizr {
         this.props.searchTerm
       );
 
-      if (multiFilteringEnabled) {
+      if (multiFilteringEnabled && Array.isArray(filter)) {
         if (multifilterLogicalOperator === 'or') {
           filtersMatch = intersection(categories, filter).length;
         } else {
@@ -461,15 +455,15 @@ class Filterizr {
     });
 
     // Determine target positions for items to be filtered in
-    const PositionsArray = Positions(layout, this);
+    const positions = Positions(layout, this);
 
     // Filter in new items
     FilterItems.forEach((FilterItem, index) => {
-      FilterItem.filterIn(PositionsArray[index], filterInCss);
+      FilterItem.filterIn(positions[index], filterInCss);
     });
   }
 
-  onTransitionEndCallback(): void {
+  private _onTransitionEndCallback(): void {
     const { filterizrState, FilterContainer } = this.props;
 
     switch (filterizrState) {
@@ -488,7 +482,7 @@ class Filterizr {
     this.props.filterizrState = FILTERIZR_STATE.IDLE;
   }
 
-  rebindFilterContainerEvents(): void {
+  private _rebindFilterContainerEvents(): void {
     const { FilterContainer } = this.props;
     const { animationDuration, callbacks } = this.options;
 
@@ -498,19 +492,19 @@ class Filterizr {
     // Rebind evts
     FilterContainer.bindEvents(callbacks);
     FilterContainer.bindTransitionEnd(() => {
-      this.onTransitionEndCallback();
+      this._onTransitionEndCallback();
     }, animationDuration);
   }
 
-  bindEvents(): void {
+  private _bindEvents(): void {
     const { FilterContainer } = this.props;
 
     // FilterContainer events
-    this.rebindFilterContainerEvents();
+    this._rebindFilterContainerEvents();
 
     // Generic Filterizr events
     // Filter grid again on window resize
-    this.props.windowResizeHandler = debounce(
+    this.props.windowResizeHandler = <EventListener>debounce(
       () => {
         // Update dimensions of items based on new window size
         FilterContainer.updateWidth();

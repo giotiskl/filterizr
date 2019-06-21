@@ -1,9 +1,11 @@
+import Filterizr from '../Filterizr';
+
 /**
  * Vertical layout algorithm that arranges all FilterItems in one column. Their height may vary.
  * @param {Object} Filterizr instance.
  * @return {Object[]} positions for the items to assume.
  */
-const VerticalLayout = Filterizr => {
+const VerticalLayout = (Filterizr: Filterizr) => {
   const { FilterContainer, FilteredItems } = Filterizr.props;
 
   // In this layout top in the end will also

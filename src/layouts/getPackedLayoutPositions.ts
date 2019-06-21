@@ -1,8 +1,10 @@
+import Filterizr from '../Filterizr';
+
 /**
  * Packed layout for items that can have varying width as well as varying height.
  * @param {object} Filterizr instance.
  */
-const PackedLayout = Filterizr => {
+const getPackedLayoutPositions = (Filterizr: Filterizr) => {
   const { FilterContainer, FilteredItems } = Filterizr.props;
 
   //Instantiate new Packer, set up grid
@@ -17,7 +19,7 @@ const PackedLayout = Filterizr => {
   // by the packing algorithm
   packer.fit(filterItemsDimensions);
 
-  const targetPositions = filterItemsDimensions.map(({ fit }) => ({
+  const targetPositions = filterItemsDimensions.map(({ fit }: any) => ({
     left: fit.x,
     top: fit.y,
   }));
@@ -32,20 +34,41 @@ const PackedLayout = Filterizr => {
  * Modified version of Jake Gordon's Bin Packing algorithm used for Filterizr's 'packed' layout
  * @see {@link https://github.com/jakesgordon/bin-packing}
  */
-const Packer = function(w) {
-  this.init(w);
+type PackerRoot = {
+  x: number;
+  y: number;
+  w: number;
+  h?: number;
+  used?: boolean;
+  down?: PackerRoot;
+  right?: PackerRoot;
 };
 
-Packer.prototype = {
-  init: function(w) {
+type PackerBlock = {
+  x?: number;
+  y?: number;
+  w?: number;
+  h?: number;
+  fit?: PackerRoot | void;
+};
+
+class Packer {
+  root: PackerRoot;
+
+  constructor(w: number) {
+    this.init(w);
+  }
+
+  init(w: number) {
     this.root = { x: 0, y: 0, w: w };
-  },
-  fit: function(blocks) {
-    var n,
+  }
+
+  fit(blocks: PackerBlock[]) {
+    let n,
       node,
       block,
       len = blocks.length;
-    var h = len > 0 ? blocks[0].h : 0;
+    let h = len > 0 ? blocks[0].h : 0;
     this.root.h = h;
     for (n = 0; n < len; n++) {
       block = blocks[n];
@@ -53,21 +76,24 @@ Packer.prototype = {
         block.fit = this.splitNode(node, block.w, block.h);
       else block.fit = this.growDown(block.w, block.h);
     }
-  },
-  findNode: function(root, w, h) {
+  }
+
+  findNode(root: PackerRoot, w: number, h: number): PackerRoot | void {
     if (root.used)
       return this.findNode(root.right, w, h) || this.findNode(root.down, w, h);
     else if (w <= root.w && h <= root.h) return root;
     else return null;
-  },
-  splitNode: function(node, w, h) {
+  }
+
+  splitNode(node: PackerRoot, w: number, h: number): PackerRoot {
     node.used = true;
     node.down = { x: node.x, y: node.y + h, w: node.w, h: node.h - h };
     node.right = { x: node.x + w, y: node.y, w: node.w - w, h: h };
     return node;
-  },
-  growDown: function(w, h) {
-    var node;
+  }
+
+  growDown(w: number, h: number): PackerRoot | void {
+    let node;
     this.root = {
       used: true,
       x: 0,
@@ -80,7 +106,8 @@ Packer.prototype = {
     if ((node = this.findNode(this.root, w, h)))
       return this.splitNode(node, w, h);
     else return null;
-  },
-};
+  }
+}
 
-export default PackedLayout;
+// export default PackedLayout;
+export default getPackedLayoutPositions;

@@ -1,8 +1,11 @@
+import Filterizr from '../Filterizr';
+import FilterItem from '../FilterItem';
+
 /**
  * Same width layout for items that have the same width, but can have varying height
  * @param {object} Filterizr instance.
  */
-const SameWidthLayout = Filterizr => {
+const getSameWidthLayoutPositions = (Filterizr: Filterizr) => {
   const { FilterContainer, FilteredItems } = Filterizr.props;
 
   // Calculate number of columns and rows the grid should have
@@ -46,11 +49,15 @@ const SameWidthLayout = Filterizr => {
 /**
  * Helper method used to calculate what the top
  * of the current item in the iteration should be.
- * @param {array} FilteredItems collection
- * @param {integer} cols of grid
- * @param {integer} index of current item in FilteredItems collection
+ * @param {Array} FilteredItems collection
+ * @param {Number} cols of grid
+ * @param {Number} index of current item in FilteredItems collection
  */
-const calcItemTop = (FilteredItems, cols, index) => {
+const calcItemTop = (
+  FilteredItems: FilterItem[],
+  cols: number,
+  index: number
+) => {
   // Prevent infinite loop on window resize when container is not visible
   if (cols <= 0) return 0;
 
@@ -67,4 +74,4 @@ const calcItemTop = (FilteredItems, cols, index) => {
   return itemTop;
 };
 
-export default SameWidthLayout;
+export default getSameWidthLayoutPositions;

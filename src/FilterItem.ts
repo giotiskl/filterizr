@@ -6,7 +6,7 @@ export default class FilterItem {
   index: number;
   options: IDefaultOptions;
   props: {
-    data: string[];
+    data: { [key: string]: any };
     onTransitionEndHandler: EventListener;
     index: number;
     sortData: string;
@@ -87,7 +87,7 @@ export default class FilterItem {
    */
   filterIn(
     targetPosition: { left: number; top: number },
-    cssOptions: { transform: string }
+    cssOptions: { [key: string]: any }
   ): void {
     // Enhance the cssOptions with the target position before animating
     setStylesOnHTMLNode(
@@ -108,7 +108,7 @@ export default class FilterItem {
    * Filters out a specific FilterItem out of the grid.
    * @param {Object} cssOptions for the animation
    */
-  filterOut(cssOptions: { transform: string }): void {
+  filterOut(cssOptions: { [key: string]: any }): void {
     const { lastPosition: targetPosition } = this.props;
     // Enhance the cssOptions with the target position before animating
     setStylesOnHTMLNode(
