@@ -5,6 +5,7 @@ import ShowcasePage from '../ShowcasePage';
 import QuickstartTutorialPage from '../QuickstartTutorialPage';
 import FilteringtutorialPage from '../FilteringTutorialPage';
 import SearchingTutorialPage from '../SearchingTutorialPage';
+import DelayModeTutorialPage from '../DelayModeTutorialPage';
 
 function App() {
   return (
@@ -27,6 +28,11 @@ function App() {
             path="/tutorials/searching"
             exact
             component={SearchingTutorialPage}
+          />
+          <Route
+            path="/tutorials/delay-modes"
+            exact
+            component={DelayModeTutorialPage}
           />
         </main>
       </Router>
