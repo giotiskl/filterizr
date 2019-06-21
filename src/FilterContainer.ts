@@ -14,14 +14,12 @@ export default class FilterContainer {
 
   /**
    * Instantiates a FilterContainer
-   * @param {String} selector of the FilterContainer instance
+   * @param {Element} node of the FilterContainer instance
    * @param {Object} options with which to instantiate the container
    * @return {FilterContainer} FilterContainer instance
    */
-  constructor(selector: string = '.filtr-container', options: IDefaultOptions) {
-    // Cache jQuery node
-    this.node = document.querySelector(selector);
-
+  constructor(node: Element, options: IDefaultOptions) {
+    this.node = node;
     this.options = options;
 
     // Set up initial styles of container

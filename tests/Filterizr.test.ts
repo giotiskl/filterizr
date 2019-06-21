@@ -1,18 +1,20 @@
 // import test utils
-import $ from 'jquery';
+import * as $ from 'jquery';
 import { fakeDom } from './testSetup';
 // import items to be tested
 import Filterizr from '../src/Filterizr';
-import DefaultOptions from '../src/DefaultOptions';
+import FilterContainer from '../src/FilterContainer';
+import FilterItem from '../src/FilterItem';
+import DefaultOptions, { IDefaultOptions } from '../src/DefaultOptions';
 
 // General setup
-window.$ = $;
+(<any>window).$ = $;
 
 // Test suite for Filterizr
 describe('Filterizr', () => {
   // Basic setup before all tests
-  let filterizr;
-  let filterContainer;
+  let filterizr: Filterizr;
+  let filterContainer: FilterContainer;
 
   beforeEach(() => {
     $('body').html(fakeDom);
@@ -25,11 +27,13 @@ describe('Filterizr', () => {
       const instantiateBrokenFilterizr = () => {
         new Filterizr('.non-existent-container', DefaultOptions);
       };
-      expect(instantiateBrokenFilterizr).toThrowError(/could not find a container/);
+      expect(instantiateBrokenFilterizr).toThrowError(
+        /could not find a container/
+      );
     });
 
     it('should take an optional parameter selector which defaults to ".filtr-container"', () => {
-      expect(filterContainer.$node.length).toBeGreaterThan(0);
+      expect(filterContainer.node).toBeTruthy();
     });
 
     it('should return a new instance of the Filterizr class', () => {
@@ -51,31 +55,33 @@ describe('Filterizr', () => {
     });
 
     it('should reset all inline styles on the .filtr-container', () => {
-      const oldInlineStyles = filterContainer.$node.attr('style');
+      const { node } = filterContainer;
+      const oldInlineStyles = node.getAttribute('style');
       filterContainer.destroy();
-      const newInlineStyles = filterContainer.$node.attr('style');
+      const newInlineStyles = node.getAttribute('style');
 
       expect(oldInlineStyles).toBeTruthy();
-      expect(newInlineStyles).toEqual('');
+      expect(newInlineStyles).toEqual(null);
     });
 
     it('should reset all inline styles on its .filtr-item children', () => {
-      const oldInlineStyles = filterContainer.$node.find('.filtr-item').attr('style');
+      const filterItem = filterContainer.node.querySelector('.filtr-item');
+      const oldInlineStyles = filterItem.getAttribute('style');
       filterContainer.destroy();
-      const newInlineStyles = filterContainer.$node.find('.filtr-item').attr('style');
+      const newInlineStyles = filterItem.getAttribute('style');
 
       expect(oldInlineStyles).toBeTruthy();
-      expect(newInlineStyles).toEqual('');
+      expect(newInlineStyles).toEqual(null);
     });
   });
 
   describe('#filter', () => {
     const filter = '2';
-    let FilteredOutItems, FilteredInItems;
+    let FilteredOutItems: FilterItem[], FilteredInItems: FilterItem[];
 
     beforeEach(() => {
       filterizr.filter(filter);
-      FilteredOutItems = filterizr.props.FilterItems.filter((FilterItem) => {
+      FilteredOutItems = filterizr.props.FilterItems.filter(FilterItem => {
         const categories = FilterItem.getCategories();
         return !categories.includes(filter);
       });
@@ -88,7 +94,7 @@ describe('Filterizr', () => {
     it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter', () => {
       // Wait for animation to finish before test
       setTimeout(() => {
-        FilteredInItems.forEach((FilterItem) => {
+        FilteredInItems.forEach(FilterItem => {
           const categories = FilterItem.getCategories();
           const belongsToCategory = categories.includes(filter);
           expect(belongsToCategory).toEqual(true);
@@ -99,8 +105,8 @@ describe('Filterizr', () => {
     it('should add the .filteredOut class to all filtered out .filtr-item elements', () => {
       // Wait for animation to finish before test
       setTimeout(() => {
-        FilteredOutItems.forEach((FilterItem) => {
-          expect(FilterItem.$node.hasClass('.filteredOut'));
+        FilteredOutItems.forEach(FilterItem => {
+          expect(Array.from(FilterItem.node.classList).includes('filteredOut'));
         });
       });
     });
@@ -108,8 +114,9 @@ describe('Filterizr', () => {
     it('should set an inline style z-index: -1000 on filteringEnd for .filteredOut .filtr-item elements', () => {
       // Wait for animation to finish before test
       setTimeout(() => {
-        FilteredOutItems.forEach((FilterItem) => {
-          const zIndexOfFilteredOutItem = FilterItem.$node.css('z-index');
+        FilteredOutItems.forEach(FilterItem => {
+          const zIndexOfFilteredOutItem = (<HTMLElement>FilterItem.node).style
+            .zIndex;
           expect(zIndexOfFilteredOutItem).toEqual('-1000');
         });
       }, 1000);
@@ -155,22 +162,24 @@ describe('Filterizr', () => {
   });
 
   describe('#insertItem', () => {
-    let $nodeToAdd, oldLength;
+    let nodeToAdd: Node, oldLength: number;
 
     beforeEach(() => {
-      $nodeToAdd = filterContainer.$node.find('.filtr-item:last');
+      const nodes = filterContainer.node.querySelectorAll('.filtr-item');
+      nodeToAdd = nodes[nodes.length - 1];
       oldLength = filterizr.props.FilterItems.length;
     });
 
-    it ('should increase the length of the FilterItems array by 1', () => {
-      filterizr.insertItem($nodeToAdd);
+    it('should increase the length of the FilterItems array by 1', () => {
+      filterizr.insertItem(<HTMLElement>nodeToAdd);
       const newLength = filterizr.props.FilterItems.length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
-    it ('should add into the grid a new FilterItem with the index property equal to the length of the FilterItems array', () => {
-      filterizr.insertItem($nodeToAdd);
-      const indexOfNewLastItem = filterizr.props.FilterItems[oldLength].props.index;
+    it('should add into the grid a new FilterItem with the index property equal to the length of the FilterItems array', () => {
+      filterizr.insertItem(<HTMLElement>nodeToAdd);
+      const indexOfNewLastItem =
+        filterizr.props.FilterItems[oldLength].props.index;
       expect(indexOfNewLastItem).toEqual(oldLength);
     });
   });
@@ -181,7 +190,7 @@ describe('Filterizr', () => {
       const { FilterItems } = filterizr.props;
       const { length } = FilterItems;
       for (let i = 0; i < length; i++) {
-        expect(FilterItems[i].props.index).toEqual((length - 1) - i);
+        expect(FilterItems[i].props.index).toEqual(length - 1 - i);
       }
     });
   });
@@ -201,24 +210,31 @@ describe('Filterizr', () => {
     it('should render only items containing the search term', () => {
       const term = 'city';
       filterizr.search('city');
-      filterizr.props.FilteredItems.forEach((FilteredItem) => {
-        const contents = FilteredItem.$node.find('.item-desc').text().toLowerCase();
+      filterizr.props.FilteredItems.forEach(FilteredItem => {
+        const contents = $(FilteredItem.node)
+          .find('.item-desc')
+          .text()
+          .toLowerCase();
         const termFound = ~contents.lastIndexOf(term);
         expect(termFound).toBeTruthy();
       });
     });
   });
 
-  describe('#shuffle', () => {
-    it('should shuffle the grid until all elements have different positions');
-  });
+  // describe('#shuffle', () => {
+  // it('should shuffle the grid until all elements have different positions');
+  // });
 
   describe('#setOptions', () => {
-    const newOptions = {
+    const newOptions: IDefaultOptions = {
       animationDuration: 0.25,
       callbacks: {
-        onFilteringStart: () => { return 'filtering started'; },
-        onFilteringEnd: () => { return 'filtering ended'; },
+        onFilteringStart: () => {
+          return 'filtering started';
+        },
+        onFilteringEnd: () => {
+          return 'filtering ended';
+        },
       },
       controlsSelector: '.new-controls',
       delay: 1150,
@@ -226,19 +242,19 @@ describe('Filterizr', () => {
       easing: 'ease-in-out',
       filter: '2',
       filterOutCss: {
-        'opacity': 0.25,
-        'transform': 'scale(0.5)',
+        opacity: 0.25,
+        transform: 'scale(0.5)',
       },
       filterInCss: {
-        'opacity': 1,
-        'transform': 'scale(1)',
+        opacity: 1,
+        transform: 'scale(1)',
       },
       layout: 'packed',
       multifilterLogicalOperator: 'and',
       setupControls: false,
     };
 
-    const callToSetOptions = (options) => {
+    const callToSetOptions = (options: IDefaultOptions) => {
       return () => {
         filterizr.setOptions(options);
       };
@@ -252,42 +268,30 @@ describe('Filterizr', () => {
       expect(options.animationDuration).toEqual(0.25);
       expect(options.controlsSelector).toEqual('.new-controls');
       expect(options.delay).toEqual(1150);
-      expect(options.delayMode).toEqual('alternate'); expect(options.easing).toEqual('ease-in-out');
+      expect(options.delayMode).toEqual('alternate');
+      expect(options.easing).toEqual('ease-in-out');
       expect(options.filter).toEqual('2');
       expect(options.layout).toEqual('packed');
       expect(options.multifilterLogicalOperator).toEqual('and');
       expect(options.setupControls).toEqual(false);
     });
 
-    it('should throw an exception if an invalid type is passed in the options', () => {
-      expect(callToSetOptions({ animationDuration: 'string' })).toThrowError(/expected type/);
-      expect(callToSetOptions({ callbacks: 5 })).toThrowError(/expected type/);
-      expect(callToSetOptions({ controlsSelector: 5 })).toThrowError(/expected type/);
-      expect(callToSetOptions({ delay: 'string' })).toThrowError(/expected type/);
-      expect(callToSetOptions({ delayMode: 5 })).toThrowError(/expected type/);
-      expect(callToSetOptions({ easing: 5 })).toThrowError(/expected type/);
-      expect(callToSetOptions({ filter: () => {} })).toThrowError(/expected type/);
-      expect(callToSetOptions({ layout: 5 })).toThrowError(/expected type/);
-      expect(callToSetOptions({ multifilterLogicalOperator: 5 })).toThrowError(/expected type/);
-      expect(callToSetOptions({ setupControls: 'string' })).toThrowError(/expected type/);
-    });
-
     it('should not throw an exception if an acceptable value is passed to the option delayMode', () => {
-      expect(callToSetOptions({ delayMode: 'alternate' })).not.toThrowError(/allowed values for option/);
-      expect(callToSetOptions({ delayMode: 'progressive' })).not.toThrowError(/allowed values for option/);
-    });
-
-    it('should throw an exception if a non-acceptable value is passed to the option delayMode', () => {
-      expect(callToSetOptions({ delayMode: 'slow' })).toThrowError(/allowed values for option/);
+      expect(callToSetOptions({ delayMode: 'alternate' })).not.toThrowError(
+        /allowed values for option/
+      );
+      expect(callToSetOptions({ delayMode: 'progressive' })).not.toThrowError(
+        /allowed values for option/
+      );
     });
 
     it('should not throw an exception if an acceptable value is passed to the option multifilterLogicalOperator', () => {
-      expect(callToSetOptions({ multifilterLogicalOperator: 'and' })).not.toThrowError(/allowed values for option/);
-      expect(callToSetOptions({ multifilterLogicalOperator: 'or' })).not.toThrowError(/allowed values for option/);
-    });
-
-    it('should throw an exception if a non-acceptable value is passed to the option multifilterLogicalOperator', () => {
-      expect(callToSetOptions({ multifilterLogicalOperator: 'eitheror' })).toThrowError(/allowed values for option/);
+      expect(
+        callToSetOptions({ multifilterLogicalOperator: 'and' })
+      ).not.toThrowError(/allowed values for option/);
+      expect(
+        callToSetOptions({ multifilterLogicalOperator: 'or' })
+      ).not.toThrowError(/allowed values for option/);
     });
   });
 });

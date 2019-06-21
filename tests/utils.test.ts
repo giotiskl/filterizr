@@ -1,7 +1,7 @@
 /**
  * Test suite for the utils module, containing helper methods for Filterizr.
  */
-import { 
+import {
   allStringsOfArray1InArray2,
   debounce,
   makeShallowClone,
@@ -30,7 +30,7 @@ describe('utils', () => {
   describe('#debounce', () => {
     const DEBOUNCE_TIME = 100;
     const fn = () => 5;
-    const debouncedFn = debounce(fn, DEBOUNCE_TIME);
+    const debouncedFn = debounce(fn, DEBOUNCE_TIME, false);
 
     it('should debounce a function for a given amount of time', () => {
       expect(debouncedFn()).not.toEqual(5);
@@ -87,20 +87,20 @@ describe('utils', () => {
   });
 
   describe('#sortBy', () => {
-    let sortFn, unsorted, sorted;
+    let sortFn, unsorted: number[], sorted: number[];
     beforeEach(() => {
-      sortFn = (a => a);
+      sortFn = (a: number) => a;
       unsorted = [3, 4, 1, 8];
       sorted = sortBy(unsorted, sortFn);
     });
-      
+
     it('should return a sorted array', () => {
       for (let i = 0; i < unsorted.length - 2; i++) {
-        expect(sorted[i]).toBeLessThan(sorted[i+1]);
+        expect(sorted[i]).toBeLessThan(sorted[i + 1]);
       }
     });
 
-    it ('should not mutate the array', () => {
+    it('should not mutate the array', () => {
       expect(unsorted === sorted).toEqual(false);
     });
   });
@@ -122,8 +122,12 @@ describe('utils', () => {
       expect('steps(1,end)'.match(cssEasingValuesRegexp)).toBeTruthy();
       expect('steps(1 ,end)'.match(cssEasingValuesRegexp)).toBeTruthy();
       expect('steps(1 , end)'.match(cssEasingValuesRegexp)).toBeTruthy();
-      expect('cubic-bezier(0.42,0,0.58,1)'.match(cssEasingValuesRegexp)).toBeTruthy();
-      expect('cubic-bezier(0.42 , 0,0.58, 1)'.match(cssEasingValuesRegexp)).toBeTruthy();
+      expect(
+        'cubic-bezier(0.42,0,0.58,1)'.match(cssEasingValuesRegexp)
+      ).toBeTruthy();
+      expect(
+        'cubic-bezier(0.42 , 0,0.58, 1)'.match(cssEasingValuesRegexp)
+      ).toBeTruthy();
     });
 
     it('should return null for non-acceptable values for the CSS transition-timing-function property', () => {
@@ -132,10 +136,15 @@ describe('utils', () => {
       expect('ase'.match(cssEasingValuesRegexp)).toEqual(null);
       expect('eas'.match(cssEasingValuesRegexp)).toEqual(null);
       expect('istep-start'.match(cssEasingValuesRegexp)).toEqual(null);
-      expect('cubicbezier(0.42,0,0.58,1)'.match(cssEasingValuesRegexp)).toEqual(null);
-      expect('cuicbezer(0.0,0.58,1)'.match(cssEasingValuesRegexp)).toEqual(null);
-      expect('cubic-bezie(0.42 , 0,0.58, 1)'.match(cssEasingValuesRegexp)).toEqual(null);
+      expect('cubicbezier(0.42,0,0.58,1)'.match(cssEasingValuesRegexp)).toEqual(
+        null
+      );
+      expect('cuicbezer(0.0,0.58,1)'.match(cssEasingValuesRegexp)).toEqual(
+        null
+      );
+      expect(
+        'cubic-bezie(0.42 , 0,0.58, 1)'.match(cssEasingValuesRegexp)
+      ).toEqual(null);
     });
   });
-
 });

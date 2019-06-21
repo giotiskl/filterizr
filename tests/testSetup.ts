@@ -1,4 +1,4 @@
-const fakeDom = `
+const fakeDom: string = `
 <div class="container">
     <div class="row">
         <ul class="simplefilter">
@@ -86,6 +86,4 @@ const fakeDom = `
 </div>
 `;
 
-export {
-  fakeDom,
-};
+export { fakeDom };

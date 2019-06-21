@@ -39,9 +39,9 @@ class Filterizr {
     this.options = merge(DefaultOptions, userOptions);
 
     // Try to find and instantiate the FilterContainer
-    const filterContainer = new FilterContainer(selector, this.options);
+    const filterContainerNode = document.querySelector(selector);
 
-    if (!filterContainer.node) {
+    if (!filterContainerNode) {
       // Throw because the selector given was not
       // found to initialize a FilterContainer.
       throw new Error(
@@ -50,7 +50,11 @@ class Filterizr {
       );
     }
 
-    // Setup FilterControls
+    const filterContainer = new FilterContainer(
+      filterContainerNode,
+      this.options
+    );
+
     const filterControls = new FilterControls(
       this,
       this.options.controlsSelector
