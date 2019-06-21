@@ -43,12 +43,12 @@ export default class Navigation extends Component {
               <Dropdown.Menu>
                 <Dropdown.Item
                   as={Link}
-                  to="/tutorials/installing"
+                  to="/tutorials/quickstart"
                   onClick={(event) =>
                     this.handleItemClick(event, { name: 'tutorials' })
                   }
                 >
-                  Installing
+                  Get started
                 </Dropdown.Item>
                 <Dropdown.Item
                   as={Link}

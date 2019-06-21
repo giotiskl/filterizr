@@ -13,6 +13,20 @@ code {
 }
 
 main {
+  padding: 0 15px;
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 1230px;
+}
+
+.hljs-inline {
+  pre {
+    font-size: 12px;
+  }
+
+  pre,
+  .hljs {
+    border-radius: 3px;
+    display: inline !important;
+    padding: 3px;
+  }
 }
