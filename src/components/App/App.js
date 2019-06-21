@@ -3,6 +3,7 @@ import { HashRouter as Router, Route } from 'react-router-dom';
 import Navigation from '../Navigation';
 import ShowcasePage from '../ShowcasePage';
 import QuickstartTutorialPage from '../QuickstartTutorialPage';
+import FilteringtutorialPage from '../FilteringTutorialPage';
 
 function App() {
   return (
@@ -15,6 +16,11 @@ function App() {
             path="/tutorials/quickstart"
             exact
             component={QuickstartTutorialPage}
+          />
+          <Route
+            path="/tutorials/filtering"
+            exact
+            component={FilteringtutorialPage}
           />
         </main>
       </Router>

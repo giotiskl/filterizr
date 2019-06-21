@@ -9,6 +9,7 @@ import Filterizr from '../../vendor/filterizr.min';
 export default class extends React.Component {
   static propTypes = {
     filterControls: PropTypes.arrayOf(PropTypes.node),
+    multiFilterControls: PropTypes.arrayOf(PropTypes.node),
     options: PropTypes.object,
     selector: PropTypes.string,
     useImagesLoaded: PropTypes.bool,
@@ -16,7 +17,18 @@ export default class extends React.Component {
 
   static defaultProps = {
     filterControls: [],
-    options: {},
+    multiFilterControls: [],
+    options: {
+      delay: 10,
+      filterOutCss: {
+        opacity: 0,
+        transform: 'scale(0.75)',
+      },
+      filterInCss: {
+        opacity: 1,
+        transform: 'scale(1)',
+      },
+    },
     selector: '.filtr-container',
     useImagesLoaded: false,
   };
@@ -94,9 +106,53 @@ export default class extends React.Component {
 
   setActiveFilter = (activeFilter) => this.setState({ activeFilter });
 
+  toggleActiveFilter = (toggledFilter) =>
+    this.setState((oldState) => {
+      const oldFilter = oldState.activeFilter;
+
+      if (
+        toggledFilter === 'all' ||
+        (typeof oldFilter === 'string' &&
+          oldFilter !== 'all' &&
+          oldFilter === toggledFilter)
+      ) {
+        return { activeFilter: 'all' };
+      }
+
+      if (typeof oldFilter === 'string' && toggledFilter !== oldFilter) {
+        return {
+          activeFilter: [oldFilter, toggledFilter],
+        };
+      }
+
+      if (Array.isArray(oldFilter)) {
+        if (!oldFilter.includes(toggledFilter)) {
+          return {
+            activeFilter: [...oldFilter, toggledFilter],
+          };
+        }
+
+        const reducedFilters = [
+          ...oldFilter.slice(0, oldFilter.indexOf(toggledFilter)),
+          ...oldFilter.slice(
+            oldFilter.indexOf(toggledFilter) + 1,
+            oldFilter.length
+          ),
+        ];
+        if (reducedFilters.length === 1) {
+          return {
+            activeFilter: reducedFilters[0],
+          };
+        }
+        return {
+          activeFilter: reducedFilters,
+        };
+      }
+    });
+
   render() {
     const { activeFilter } = this.state;
-    const { filterControls, selector } = this.props;
+    const { filterControls, multiFilterControls, selector } = this.props;
 
     return (
       <>
@@ -111,6 +167,24 @@ export default class extends React.Component {
                     this.setActiveFilter(control.props.targetFilter),
                 })
               )}
+            </Button.Group>
+          </div>
+        )}
+        {multiFilterControls && (
+          <div className="Filterizr__multi-filter-controls">
+            <Button.Group widths={multiFilterControls.length}>
+              {React.Children.map(multiFilterControls, (control, index) => {
+                const { targetFilter } = control.props;
+                const active = Array.isArray(activeFilter)
+                  ? activeFilter.includes(targetFilter)
+                  : activeFilter === targetFilter;
+                return React.cloneElement(control, {
+                  ...control.props,
+                  active,
+                  onClick: () =>
+                    this.toggleActiveFilter(control.props.targetFilter),
+                });
+              })}
             </Button.Group>
           </div>
         )}

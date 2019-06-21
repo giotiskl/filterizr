@@ -12,7 +12,10 @@ export const FilterButton = ({ active, onClick, targetFilter, text }) => (
 FilterButton.propTypes = {
   active: PropTypes.bool,
   onClick: PropTypes.func,
-  targetFilter: PropTypes.string.isRequired,
+  targetFilter: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.arrayOf(PropTypes.string),
+  ]).isRequired,
   text: PropTypes.string.isRequired,
 };
 
