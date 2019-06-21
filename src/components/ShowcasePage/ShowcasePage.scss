@@ -1,0 +1,48 @@
+.ShowcasePage {
+  .Filterizr__filter-controls {
+    display: flex;
+    align-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 900px;
+    padding: 0 20px;
+  }
+
+  .filtr-container {
+    margin: 0 auto;
+    max-width: 900px;
+
+    .filtr-item {
+      display: inline-block;
+      width: 33%;
+      padding: 20px;
+      position: relative;
+
+      .item-desc {
+        position: absolute;
+        bottom: 25px;
+        color: white;
+        text-transform: uppercase;
+        padding: 5px 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 3px;
+        left: 25px;
+      }
+    }
+  }
+
+  &__playground-wrapper {
+    display: flex;
+    margin-bottom: 13px;
+    height: 280px;
+
+    & > div {
+      width: 100%;
+
+      .jsoneditor-tree-inner {
+        padding-top: 10px;
+        padding-bottom: 50px !important;
+      }
+    }
+  }
+}

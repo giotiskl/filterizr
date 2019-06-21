@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dropdown, Menu, Segment } from 'semantic-ui-react';
+import { Dropdown, Image, Menu, Segment } from 'semantic-ui-react';
 
 import './Navigation.scss';
 
@@ -14,6 +14,9 @@ export default class Navigation extends Component {
     return (
       <Segment className="Navigation" inverted>
         <Menu inverted className="Navigation__navbar">
+          <Menu.Menu className="Navigation__logo" position="left">
+            <Image src="/img/filterizr-logo.png" fluid />
+          </Menu.Menu>
           <Menu.Menu position="right">
             <Menu.Item
               name="showcase"

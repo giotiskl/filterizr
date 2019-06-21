@@ -5,6 +5,7 @@ import App from './components/App/App';
 import * as serviceWorker from './serviceWorker';
 
 import 'highlight.js/styles/monokai.css';
+import 'jsoneditor-react/es/editor.min.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
