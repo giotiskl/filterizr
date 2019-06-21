@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Grid, Header } from 'semantic-ui-react';
+import { Grid, Header } from 'semantic-ui-react';
 import Filterizr from '../Filterizr';
 import Highlight from 'react-highlight';
 
