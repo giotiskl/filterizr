@@ -4,6 +4,7 @@ import Navigation from '../Navigation';
 import ShowcasePage from '../ShowcasePage';
 import QuickstartTutorialPage from '../QuickstartTutorialPage';
 import FilteringtutorialPage from '../FilteringTutorialPage';
+import SearchingTutorialPage from '../SearchingTutorialPage';
 
 function App() {
   return (
@@ -21,6 +22,11 @@ function App() {
             path="/tutorials/filtering"
             exact
             component={FilteringtutorialPage}
+          />
+          <Route
+            path="/tutorials/searching"
+            exact
+            component={SearchingTutorialPage}
           />
         </main>
       </Router>
