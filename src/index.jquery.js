@@ -14,14 +14,10 @@ import Filterizr from './Filterizr';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
 import DefaultOptions from './DefaultOptions';
-import executePolyfills from './polyfills';
 
 (function($) {
   //Make sure jQuery exists
   if (!$) throw new Error('Filterizr requires jQuery to work.');
-
-  // Execute polyfills
-  executePolyfills();
 
   // Extract .filterizr method on jQuery prototype
   $.fn.filterizr = function() {
