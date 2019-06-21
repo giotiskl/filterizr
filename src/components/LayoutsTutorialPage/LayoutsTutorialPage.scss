@@ -1,0 +1,37 @@
+.LayoutsTutorialPage {
+  .horizontal-layout,
+  .vertical-layout,
+  .packed-layout,
+  .same-height-layout,
+  .same-width-layout,
+  .same-size-layout {
+    background-color: #272721;
+    border-radius: 3px;
+    margin-top: 10px;
+    padding: 10px;
+    position: relative;
+    z-index: 0;
+
+    .filtr-item {
+      display: flex;
+      padding: 10px;
+      height: 84px;
+      width: 16.66%;
+    }
+  }
+
+  .same-width-layout {
+    .filtr-item:nth-child(2),
+    .filtr-item:nth-child(6),
+    .filtr-item:nth-child(8),
+    .filtr-item:nth-child(12) {
+      height: 84 * 2px;
+    }
+    .filtr-item:nth-child(3),
+    .filtr-item:nth-child(5),
+    .filtr-item:nth-child(7),
+    .filtr-item:nth-child(10) {
+      height: 84 * 3px;
+    }
+  }
+}
