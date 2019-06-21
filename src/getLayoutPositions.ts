@@ -13,7 +13,7 @@ import getPackedLayoutPositions from './layouts/getPackedLayoutPositions';
  * @param {Object} Filterizr - instance
  * @return {Object} layout to be used by Filterizr
  */
-const Positions = (layout: string, Filterizr: Filterizr) => {
+const getLayoutPositions = (layout: string, Filterizr: Filterizr) => {
   switch (layout) {
     case 'horizontal':
       return getHorizontalLayoutPositions(Filterizr);
@@ -31,4 +31,4 @@ const Positions = (layout: string, Filterizr: Filterizr) => {
   }
 };
 
-export default Positions;
+export default getLayoutPositions;

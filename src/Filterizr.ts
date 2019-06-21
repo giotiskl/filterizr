@@ -1,7 +1,7 @@
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
-import Positions from './Positions';
+import getLayoutPositions from './getLayoutPositions';
 import DefaultOptions, { IDefaultOptions } from './DefaultOptions';
 import {
   FILTERIZR_STATE,
@@ -38,9 +38,7 @@ class Filterizr {
     // so that we can later easily modify/update them.
     this.options = merge(DefaultOptions, userOptions);
 
-    // Try to find and instantiate the FilterContainer
     const filterContainerNode = document.querySelector(selector);
-
     if (!filterContainerNode) {
       // Throw because the selector given was not
       // found to initialize a FilterContainer.
@@ -61,7 +59,6 @@ class Filterizr {
     );
     filterControls.initialize();
 
-    // Define props
     this.props = {
       FilterContainer: filterContainer,
       FilterControls: filterControls,
@@ -459,7 +456,7 @@ class Filterizr {
     });
 
     // Determine target positions for items to be filtered in
-    const positions = Positions(layout, this);
+    const positions = getLayoutPositions(layout, this);
 
     // Filter in new items
     FilterItems.forEach((FilterItem, index) => {
