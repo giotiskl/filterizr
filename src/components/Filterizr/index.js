@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import imagesloaded from 'imagesloaded';
 import { isEqual, merge } from 'lodash';
 import { FilterButton } from './components/FilterButton';
-import { Button, Form } from 'semantic-ui-react';
+import { Button, Form, Select } from 'semantic-ui-react';
 import Filterizr from '../../vendor/filterizr.min';
 
 export default class extends React.Component {
@@ -14,6 +14,14 @@ export default class extends React.Component {
     searchable: PropTypes.bool,
     selector: PropTypes.string,
     shuffleControl: PropTypes.node,
+    sortAttributes: PropTypes.arrayOf(
+      PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+      })
+    ),
+    sortable: PropTypes.bool,
     useImagesLoaded: PropTypes.bool,
   };
 
@@ -34,12 +42,18 @@ export default class extends React.Component {
     searchable: false,
     selector: '.filtr-container',
     shuffleControl: null,
+    sortAttributes: [
+      { key: 'domIndex', value: 'domIndex', text: 'Index' },
+      { key: 'sortData', value: 'sortData', text: 'Description' },
+    ],
+    sortable: false,
     useImagesLoaded: false,
   };
 
   state = {
     activeFilter: 'all',
     searchTerm: '',
+    sortAttr: null,
   };
 
   static FilterButton = FilterButton;
@@ -161,14 +175,22 @@ export default class extends React.Component {
       }
     });
 
+  sortFilterizr = (sortOrder) => () => {
+    const { sortAttr } = this.state;
+    console.log('received', sortOrder, sortAttr);
+    this.filterizr.sort(sortAttr, sortOrder);
+  };
+
   render() {
     const { activeFilter } = this.state;
     const {
       filterControls,
       multiFilterControls,
-      shuffleControl,
       searchable,
       selector,
+      shuffleControl,
+      sortAttributes,
+      sortable,
     } = this.props;
 
     return (
@@ -205,13 +227,48 @@ export default class extends React.Component {
             </Button.Group>
           </div>
         )}
-        {/* TODO: maintain shuffled state after refiltering */}
-        {shuffleControl && (
-          <div className="Filterizr__shuffle-control">
-            {React.cloneElement(shuffleControl, {
-              ...shuffleControl.props,
-              onClick: () => this.filterizr.shuffle(),
-            })}
+        {(shuffleControl || sortable) && (
+          <div className="Filterizr__secondary-controls">
+            {/* TODO: maintain shuffled state after refiltering */}
+            {shuffleControl && (
+              <div className="Filterizr__shuffle-control">
+                {React.cloneElement(shuffleControl, {
+                  ...shuffleControl.props,
+                  onClick: () => this.filterizr.shuffle(),
+                })}
+              </div>
+            )}
+            {sortable && (
+              <div className="Filterizr__sort-controls">
+                <Button.Group widths="2">
+                  <Button
+                    color={!this.state.sortAttr ? 'grey' : 'red'}
+                    disabled={!this.state.sortAttr}
+                    onClick={this.sortFilterizr('asc')}
+                  >
+                    Asc
+                  </Button>
+                  <Button
+                    color={!this.state.sortAttr ? 'grey' : 'red'}
+                    disabled={!this.state.sortAttr}
+                    onClick={this.sortFilterizr('desc')}
+                  >
+                    Desc
+                  </Button>
+                </Button.Group>
+                <Form>
+                  <Form.Field>
+                    <Select
+                      onChange={(event, input) =>
+                        this.setState({ sortAttr: input.value })
+                      }
+                      placeholder="Sort by..."
+                      options={sortAttributes}
+                    />
+                  </Form.Field>
+                </Form>
+              </div>
+            )}
           </div>
         )}
         {searchable && (

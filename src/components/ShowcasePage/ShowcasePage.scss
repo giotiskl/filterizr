@@ -1,6 +1,7 @@
 .ShowcasePage {
   .Filterizr__filter-controls,
-  .Filterizr__shuffle-control,
+  .Filterizr__secondary-controls,
+  .Filterizr__shuffle-controls,
   .Filterizr__search-control {
     display: flex;
     align-content: space-between;
@@ -10,7 +11,19 @@
     padding: 0 20px;
   }
 
-  .Filterizr__shuffle-control,
+  .Filterizr__secondary-controls {
+    justify-content: space-between;
+  }
+
+  .Filterizr__sort-controls {
+    display: flex;
+
+    .form {
+      margin-left: 15px;
+    }
+  }
+
+  .Filterizr__secondary-controls,
   .Filterizr__search-control {
     margin-top: 15px;
   }
@@ -29,14 +42,24 @@
         width: 33%;
       }
 
+      .item-index,
       .item-desc {
         position: absolute;
-        bottom: 25px;
         color: white;
         text-transform: uppercase;
         padding: 5px 10px;
         background-color: rgba(0, 0, 0, 0.5);
         border-radius: 3px;
+        z-index: 1;
+      }
+
+      .item-index {
+        top: 25px;
+        left: 25px;
+      }
+
+      .item-desc {
+        bottom: 25px;
         left: 25px;
       }
     }
