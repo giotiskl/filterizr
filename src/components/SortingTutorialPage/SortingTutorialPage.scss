@@ -1,6 +1,17 @@
 .SortingTutorialPage {
-  .toggle-filter,
-  .active-filter {
+  .Filterizr__sort-controls {
+    display: flex;
+
+    .two.buttons {
+      max-width: 190px;
+    }
+
+    .form {
+      margin-left: 15px;
+    }
+  }
+
+  .sortable-grid {
     background-color: #272721;
     border-radius: 3px;
     margin-top: 10px;
@@ -13,6 +24,14 @@
       padding: 10px;
       height: 84px;
       width: 16.66%;
+
+      .black-letter {
+        color: black;
+      }
+
+      .blue-letter {
+        color: rgb(44, 108, 204);
+      }
     }
   }
 }
