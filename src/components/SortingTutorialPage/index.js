@@ -4,7 +4,7 @@ import Filterizr from '../Filterizr';
 import Highlight from 'react-highlight';
 import ColoredFilteritems from '../ColoredFilterItems';
 
-import './FilteringTutorialPage.scss';
+import './SortingTutorialPage.scss';
 
 const snippetStep1 = `<ul>
   <li data-filter="all"> All </li>
@@ -22,10 +22,10 @@ const snippetStep2 = `<ul>
   <li data-multifilter="3"> Purple </li>
 </ul>`;
 
-class FilteringTutorialPage extends React.Component {
+class SortingTutorialPage extends React.Component {
   render() {
     return (
-      <Grid className="FilteringTutorialPage" divided="vertically">
+      <Grid className="SortingTutorialPage" divided="vertically">
         <Grid.Row columns={1}>
           <Grid.Column>
             <Header as="h1">Filtering</Header>
@@ -111,4 +111,4 @@ class FilteringTutorialPage extends React.Component {
   }
 }
 
-export default FilteringTutorialPage;
+export default SortingTutorialPage;

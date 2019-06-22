@@ -9,7 +9,7 @@ import './DelayModeTutorialPage.scss';
 const snippetStep1 = `filterizr.setOptions({ delay: 50, delayMode: 'progressive' });`;
 const snippetStep2 = `filterizr.setOptions({ delay: 250, delayMode: 'alternate' });`;
 
-class ShowcasePage extends React.Component {
+class DelayModeTutorialPage extends React.Component {
   render() {
     return (
       <Grid className="DelayModeTutorialPage" divided="vertically">
@@ -106,4 +106,4 @@ class ShowcasePage extends React.Component {
   }
 }
 
-export default ShowcasePage;
+export default DelayModeTutorialPage;

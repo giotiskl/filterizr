@@ -76,7 +76,7 @@ const options = {
 } 
 `;
 
-class ShowcasePage extends React.Component {
+class QuickstartTutorialPage extends React.Component {
   render() {
     return (
       <Grid className="QuickstartTutorialPage" divided="vertically">
@@ -158,4 +158,4 @@ class ShowcasePage extends React.Component {
   }
 }
 
-export default ShowcasePage;
+export default QuickstartTutorialPage;

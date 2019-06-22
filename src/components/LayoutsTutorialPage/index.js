@@ -13,7 +13,7 @@ const snippet4 = `filterizr.setOptions({layout: 'packed'});`;
 const snippet5 = `filterizr.setOptions({layout: 'horizontal'});`;
 const snippet6 = `filterizr.setOptions({layout: 'vertical'});`;
 
-class ShowcasePage extends React.Component {
+class LayoutsTutorialPage extends React.Component {
   render() {
     return (
       <Grid className="LayoutsTutorialPage" divided="vertically">
@@ -225,4 +225,4 @@ class ShowcasePage extends React.Component {
   }
 }
 
-export default ShowcasePage;
+export default LayoutsTutorialPage;

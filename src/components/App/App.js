@@ -5,6 +5,7 @@ import ShowcasePage from '../ShowcasePage';
 import QuickstartTutorialPage from '../QuickstartTutorialPage';
 import FilteringtutorialPage from '../FilteringTutorialPage';
 import SearchingTutorialPage from '../SearchingTutorialPage';
+import SortingTutorialPage from '../SortingTutorialPage';
 import DelayModeTutorialPage from '../DelayModeTutorialPage';
 import LayoutsTutorialPage from '../LayoutsTutorialPage';
 
@@ -24,6 +25,11 @@ function App() {
             path="/tutorials/filtering"
             exact
             component={FilteringtutorialPage}
+          />
+          <Route
+            path="/tutorials/sorting"
+            exact
+            component={SortingTutorialPage}
           />
           <Route
             path="/tutorials/searching"
