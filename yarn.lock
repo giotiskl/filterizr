@@ -6456,9 +6456,9 @@ jsoneditor-react@^1.0.1:
     prop-types "^15.6.0"
 
 jsoneditor@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/jsoneditor/-/jsoneditor-6.0.0.tgz#79cb8732863b92c425bb037196b4a7808f8d3291"
-  integrity sha512-I09fUBgkCZNtD/Byv39Xv4M4/HUgiASv6L213d4I1tRBSIaLLKBgufeSu4N99LjNTWOH0ZbZho8si17jljK9wQ==
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/jsoneditor/-/jsoneditor-6.1.0.tgz#611b4002d560ffc6c3863f4b6fad223b15a97c12"
+  integrity sha512-jZ5WUFqC+9MuYy5W7qz4VQa9xblfY1Xmzw79Odzz9pA6VyMRv7DIGvHLIzTOWl3KuWDQL/hsxliS6IBJeCev6Q==
   dependencies:
     ajv "6.10.0"
     brace "0.11.1"
