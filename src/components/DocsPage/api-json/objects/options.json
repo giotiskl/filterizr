@@ -1,0 +1,114 @@
+{
+  "fields": [
+    {
+      "name": "animationDuration",
+      "type": "Number",
+      "defaultValue": "0.5",
+      "description": "The duration of CSS3 transitions, taking place for your effects."
+    },
+    {
+      "name": "callbacks",
+      "type": "Object",
+      "defaultValue": "-",
+      "description": "Used as the container for your event callbacks.",
+      "fields": [
+        {
+          "name": "onFilteringStart",
+          "type": "Function",
+          "defaultValue": "() => {}",
+          "description": "Triggered when filtering of the grid starts."
+        },
+        {
+          "name": "onFilteringEnd",
+          "type": "Function",
+          "defaultValue": "() => {}",
+          "description": "Triggered when filtering of the grid ends."
+        },
+        {
+          "name": "onSortingStart",
+          "type": "Function",
+          "defaultValue": "() => {}",
+          "description": "Triggered when sorting of the grid starts"
+        },
+        {
+          "name": "onSortingEnd",
+          "type": "Function",
+          "defaultValue": "() => {}",
+          "description": "Triggered when sorting of the grid ends"
+        },
+        {
+          "name": "onShufflingStart",
+          "type": "Function",
+          "defaultValue": "() => {}",
+          "description": "Triggered when shuffling of the grid starts"
+        },
+        {
+          "name": "onShufflingEnd",
+          "type": "Function",
+          "defaultValue": "() => {}",
+          "description": "Triggered when shuffling of the grid ends"
+        }
+      ]
+    },
+    {
+      "name": "controlsSelector",
+      "type": "String",
+      "defaultValue": "''",
+      "description": "In case there is the need to have more than one Filterizr instance on the same page then you need to set up different controls for them. This is where this option comes in handy. When instantiating your Filterizr you will need to set the following options: `{ controlsSelector: '.filtr-controls', setupControls: false }`. Then you will have to set the same class on all of your Filterizr controls, i.e. in this case `.filtr-controls`. The option `setupControls: false` will prevent the default controls from being set up and by defining the `controlsSelector` you target a specific set of controls for this Filterizr instance."
+    },
+    {
+      "name": "delay",
+      "type": "Number",
+      "defaultValue": 0,
+      "description": "Measured in milliseconds and used to set the value of the transition-delay property of every item. The value of the transition-delay is incremented progressively by the value of delay for every item to create a more progressive version of your effect."
+    },
+    {
+      "name": "delayMode",
+      "type": "Enum (progressive|alternate)",
+      "defaultValue": "progressive",
+      "description": "Determines how delay is applied to the transition between items. The two possible values are progressive and alternate. The value of delayMode makes no difference if delay is 0."
+    },
+    {
+      "name": "easing",
+      "type": "Enum (linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|steps(int,start|end)|cubic-bezier(n,n,n,n)|initial|inherit)",
+      "defaultValue": "ease-out",
+      "description": "Specifies the speed curve of the transition effect"
+    },
+    {
+      "name": "filterInCss",
+      "type": "Object",
+      "defaultValue": "{ opacity: 0, transform: 'scale(0,0)' }",
+      "description": "A CSS object. This the transition that is triggered when your items are being filtered in."
+    },
+    {
+      "name": "filterOutCss",
+      "type": "Object",
+      "defaultValue": "{ opacity: 1, transform: 'scale(1,1)' }",
+      "description": "A CSS object. This the transition that is triggered when your items are being filtered out."
+    },
+    {
+      "name": "layout",
+      "type": "Enum (sameSize|sameWidth|sameHeight|packed|horizontal|vertical)",
+      "defaultValue": "sameSize",
+      "description": "The layout of your Filterizr grid. For a demo of what the different layouts look like check the tutorials section."
+    },
+    {
+      "name": "multifilterLogicalOperator",
+      "type": "Enum (or|and)",
+      "defaultValue": "or",
+      "description": "If you are using multifiltering controls, this option defines the logic of how items are rendered. When set to `or` it will render items belonging to either category of the selected filters, when set to `and` it will render only items belonging to both."
+    },
+    {
+      "name": "selector",
+      "type": "String",
+      "defaultValue": ".filtr-container",
+      "description": "The CSS selector of the container of your gallery grid."
+    },
+    {
+      "name": "setupControls",
+      "type": "Boolean",
+      "defaultValue": "true",
+      "description": "If set to true then Filterizr will try to detect and set up filtering, shuffling and sorting controls. In case you have multiple Filterizrs in your view, you might decide to set this to false and set up your own controls, using the public API, so as to avoid interference the controls of your Filterizr instances."
+    }
+  ]
+}
