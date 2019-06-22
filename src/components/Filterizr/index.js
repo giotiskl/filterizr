@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import imagesloaded from 'imagesloaded';
 import { isEqual, merge } from 'lodash';
 import { FilterButton } from './components/FilterButton';
-import { Button } from 'semantic-ui-react';
+import { Button, Form } from 'semantic-ui-react';
 import Filterizr from '../../vendor/filterizr.min';
 
 export default class extends React.Component {
@@ -11,7 +11,9 @@ export default class extends React.Component {
     filterControls: PropTypes.arrayOf(PropTypes.node),
     multiFilterControls: PropTypes.arrayOf(PropTypes.node),
     options: PropTypes.object,
+    searchable: PropTypes.bool,
     selector: PropTypes.string,
+    shuffleControl: PropTypes.node,
     useImagesLoaded: PropTypes.bool,
   };
 
@@ -29,12 +31,15 @@ export default class extends React.Component {
         transform: 'scale(1)',
       },
     },
+    searchable: false,
     selector: '.filtr-container',
+    shuffleControl: null,
     useImagesLoaded: false,
   };
 
   state = {
     activeFilter: 'all',
+    searchTerm: '',
   };
 
   static FilterButton = FilterButton;
@@ -75,8 +80,11 @@ export default class extends React.Component {
     this.filterizr = null;
   }
 
-  componentDidUpdate(prevProps, { activeFilter: prevActiveFilter }) {
-    const { activeFilter } = this.state;
+  componentDidUpdate(
+    prevProps,
+    { activeFilter: prevActiveFilter, searchTerm: prevSearchTerm }
+  ) {
+    const { activeFilter, searchTerm } = this.state;
     const { options: prevUserOptions } = prevProps;
     const { options: userOptions } = this.props;
     const prevOptions = merge(
@@ -101,6 +109,9 @@ export default class extends React.Component {
     }
     if (!isEqual(prevOptions, options)) {
       this.filterizr.setOptions(options);
+    }
+    if (searchTerm !== prevSearchTerm) {
+      this.filterizr.search(searchTerm);
     }
   }
 
@@ -152,11 +163,17 @@ export default class extends React.Component {
 
   render() {
     const { activeFilter } = this.state;
-    const { filterControls, multiFilterControls, selector } = this.props;
+    const {
+      filterControls,
+      multiFilterControls,
+      shuffleControl,
+      searchable,
+      selector,
+    } = this.props;
 
     return (
       <>
-        {filterControls && (
+        {!!filterControls.length && (
           <div className="Filterizr__filter-controls">
             <Button.Group widths={filterControls.length}>
               {React.Children.map(filterControls, (control, index) =>
@@ -170,7 +187,7 @@ export default class extends React.Component {
             </Button.Group>
           </div>
         )}
-        {multiFilterControls && (
+        {!!multiFilterControls.length && (
           <div className="Filterizr__multi-filter-controls">
             <Button.Group widths={multiFilterControls.length}>
               {React.Children.map(multiFilterControls, (control, index) => {
@@ -187,6 +204,29 @@ export default class extends React.Component {
               })}
             </Button.Group>
           </div>
+        )}
+        {/* TODO: maintain shuffled state after refiltering */}
+        {shuffleControl && (
+          <div className="Filterizr__shuffle-control">
+            {React.cloneElement(shuffleControl, {
+              ...shuffleControl.props,
+              onClick: () => this.filterizr.shuffle(),
+            })}
+          </div>
+        )}
+        {searchable && (
+          <Form className="Filterizr__search-control">
+            <Form.Field>
+              <input
+                type="text"
+                placeholder="Search..."
+                onChange={({ target: { value } }) =>
+                  this.setState({ searchTerm: value })
+                }
+                value={this.state.searchTerm}
+              />
+            </Form.Field>
+          </Form>
         )}
 
         <div className={selector.slice(1, selector.length)}>

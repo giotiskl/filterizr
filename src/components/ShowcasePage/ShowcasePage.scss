@@ -1,5 +1,7 @@
 .ShowcasePage {
-  .Filterizr__filter-controls {
+  .Filterizr__filter-controls,
+  .Filterizr__shuffle-control,
+  .Filterizr__search-control {
     display: flex;
     align-content: space-between;
     align-items: center;
@@ -8,15 +10,24 @@
     padding: 0 20px;
   }
 
+  .Filterizr__shuffle-control,
+  .Filterizr__search-control {
+    margin-top: 15px;
+  }
+
   .filtr-container {
     margin: 0 auto;
     max-width: 900px;
 
     .filtr-item {
       display: inline-block;
-      width: 33%;
+      width: 50%;
       padding: 20px;
       position: relative;
+
+      @media only screen and (min-width: 992px) {
+        width: 33%;
+      }
 
       .item-desc {
         position: absolute;

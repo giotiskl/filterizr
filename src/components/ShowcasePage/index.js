@@ -24,8 +24,8 @@ class ShowcasePage extends React.Component {
   render() {
     return (
       <Grid className="ShowcasePage" divided="vertically">
-        <Grid.Row columns={2}>
-          <Grid.Column>
+        <Grid.Row columns={1}>
+          <Grid.Column mobile={16} computer={8}>
             <Header as="h1">Filter all night long</Header>
             <p>
               Filterizr is a JavaScript library that searches, sorts, shuffles
@@ -61,7 +61,7 @@ class ShowcasePage extends React.Component {
               <Icon name="github" /> Github
             </Button>
           </Grid.Column>
-          <Grid.Column>
+          <Grid.Column mobile={16} computer={8}>
             <Header as="h1">Filter playground</Header>
             <p>
               Write your CSS in JSON in the textarea below. Hit Filterize and
@@ -94,6 +94,8 @@ class ShowcasePage extends React.Component {
                 <Filterizr.FilterButton text="Daylight" targetFilter="4" />,
                 <Filterizr.FilterButton text="Nightscape" targetFilter="5" />,
               ]}
+              shuffleControl={<Button color="yellow">Shuffle</Button>}
+              searchable
               selector=".filtr-container"
             >
               <div
