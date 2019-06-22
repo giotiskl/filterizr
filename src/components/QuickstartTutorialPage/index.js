@@ -87,7 +87,7 @@ class ShowcasePage extends React.Component {
         </Grid.Row>
         <Grid.Row columns={1}>
           <Grid.Column mobile={16} computer={8}>
-            <Header as="h2">Prepare the HTML</Header>
+            <Header as="h2">1. Prepare the HTML</Header>
             <p>To set up your own gallery, modify your HTML as follows:</p>
             <List className="hljs-inline" bulleted>
               <List.Item>
@@ -107,7 +107,7 @@ class ShowcasePage extends React.Component {
             <Highlight className="html">{snippetStep1}</Highlight>
           </Grid.Column>
           <Grid.Column mobile={16} computer={8}>
-            <Header as="h2">Add the controls</Header>
+            <Header as="h2">2. Add the controls</Header>
             <p>
               To be able to use your filterized gallery, you will have to set up
               some controls (e.g. buttons to trigger filtering or a text search
@@ -130,12 +130,12 @@ class ShowcasePage extends React.Component {
         </Grid.Row>
         <Grid.Row columns={1}>
           <Grid.Column mobile={16} computer={8}>
-            <Header as="h2">Instantiate Filterizr</Header>
+            <Header as="h2">3. Instantiate Filterizr</Header>
             <p>After installing Filterizr via npm:</p>
             <Highlight className="javascript">{snippetStep3}</Highlight>
           </Grid.Column>
           <Grid.Column mobile={16} computer={8}>
-            <Header as="h2">Available options</Header>
+            <Header as="h2">4. Available options</Header>
             <p className="hljs-inline">
               Filterizr's magic lies in{' '}
               <Highlight className="javascript">filterInCss</Highlight> and{' '}
