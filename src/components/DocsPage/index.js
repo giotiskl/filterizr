@@ -4,14 +4,24 @@ import { Grid, Menu } from 'semantic-ui-react';
 import { Link, Route } from 'react-router-dom';
 import OptionsDocs from './components/OptionsDocs';
 import MethodDocs from './components/MethodDocs';
-import filterMethodJSON from './api-json/methods/filter.json';
-import shuffleMethodJSON from './api-json/methods/shuffle.json';
 import destroyMethodJSON from './api-json/methods/destroy.json';
+import filterMethodJSON from './api-json/methods/filter.json';
+import insertItemMethodJSON from './api-json/methods/insertItem.json';
+import searchMethodJSON from './api-json/methods/search.json';
+import setOptionsMethodJSON from './api-json/methods/setOptions.json';
+import shuffleMethodJSON from './api-json/methods/shuffle.json';
+import sortMethodJSON from './api-json/methods/sort.json';
+import toggleFilterMethodJSON from './api-json/methods/toggleFilter.json';
 
 const METHODS = {
   destroy: destroyMethodJSON,
   filter: filterMethodJSON,
+  insertItem: insertItemMethodJSON,
+  search: searchMethodJSON,
+  setOptions: setOptionsMethodJSON,
   shuffle: shuffleMethodJSON,
+  sort: sortMethodJSON,
+  toggleFilter: toggleFilterMethodJSON,
 };
 
 class DocsPage extends Component {

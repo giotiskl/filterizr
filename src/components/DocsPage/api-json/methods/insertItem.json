@@ -1,0 +1,11 @@
+{
+  "preview": "filterizr.insertItem(node);",
+  "description": "Appends a new item to the grid. This method could be used in case you need to load item dynamically.",
+  "args": [
+    {
+      "name": "node",
+      "type": "HTMLElement",
+      "description": "The new grid item to be appended."
+    }
+  ]
+}
