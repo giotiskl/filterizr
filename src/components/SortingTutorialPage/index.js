@@ -7,7 +7,7 @@ import Highlight from 'react-highlight';
 import './SortingTutorialPage.scss';
 
 const snippet1 = `<select data-sortOrder>
-  <option value="domIndex">Order it appears in DOM</option>
+  <option value="index">Order it appears in DOM</option>
   <option value="sortData">Value of data-sort attribute</option>
   <!-- Next two can be used only for layouts of varying widths/heights -->
   <option value="w">Item Width</option>
@@ -34,7 +34,7 @@ const snippet3 = `<div class="filtr-container">
 </div>`;
 
 const snippet4 = `<select data-sortOrder>
-  <option value="domIndex"> Position in DOM </option>
+  <option value="index"> Position in DOM </option>
   <!-- Other options and then... -->
   <option value="author">Author Name</option>
   <option value="year">Year Published</option>
@@ -66,7 +66,7 @@ class SortingTutorialPage extends React.Component {
             <Header as="h2">Example</Header>
             <Filterizr
               sortAttributes={[
-                { key: 'domIndex', value: 'domIndex', text: 'Index' },
+                { key: 'index', value: 'index', text: 'Index' },
                 { key: 'black', value: 'black', text: 'Black letter' },
                 { key: 'blue', value: 'blue', text: 'Blue letter' },
               ]}

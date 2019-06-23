@@ -5,8 +5,8 @@
     {
       "name": "attribute",
       "type": "String",
-      "defaultValue": "domIndex",
-      "description": "The attribute based on which the grid is sorted. When it defaults to `'domIndex'` the items are sorted based on their initial position in the DOM. If its value is set to `'sortData'`, the elements are sorted based on the value of the user-defined `data-sort` attribute. Other possible values includes `'w'` or `'h'` if you wish to sort your elements by width or height (used for layouts of items of different size). To use a custom data-attribute for sorting you can to pass its name omitting the `data-` part. For example if you have defined a `data-author` HTML attribute on your grid items, you could invoke `filterizr.sort('author', 'asc');`."
+      "defaultValue": "index",
+      "description": "The attribute based on which the grid is sorted. When it defaults to `'index'` the items are sorted based on their initial position in the DOM. If its value is set to `'sortData'`, the elements are sorted based on the value of the user-defined `data-sort` attribute. Other possible values includes `'w'` or `'h'` if you wish to sort your elements by width or height (used for layouts of items of different size). To use a custom data-attribute for sorting you can to pass its name omitting the `data-` part. For example if you have defined a `data-author` HTML attribute on your grid items, you could invoke `filterizr.sort('author', 'asc');`."
     },
     {
       "name": "sortOrder",

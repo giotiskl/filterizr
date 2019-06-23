@@ -29,7 +29,7 @@ const snippetStep2 = `<ul>
 </ul>
 <!-- To choose the value by which you want to sort add -->
 <select data-sortOrder>
-  <option value="domIndex"> Position </option>
+  <option value="index"> Position </option>
   <option value="sortData"> Custom Data </option>
 </select>
 <!-- To create a search control -->

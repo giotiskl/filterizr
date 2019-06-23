@@ -43,7 +43,7 @@ export default class extends React.Component {
     selector: '.filtr-container',
     shuffleControl: null,
     sortAttributes: [
-      { key: 'domIndex', value: 'domIndex', text: 'Index' },
+      { key: 'index', value: 'index', text: 'Index' },
       { key: 'sortData', value: 'sortData', text: 'Description' },
     ],
     sortable: false,
@@ -175,7 +175,6 @@ export default class extends React.Component {
 
   sortFilterizr = (sortOrder) => () => {
     const { sortAttr } = this.state;
-    console.log('received', sortOrder, sortAttr);
     this.filterizr.sort(sortAttr, sortOrder);
   };
 
