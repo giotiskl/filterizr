@@ -83,6 +83,67 @@ class QuickstartTutorialPage extends React.Component {
         <Grid.Row columns={1}>
           <Grid.Column>
             <Header as="h1">Getting started</Header>
+            <p>
+              First, you must add Filterizr in your project. There are three
+              ways to do this:
+            </p>
+            <ol>
+              <li className="hljs-inline">
+                If you would like to add the vanilla JavaScript Filterizr
+                variation with a plain script tag, then download it{' '}
+                <a
+                  href="https://github.com/giotiskl/filterizr/blob/master/dist/filterizr.min.js"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  here
+                </a>
+                . Then include it in your project like this:{' '}
+                <Highlight language="html">
+                  {
+                    '<script type="text/javascript" src="filterizr.min.js"></script>'
+                  }
+                </Highlight>
+                <p>This script will expose the Filterizr class as a global.</p>
+              </li>
+              <li className="hljs-inline">
+                If you would like to add the jQuery Filterizr variation again
+                with a plain script tag, you can download it{' '}
+                <a
+                  href="https://github.com/giotiskl/filterizr/blob/master/dist/jquery.filterizr.min.js"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  here
+                </a>
+                . Then include it in your project like this:{' '}
+                <Highlight language="html">
+                  {
+                    '<script type="text/javascript" src="jquery.filterizr.min.js"></script>'
+                  }
+                </Highlight>
+                <div>
+                  Make sure to include this script after you have included
+                  jQuery, as it will try to detect the jQuery object and extend
+                  it with a{' '}
+                  <Highlight language="javascript">.filterizr</Highlight>{' '}
+                  method.
+                </div>
+              </li>
+              <li className="hljs-inline">
+                Finally if you would like to install Filterizr as a module via
+                npm, then you can do:
+                <Highlight language="javascript">
+                  npm install filterizr
+                </Highlight>
+                <div>
+                  Then in your code:{' '}
+                  <Highlight language="javascript">
+                    import Filterizr from 'filterizr';
+                  </Highlight>
+                </div>
+              </li>
+            </ol>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={1}>
