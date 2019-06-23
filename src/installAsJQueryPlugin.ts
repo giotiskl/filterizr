@@ -1,31 +1,23 @@
-/**
- * Filterizr is a jQuery plugin that sorts, shuffles and applies stunning filters over
- * responsive galleries using CSS3 transitions and custom CSS effects.
- *
- * @author Yiotis Kaltsikis
- * @see {@link http://yiotis.net/filterizr}
- * @license MIT
- */
-
-let $, jQuery;
-$ = jQuery = IMPORT_JQUERY ? require('jquery') : window.jQuery;
 import Filterizr from './Filterizr';
-import FilterContainer from './FilterContainer';
-import FilterItem from './FilterItem';
-import DefaultOptions from './DefaultOptions';
+import defaultOptions from './DefaultOptions';
 
-(function($) {
-  //Make sure jQuery exists
-  if (!$) throw new Error('Filterizr requires jQuery to work.');
+export default function installAsJQueryPlugin($: any) {
+  if (!$)
+    throw new Error(
+      'Filterizr as a jQuery plugin, requires jQuery to work. If you would prefer to use the vanilla JS version, please use the correct bundle file.'
+    );
 
-  // Extract .filterizr method on jQuery prototype
+  // Add filterizr method on jQuery prototype
   $.fn.filterizr = function() {
     const selector = `.${$.trim(this.get(0).className).replace(/\s+/g, '.')}`;
     const args = arguments;
 
     // user is instantiating Filterizr
-    if (!this._fltr && args.length === 0 || (args.length === 1 && typeof args[0] === 'object')) {
-      const options = args.length > 0 ? args[0] : DefaultOptions;
+    if (
+      (!this._fltr && args.length === 0) ||
+      (args.length === 1 && typeof args[0] === 'object')
+    ) {
+      const options = args.length > 0 ? args[0] : defaultOptions;
       this._fltr = new Filterizr(selector, options);
     }
     // otherwise call the method called
@@ -33,7 +25,7 @@ import DefaultOptions from './DefaultOptions';
       const method = args[0];
       const methodArgs = Array.prototype.slice.call(args, 1);
       const filterizr = this._fltr;
-      switch(method) {
+      switch (method) {
         case 'filter':
           filterizr.filter(...methodArgs);
           return this;
@@ -61,21 +53,12 @@ import DefaultOptions from './DefaultOptions';
           delete this._fltr;
           return this;
         default:
-          throw new Error(`Filterizr: ${method} is not part of the Filterizr API. Please refer to the docs for more information.`);
+          throw new Error(
+            `Filterizr: ${method} is not part of the Filterizr API. Please refer to the docs for more information.`
+          );
       }
     }
 
     return this;
   };
-})(jQuery);
-
-// Export all Filterizr classes
-export {
-  Filterizr,
-  FilterContainer,
-  FilterItem,
-  DefaultOptions,
-};
-
-// Set default export to jQuery object extended with Filterizr plugin
-export default $;
+}

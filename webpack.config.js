@@ -15,6 +15,7 @@ module.exports = (env = {}) => {
   return {
     entry: {
       filterizr: './src/index.ts',
+      'jquery.filterizr': './src/index.jquery.ts',
     },
     ...(IS_DEVELOPMENT && {
       devtool: 'inline-source-map',

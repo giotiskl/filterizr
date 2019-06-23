@@ -3,6 +3,7 @@ import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
 import getLayoutPositions from './getLayoutPositions';
 import DefaultOptions, { IDefaultOptions } from './DefaultOptions';
+import _installAsJQueryPlugin from './installAsJQueryPlugin';
 import {
   FILTERIZR_STATE,
   allStringsOfArray1InArray2,
@@ -350,6 +351,15 @@ class Filterizr {
 
     // Trigger a refilter
     this.filter(this.options.filter);
+  }
+
+  /**
+   * Receives the jQuery object and extends its prototype with a .filterizr method
+   * @param {Object} $ - window.jQuery
+   * @returns {undefined}
+   */
+  installAsJQueryPlugin($: any) {
+    _installAsJQueryPlugin($);
   }
 
   // Helper methods
