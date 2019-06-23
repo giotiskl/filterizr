@@ -76,15 +76,13 @@ export default class extends React.Component {
       userOptions
     );
 
-    console.log('RECEIVED', Filterizr)
-
     if (useImagesLoaded) {
       imagesloaded(document.querySelector('main'), () => {
-        const filterizr = new Filterizr.Filterizr(selector, options);
+        const filterizr = new Filterizr(selector, options);
         this.filterizr = filterizr;
       });
     } else {
-      const filterizr = new Filterizr.Filterizr(selector, options);
+      const filterizr = new Filterizr(selector, options);
       this.filterizr = filterizr;
     }
   }
