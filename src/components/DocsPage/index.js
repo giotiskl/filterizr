@@ -56,6 +56,7 @@ class DocsPage extends Component {
         name={item}
         active={activeItem === item}
         onClick={this.handleItemClick(item)}
+        key={index}
       >
         {item}
       </Menu.Item>

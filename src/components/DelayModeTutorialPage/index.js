@@ -16,7 +16,7 @@ class DelayModeTutorialPage extends React.Component {
         <Grid.Row columns={1}>
           <Grid.Column>
             <Header as="h1">Delay modes</Header>
-            <p className="hljs-inline">
+            <div className="hljs-inline">
               If you would like to spice up the effect of your Filterizr by
               making it less synchronous, you could experiment with adding
               delays between your gallery's items. Filterizr uses by default{' '}
@@ -26,20 +26,20 @@ class DelayModeTutorialPage extends React.Component {
               but the value of{' '}
               <Highlight className="javascript">delay</Highlight> in the options
               is set to 0. Thus, there is no delay effect by default.
-            </p>
+            </div>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={1}>
           <Grid.Column mobile={16} computer={8}>
             <Header as="h2">Progressive delay mode</Header>
             <Header as="h3">Description</Header>
-            <p className="hljs-inline">
+            <div className="hljs-inline">
               This delay mode increases the transition-delay property of your
               items consecutively by the amount you've set the{' '}
               <Highlight className="javascript">delay</Highlight> option in
               Filterizr's options. I would suggest a value between 25-50 ms for
               an optimal effect.
-            </p>
+            </div>
             <Header as="h3">Example</Header>
             <Highlight className="javascript">{snippetStep1}</Highlight>
           </Grid.Column>
@@ -69,13 +69,13 @@ class DelayModeTutorialPage extends React.Component {
           <Grid.Column mobile={16} computer={8}>
             <Header as="h2">Alternate delay mode</Header>
             <Header as="h3">Description</Header>
-            <p className="hljs-inline">
+            <div className="hljs-inline">
               This delay mode sets the transition-delay property of every other
               item to the amount you've set the{' '}
               <Highlight className="javascript">delay</Highlight> option in
               Filterizr's options. I would suggest a value between 250-400 ms
               for an optimal effect if you choose this delay mode.
-            </p>
+            </div>
             <Header as="h3">Example</Header>
             <Highlight className="javascript">{snippetStep2}</Highlight>
           </Grid.Column>

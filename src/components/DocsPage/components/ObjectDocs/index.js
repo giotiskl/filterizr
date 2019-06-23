@@ -9,7 +9,7 @@ const ObjectDocs = ({ jsonDefinition, secondary }) => (
     {jsonDefinition.map(
       ({ name, defaultValue, type, description, fields }, index) => (
         <Segment key={index} secondary={secondary}>
-          <p className="hljs-inline">
+          <div className="hljs-inline">
             <strong>Name:</strong>
             <Highlight className="javascript">{name}</Highlight>
             <br />
@@ -21,9 +21,10 @@ const ObjectDocs = ({ jsonDefinition, secondary }) => (
                 <Highlight className="javascript">{defaultValue}</Highlight>
               </>
             )}
-          </p>
+          </div>
+          <br />
           <strong>Description:</strong>
-          <p className="hljs-inline">{highlightSyntax(description)}</p>
+          <div className="hljs-inline">{highlightSyntax(description)}</div>
           {!!fields && <ObjectDocs jsonDefinition={fields} secondary />}
         </Segment>
       )
@@ -32,7 +33,7 @@ const ObjectDocs = ({ jsonDefinition, secondary }) => (
 );
 
 ObjectDocs.propTypes = {
-  jsonDefinition: PropTypes.string.isRequired,
+  jsonDefinition: PropTypes.array.isRequired,
   secondary: PropTypes.bool,
 };
 

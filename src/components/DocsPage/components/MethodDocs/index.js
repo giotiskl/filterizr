@@ -13,7 +13,7 @@ const MethodDocs = ({
     <Header as="h3">Preview</Header>
     <Highlight className="javascript">{preview}</Highlight>
     <Header as="h3">Description</Header>
-    <p className="hljs-inline">{highlightSyntax(description)}</p>
+    <div className="hljs-inline">{highlightSyntax(description)}</div>
     {args && (
       <>
         <Header as="h3">Arguments</Header>
@@ -24,7 +24,7 @@ const MethodDocs = ({
 );
 
 MethodDocs.propTypes = {
-  jsonDefinition: PropTypes.string.isRequired,
+  jsonDefinition: PropTypes.object.isRequired,
   secondary: PropTypes.bool,
 };
 

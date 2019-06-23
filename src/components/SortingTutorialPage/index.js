@@ -252,13 +252,13 @@ class SortingTutorialPage extends React.Component {
               to your select input element:
             </p>
             <Highlight className="html">{snippet4}</Highlight>
-            <p className="hljs-inline">
+            <div className="hljs-inline">
               If you are using the default sorting controls that's it! If you
               wish to use the public API once again you simply pass the value of
               the option elements as the sort attribute parameter. Just remember
               to omit the <Highlight className="html">data-</Highlight> part.
               For example:
-            </p>
+            </div>
             <Highlight className="javascript">{snippet5}</Highlight>
           </Grid.Column>
         </Grid.Row>

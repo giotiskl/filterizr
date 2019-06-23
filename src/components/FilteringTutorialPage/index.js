@@ -43,7 +43,7 @@ class FilteringTutorialPage extends React.Component {
           <Grid.Column mobile={16} computer={8}>
             <Header as="h2">Active filter mode</Header>
             <Header as="h3">Description</Header>
-            <p className="hljs-inline">
+            <div className="hljs-inline">
               For this filtering mode all you need to do is to include the
               <Highlight className="html">data-filter</Highlight> attribute in
               your controls as illustrated below. Each time you switch between
@@ -54,7 +54,7 @@ class FilteringTutorialPage extends React.Component {
                 Filterizr.prototype.filter(targetFilter)
               </Highlight>{' '}
               method in the background to switch between categories.
-            </p>
+            </div>
             <Header as="h3">Control setup</Header>
             <Highlight className="html">{snippetStep1}</Highlight>
           </Grid.Column>
@@ -80,7 +80,7 @@ class FilteringTutorialPage extends React.Component {
           <Grid.Column mobile={16} computer={8}>
             <Header as="h2">Toggle filter mode</Header>
             <Header as="h3">Description</Header>
-            <p className="hljs-inline">
+            <div className="hljs-inline">
               For this filtering mode you need to include the{' '}
               <Highlight className="html">data-multifilter</Highlight> attribute
               in your controls as illustrated below. When all buttons are
@@ -89,7 +89,7 @@ class FilteringTutorialPage extends React.Component {
                 Filterizr.prototype.toggleFilter(toggledFilter)
               </Highlight>{' '}
               method in the background to hide or display categories.
-            </p>
+            </div>
             <Header as="h3">Control setup</Header>
             <Highlight className="html">{snippetStep2}</Highlight>
           </Grid.Column>

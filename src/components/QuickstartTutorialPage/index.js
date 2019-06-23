@@ -136,16 +136,16 @@ class QuickstartTutorialPage extends React.Component {
           </Grid.Column>
           <Grid.Column mobile={16} computer={8}>
             <Header as="h2">4. Available options</Header>
-            <p className="hljs-inline">
+            <div className="hljs-inline">
               Filterizr's magic lies in{' '}
               <Highlight className="javascript">filterInCss</Highlight> and{' '}
               <Highlight className="javascript">filterOutCss</Highlight>.
-            </p>
-            <p className="hljs-inline">
+            </div>
+            <div className="hljs-inline">
               If you wish overwrite any options, pass the options object to the
               constructor methods or if you have an instance call the method
               <Highlight className="javascript">setOptions(options)</Highlight>.
-            </p>
+            </div>
             <p>
               Here is a list of all the available options (for more details look
               in the documentation).

@@ -35,7 +35,6 @@ export default class Navigation extends Component {
               onClick={this.handleItemClick}
             />
             <Dropdown
-              active={activeItem === 'tutorials'}
               item
               text="Tutorials"
             >
