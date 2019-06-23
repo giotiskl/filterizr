@@ -43,8 +43,9 @@ module.exports = (env = {}) => {
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].min.js',
-      library: 'filterizr',
+      library: 'Filterizr',
       libraryTarget,
+      libraryExport: 'default',
     },
   };
 };

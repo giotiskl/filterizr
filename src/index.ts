@@ -7,9 +7,4 @@
  * @license MIT
  */
 
-import FilterContainer from './FilterContainer';
-import FilterItem from './FilterItem';
-import defaultOptions from './DefaultOptions';
-
 export { default } from './Filterizr';
-export { FilterContainer, FilterItem, defaultOptions };

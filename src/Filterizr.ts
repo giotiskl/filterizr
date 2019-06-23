@@ -17,6 +17,10 @@ import {
 } from './utils';
 
 class Filterizr {
+  FilterContainer: FilterContainer;
+  FilterItem: FilterItem;
+  defaultOptions: IDefaultOptions;
+
   options: IDefaultOptions;
   props: {
     FilterContainer: FilterContainer;
@@ -29,6 +33,10 @@ class Filterizr {
     sortOrder: string;
     windowResizeHandler?: EventListener;
   };
+
+  static FilterContainer = FilterContainer;
+  static FilterItem = FilterItem;
+  static defaultOptions = DefaultOptions;
 
   constructor(
     selector: string = '.filtr-container',
