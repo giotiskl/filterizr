@@ -1,0 +1,31 @@
+{
+  "faq": [
+    {
+      "question": "Why Filterizr?",
+      "answer": "Filterizr is fast, responsive, performs well on mobile and is written with up-to-date JavaScript. It has no dependencies and can be used either as a vanilla JavaScript library, a jQuery plugin and soon as a React component."
+    },
+
+    {
+      "question": "Can I redistribute, sell or alter Filterizr?",
+      "answer": "Yes, Filterizr is licensed under MIT. This means you can do whatever you please with it."
+    },
+    {
+      "question": "How can I contribute to Filterizr?",
+      "answer": "If you would like to help build Filterizr into something better, you can find its GitHub repo right <a  href=\"https://github.com/giotiskl/filterizr\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>. If you used Filterizr I would appreciate if you could starthe repo on GitHub."
+    }
+  ],
+  "caveats": [
+    {
+      "question": "Images appear without height on first load",
+      "answer": "If the height of your grid items depends on images then you might have trouble on first load as Filterizr is initialized before they finish loading. To solve this issue you can either set the height of your images explicitly via CSS or  make use of <a href=\"https://imagesloaded.desandro.com/\" target=\"_blank\" rel=\"noopener noreferrer\">DeSandro's imagesLoaded script</a> which is only 5kb!"
+    },
+    {
+      "question": "Margin don't work for me?",
+      "answer": "Bear in mind that Filterizr has no notion of margins. If you wish to create whitespace I suggest using a wrapper element and set padding on it, both for your items and your container. The width of your items will have to sum up to 100% per row."
+    },
+    {
+      "question": "The CSS for my filtering has bad performance",
+      "answer": "If the performance of your Filterizr's effect is not silky smooth, please make sure to read on <a href=\"https://developers.google.com/web/fundamentals/performance/rendering/stick-to-compositor-only-properties-and-manage-layer-count\" target=\"_blank\" rel=\"noopener noreferrer\">compositor-only properties</a> as well as <a href=\"https://www.smashingmagazine.com/2012/06/play-with-hardware-accelerated-css/\" target=\"_blank\" rel=\"noopener noreferrer\">hardware-accelerated CSS</a> and go through your code again."
+    }
+  ]
+}

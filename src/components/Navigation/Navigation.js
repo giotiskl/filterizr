@@ -36,7 +36,6 @@ export default class Navigation extends Component {
             />
             <Dropdown
               active={activeItem === 'tutorials'}
-              // as={Menu.Item}
               item
               text="Tutorials"
             >
@@ -99,7 +98,7 @@ export default class Navigation extends Component {
             </Dropdown>
             <Menu.Item
               as={Link}
-              to="/documentation"
+              to="/documentation/options"
               name="docs"
               active={activeItem === 'docs'}
               onClick={this.handleItemClick}
