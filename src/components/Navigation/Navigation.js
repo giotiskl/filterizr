@@ -34,10 +34,7 @@ export default class Navigation extends Component {
               active={activeItem === 'showcase'}
               onClick={this.handleItemClick}
             />
-            <Dropdown
-              item
-              text="Tutorials"
-            >
+            <Dropdown item text="Tutorials">
               <Dropdown.Menu>
                 <Dropdown.Item
                   as={Link}
@@ -92,6 +89,15 @@ export default class Navigation extends Component {
                   }
                 >
                   Layouts
+                </Dropdown.Item>
+                <Dropdown.Item
+                  as={Link}
+                  to="/tutorials/as-jquery-plugin"
+                  onClick={(event) =>
+                    this.handleItemClick(event, { name: 'tutorials' })
+                  }
+                >
+                  As jQuery plugin
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

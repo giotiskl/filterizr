@@ -8,6 +8,7 @@ import SearchingTutorialPage from '../SearchingTutorialPage';
 import SortingTutorialPage from '../SortingTutorialPage';
 import DelayModeTutorialPage from '../DelayModeTutorialPage';
 import LayoutsTutorialPage from '../LayoutsTutorialPage';
+import AsJqueryPluginTutorialPage from '../AsJqueryPluginTutorialPage';
 import DocsPage from '../DocsPage';
 import FAQPage from '../FAQPage';
 
@@ -49,6 +50,11 @@ function App() {
             path="/tutorials/layouts"
             exact
             component={LayoutsTutorialPage}
+          />
+          <Route
+            path="/tutorials/as-jquery-plugin"
+            exact
+            component={AsJqueryPluginTutorialPage}
           />
         </main>
       </Router>
