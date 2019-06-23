@@ -71,6 +71,6 @@ import defaultOptions from './DefaultOptions';
 
     return this;
   };
-})(jQuery);
+})((<any>window).jQuery);
 
 export default Filterizr;

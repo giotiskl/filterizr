@@ -35,9 +35,17 @@ class Filterizr {
     windowResizeHandler?: EventListener;
   };
 
+  /**
+   * Filterizr classes
+   */
   static FilterContainer = FilterContainer;
   static FilterItem = FilterItem;
   static defaultOptions = DefaultOptions;
+  /**
+   * Static method that receives the jQuery object and extends
+   * its prototype with a .filterizr method.
+   */
+  static installAsJQueryPlugin = _installAsJQueryPlugin;
 
   constructor(
     selector: string = '.filtr-container',
@@ -351,15 +359,6 @@ class Filterizr {
 
     // Trigger a refilter
     this.filter(this.options.filter);
-  }
-
-  /**
-   * Receives the jQuery object and extends its prototype with a .filterizr method
-   * @param {Object} $ - window.jQuery
-   * @returns {undefined}
-   */
-  installAsJQueryPlugin($: any) {
-    _installAsJQueryPlugin($);
   }
 
   // Helper methods
