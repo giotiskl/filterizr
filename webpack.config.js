@@ -17,10 +17,10 @@ module.exports = (env = {}) => {
 
   return {
     entry: {
-      ...(!IS_BUILDING_VAR_VERSIONS && {
+      ...((!IS_BUILDING_VAR_VERSIONS || IS_DEVELOPMENT) && {
         filterizr: './src/index.ts',
       }),
-      ...(IS_BUILDING_VAR_VERSIONS && {
+      ...((IS_BUILDING_VAR_VERSIONS || IS_DEVELOPMENT) && {
         'jquery.filterizr': './src/index.jquery.ts',
         'vanilla.filterizr': './src/index.ts',
       }),
