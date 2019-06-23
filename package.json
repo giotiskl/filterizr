@@ -12,21 +12,17 @@
   "scripts": {
     "start": "webpack-dev-server --env.env=development --mode development",
     "start-with-jquery": "webpack-dev-server --progress --inline --hot --env.env=development --env.withjquery=false",
-    "build": "webpack -p --progress --env.env=production",
+    "build": "webpack -p --progress --env.env=production && webpack -p --progress --env.env=production --env.buildTarget=vanilla-var",
+    "build-commonjs": "webpack -p --progress --env.env=production",
     "build-vanilla-var": "webpack -p --progress --env.env=production --env.buildTarget=vanilla-var",
     "test": "jest",
     "coverage": "jest --coverage",
     "showcoverage": "xdg-open ./coverage/lcov-report/index.html",
     "lint": "./node_modules/.bin/eslint .",
-    "preversion": "yarn test",
+    "preversion": "yarn test && yarn lint",
     "version": "yarn build",
     "postversion": "git push && git push --tags",
     "watch": "webpack --watch"
-  },
-  "jest": {
-    "globals": {
-      "IMPORT_JQUERY": "false"
-    }
   },
   "repository": {
     "type": "git",

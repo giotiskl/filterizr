@@ -3,9 +3,6 @@ env:
   es6: true
   jest: true
   jquery: true
-globals:
-  IMPORT_JQUERY: true
-  FILTERIZR_ENV: true
 extends: 'eslint:recommended'
 parserOptions:
   sourceType: module
