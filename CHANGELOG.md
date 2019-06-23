@@ -1,3 +1,9 @@
+## Version 2.0.0
+* Filterizr is now a JavaScript library and has no jQuery dependency, but can still be used as a jQuery plugin
+* Converted the codebase to TypeScript
+* Fix a few minor bugs
+* Rebuilt the website in React
+
 ## Version 1.3.5
 * Add support for Bootstrap v4+ and flex layouts
 * Fix bug with infinite loop for sameWidth layout when window resizing and cols <= 0
