@@ -8,6 +8,7 @@ import SearchingTutorialPage from '../SearchingTutorialPage';
 import SortingTutorialPage from '../SortingTutorialPage';
 import DelayModeTutorialPage from '../DelayModeTutorialPage';
 import LayoutsTutorialPage from '../LayoutsTutorialPage';
+import DocsPage from '../DocsPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Navigation />
         <main>
           <Route path="/" exact component={ShowcasePage} />
+          <Route path="/documentation" exact component={DocsPage} />
           <Route
             path="/tutorials/quickstart"
             exact

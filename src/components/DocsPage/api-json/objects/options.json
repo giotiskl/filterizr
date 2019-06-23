@@ -10,7 +10,7 @@
       "name": "callbacks",
       "type": "Object",
       "defaultValue": "-",
-      "description": "Used as the container for your event callbacks.",
+      "description": "Used as the container for your event callbacks. Check the nested list below.",
       "fields": [
         {
           "name": "onFilteringStart",
