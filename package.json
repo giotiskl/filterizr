@@ -13,6 +13,7 @@
     "start": "webpack-dev-server --env.env=development --mode development",
     "start-with-jquery": "webpack-dev-server --progress --inline --hot --env.env=development --env.withjquery=false",
     "build": "webpack -p --progress --env.env=production",
+    "build-vanilla-var": "webpack -p --progress --env.env=production --env.buildTarget=vanilla-var",
     "test": "jest",
     "coverage": "jest --coverage",
     "showcoverage": "xdg-open ./coverage/lcov-report/index.html",

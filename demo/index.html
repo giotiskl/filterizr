@@ -519,6 +519,11 @@
       </div>
     </div>
   </body>
+  <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"
+  ></script>
   <script type="text/javascript" src="filterizr.min.js"></script>
   <script type="text/javascript">
     const simpleFilters = document.querySelectorAll('.simplefilter li');
@@ -546,7 +551,7 @@
 
     const shuffleControl = document.querySelector('.shuffle-btn');
     shuffleControl.addEventListener('click', function() {
-        sortControls.forEach(control => control.classList.remove('active'));
+      sortControls.forEach(control => control.classList.remove('active'));
     });
 
     new window.Filterizr('.filtr-container', {
