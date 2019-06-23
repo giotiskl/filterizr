@@ -144,7 +144,7 @@ const merge = (old: any, target: any) => {
         typeof old[p] === 'object' &&
         !Array.isArray(old[p])
       ) {
-        ret[p] = merge(typeof ret[p] === 'object' ? ret[p] : {}, old[p]);
+        ret[p] = merge(old[p], typeof ret[p] === 'object' ? ret[p] : {});
       }
     }
   }
