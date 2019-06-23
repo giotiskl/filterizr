@@ -14,7 +14,7 @@ module.exports = (env = {}) => {
 
   const library = IS_DEVELOPMENT || IS_BUILDING_VAR_VERSIONS ? 'Filterizr' : '';
   const libraryTarget =
-    IS_DEVELOPMENT || IS_BUILDING_VAR_VERSIONS ? 'var' : 'commonjs';
+    IS_DEVELOPMENT || IS_BUILDING_VAR_VERSIONS ? 'var' : 'umd';
 
   return {
     entry: {
