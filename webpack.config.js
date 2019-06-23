@@ -7,23 +7,21 @@ const ENVIRONMENTS = {
 
 module.exports = (env = {}) => {
   const IS_DEVELOPMENT = env.env === ENVIRONMENTS.DEVELOPMENT;
-  const IS_BUILDING_VANILLA_VAR_VERSION = env.buildTarget === 'vanilla-var';
+  const IS_BUILDING_VAR_VERSIONS = env.buildTarget === 'var';
   const mode = IS_DEVELOPMENT
     ? ENVIRONMENTS.DEVELOPMENT
     : ENVIRONMENTS.PRODUCTION;
 
   const libraryTarget =
-    IS_DEVELOPMENT || IS_BUILDING_VANILLA_VAR_VERSION ? 'var' : 'commonjs';
-
-  const outputFileName = IS_BUILDING_VANILLA_VAR_VERSION
-    ? 'vanilla.filterizr.min.js'
-    : '[name].min.js';
+    IS_DEVELOPMENT || IS_BUILDING_VAR_VERSIONS ? 'var' : 'commonjs';
 
   return {
     entry: {
-      filterizr: './src/index.ts',
-      'jquery.filterizr': './src/index.jquery.ts',
-      ...(IS_BUILDING_VANILLA_VAR_VERSION && {
+      ...(!IS_BUILDING_VAR_VERSIONS && {
+        filterizr: './src/index.ts',
+      }),
+      ...(IS_BUILDING_VAR_VERSIONS && {
+        'jquery.filterizr': './src/index.jquery.ts',
         'vanilla.filterizr': './src/index.ts',
       }),
     },
