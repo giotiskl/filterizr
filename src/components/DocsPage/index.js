@@ -4,6 +4,7 @@ import { Grid, Menu } from 'semantic-ui-react';
 import { Link, Route } from 'react-router-dom';
 import OptionsDocs from './components/OptionsDocs';
 import MethodDocs from './components/MethodDocs';
+import EventDocs from './components/EventDocs';
 import destroyMethodJSON from './api-json/methods/destroy.json';
 import filterMethodJSON from './api-json/methods/filter.json';
 import insertItemMethodJSON from './api-json/methods/insertItem.json';
@@ -23,6 +24,15 @@ const METHODS = {
   sort: sortMethodJSON,
   toggleFilter: toggleFilterMethodJSON,
 };
+
+const EVENTS = [
+  'onFilteringStart',
+  'onFilteringEnd',
+  'onShufflingStart',
+  'onShufflingEnd',
+  'onSortingStart',
+  'onSortingEnd',
+];
 
 class DocsPage extends Component {
   static propTypes = {
@@ -81,16 +91,7 @@ class DocsPage extends Component {
               </Menu.Item>
               <Menu.Item>
                 <Menu.Header>Events</Menu.Header>
-                <Menu.Menu>
-                  {this.renderMenuItems([
-                    'onFilteringStart',
-                    'onFilteringEnd',
-                    'onShufflingStart',
-                    'onShufflingEnd',
-                    'onSortingStart',
-                    'onSortingEnd',
-                  ])}
-                </Menu.Menu>
+                <Menu.Menu>{this.renderMenuItems(EVENTS)}</Menu.Menu>
               </Menu.Item>
             </Menu>
           </Grid.Column>
@@ -98,10 +99,19 @@ class DocsPage extends Component {
             {/* Objects documentation */}
             <Route component={OptionsDocs} path={`${match.url}/options`} />
             {/* Methods documentation */}
-            {Object.entries(METHODS).map(([key, value]) => (
+            {Object.entries(METHODS).map(([key, value], index) => (
               <Route
                 render={() => <MethodDocs jsonDefinition={value} />}
                 path={`${match.url}/${key}`}
+                key={index}
+              />
+            ))}
+            {/* Events documentation */}
+            {EVENTS.map((eventName, index) => (
+              <Route
+                render={() => <EventDocs eventName={eventName} />}
+                path={`${match.url}/${eventName.toLowerCase()}`}
+                key={index}
               />
             ))}
           </Grid.Column>
