@@ -554,7 +554,8 @@
       sortControls.forEach(control => control.classList.remove('active'));
     });
 
-    new window.Filterizr('.filtr-container', {
+    // Expose this filterizr as a global for debugging
+    window.filterizr = new window.Filterizr('.filtr-container', {
       controlsSelector: '.fltr-controls',
     });
     new window.Filterizr('.color-container-1', {
