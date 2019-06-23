@@ -12,6 +12,7 @@ module.exports = (env = {}) => {
     ? ENVIRONMENTS.DEVELOPMENT
     : ENVIRONMENTS.PRODUCTION;
 
+  const library = IS_DEVELOPMENT || IS_BUILDING_VAR_VERSIONS ? 'Filterizr' : '';
   const libraryTarget =
     IS_DEVELOPMENT || IS_BUILDING_VAR_VERSIONS ? 'var' : 'commonjs';
 
@@ -52,7 +53,7 @@ module.exports = (env = {}) => {
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].min.js',
-      library: 'Filterizr',
+      library,
       libraryTarget,
       libraryExport: 'default',
     },
