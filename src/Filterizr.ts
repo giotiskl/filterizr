@@ -284,7 +284,13 @@ class Filterizr {
     );
     checkOptionForErrors('setupControls', newOptions.setupControls, 'boolean');
 
-    // Merge options
+    if (newOptions.callbacks) {
+      // If user has passed in a callback, deregister the old ones
+      const { FilterContainer } = this.props;
+      FilterContainer.unbindEvents(this.options.callbacks);
+    }
+
+    // Update options
     this.options = merge(this.options, newOptions);
 
     // If one of the options that updates the transition properties
