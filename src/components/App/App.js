@@ -17,7 +17,7 @@ function App() {
         <Navigation />
         <main>
           <Route path="/" exact component={ShowcasePage} />
-          <Route path="/documentation" exact component={DocsPage} />
+          <Route path="/documentation" component={DocsPage} />
           <Route
             path="/tutorials/quickstart"
             exact

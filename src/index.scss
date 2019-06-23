@@ -18,6 +18,10 @@ main {
   max-width: 1230px;
 }
 
+.hljs {
+  border-radius: 3px;
+}
+
 .hljs-inline {
   pre {
     font-size: 12px;
@@ -25,7 +29,6 @@ main {
 
   pre,
   .hljs {
-    border-radius: 3px;
     display: inline !important;
     padding: 3px;
   }

@@ -1,0 +1,4 @@
+{
+  "preview": "filterizr.destroy();",
+  "description": "Tears down the Filterizr instance"
+}

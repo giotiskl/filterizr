@@ -28,10 +28,13 @@ const ObjectDocs = ({ jsonDefinition, secondary }) => (
             <br />
             <strong>Type:</strong>
             <Highlight className="javascript">{type}</Highlight>
-            <br /> <strong>Default value:</strong>
-            <Highlight className="javascript">{defaultValue}</Highlight>
+            {defaultValue && (
+              <>
+                <br /> <strong>Default value:</strong>
+                <Highlight className="javascript">{defaultValue}</Highlight>
+              </>
+            )}
           </p>
-          <p></p>
           <strong>Description:</strong>
           <p className="hljs-inline">{highlightDescription(description)}</p>
           {!!fields && <ObjectDocs jsonDefinition={fields} secondary />}

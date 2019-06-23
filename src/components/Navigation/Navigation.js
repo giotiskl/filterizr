@@ -36,7 +36,7 @@ export default class Navigation extends Component {
             />
             <Dropdown
               active={activeItem === 'tutorials'}
-              as={Menu.Item}
+              // as={Menu.Item}
               item
               text="Tutorials"
             >
