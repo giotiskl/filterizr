@@ -295,11 +295,12 @@ class Filterizr {
       newOptions.delayMode ||
       newOptions.easing
     ) {
+      const { animationDuration, easing, delay, delayMode } = this.options;
       this.props.FilterContainer.updateFilterItemsTransitionStyle(
-        newOptions.animationDuration,
-        newOptions.easing,
-        newOptions.delay,
-        newOptions.delayMode
+        animationDuration,
+        easing,
+        delay,
+        delayMode
       );
     }
 
