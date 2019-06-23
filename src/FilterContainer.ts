@@ -73,7 +73,7 @@ export default class FilterContainer {
 
   /**
    * Pushes a new item into the FilterItem array in the properties of the FilterContainer
-   * @param {Object} node - jQuery node to instantiate as FilterItem and append to the grid
+   * @param {Object} node - HTML node to instantiate as FilterItem and append to the grid
    * @param {Object} options - Filterizr instance options
    */
   push(node: Element, options: IDefaultOptions): void {
@@ -147,7 +147,7 @@ export default class FilterContainer {
   }
 
   /**
-   * Wrapper call around jQuery's innerWidth
+   * Gets the clientWidth of the container
    * @returns {number} width of node
    */
   getWidth(): number {
@@ -240,7 +240,7 @@ export default class FilterContainer {
   }
 
   /**
-   * Method wrapper around jQuery's trigger
+   * Dispatches an event to the container
    * @param {string} eventType - name of the event
    * @returns {undefined}
    */
