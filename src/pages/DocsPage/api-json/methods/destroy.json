@@ -1,4 +1,10 @@
 {
-  "preview": "filterizr.destroy();",
-  "description": "Tears down the Filterizr instance"
+  "vanilla": {
+    "preview": "filterizr.destroy();",
+    "description": "Tears down the Filterizr instance."
+  },
+  "jquery": {
+    "preview": "filterizrInstance.filterizr('destroy');",
+    "description": "Tears down the Filterizr instance."
+  }
 }

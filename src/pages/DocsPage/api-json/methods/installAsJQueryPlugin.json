@@ -1,0 +1,13 @@
+{
+  "vanilla": {
+    "preview": "Filterizr.installAsJQueryPlugin(jQuery)",
+    "description": "This is a static method on the Filterizr class, that will extend the jQuery object with a `.filterizr` method. Check the \"As jQuery Plugin\" tutorial for a working example.",
+    "args": [
+      {
+        "name": "jQuery",
+        "type": "Object",
+        "description": "The jQuery object. It will be `window.$` or `window.jQuery` if you include jQuery via a script tag."
+      }
+    ]
+  }
+}

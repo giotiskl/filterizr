@@ -1,0 +1,13 @@
+{
+  "jquery": {
+    "preview": "$(selector).filterizr(options);",
+    "description": "A jQuery method added to `jQuery.fn`. It can be used on DOM nodes to create a Filterizr instance. It returns the jQuery object to facilitate method-chaining. If you already have created a Filterizr instance (e.g. `const fltr = $('.container').filterizr({});`), you can use the `.filterizr` method on your instance to access all of Filterizr's public API. For example to filter the grid you can do `fltr.filterizr('filter', targetCategory)`, passing in method name and arguments.",
+    "args": [
+      {
+        "name": "options",
+        "type": "Object",
+        "description": "Filterizr options object, see documentation on \"options\"."
+      }
+    ]
+  }
+}

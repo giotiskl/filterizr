@@ -1,11 +1,24 @@
 {
-  "preview": "filterizr.toggleFilter(toggledFilter);",
-  "description": "Filters the grid based on the filters toggled on. If all filters are toggled off then an unfiltered gallery is rendered. The default controls that come with this method are the controls with a `data-multifilter` attribute. This method triggers the `onFilteringStart` callback. If you want `and` logic for the active filters (i.e. render items belonging to all active categories) you need to first set the `multifilterLogicalOperator` by calling `filterizr.setOptions({ multifilterLogicalOperator: 'and'})`.",
-  "args": [
-    {
-      "name": "toggledFilter",
-      "type": "String",
-      "description": "The filter to toggle on/off."
-    }
-  ]
+  "vanilla": {
+    "preview": "filterizr.toggleFilter(toggledFilter);",
+    "description": "Filters the grid based on the filters toggled on. If all filters are toggled off then an unfiltered gallery is rendered. The default controls that come with this method are the controls with a `data-multifilter` attribute. This method triggers the `onFilteringStart` callback. If you want `and` logic for the active filters (i.e. render items belonging to all active categories) you need to first set the `multifilterLogicalOperator` by calling `filterizr.setOptions({ multifilterLogicalOperator: 'and'})`.",
+    "args": [
+      {
+        "name": "toggledFilter",
+        "type": "String",
+        "description": "The filter to toggle on/off."
+      }
+    ]
+  },
+  "jquery": {
+    "preview": "filterizrInstance.filterizr('toggleFilter', toggledFilter);",
+    "description": "Filters the grid based on the filters toggled on. If all filters are toggled off then an unfiltered gallery is rendered. The default controls that come with this method are the controls with a `data-multifilter` attribute. This method triggers the `onFilteringStart` callback. If you want `and` logic for the active filters (i.e. render items belonging to all active categories) you need to first set the `multifilterLogicalOperator` by calling `filterizr.setOptions({ multifilterLogicalOperator: 'and'})`.",
+    "args": [
+      {
+        "name": "toggledFilter",
+        "type": "String",
+        "description": "The filter to toggle on/off."
+      }
+    ]
+  }
 }

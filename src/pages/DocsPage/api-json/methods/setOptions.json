@@ -1,11 +1,24 @@
 {
-  "preview": "filterizr.setOptions(options);",
-  "description": "Merges the options into the default options (see documentation on options for defaults) and triggers a rerender to reflect the new options.",
-  "args": [
-    {
-      "name": "options",
-      "type": "Object",
-      "description": "The new options to merge into the defaults."
-    }
-  ]
+  "vanilla": {
+    "preview": "filterizr.setOptions(options);",
+    "description": "Merges the options into the default options (see documentation on options for defaults) and triggers a rerender to reflect the new options.",
+    "args": [
+      {
+        "name": "options",
+        "type": "Object",
+        "description": "The new options to merge into the defaults."
+      }
+    ]
+  },
+  "jquery": {
+    "preview": "filterizrInstance.filterizr('setOptions', options);",
+    "description": "Merges the options into the default options (see documentation on options for defaults) and triggers a rerender to reflect the new options.",
+    "args": [
+      {
+        "name": "options",
+        "type": "Object",
+        "description": "The new options to merge into the defaults."
+      }
+    ]
+  }
 }

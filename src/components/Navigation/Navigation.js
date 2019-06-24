@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Dropdown, Image, Menu, Segment } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import './Navigation.scss';
 
-export default class Navigation extends Component {
-  state = { activeItem: 'showcase' };
-
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+class Navigation extends Component {
+  static propTypes = {
+    history: PropTypes.object.isRequired,
+  };
 
   render() {
-    const { activeItem } = this.state;
+    const {
+      history: {
+        location: { pathname },
+      },
+    } = this.props;
 
     return (
       <Segment className="Navigation" inverted>
@@ -18,9 +23,6 @@ export default class Navigation extends Component {
           <Menu.Menu
             as={Link}
             to="/"
-            onClick={(event) =>
-              this.handleItemClick(event, { name: 'showcase' })
-            }
             className="Navigation__logo"
             position="left"
           >
@@ -31,89 +33,56 @@ export default class Navigation extends Component {
               as={Link}
               to="/"
               name="showcase"
-              active={activeItem === 'showcase'}
-              onClick={this.handleItemClick}
+              active={pathname === '/'}
             />
-            <Dropdown item text="Tutorials">
+            <Dropdown
+              item
+              className={pathname.includes('tutorials') ? 'active' : ''}
+              text="Tutorials"
+            >
               <Dropdown.Menu>
-                <Dropdown.Item
-                  as={Link}
-                  to="/tutorials/quickstart"
-                  onClick={(event) =>
-                    this.handleItemClick(event, { name: 'tutorials' })
-                  }
-                >
+                <Dropdown.Item as={Link} to="/tutorials/quickstart">
                   Get started
                 </Dropdown.Item>
-                <Dropdown.Item
-                  as={Link}
-                  to="/tutorials/filtering"
-                  onClick={(event) =>
-                    this.handleItemClick(event, { name: 'tutorials' })
-                  }
-                >
+                <Dropdown.Item as={Link} to="/tutorials/filtering">
                   Filtering
                 </Dropdown.Item>
-                <Dropdown.Item
-                  as={Link}
-                  to="/tutorials/sorting"
-                  onClick={(event) =>
-                    this.handleItemClick(event, { name: 'tutorials' })
-                  }
-                >
+                <Dropdown.Item as={Link} to="/tutorials/sorting">
                   Sorting
                 </Dropdown.Item>
-                <Dropdown.Item
-                  as={Link}
-                  to="/tutorials/searching"
-                  onClick={(event) =>
-                    this.handleItemClick(event, { name: 'tutorials' })
-                  }
-                >
+                <Dropdown.Item as={Link} to="/tutorials/searching">
                   Searching
                 </Dropdown.Item>
-                <Dropdown.Item
-                  as={Link}
-                  to="/tutorials/delay-modes"
-                  onClick={(event) =>
-                    this.handleItemClick(event, { name: 'tutorials' })
-                  }
-                >
+                <Dropdown.Item as={Link} to="/tutorials/delay-modes">
                   Delay modes
                 </Dropdown.Item>
-                <Dropdown.Item
-                  as={Link}
-                  to="/tutorials/layouts"
-                  onClick={(event) =>
-                    this.handleItemClick(event, { name: 'tutorials' })
-                  }
-                >
+                <Dropdown.Item as={Link} to="/tutorials/layouts">
                   Layouts
                 </Dropdown.Item>
-                <Dropdown.Item
-                  as={Link}
-                  to="/tutorials/as-jquery-plugin"
-                  onClick={(event) =>
-                    this.handleItemClick(event, { name: 'tutorials' })
-                  }
-                >
+                <Dropdown.Item as={Link} to="/tutorials/as-jquery-plugin">
                   As jQuery plugin
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown
+              item
+              className={pathname.includes('documentation') ? 'active' : ''}
+              text="Documentation"
+            >
+              <Dropdown.Menu>
+                <Dropdown.Item as={Link} to="/documentation/vanilla/options">
+                  Vanilla Filterizr
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/documentation/jquery/options">
+                  jQuery Filterizr
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <Menu.Item
               as={Link}
-              to="/documentation/options"
-              name="docs"
-              active={activeItem === 'docs'}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              as={Link}
               to="/faq"
               name="FAQ"
-              active={activeItem === 'FAQ'}
-              onClick={this.handleItemClick}
+              active={pathname.includes('faq')}
             />
           </Menu.Menu>
         </Menu>
@@ -121,3 +90,5 @@ export default class Navigation extends Component {
     );
   }
 }
+
+export default withRouter(Navigation);

@@ -21,7 +21,7 @@ function App() {
         <Navigation />
         <main>
           <Route path="/" exact component={ShowcasePage} />
-          <Route path="/documentation" component={DocsPage} />
+          <Route path="/documentation/:variation" component={DocsPage} />
           <Route path="/faq" exact component={FAQPage} />
           <Route
             path="/tutorials/quickstart"

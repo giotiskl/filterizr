@@ -1,11 +1,24 @@
 {
-  "preview": "filterizr.search(text);",
-  "description": "Apply an extra filter on top of your grid based on the search term. Passing an empty string will render an unfiltered gallery.",
-  "args": [
-    {
-      "name": "text",
-      "type": "String",
-      "description": "The string for which the contents of the grid items are searched."
-    }
-  ]
+  "vanilla": {
+    "preview": "filterizr.search(text);",
+    "description": "Apply an extra filter on top of your grid based on the search term. Passing an empty string will render an unfiltered gallery.",
+    "args": [
+      {
+        "name": "text",
+        "type": "String",
+        "description": "The string for which the contents of the grid items are searched."
+      }
+    ]
+  },
+  "jquery": {
+    "preview": "filterizrInstance.filterizr('search', text);",
+    "description": "Apply an extra filter on top of your grid based on the search term. Passing an empty string will render an unfiltered gallery.",
+    "args": [
+      {
+        "name": "text",
+        "type": "String",
+        "description": "The string for which the contents of the grid items are searched."
+      }
+    ]
+  }
 }

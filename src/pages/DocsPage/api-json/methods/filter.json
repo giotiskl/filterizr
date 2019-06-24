@@ -1,11 +1,24 @@
 {
-  "preview": "filterizr.filter(targetFilter);",
-  "description": "Filter the items in the grid by setting an active category. When called it updates the `options.filter` property to reflect the new active category and triggers the `onFilteringStart` event.",
-  "args": [
-    {
-      "name": "targetFilter",
-      "type": "String",
-      "description": "The target filter towards which to filter the visible category, should be a numerical value based on the data-category attribute of `.filtr-item` elements. The value `'all'` can be used for an unfiltered gallery."
-    }
-  ]
+  "vanilla": {
+    "preview": "filterizr.filter(targetFilter);",
+    "description": "Filter the items in the grid by setting an active category. When called it updates the `options.filter` property to reflect the new active category and triggers the `onFilteringStart` event.",
+    "args": [
+      {
+        "name": "targetFilter",
+        "type": "String",
+        "description": "The target filter towards which to filter the visible category, should be a numerical value based on the data-category attribute of `.filtr-item` elements. The value `'all'` can be used for an unfiltered gallery."
+      }
+    ]
+  },
+  "jquery": {
+    "preview": "filterizrInstance.filterizr('filter', targetFilter);",
+    "description": "Filter the items in the grid by setting an active category. When called it updates the `options.filter` property to reflect the new active category and triggers the `onFilteringStart` event.",
+    "args": [
+      {
+        "name": "targetFilter",
+        "type": "String",
+        "description": "The target filter towards which to filter the visible category, should be a numerical value based on the data-category attribute of `.filtr-item` elements. The value `'all'` can be used for an unfiltered gallery."
+      }
+    ]
+  }
 }
