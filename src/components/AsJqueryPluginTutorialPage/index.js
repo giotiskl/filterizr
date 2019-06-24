@@ -2,6 +2,16 @@ import React from 'react';
 import { List, Grid, Header } from 'semantic-ui-react';
 import Highlight from 'react-highlight';
 
+const snippet = `import $ from 'jquery';
+import Filterizr from 'filterizr';
+
+// Extend the jQuery object with a .filterizr method
+Filterizr.installAsJQueryPlugin($);
+
+// Use Filterizr as a jQuery plugin
+$('.filtr-container').filterizr(options);
+`;
+
 class AsJqueryPluginTutorialPage extends React.Component {
   render() {
     return (
@@ -51,14 +61,39 @@ class AsJqueryPluginTutorialPage extends React.Component {
               will try to detect the global jQuery object and extend it with a{' '}
               <Highlight className="javascript">.filterizr</Highlight> method.
             </div>
+            <div className="hljs-inline">
+              Additionally to extending jQuery this variation of Filterizr will
+              also expose the vanilla JavaScript Filterizr as a global, you can
+              access it on{' '}
+              <Highlight className="javascript">window.Filterizr</Highlight>.
+            </div>
           </Grid.Column>
           <Grid.Column mobile={16} computer={8}>
             <Header as="h2">Method B &mdash; Via npm with ES6 import</Header>
             <p>
-              To be able to use your filterized gallery, you will have to set up
-              some controls (e.g. buttons to trigger filtering or a text search
-              etc).
+              If you're working on a project with Babel and/or Webpack and
+              you're using ES6 modules then you're probably going to install
+              Filterizr via npm. In this case you can still extend jQuery with
+              Filterizr as follows:
             </p>
+            <List bulleted>
+              <List.Item className="hljs-inline">
+                Install jQuery and Filterizr via npm:{' '}
+                <Highlight className="javascript">
+                  npm install jquery filterizr
+                </Highlight>
+              </List.Item>
+              <List.Item>
+                <div className="hljs-inline">
+                  Import jQuery and Filterizr and extend jQuery using
+                  Filterizr's static method{' '}
+                  <Highlight className="javascript">
+                    Filterizr.installAsJQueryPlugin(jQueryObject)
+                  </Highlight>
+                </div>
+                <Highlight className="javascript">{snippet}</Highlight>
+              </List.Item>
+            </List>
           </Grid.Column>
         </Grid.Row>
       </Grid>
