@@ -51,6 +51,7 @@ const EVENTS = [
 class DocsPage extends Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
   };
 
   state = {
@@ -61,6 +62,17 @@ class DocsPage extends Component {
   };
 
   handleItemClick = (name) => () => this.setState({ activeItem: name });
+
+  componentDidUpdate(prevProps, prevState) {
+    const { activeItem } = this.state;
+    const currentItemDocumentation = this.props.history.location.pathname.slice(
+      this.props.history.location.pathname.lastIndexOf('/') + 1,
+      this.props.history.location.pathname.length
+    );
+    if (currentItemDocumentation !== activeItem) {
+      this.setState({ activeItem: currentItemDocumentation });
+    }
+  }
 
   renderMenuItems = (items) => {
     const { match } = this.props;
