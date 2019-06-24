@@ -60,14 +60,17 @@ You can find Filterizr's documentation as well as a series of tutorials on how t
 
 Contents:
 
-- [Getting started](https://yiotis.net/filterizr/#/tutorials/quickstart)
-- [Filtering](https://yiotis.net/filterizr/#/tutorials/filtering)
-- [Sorting](https://yiotis.net/filterizr/#/tutorials/sorting)
-- [Searching](https://yiotis.net/filterizr/#/tutorials/searching)
-- [Delay modes](https://yiotis.net/filterizr/#/tutorials/delay-modes)
-- [Layouts](https://yiotis.net/filterizr/#/tutorials/layouts)
-- [Using as jQuery plugin](https://yiotis.net/filterizr/#/tutorials/as-jquery-plugin)
-- [Documentation](https://yiotis.net/filterizr/#/documentation)
+- Documentation
+  - [Vanilla JavaScript Filterizr](https://yiotis.net/filterizr/#/documentation/vanilla/options)
+  - [jQuery Filterizr](https://yiotis.net/filterizr/#/documentation/jquery/options)
+- Tutorials
+  - [Getting started](https://yiotis.net/filterizr/#/tutorials/quickstart)
+  - [Filtering](https://yiotis.net/filterizr/#/tutorials/filtering)
+  - [Sorting](https://yiotis.net/filterizr/#/tutorials/sorting)
+  - [Searching](https://yiotis.net/filterizr/#/tutorials/searching)
+  - [Delay modes](https://yiotis.net/filterizr/#/tutorials/delay-modes)
+  - [Layouts](https://yiotis.net/filterizr/#/tutorials/layouts)
+  - [Using as jQuery plugin](https://yiotis.net/filterizr/#/tutorials/as-jquery-plugin)
 - [FAQ & Caveats](https://yiotis.net/filterizr/#/faq)
 
 ## Why Filterizr?
