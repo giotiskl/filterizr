@@ -1,8 +1,8 @@
 import React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import Filterizr from '../Filterizr';
 import Highlight from 'react-highlight';
-import ColoredFilteritems from '../ColoredFilterItems';
+import Filterizr from '../../components/Filterizr';
+import ColoredFilteritems from '../../components/ColoredFilterItems';
 
 import './LayoutsTutorialPage.scss';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Header } from 'semantic-ui-react';
-import Filterizr from '../Filterizr';
+import Filterizr from '../../components/Filterizr';
 import Highlight from 'react-highlight';
 
 import './SortingTutorialPage.scss';

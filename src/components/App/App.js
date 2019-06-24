@@ -1,16 +1,18 @@
 import React from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import Navigation from '../Navigation';
-import ShowcasePage from '../ShowcasePage';
-import QuickstartTutorialPage from '../QuickstartTutorialPage';
-import FilteringtutorialPage from '../FilteringTutorialPage';
-import SearchingTutorialPage from '../SearchingTutorialPage';
-import SortingTutorialPage from '../SortingTutorialPage';
-import DelayModeTutorialPage from '../DelayModeTutorialPage';
-import LayoutsTutorialPage from '../LayoutsTutorialPage';
-import AsJqueryPluginTutorialPage from '../AsJqueryPluginTutorialPage';
-import DocsPage from '../DocsPage';
-import FAQPage from '../FAQPage';
+import {
+  AsJqueryPluginTutorialPage,
+  DelayModeTutorialPage,
+  DocsPage,
+  FAQPage,
+  FilteringtutorialPage,
+  LayoutsTutorialPage,
+  QuickstartTutorialPage,
+  SearchingTutorialPage,
+  ShowcasePage,
+  SortingTutorialPage,
+} from '../../pages';
 
 function App() {
   return (

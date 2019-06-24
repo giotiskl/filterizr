@@ -2,7 +2,7 @@ import React from 'react';
 import { JsonEditor as Editor } from 'jsoneditor-react';
 import { Button, Icon, Grid, Header, Image } from 'semantic-ui-react';
 import Highlight from 'react-highlight';
-import Filterizr from '../Filterizr';
+import Filterizr from '../../components/Filterizr';
 
 import './ShowcasePage.scss';
 
