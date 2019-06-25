@@ -33,7 +33,6 @@
     "@types/jest": "^24.0.15",
     "@types/jquery": "^3.3.29",
     "@typescript-eslint/parser": "^1.11.0",
-    "babel-core": "^6.25.0",
     "eslint": "^6.0.1",
     "jest": "^24.8.0",
     "jquery": "^3.4.1",
