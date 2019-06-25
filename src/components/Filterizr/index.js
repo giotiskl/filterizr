@@ -117,7 +117,7 @@ export default class extends React.Component {
     );
 
     if (prevActiveFilter !== activeFilter) {
-      this.filterizr.filter(activeFilter);
+      this.filterizr.setOptions({ filter: activeFilter });
     }
     if (!isEqual(prevOptions, options)) {
       this.filterizr.setOptions(options);
