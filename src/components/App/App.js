@@ -1,6 +1,7 @@
 import React from 'react';
 import { HashRouter as Router, Route } from 'react-router-dom';
 import Navigation from '../Navigation';
+import Footer from '../Footer';
 import {
   AsJqueryPluginTutorialPage,
   DelayModeTutorialPage,
@@ -13,6 +14,8 @@ import {
   ShowcasePage,
   SortingTutorialPage,
 } from '../../pages';
+
+import './App.scss';
 
 function App() {
   return (
@@ -60,6 +63,7 @@ function App() {
           />
         </main>
       </Router>
+      <Footer />
     </div>
   );
 }
