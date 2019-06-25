@@ -32,6 +32,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.15",
     "@types/jquery": "^3.3.29",
+    "@typescript-eslint/parser": "^1.11.0",
     "babel-core": "^6.25.0",
     "eslint": "^4.3.0",
     "eslint-loader": "^1.9.0",

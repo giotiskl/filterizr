@@ -4,6 +4,8 @@ env:
   jest: true
   jquery: true
 extends: 'eslint:recommended'
+parser:
+  @typescript-eslint/parser
 parserOptions:
   sourceType: module
 rules:
