@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "filterizr": "^2.0.1",
     "highlight.js": "^9.15.8",
     "imagesloaded": "^4.1.4",
     "jsoneditor": "^6.0.0",

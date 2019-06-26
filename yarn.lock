@@ -4541,6 +4541,11 @@ fill-range@^4.0.0:
     repeat-string "^1.6.1"
     to-regex-range "^2.1.0"
 
+filterizr@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/filterizr/-/filterizr-2.0.1.tgz#9b41d74df76f16d086bcf04665af23311dcb15f5"
+  integrity sha512-7HpTOhGIkiG6GMfZKYVERR5hFPzhlOe3xlWgb6SrltpAAg7Fyv+QSk3Ryxk5nvA65SsSUbK0jd2yu9e368A2XQ==
+
 finalhandler@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/finalhandler/-/finalhandler-1.1.1.tgz#eebf4ed840079c83f4249038c9d703008301b105"
