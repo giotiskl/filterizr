@@ -43,8 +43,7 @@ class ShowcasePage extends React.Component {
             </p>
             <ul>
               <li>
-                Pluggable look & feel (write your CSS effects in the box on the
-                right and hit Filterize!)
+                Pluggable look & feel (edit the JSON settings on the right)
               </li>
               <li>
                 Smooth performance — optimized for smooth experience on mobile
@@ -73,8 +72,8 @@ class ShowcasePage extends React.Component {
           <Grid.Column mobile={16} computer={8}>
             <Header as="h1">Filter playground</Header>
             <p>
-              Write your CSS in JSON in the textarea below. Hit Filterize and
-              test your effects on the demo gallery!
+              Edit the styles and see the effects take place immediately in the
+              demo gallery!
             </p>
             <div className="ShowcasePage__playground-wrapper">
               <Editor

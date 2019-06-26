@@ -1,4 +1,6 @@
 .ShowcasePage {
+  overflow: hidden;
+
   .Filterizr__filter-controls,
   .Filterizr__secondary-controls,
   .Filterizr__shuffle-controls,
@@ -32,7 +34,7 @@
     margin: 0 auto;
     max-width: 900px;
     transition: height 1000ms ease-out;
-    overflow-y: hidden;
+    overflow: hidden;
 
     .filtr-item {
       display: inline-block;
