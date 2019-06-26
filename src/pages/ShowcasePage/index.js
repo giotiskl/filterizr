@@ -3,6 +3,15 @@ import { JsonEditor as Editor } from 'jsoneditor-react';
 import { Button, Icon, Grid, Header, Image } from 'semantic-ui-react';
 import Highlight from 'react-highlight';
 import Filterizr from '../../components/Filterizr';
+import city1 from './img/city_1.jpg';
+import city2 from './img/city_2.jpg';
+import city3 from './img/city_3.jpg';
+import industrial1 from './img/industrial_1.jpg';
+import industrial2 from './img/industrial_2.jpg';
+import industrial3 from './img/industrial_3.jpg';
+import nature1 from './img/nature_1.jpg';
+import nature2 from './img/nature_2.jpg';
+import nature3 from './img/nature_3.jpg';
 
 import './ShowcasePage.scss';
 
@@ -105,7 +114,7 @@ class ShowcasePage extends React.Component {
                 data-sort="Busy streets"
               >
                 <span className="item-index">1</span>
-                <Image src="/img/city_1.jpg" fluid />
+                <Image src={city1} fluid />
                 <span className="item-desc">Busy Streets</span>
               </div>
               <div
@@ -114,7 +123,7 @@ class ShowcasePage extends React.Component {
                 data-sort="Luminous night"
               >
                 <span className="item-index">2</span>
-                <Image src="/img/nature_2.jpg" fluid />
+                <Image src={nature1} fluid />
                 <span className="item-desc">Luminous night</span>
               </div>
               <div
@@ -123,7 +132,7 @@ class ShowcasePage extends React.Component {
                 data-sort="City wonders"
               >
                 <span className="item-index">3</span>
-                <Image src="/img/city_3.jpg" fluid />
+                <Image src={city2} fluid />
                 <span className="item-desc">City wonders</span>
               </div>
               <div
@@ -132,7 +141,7 @@ class ShowcasePage extends React.Component {
                 data-sort="In production"
               >
                 <span className="item-index">4</span>
-                <Image src="/img/industrial_1.jpg" fluid />
+                <Image src={industrial1} fluid />
                 <span className="item-desc">In production</span>
               </div>
               <div
@@ -141,7 +150,7 @@ class ShowcasePage extends React.Component {
                 data-sort="Industrial site"
               >
                 <span className="item-index">5</span>
-                <Image src="/img/industrial_2.jpg" fluid />
+                <Image src={industrial2} fluid />
                 <span className="item-desc">Industrial site</span>
               </div>
               <div
@@ -150,7 +159,7 @@ class ShowcasePage extends React.Component {
                 data-sort="Peaceful lake"
               >
                 <span className="item-index">6</span>
-                <Image src="/img/nature_1.jpg" fluid />
+                <Image src={nature2} fluid />
                 <span className="item-desc">Peaceful lake</span>
               </div>
               <div
@@ -159,7 +168,7 @@ class ShowcasePage extends React.Component {
                 data-sort="City lights"
               >
                 <span className="item-index">7</span>
-                <Image src="/img/city_2.jpg" fluid />
+                <Image src={city3} fluid />
                 <span className="item-desc">City lights</span>
               </div>
               <div
@@ -168,7 +177,7 @@ class ShowcasePage extends React.Component {
                 data-sort="Dreamhouse"
               >
                 <span className="item-index">8</span>
-                <Image src="/img/nature_3.jpg" fluid />
+                <Image src={nature3} fluid />
                 <span className="item-desc">Dreamhouse</span>
               </div>
               <div
@@ -177,7 +186,7 @@ class ShowcasePage extends React.Component {
                 data-sort="Restless machines"
               >
                 <span className="item-index">9</span>
-                <Image src="/img/industrial_3.jpg" fluid />
+                <Image src={industrial3} fluid />
                 <span className="item-desc">Restless machines</span>
               </div>
             </Filterizr>

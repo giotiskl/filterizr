@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, Image, Menu, Segment } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
+import filterizrLogo from './filterizr-logo.png';
 
 import './Navigation.scss';
 
@@ -26,7 +27,7 @@ class Navigation extends Component {
             className="Navigation__logo"
             position="left"
           >
-            <Image src="/img/filterizr-logo.png" fluid />
+            <Image src={filterizrLogo} fluid />
           </Menu.Menu>
           <Menu.Menu position="right">
             <Menu.Item
