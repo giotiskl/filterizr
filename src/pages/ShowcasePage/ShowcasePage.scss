@@ -31,7 +31,8 @@
   .filtr-container {
     margin: 0 auto;
     max-width: 900px;
-    transition: height 1s ease-out;
+    transition: height 1000ms ease-out;
+    overflow-y: hidden;
 
     .filtr-item {
       display: inline-block;
