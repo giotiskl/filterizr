@@ -217,21 +217,30 @@ class Filterizr {
    * Shuffles the FilterItems in the grid, making sure their positions have changed.
    */
   shuffle(): void {
-    const { FilterContainer, FilteredItems } = this.props;
+    const { FilterContainer } = this.props;
 
-    // Trigger filteringStart event
     FilterContainer.trigger('shufflingStart');
 
-    // Set animation state to trigger callbacks
     this.props.filterizrState = FILTERIZR_STATE.SHUFFLING;
 
-    // Generate array of shuffled items
-    const ShuffledItems = this._shuffle(FilteredItems);
+    // Get the indices of the Filtered items in the Filter items array before
+    // shuffling begins, to update the FilterItems collection after shuffling
+    const indicesBeforeShuffling = this.props.FilteredItems.map(filterItem =>
+      this.props.FilterItems.indexOf(filterItem)
+    ).slice();
 
-    // Update the FilteredItems to equal the array of the shuffled items
-    this.props.FilteredItems = ShuffledItems;
+    // Shuffle filtered items
+    this.props.FilteredItems = this._shuffle(this.props.FilteredItems);
 
-    this._render(ShuffledItems);
+    // Update the FilterItems to have them in the shuffled order
+    this.props.FilteredItems.forEach((filterItem, index) => {
+      const newIndex = indicesBeforeShuffling[index];
+      this.props.FilterItems = Object.assign([], this.props.FilterItems, {
+        [newIndex]: filterItem,
+      });
+    });
+
+    this._render(this.props.FilteredItems);
   }
 
   /**

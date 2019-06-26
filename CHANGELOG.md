@@ -2,6 +2,7 @@
 * Filterizr is now a JavaScript library and has no jQuery dependency, but can still be used as a jQuery plugin
 * Converted the codebase to TypeScript
 * Fix a few minor bugs
+* Improved behavior of shuffle
 * Rebuilt the website in React
 
 ## Version 1.3.5
