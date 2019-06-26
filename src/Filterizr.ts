@@ -25,7 +25,7 @@ class Filterizr {
   options: IDefaultOptions;
   props: {
     FilterContainer: FilterContainer;
-    FilterControls: FilterControls;
+    FilterControls?: FilterControls;
     FilterItems: FilterItem[];
     FilteredItems: FilterItem[];
     filterizrState: string;
@@ -70,15 +70,15 @@ class Filterizr {
       this.options
     );
 
-    const filterControls = new FilterControls(
-      this,
-      this.options.controlsSelector
-    );
-    filterControls.initialize();
+    let filterControls = null;
+    if (this.options.setupControls) {
+      filterControls = new FilterControls(this, this.options.controlsSelector);
+      filterControls.initialize();
+    }
 
     this.props = {
       FilterContainer: filterContainer,
-      FilterControls: filterControls,
+      ...(this.options.setupControls && { FilterControls: filterControls }),
       FilterItems: filterContainer.props.FilterItems,
       FilteredItems: [],
       filterizrState: FILTERIZR_STATE.IDLE,
@@ -141,7 +141,9 @@ class Filterizr {
     window.removeEventListener('resize', this.props.windowResizeHandler);
 
     // Destroy all controls of the instance
-    FilterControls.destroy();
+    if (this.options.setupControls && FilterControls) {
+      FilterControls.destroy();
+    }
   }
 
   /**
