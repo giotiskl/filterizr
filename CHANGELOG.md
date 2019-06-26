@@ -1,3 +1,6 @@
+## Version 2.0.1
+* Fix bug where `setupControls` in options was no functional
+
 ## Version 2.0.0
 * Filterizr is now a JavaScript library and has no jQuery dependency, but can still be used as a jQuery plugin
 * Converted the codebase to TypeScript
