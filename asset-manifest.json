@@ -1,18 +1,27 @@
 {
   "files": {
     "main.css": "/filterizr/static/css/main.c6e551fe.chunk.css",
-    "main.js": "/filterizr/static/js/main.0ece2c6a.chunk.js",
-    "main.js.map": "/filterizr/static/js/main.0ece2c6a.chunk.js.map",
+    "main.js": "/filterizr/static/js/main.4cc42dfd.chunk.js",
+    "main.js.map": "/filterizr/static/js/main.4cc42dfd.chunk.js.map",
     "runtime~main.js": "/filterizr/static/js/runtime~main.0e01647f.js",
     "runtime~main.js.map": "/filterizr/static/js/runtime~main.0e01647f.js.map",
     "static/css/2.06496d04.chunk.css": "/filterizr/static/css/2.06496d04.chunk.css",
-    "static/js/2.d0592b4d.chunk.js": "/filterizr/static/js/2.d0592b4d.chunk.js",
-    "static/js/2.d0592b4d.chunk.js.map": "/filterizr/static/js/2.d0592b4d.chunk.js.map",
+    "static/js/2.e527b862.chunk.js": "/filterizr/static/js/2.e527b862.chunk.js",
+    "static/js/2.e527b862.chunk.js.map": "/filterizr/static/js/2.e527b862.chunk.js.map",
     "index.html": "/filterizr/index.html",
-    "precache-manifest.0eb50e5c35daa13afa76e4de417dac37.js": "/filterizr/precache-manifest.0eb50e5c35daa13afa76e4de417dac37.js",
+    "precache-manifest.63ac05dd0229a46806b95fe5dfd644ea.js": "/filterizr/precache-manifest.63ac05dd0229a46806b95fe5dfd644ea.js",
     "service-worker.js": "/filterizr/service-worker.js",
     "static/css/2.06496d04.chunk.css.map": "/filterizr/static/css/2.06496d04.chunk.css.map",
     "static/css/main.c6e551fe.chunk.css.map": "/filterizr/static/css/main.c6e551fe.chunk.css.map",
-    "static/media/editor.min.css": "/filterizr/static/media/jsoneditor-icons.d961fdfa.svg"
+    "static/media/city_1.jpg": "/filterizr/static/media/city_1.ccdc3a7a.jpg",
+    "static/media/city_2.jpg": "/filterizr/static/media/city_2.1abd20cd.jpg",
+    "static/media/city_3.jpg": "/filterizr/static/media/city_3.9c8af41d.jpg",
+    "static/media/industrial_1.jpg": "/filterizr/static/media/industrial_1.88b84a91.jpg",
+    "static/media/industrial_2.jpg": "/filterizr/static/media/industrial_2.38fadfab.jpg",
+    "static/media/industrial_3.jpg": "/filterizr/static/media/industrial_3.d5416f34.jpg",
+    "static/media/editor.min.css": "/filterizr/static/media/jsoneditor-icons.d961fdfa.svg",
+    "static/media/nature_1.jpg": "/filterizr/static/media/nature_1.c7d6e606.jpg",
+    "static/media/nature_2.jpg": "/filterizr/static/media/nature_2.df608809.jpg",
+    "static/media/nature_3.jpg": "/filterizr/static/media/nature_3.aef42b3c.jpg"
   }
 }
