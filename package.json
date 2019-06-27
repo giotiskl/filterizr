@@ -3,6 +3,7 @@
   "version": "2.0.1",
   "description": "Filterizr is a jQuery plugin that sorts, shuffles, searches and applies stunning filters over responsive galleries using CSS3 transitions and custom CSS effects",
   "main": "dist/filterizr.min.js",
+  "types": "dist/index.d.ts",
   "author": "Yiotis Kaltsikis <yiotiskal@gmail.com>",
   "license": "MIT",
   "bugs": {

@@ -1,4 +1,6 @@
 **/node_modules
 **/coverage
 **/build
+**/dist/*.d.ts
+**/dist/layouts
 .DS_STORE

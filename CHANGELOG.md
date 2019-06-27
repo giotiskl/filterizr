@@ -1,4 +1,7 @@
 ## Version 2.0.1
+* Export TS type declarations for package consumers
+
+## Version 2.0.1
 * Fix bug where `setupControls` in options was no functional
 
 ## Version 2.0.0
