@@ -28,7 +28,7 @@ describe('Filterizr', () => {
         new Filterizr('.non-existent-container', DefaultOptions);
       };
       expect(instantiateBrokenFilterizr).toThrowError(
-        /could not find a container/
+        /could not initialize container/
       );
     });
 

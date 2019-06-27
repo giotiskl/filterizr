@@ -54,6 +54,8 @@ class FilterControls {
         sortDescControlsHandler: null,
       },
     };
+
+    this.initialize();
   }
 
   initialize() {

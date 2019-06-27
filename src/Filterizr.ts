@@ -48,20 +48,21 @@ class Filterizr {
   static installAsJQueryPlugin = _installAsJQueryPlugin;
 
   constructor(
-    selector: string = '.filtr-container',
+    selectorOrNode: string | HTMLElement = '.filtr-container',
     userOptions: IDefaultOptions = {}
   ) {
     // Make the options a property of the Filterizr instance
     // so that we can later easily modify/update them.
     this.options = merge(DefaultOptions, userOptions);
 
-    const filterContainerNode = document.querySelector(selector);
+    const filterContainerNode =
+      typeof selectorOrNode === 'string'
+        ? document.querySelector(selectorOrNode)
+        : selectorOrNode;
+
     if (!filterContainerNode) {
-      // Throw because the selector given was not
-      // found to initialize a FilterContainer.
       throw new Error(
-        'Filterizr: could not find a container with ' +
-          `the selector ${selector}, to initialize Filterizr.`
+        'Filterizr: could not initialize container, check the selector or node you passed to the constructor exists.'
       );
     }
 
@@ -73,7 +74,6 @@ class Filterizr {
     let filterControls = null;
     if (this.options.setupControls) {
       filterControls = new FilterControls(this, this.options.controlsSelector);
-      filterControls.initialize();
     }
 
     this.props = {
@@ -102,6 +102,7 @@ class Filterizr {
   /**
    * Filters the items in the grid by a category
    * @param {String} category by which to filter
+   * @returns {undefined}
    */
   filter(category: string | string[]): void {
     const { searchTerm, FilterContainer, FilterItems } = this.props;
