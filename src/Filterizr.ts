@@ -49,7 +49,7 @@ class Filterizr {
 
   constructor(
     selector: string = '.filtr-container',
-    userOptions: IDefaultOptions
+    userOptions: IDefaultOptions = {}
   ) {
     // Make the options a property of the Filterizr instance
     // so that we can later easily modify/update them.
