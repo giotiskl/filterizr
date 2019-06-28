@@ -2,6 +2,11 @@ import { getDataAttributesOfHTMLNode, setStylesOnHTMLNode } from './utils';
 import { IDefaultOptions } from './defaultOptions';
 import { IDictionary } from './types/interfaces/IDictionary';
 
+interface IPosition {
+  left: number;
+  top: number;
+}
+
 export default class FilterItem {
   node: Element;
   index: number;
@@ -11,7 +16,7 @@ export default class FilterItem {
     onTransitionEndHandler: EventListener;
     index: number;
     sortData: string;
-    lastPosition: { left: number; top: number };
+    lastPosition: IPosition;
     filteredOut: boolean;
     w: number;
     h: number;
@@ -86,10 +91,7 @@ export default class FilterItem {
    * @param {Object} cssOptions for the animation
    * @returns {undefined}
    */
-  filterIn(
-    targetPosition: { left: number; top: number },
-    cssOptions: IDictionary
-  ): void {
+  filterIn(targetPosition: IPosition, cssOptions: IDictionary): void {
     // Enhance the cssOptions with the target position before animating
     setStylesOnHTMLNode(
       this.node,
@@ -130,7 +132,10 @@ export default class FilterItem {
    * @param {String} delayMode can be 'alternate' or 'progressive'
    * @return {Number} delay in ms
    */
-  getTransitionDelay(delay: number, delayMode: 'progressive' | 'alternate'): number {
+  getTransitionDelay(
+    delay: number,
+    delayMode: 'progressive' | 'alternate'
+  ): number {
     let ret = 0;
 
     if (delayMode === 'progressive') {
