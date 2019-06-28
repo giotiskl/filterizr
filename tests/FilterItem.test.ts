@@ -98,17 +98,17 @@ describe('FilterItem', () => {
     it('should return delay multiplied by index for "progressive" mode', () => {
       const delay = 150;
       const mode = 'progressive';
-      expect(filterItem1.calcDelay(delay, mode)).toEqual(0);
-      expect(filterItem2.calcDelay(delay, mode)).toEqual(150);
-      expect(filterItem3.calcDelay(delay, mode)).toEqual(300);
+      expect(filterItem1.getTransitionDelay(delay, mode)).toEqual(0);
+      expect(filterItem2.getTransitionDelay(delay, mode)).toEqual(150);
+      expect(filterItem3.getTransitionDelay(delay, mode)).toEqual(300);
     });
 
     it('should return delay for even items and 0 for odd items for "alternate" mode', () => {
       const delay = 150;
       const mode = 'alternate';
-      expect(filterItem1.calcDelay(delay, mode)).toEqual(150);
-      expect(filterItem2.calcDelay(delay, mode)).toEqual(0);
-      expect(filterItem3.calcDelay(delay, mode)).toEqual(150);
+      expect(filterItem1.getTransitionDelay(delay, mode)).toEqual(150);
+      expect(filterItem2.getTransitionDelay(delay, mode)).toEqual(0);
+      expect(filterItem3.getTransitionDelay(delay, mode)).toEqual(150);
     });
   });
 

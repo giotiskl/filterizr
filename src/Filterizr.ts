@@ -1,7 +1,7 @@
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
-import ActiveFilter from './ActiveFilter';
+import ActiveFilter, { Filter } from './ActiveFilter';
 import getLayoutPositions from './getLayoutPositions';
 import defaultOptions, { IDefaultOptions } from './defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
@@ -95,10 +95,10 @@ class Filterizr {
 
   /**
    * Filters the items in the grid by a category
-   * @param {String} category by which to filter
+   * @param {String|String[]} category by which to filter
    * @returns {undefined}
    */
-  filter(category: string | string[]): void {
+  filter(category: Filter): void {
     const { searchTerm, filterContainer, filterItems } = this.props;
 
     // Trigger filteringStart event

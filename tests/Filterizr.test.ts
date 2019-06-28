@@ -19,7 +19,7 @@ describe('Filterizr', () => {
   beforeEach(() => {
     $('body').html(fakeDom);
     filterizr = new Filterizr('.filtr-container', defaultOptions);
-    filterContainer = filterizr.props.FilterContainer;
+    filterContainer = filterizr.props.filterContainer;
   });
 
   describe('#constructor', () => {
@@ -77,15 +77,15 @@ describe('Filterizr', () => {
 
   describe('#filter', () => {
     const filter = '2';
-    let FilteredOutItems: FilterItem[], FilteredInItems: FilterItem[];
+    let filteredOutItems: FilterItem[], filteredInItems: FilterItem[];
 
     beforeEach(() => {
       filterizr.filter(filter);
-      FilteredOutItems = filterizr.props.FilterItems.filter(FilterItem => {
+      filteredOutItems = filterizr.props.filterItems.filter(FilterItem => {
         const categories = FilterItem.getCategories();
         return !categories.includes(filter);
       });
-      FilteredInItems = filterizr.props.FilterItems.filter(FilterItem => {
+      filteredInItems = filterizr.props.filterItems.filter(FilterItem => {
         const categories = FilterItem.getCategories();
         return categories.includes(filter);
       });
@@ -94,8 +94,8 @@ describe('Filterizr', () => {
     it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter', () => {
       // Wait for animation to finish before test
       setTimeout(() => {
-        FilteredInItems.forEach(FilterItem => {
-          const categories = FilterItem.getCategories();
+        filteredInItems.forEach(filterItem => {
+          const categories = filterItem.getCategories();
           const belongsToCategory = categories.includes(filter);
           expect(belongsToCategory).toEqual(true);
         });
@@ -105,8 +105,8 @@ describe('Filterizr', () => {
     it('should add the .filteredOut class to all filtered out .filtr-item elements', () => {
       // Wait for animation to finish before test
       setTimeout(() => {
-        FilteredOutItems.forEach(FilterItem => {
-          expect(Array.from(FilterItem.node.classList).includes('filteredOut'));
+        filteredOutItems.forEach(filterItem => {
+          expect(Array.from(filterItem.node.classList).includes('filteredOut'));
         });
       });
     });
@@ -114,8 +114,8 @@ describe('Filterizr', () => {
     it('should set an inline style z-index: -1000 on filteringEnd for .filteredOut .filtr-item elements', () => {
       // Wait for animation to finish before test
       setTimeout(() => {
-        FilteredOutItems.forEach(FilterItem => {
-          const zIndexOfFilteredOutItem = (<HTMLElement>FilterItem.node).style
+        filteredOutItems.forEach(filterItem => {
+          const zIndexOfFilteredOutItem = (<HTMLElement>filterItem.node).style
             .zIndex;
           expect(zIndexOfFilteredOutItem).toEqual('-1000');
         });
@@ -167,19 +167,19 @@ describe('Filterizr', () => {
     beforeEach(() => {
       const nodes = filterContainer.node.querySelectorAll('.filtr-item');
       nodeToAdd = nodes[nodes.length - 1];
-      oldLength = filterizr.props.FilterItems.length;
+      oldLength = filterizr.props.filterItems.length;
     });
 
     it('should increase the length of the FilterItems array by 1', () => {
       filterizr.insertItem(<HTMLElement>nodeToAdd);
-      const newLength = filterizr.props.FilterItems.length;
+      const newLength = filterizr.props.filterItems.length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
     it('should add into the grid a new FilterItem with the index property equal to the length of the FilterItems array', () => {
       filterizr.insertItem(<HTMLElement>nodeToAdd);
       const indexOfNewLastItem =
-        filterizr.props.FilterItems[oldLength].props.index;
+        filterizr.props.filterItems[oldLength].props.index;
       expect(indexOfNewLastItem).toEqual(oldLength);
     });
   });
@@ -187,10 +187,10 @@ describe('Filterizr', () => {
   describe('#sort', () => {
     it('should return a sorted grid', () => {
       filterizr.sort('index', 'desc');
-      const { FilterItems } = filterizr.props;
-      const { length } = FilterItems;
+      const { filterItems } = filterizr.props;
+      const { length } = filterItems;
       for (let i = 0; i < length; i++) {
-        expect(FilterItems[i].props.index).toEqual(length - 1 - i);
+        expect(filterItems[i].props.index).toEqual(length - 1 - i);
       }
     });
   });
@@ -199,19 +199,19 @@ describe('Filterizr', () => {
     it('should apply an extra layer of filtering based on the search term', () => {
       filterizr.filter('1'); // by this point 3 items should be visible
       filterizr.search('city'); // by this point 2 items should be visible
-      expect(filterizr.props.FilteredItems.length).toEqual(2);
+      expect(filterizr.props.filteredItems.length).toEqual(2);
     });
 
     it('should render an empty grid if no item was found', () => {
       filterizr.search('term not contained anywhere in the grid');
-      expect(filterizr.props.FilteredItems.length).toEqual(0);
+      expect(filterizr.props.filteredItems.length).toEqual(0);
     });
 
     it('should render only items containing the search term', () => {
       const term = 'city';
       filterizr.search('city');
-      filterizr.props.FilteredItems.forEach(FilteredItem => {
-        const contents = $(FilteredItem.node)
+      filterizr.props.filteredItems.forEach(filteredItem => {
+        const contents = $(filteredItem.node)
           .find('.item-desc')
           .text()
           .toLowerCase();
