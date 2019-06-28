@@ -88,9 +88,6 @@ class FilterControls {
       this.props.handlers.filterControlsHandler = evt => {
         const ctrl: Element = <Element>evt.currentTarget;
         const targetFilter: string = ctrl.getAttribute('data-filter');
-        // Update active filter in Filterizr's options
-        // filterizr.props.activeFilter.set(targetFilter);
-        // Trigger filter
         filterizr.filter(targetFilter);
       };
 
@@ -193,9 +190,8 @@ class FilterControls {
       this.props.handlers.searchControlsHandler = <EventListener>debounce(
         (evt: Event) => {
           const textfield: HTMLInputElement = <HTMLInputElement>evt.target;
-          const val = textfield.value;
-          filterizr.props.searchTerm = val.toLowerCase();
-          filterizr.search(filterizr.props.searchTerm);
+          const searchTerm = textfield.value;
+          filterizr.search(searchTerm);
         },
         250,
         false
@@ -239,7 +235,6 @@ class FilterControls {
         const sortAttr: string = (<HTMLInputElement>(
           document.querySelector(`${selector}[data-sortOrder]`)
         )).value;
-        filterizr.props.sortOrder = 'asc';
         filterizr.sort(sortAttr, 'asc');
       };
 
@@ -256,7 +251,6 @@ class FilterControls {
         const sortAttr = (<HTMLInputElement>(
           document.querySelector(`${selector}[data-sortOrder]`)
         )).value;
-        filterizr.props.sortOrder = 'desc';
         filterizr.sort(sortAttr, 'desc');
       };
 

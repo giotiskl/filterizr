@@ -111,7 +111,7 @@ class Filterizr {
     category = Array.isArray(category)
       ? category.map(c => c.toString())
       : category.toString();
-    
+
     // Update filter in options
     this.props.activeFilter.set(category);
 
@@ -179,6 +179,9 @@ class Filterizr {
     // Set animation state to trigger callbacks
     this.props.filterizrState = FILTERIZR_STATE.SORTING;
 
+    // Update sortOrder in props
+    this.props.sortOrder = sortOrder;
+
     // Sort main array
     this.props.filterItems = this._sort(filterItems, sortAttr, sortOrder);
 
@@ -199,6 +202,9 @@ class Filterizr {
    */
   search(searchTerm: string = this.props.searchTerm): void {
     const { filterItems } = this.props;
+
+    // Update search term
+    this.props.searchTerm = searchTerm.toLowerCase();
 
     // Filter items and optionally apply search if a search term exists
     const filteredItems = this._search(
