@@ -2,7 +2,7 @@ import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
 import getLayoutPositions from './getLayoutPositions';
-import DefaultOptions, { IDefaultOptions } from './DefaultOptions';
+import defaultOptions, { IDefaultOptions } from './defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
 import {
   FILTERIZR_STATE,
@@ -40,7 +40,7 @@ class Filterizr {
    */
   static FilterContainer = FilterContainer;
   static FilterItem = FilterItem;
-  static defaultOptions = DefaultOptions;
+  static defaultOptions = defaultOptions;
   /**
    * Static method that receives the jQuery object and extends
    * its prototype with a .filterizr method.
@@ -48,12 +48,12 @@ class Filterizr {
   static installAsJQueryPlugin = _installAsJQueryPlugin;
 
   constructor(
-    selectorOrNode: string | HTMLElement = DefaultOptions.gridSelector,
+    selectorOrNode: string | HTMLElement = defaultOptions.gridSelector,
     userOptions: IDefaultOptions = {}
   ) {
     // Make the options a property of the Filterizr instance
     // so that we can later easily modify/update them.
-    this.options = merge(DefaultOptions, userOptions);
+    this.options = merge(defaultOptions, userOptions);
 
     const filterContainerNode =
       typeof selectorOrNode === 'string'

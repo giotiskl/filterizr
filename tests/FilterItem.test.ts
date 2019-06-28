@@ -3,7 +3,7 @@ import * as $ from 'jquery';
 import { fakeDom } from './testSetup';
 // import items to be tested
 import FilterItem from '../src/FilterItem';
-import DefaultOptions from '../src/DefaultOptions';
+import defaultOptions from '../src/defaultOptions';
 
 // General setup
 (<any>window).$ = $;
@@ -21,7 +21,7 @@ describe('FilterItem', () => {
       const filterItem = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       expect(filterItem instanceof FilterItem).toBe(true);
     });
@@ -29,7 +29,7 @@ describe('FilterItem', () => {
     it('should set inline styles on the .filtr-item element', () => {
       const filtrItem = $('.filtr-item:first');
       const beforeInlineStyles = filtrItem.attr('style');
-      new FilterItem(filtrItem.get(0), 0, DefaultOptions);
+      new FilterItem(filtrItem.get(0), 0, defaultOptions);
       const afterInlineStyles = filtrItem.attr('style');
       expect(beforeInlineStyles).not.toEqual(afterInlineStyles);
     });
@@ -40,7 +40,7 @@ describe('FilterItem', () => {
       const filterItem = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       const position = { left: 15, top: 100 };
       filterItem.filterIn(position, {});
@@ -52,7 +52,7 @@ describe('FilterItem', () => {
       const filterItem = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       const position = { left: 15, top: 100 };
       filterItem.filterIn(position, {});
@@ -65,7 +65,7 @@ describe('FilterItem', () => {
       const filterItem = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       const position = { left: 15, top: 100 };
       filterItem.filterOut(position);
@@ -81,17 +81,17 @@ describe('FilterItem', () => {
       filterItem1 = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       filterItem2 = new FilterItem(
         $('.filtr-item:first').get(0),
         1,
-        DefaultOptions
+        defaultOptions
       );
       filterItem3 = new FilterItem(
         $('.filtr-item:first').get(0),
         2,
-        DefaultOptions
+        defaultOptions
       );
     });
 
@@ -117,7 +117,7 @@ describe('FilterItem', () => {
       const filterItem = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       expect(filterItem.contentsMatchSearch('streets')).toEqual(true);
     });
@@ -126,7 +126,7 @@ describe('FilterItem', () => {
       const filterItem = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       expect(filterItem.contentsMatchSearch('iamnotthere')).toEqual(false);
     });
@@ -135,7 +135,7 @@ describe('FilterItem', () => {
   describe('#getContentsLowercase', () => {
     it('should return the contents of the .filtr-item container in lowercase', () => {
       const $node = $('.filtr-item:first');
-      const filterItem = new FilterItem($node.get(0), 0, DefaultOptions);
+      const filterItem = new FilterItem($node.get(0), 0, defaultOptions);
       expect($node.text().toLowerCase()).toEqual(
         filterItem.getContentsLowercase()
       );
@@ -147,7 +147,7 @@ describe('FilterItem', () => {
       const filterItem = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       expect(filterItem.getCategories()).toEqual(['1', '5']);
       filterItem.node.setAttribute('data-category', '1, 5, pizza');
@@ -160,7 +160,7 @@ describe('FilterItem', () => {
       const filterItem = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       const innerHeight = filterItem.node.clientHeight;
       expect(filterItem.getHeight()).toEqual(innerHeight);
@@ -172,7 +172,7 @@ describe('FilterItem', () => {
       const filterItem = new FilterItem(
         $('.filtr-item:first').get(0),
         0,
-        DefaultOptions
+        defaultOptions
       );
       const innerWidth = filterItem.node.clientWidth;
       expect(filterItem.getWidth()).toEqual(innerWidth);

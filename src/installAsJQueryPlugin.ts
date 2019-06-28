@@ -1,5 +1,5 @@
 import Filterizr from './Filterizr';
-import defaultOptions from './DefaultOptions';
+import defaultOptions from './defaultOptions';
 
 export default function installAsJQueryPlugin($: any) {
   if (!$)
@@ -17,7 +17,7 @@ export default function installAsJQueryPlugin($: any) {
       (!this._fltr && args.length === 0) ||
       (args.length === 1 && typeof args[0] === 'object')
     ) {
-      const options = args.length > 0 ? args[0] : defaultOptions;
+      const options = args.length > 0 ? args[0] :defaultOptions;
       this._fltr = new Filterizr(selector, options);
     }
     // otherwise call the method called

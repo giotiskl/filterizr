@@ -5,7 +5,7 @@ import { fakeDom } from './testSetup';
 import Filterizr from '../src/Filterizr';
 import FilterContainer from '../src/FilterContainer';
 import FilterItem from '../src/FilterItem';
-import DefaultOptions, { IDefaultOptions } from '../src/DefaultOptions';
+import defaultOptions, { IDefaultOptions } from '../src/defaultOptions';
 
 // General setup
 (<any>window).$ = $;
@@ -18,14 +18,14 @@ describe('Filterizr', () => {
 
   beforeEach(() => {
     $('body').html(fakeDom);
-    filterizr = new Filterizr('.filtr-container', DefaultOptions);
+    filterizr = new Filterizr('.filtr-container', defaultOptions);
     filterContainer = filterizr.props.FilterContainer;
   });
 
   describe('#constructor', () => {
     it('should throw an exception when a non-existent container selector is passed as an argument', () => {
       const instantiateBrokenFilterizr = () => {
-        new Filterizr('.non-existent-container', DefaultOptions);
+        new Filterizr('.non-existent-container', defaultOptions);
       };
       expect(instantiateBrokenFilterizr).toThrowError(
         /could not initialize container/
@@ -43,7 +43,7 @@ describe('Filterizr', () => {
     it('should still work on containers with multiple class names', () => {
       $('.filtr-container').addClass('randomclass1 randomclass2');
       const instantiateFreshFilterizr = () => {
-        new Filterizr('.filtr-container', DefaultOptions);
+        new Filterizr('.filtr-container', defaultOptions);
       };
       expect(instantiateFreshFilterizr).not.toThrowError();
     });

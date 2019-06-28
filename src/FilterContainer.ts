@@ -1,4 +1,4 @@
-import { IDefaultOptions, IDefaultOptionsCallbacks } from './DefaultOptions';
+import { IDefaultOptions, IDefaultOptionsCallbacks } from './defaultOptions';
 import FilterItem from './FilterItem';
 import { debounce, setStylesOnHTMLNode } from './utils';
 

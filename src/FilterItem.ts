@@ -1,5 +1,5 @@
 import { getDataAttributesOfHTMLNode, setStylesOnHTMLNode } from './utils';
-import { IDefaultOptions } from './DefaultOptions';
+import { IDefaultOptions } from './defaultOptions';
 
 export default class FilterItem {
   node: Element;
