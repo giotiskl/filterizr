@@ -1,6 +1,7 @@
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
+import ActiveFilter from './ActiveFilter';
 import getLayoutPositions from './getLayoutPositions';
 import defaultOptions, { IDefaultOptions } from './defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
@@ -24,6 +25,7 @@ class Filterizr {
 
   options: IDefaultOptions;
   props: {
+    activeFilter: ActiveFilter;
     FilterContainer: FilterContainer;
     FilterControls?: FilterControls;
     FilterItems: FilterItem[];
@@ -83,6 +85,7 @@ class Filterizr {
     }
 
     this.props = {
+      activeFilter: new ActiveFilter(this.options),
       FilterContainer: filterContainer,
       ...(this.options.setupControls && { FilterControls: filterControls }),
       FilterItems: filterContainer.props.FilterItems,
@@ -98,7 +101,7 @@ class Filterizr {
     this._bindEvents();
 
     // Init Filterizr
-    this.filter(this.options.filter);
+    this.filter(this.props.activeFilter.filter);
   }
 
   /**
@@ -170,7 +173,7 @@ class Filterizr {
     // Retrigger filter for new item to assume position in the grid
     const FilteredItems = this._filter(
       this.props.FilterItems,
-      this.options.filter
+      this.props.activeFilter.filter
     );
 
     this._render(FilteredItems);
@@ -196,7 +199,7 @@ class Filterizr {
     // Apply filters
     const FilteredItems = this._filter(
       this.props.FilterItems,
-      this.options.filter
+      this.props.activeFilter.filter
     );
 
     this.props.FilteredItems = FilteredItems;
@@ -213,7 +216,7 @@ class Filterizr {
 
     // Filter items and optionally apply search if a search term exists
     const FilteredItems = this._search(
-      this._filter(FilterItems, this.options.filter),
+      this._filter(FilterItems, this.props.activeFilter.filter),
       searchTerm
     );
 
@@ -344,7 +347,7 @@ class Filterizr {
     // If the multifilterLogicalOperator has been defined and its
     // value changed then a refilter should be trigger.
     if (newOptions.multifilterLogicalOperator) {
-      this.filter(this.options.filter);
+      this.filter(this.props.activeFilter.filter);
     }
   }
 
@@ -354,12 +357,8 @@ class Filterizr {
    * @returns {undefined}
    */
   toggleFilter(toggledFilter: string): void {
-    this.options.filter = this._toggleFilter(
-      this.options.filter,
-      toggledFilter
-    );
-
-    this.filter(this.options.filter);
+    this.props.activeFilter.toggleFilter(toggledFilter);
+    this.filter(this.props.activeFilter.filter);
   }
 
   // Helper methods
@@ -434,41 +433,6 @@ class Filterizr {
     }
 
     return ShuffledItems;
-  }
-
-  /**
-   * Given the active filter(s) and a target filter
-   * to toggle will produce the new active filter(s)
-   *
-   * @param {string|string[]} activeFilter currently active filter(s)
-   * @param {string} targetFilter to toggle
-   * @returns {string|string[]} new active filter
-   */
-  private _toggleFilter(
-    activeFilter: string | string[],
-    targetFilter: string
-  ): string | string[] {
-    if (activeFilter === 'all') {
-      return targetFilter;
-    }
-
-    if (Array.isArray(activeFilter)) {
-      if (activeFilter.includes(targetFilter)) {
-        const newActiveFilter = activeFilter.filter(
-          filter => filter !== targetFilter
-        );
-        return newActiveFilter.length === 1
-          ? newActiveFilter[0]
-          : newActiveFilter;
-      }
-      return [...activeFilter, targetFilter];
-    }
-
-    if (activeFilter === targetFilter) {
-      return 'all';
-    }
-
-    return [activeFilter, targetFilter];
   }
 
   private _render(FilterItems: FilterItem[]): void {
@@ -570,7 +534,7 @@ class Filterizr {
         FilterContainer.updateWidth();
         FilterContainer.updateFilterItemsDimensions();
         // Refilter the grid to assume new positions
-        this.filter(this.options.filter);
+        this.filter(this.props.activeFilter.filter);
       },
       250,
       false

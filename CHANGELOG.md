@@ -1,8 +1,8 @@
-## Version 2.0.2
+## Version 2.1.0
 * Export TS type declarations for package consumers
 * Add `gridSelector` and `gridItemsSelector` to options
 * Extend constructor of `Filterizr` to accept either a selector or an `HTMLElement` as the first argument
-* Improve code in some parts
+* Add `ActiveFilter` class to abstract away some complexity from `toggleFilter`
 
 ## Version 2.0.1
 * Fix bug where `setupControls` in options was no functional
