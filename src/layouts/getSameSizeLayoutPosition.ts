@@ -5,12 +5,12 @@ import Filterizr from '../Filterizr';
  * @param {object} Filterizr instance.
  */
 const getSameSizeLayoutPosition = (Filterizr: Filterizr) => {
-  const { FilterContainer, FilteredItems } = Filterizr.props;
+  const { filterContainer, filteredItems } = Filterizr.props;
   // calculate number of columns and rows the grid should have
-  let cols = FilterContainer.calcColumns();
+  let cols = filterContainer.calcColumns();
   let row = 0;
   // calculate array of positions
-  const targetPositions = FilteredItems.map((FilterItem, index) => {
+  const targetPositions = filteredItems.map((FilterItem, index) => {
     // update current row
     if (index % cols === 0 && index >= cols) row++;
     // determine pos in grid
@@ -24,8 +24,8 @@ const getSameSizeLayoutPosition = (Filterizr: Filterizr) => {
 
   // Update the height of the FilterContainer
   // before returning from the method
-  const firstItemHeight = (FilteredItems[0] && FilteredItems[0].props.h) || 0;
-  FilterContainer.updateHeight((row + 1) * firstItemHeight);
+  const firstItemHeight = (filteredItems[0] && filteredItems[0].props.h) || 0;
+  filterContainer.updateHeight((row + 1) * firstItemHeight);
 
   // Return the array of new positions
   return targetPositions;

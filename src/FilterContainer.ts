@@ -1,12 +1,12 @@
 import { IDefaultOptions, IDefaultOptionsCallbacks } from './defaultOptions';
 import FilterItem from './FilterItem';
-import { debounce, setStylesOnHTMLNode, TRANSITION_END_EVENTS } from './utils';
+import { setStylesOnHTMLNode, TRANSITION_END_EVENTS } from './utils';
 
 export default class FilterContainer {
   node: Element;
   options: IDefaultOptions;
   props: {
-    FilterItems: FilterItem[];
+    filterItems: FilterItem[];
     w: number;
     h: number;
     onTransitionEndHandler?: EventListener;
@@ -19,6 +19,12 @@ export default class FilterContainer {
    * @return {FilterContainer} FilterContainer instance
    */
   constructor(node: Element, options: IDefaultOptions) {
+    if (!node) {
+      throw new Error(
+        'Filterizr: could not initialize container, check the selector or node you passed to the constructor exists.'
+      );
+    }
+
     this.node = node;
     this.options = options;
 
@@ -32,10 +38,16 @@ export default class FilterContainer {
       flexWrap: 'wrap',
     });
 
-    // Set props
+    // Initialize FilterItems
+    const filterItems = this.getFilterItems(options);
+    if (!filterItems.length) {
+      throw new Error(
+        "Filterizr: cannot initialize empty container. Make sure the gridItemsSelector option corresponds to the selector of your grid's items"
+      );
+    }
+
     this.props = {
-      // Other props
-      FilterItems: this.getFilterItems(options),
+      filterItems,
       w: this.getWidth(),
       h: 0,
       onTransitionEndHandler: null,
@@ -79,13 +91,13 @@ export default class FilterContainer {
    * @param {Object} options - Filterizr instance options
    */
   push(node: Element, options: IDefaultOptions): void {
-    const { FilterItems } = this.props;
+    const { filterItems } = this.props;
     // Add new item to DOM
     this.node.appendChild(node);
     // Initialize it as a FilterItem and push into array
-    const index = FilterItems.length;
+    const index = filterItems.length;
     const filterItem = new FilterItem(node, index, options);
-    this.props.FilterItems.push(filterItem);
+    this.props.filterItems.push(filterItem);
   }
 
   /**
@@ -93,7 +105,7 @@ export default class FilterContainer {
    * @returns {number} number of columns for the grid
    */
   calcColumns(): number {
-    return Math.round(this.props.w / this.props.FilterItems[0].props.w);
+    return Math.round(this.props.w / this.props.filterItems[0].props.w);
   }
 
   /**
@@ -109,11 +121,11 @@ export default class FilterContainer {
     delay: number,
     delayMode: 'progressive' | 'alternate'
   ): void {
-    const { FilterItems } = this.props;
+    const { filterItems } = this.props;
 
-    FilterItems.forEach(FilterItem =>
-      setStylesOnHTMLNode(FilterItem.node, {
-        transition: `all ${animationDuration}s ${easing} ${FilterItem.getTransitionDelay(
+    filterItems.forEach(filterItem =>
+      setStylesOnHTMLNode(filterItem.node, {
+        transition: `all ${animationDuration}s ${easing} ${filterItem.getTransitionDelay(
           delay,
           delayMode
         )}ms`,
@@ -144,8 +156,8 @@ export default class FilterContainer {
    * @returns {undefined}
    */
   updateFilterItemsDimensions(): void {
-    const { FilterItems } = this.props;
-    FilterItems.forEach(FilterItem => FilterItem.updateDimensions());
+    const { filterItems } = this.props;
+    filterItems.forEach(filterItem => filterItem.updateDimensions());
   }
 
   /**

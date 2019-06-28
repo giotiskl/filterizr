@@ -9,7 +9,7 @@ class FilterControls {
   sortAscControls: NodeListOf<Element>;
   sortDescControls: NodeListOf<Element>;
   props: {
-    Filterizr: Filterizr;
+    filterizr: Filterizr;
     selector: string;
     handlers: {
       filterControlsHandler: EventListener;
@@ -22,11 +22,11 @@ class FilterControls {
   };
 
   /**
-   * @param {object} Filterizr keep a ref to the Filterizr object to control actions
+   * @param {object} filterizr keep a ref to the Filterizr object to control actions
    * @param {string} selector optionally the selector of the .filtr-controls, used when
    *                          there is a need to have multiple Filterizr instances
    */
-  constructor(Filterizr: Filterizr, selector: string = '') {
+  constructor(filterizr: Filterizr, selector: string = '') {
     this.filterControls = document.querySelectorAll(`${selector}[data-filter]`);
     this.multiFilterControls = document.querySelectorAll(
       `${selector}[data-multifilter]`
@@ -43,7 +43,7 @@ class FilterControls {
     );
 
     this.props = {
-      Filterizr,
+      filterizr,
       selector,
       handlers: {
         filterControlsHandler: null,
@@ -80,7 +80,7 @@ class FilterControls {
     const {
       filterControls,
       multiFilterControls,
-      props: { Filterizr },
+      props: { filterizr },
     } = this;
 
     // Single filter mode controls
@@ -89,9 +89,9 @@ class FilterControls {
         const ctrl: Element = <Element>evt.currentTarget;
         const targetFilter: string = ctrl.getAttribute('data-filter');
         // Update active filter in Filterizr's options
-        Filterizr.options.filter = targetFilter;
+        // filterizr.props.activeFilter.set(targetFilter);
         // Trigger filter
-        Filterizr.filter(Filterizr.options.filter);
+        filterizr.filter(targetFilter);
       };
 
       filterControls.forEach((control: Element) =>
@@ -107,7 +107,7 @@ class FilterControls {
       this.props.handlers.multiFilterControlsHandler = evt => {
         const ctrl: Element = <Element>evt.target;
         const targetFilter = ctrl.getAttribute('data-multifilter');
-        Filterizr.toggleFilter(targetFilter);
+        filterizr.toggleFilter(targetFilter);
       };
 
       multiFilterControls.forEach(control =>
@@ -150,12 +150,12 @@ class FilterControls {
   setupShuffleControls(): void {
     const {
       shuffleControls: controls,
-      props: { Filterizr },
+      props: { filterizr },
     } = this;
 
     if (controls) {
       this.props.handlers.shuffleControlsHandler = () => {
-        Filterizr.shuffle();
+        filterizr.shuffle();
       };
 
       controls.forEach(control =>
@@ -186,7 +186,7 @@ class FilterControls {
   setupSearchControls(): void {
     const {
       searchControls: controls,
-      props: { Filterizr },
+      props: { filterizr },
     } = this;
 
     if (controls) {
@@ -194,8 +194,8 @@ class FilterControls {
         (evt: Event) => {
           const textfield: HTMLInputElement = <HTMLInputElement>evt.target;
           const val = textfield.value;
-          Filterizr.props.searchTerm = val.toLowerCase();
-          Filterizr.search(Filterizr.props.searchTerm);
+          filterizr.props.searchTerm = val.toLowerCase();
+          filterizr.search(filterizr.props.searchTerm);
         },
         250,
         false
@@ -231,7 +231,7 @@ class FilterControls {
     const {
       sortAscControls,
       sortDescControls,
-      props: { Filterizr, selector },
+      props: { filterizr, selector },
     } = this;
 
     if (sortAscControls) {
@@ -239,8 +239,8 @@ class FilterControls {
         const sortAttr: string = (<HTMLInputElement>(
           document.querySelector(`${selector}[data-sortOrder]`)
         )).value;
-        Filterizr.props.sortOrder = 'asc';
-        Filterizr.sort(sortAttr, 'asc');
+        filterizr.props.sortOrder = 'asc';
+        filterizr.sort(sortAttr, 'asc');
       };
 
       sortAscControls.forEach(control =>
@@ -256,8 +256,8 @@ class FilterControls {
         const sortAttr = (<HTMLInputElement>(
           document.querySelector(`${selector}[data-sortOrder]`)
         )).value;
-        Filterizr.props.sortOrder = 'desc';
-        Filterizr.sort(sortAttr, 'desc');
+        filterizr.props.sortOrder = 'desc';
+        filterizr.sort(sortAttr, 'desc');
       };
 
       sortDescControls.forEach(control =>

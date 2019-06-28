@@ -1,13 +1,13 @@
-import { IDefaultOptions } from './DefaultOptions';
+import { IDefaultOptions } from './defaultOptions';
 
 export type Filter = string | string[];
 
 export default class ActiveFilter {
+  private _options: IDefaultOptions;
+
   constructor(options: IDefaultOptions) {
     this._options = options;
   }
-
-  private _options: IDefaultOptions;
 
   get filter(): Filter {
     return this._options.filter;

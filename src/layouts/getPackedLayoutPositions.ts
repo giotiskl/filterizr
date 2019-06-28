@@ -5,11 +5,11 @@ import Filterizr from '../Filterizr';
  * @param {object} Filterizr instance.
  */
 const getPackedLayoutPositions = (Filterizr: Filterizr) => {
-  const { FilterContainer, FilteredItems } = Filterizr.props;
+  const { filterContainer, filteredItems } = Filterizr.props;
 
   //Instantiate new Packer, set up grid
-  const packer = new Packer(FilterContainer.props.w);
-  const filterItemsDimensions = FilteredItems.map(({ props }) => ({
+  const packer = new Packer(filterContainer.props.w);
+  const filterItemsDimensions = filteredItems.map(({ props }) => ({
     w: props.w,
     h: props.h,
   }));
@@ -25,7 +25,7 @@ const getPackedLayoutPositions = (Filterizr: Filterizr) => {
   }));
 
   // set height of container
-  FilterContainer.updateHeight(packer.root.h);
+  filterContainer.updateHeight(packer.root.h);
 
   return targetPositions;
 };

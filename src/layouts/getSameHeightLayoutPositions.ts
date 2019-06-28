@@ -5,14 +5,14 @@ import Filterizr from '../Filterizr';
  * @param {object} Filterizr instance.
  */
 const getSameHeightLayoutPositions = (Filterizr: Filterizr) => {
-  const { FilterContainer, FilteredItems } = Filterizr.props;
-  const gridWidth = FilterContainer.props.w,
-    itemHeight = FilteredItems[0].props.h;
+  const { filterContainer, filteredItems } = Filterizr.props;
+  const gridWidth = filterContainer.props.w,
+    itemHeight = filteredItems[0].props.h;
   let row = 0,
     left = 0;
 
   // calculate array of positions
-  const targetPositions = FilteredItems.map(FilterItem => {
+  const targetPositions = filteredItems.map(FilterItem => {
     const w = FilterItem.props.w;
     // in case the item exceeds the grid then move to next row and reset left
     if (left + w > gridWidth) {
@@ -31,7 +31,7 @@ const getSameHeightLayoutPositions = (Filterizr: Filterizr) => {
   });
 
   // update the height of the FilterContainer
-  FilterContainer.updateHeight((row + 1) * FilteredItems[0].props.h);
+  filterContainer.updateHeight((row + 1) * filteredItems[0].props.h);
   // return the array of new positions
   return targetPositions;
 };

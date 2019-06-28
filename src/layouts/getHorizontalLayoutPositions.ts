@@ -6,12 +6,12 @@ import Filterizr from '../Filterizr';
  * @return {Object[]} positions for the items to assume.
  */
 const getHorizontalLayoutPositions = (Filterizr: Filterizr) => {
-  const { FilterContainer, FilteredItems } = Filterizr.props;
+  const { filterContainer, filteredItems } = Filterizr.props;
 
   let left: number = 0,
     containerHeight: number = 0;
 
-  const targetPositions = FilteredItems.map(FilterItem => {
+  const targetPositions = filteredItems.map(FilterItem => {
     const { w, h } = FilterItem.props;
     const pos = {
       left: left,
@@ -27,7 +27,7 @@ const getHorizontalLayoutPositions = (Filterizr: Filterizr) => {
   });
 
   // update the height of the FilterContainer
-  FilterContainer.updateHeight(containerHeight);
+  filterContainer.updateHeight(containerHeight);
 
   return targetPositions;
 };

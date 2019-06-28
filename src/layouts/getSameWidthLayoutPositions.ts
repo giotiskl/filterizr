@@ -6,10 +6,10 @@ import FilterItem from '../FilterItem';
  * @param {object} Filterizr instance.
  */
 const getSameWidthLayoutPositions = (Filterizr: Filterizr) => {
-  const { FilterContainer, FilteredItems } = Filterizr.props;
+  const { filterContainer, filteredItems } = Filterizr.props;
 
   // Calculate number of columns and rows the grid should have
-  let cols = FilterContainer.calcColumns(),
+  let cols = filterContainer.calcColumns(),
     row = 0,
     columnHeights = Array.apply(null, Array(cols)).map(
       Number.prototype.valueOf,
@@ -17,7 +17,7 @@ const getSameWidthLayoutPositions = (Filterizr: Filterizr) => {
     );
 
   // Calculate array of positions
-  const targetPositions = FilteredItems.map((FilterItem, index) => {
+  const targetPositions = filteredItems.map((FilterItem, index) => {
     // Update height of tallest item in row if needed
     const { w, h } = FilterItem.props;
 
@@ -34,13 +34,13 @@ const getSameWidthLayoutPositions = (Filterizr: Filterizr) => {
     // Return object with new position in array
     return {
       left: spot * w,
-      top: calcItemTop(FilteredItems, cols, index),
+      top: calcItemTop(filteredItems, cols, index),
     };
   });
 
   // Update the height of the FilterContainer
   // before returning from the method
-  FilterContainer.updateHeight(Math.max(...columnHeights));
+  filterContainer.updateHeight(Math.max(...columnHeights));
 
   // Return the array of new positions
   return targetPositions;
@@ -49,12 +49,12 @@ const getSameWidthLayoutPositions = (Filterizr: Filterizr) => {
 /**
  * Helper method used to calculate what the top
  * of the current item in the iteration should be.
- * @param {Array} FilteredItems collection
+ * @param {Array} filteredItems collection
  * @param {Number} cols of grid
- * @param {Number} index of current item in FilteredItems collection
+ * @param {Number} index of current item in filteredItems collection
  */
 const calcItemTop = (
-  FilteredItems: FilterItem[],
+  filteredItems: FilterItem[],
   cols: number,
   index: number
 ) => {
@@ -68,7 +68,7 @@ const calcItemTop = (
   index -= cols;
   // If we're over the first row loop until we calculate the height of all items above
   while (index >= 0) {
-    itemTop += FilteredItems[index].props.h;
+    itemTop += filteredItems[index].props.h;
     index -= cols;
   }
   return itemTop;
