@@ -357,7 +357,7 @@ class Filterizr {
    * @returns {undefined}
    */
   toggleFilter(toggledFilter: string): void {
-    this.props.activeFilter.toggleFilter(toggledFilter);
+    this.props.activeFilter.toggle(toggledFilter);
     this.filter(this.props.activeFilter.filter);
   }
 
@@ -436,8 +436,8 @@ class Filterizr {
   }
 
   private _render(FilterItems: FilterItem[]): void {
+    const { filter } = this.props.activeFilter;
     const {
-      filter,
       filterInCss,
       filterOutCss,
       layout,

@@ -13,18 +13,18 @@ export default class ActiveFilter {
     return this._options.filter;
   }
 
-  setFilter(targetFilter: Filter): void {
+  set(targetFilter: Filter): void {
     this._options.filter = targetFilter;
   }
 
-  toggleFilter(targetFilter: string): void {
-    this._options.filter = this._toggleFilter(
+  toggle(targetFilter: string): void {
+    this._options.filter = this._toggle(
       this._options.filter,
       targetFilter
     );
   }
 
-  private _toggleFilter(
+  private _toggle(
     activeFilter: string | string[],
     targetFilter: string
   ): string | string[] {
