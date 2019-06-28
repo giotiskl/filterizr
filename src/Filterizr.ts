@@ -48,7 +48,7 @@ class Filterizr {
   static installAsJQueryPlugin = _installAsJQueryPlugin;
 
   constructor(
-    selectorOrNode: string | HTMLElement = '.filtr-container',
+    selectorOrNode: string | HTMLElement = DefaultOptions.gridSelector,
     userOptions: IDefaultOptions = {}
   ) {
     // Make the options a property of the Filterizr instance
@@ -70,6 +70,12 @@ class Filterizr {
       filterContainerNode,
       this.options
     );
+
+    if (!filterContainer.props.FilterItems.length) {
+      throw new Error(
+        "Filterizr: cannot initialize empty container. Make sure the gridItemsSelector option corresponds to the selector of your grid's items"
+      );
+    }
 
     let filterControls = null;
     if (this.options.setupControls) {
@@ -306,7 +312,7 @@ class Filterizr {
     this.options = merge(this.options, newOptions);
 
     // If one of the options that updates the transition properties
-    // of the .filtr-item elements is set, call the update method
+    // of the grid items is set, call the update method
     if (
       newOptions.animationDuration ||
       newOptions.delay ||

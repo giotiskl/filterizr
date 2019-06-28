@@ -124,7 +124,7 @@ export default class FilterItem {
   }
 
   /**
-   * Helper method to calculate the animation delay for a given .filtr-item
+   * Helper method to calculate the animation delay for a given grid item
    * @param {Number} delay in ms
    * @param {String} delayMode can be 'alternate' or 'progressive'
    * @return {Number} delay in ms
@@ -159,7 +159,7 @@ export default class FilterItem {
   }
 
   /**
-   * Returns all categories of the .filtr-item data-category attribute
+   * Returns all categories of the grid items data-category attribute
    * with a regexp regarding all whitespace.
    * @return {String[]} an array of the categories the item belongs to
    */

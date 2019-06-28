@@ -52,7 +52,7 @@ export default class FilterContainer {
     // Remove all inline styles and unbind all events
     this.node.removeAttribute('style');
     const filterItemNodes = Array.from(
-      this.node.querySelectorAll('.filtr-item')
+      this.node.querySelectorAll(this.options.gridItemsSelector)
     );
     filterItemNodes.forEach(node => node.removeAttribute('style'));
     this.unbindEvents(this.options.callbacks);
@@ -60,12 +60,14 @@ export default class FilterContainer {
 
   /**
    * Iterates over the FilterContainer creating FilterItem
-   * instances for every .filtr-item element found.
+   * instances for every grid item found.
    * @param {Object} options - of Filterizr instance
    * @return {Object[]} array of FilterItem instances
    */
   getFilterItems(options: IDefaultOptions) {
-    const filterItems = Array.from(this.node.querySelectorAll('.filtr-item'));
+    const filterItems = Array.from(
+      this.node.querySelectorAll(options.gridItemsSelector)
+    );
     return filterItems.map(
       (node, index) => new FilterItem(node, index, options)
     );
@@ -95,7 +97,7 @@ export default class FilterContainer {
   }
 
   /**
-   * Updates the transition inline styles of all contained .filtr-item children
+   * Updates the transition inline styles of all contained grid items
    * @param {Number} animationDuration duration of the animation in seconds
    * @param {String} easing function for the animation
    * @param {Number} delay in ms

@@ -17,6 +17,8 @@ export interface IDefaultOptions {
   filter?: string | string[];
   filterOutCss?: object;
   filterInCss?: object;
+  gridSelector?: string;
+  gridItemsSelector?: string;
   layout?:
     | 'horizontal'
     | 'vertical'
@@ -51,6 +53,8 @@ const options: IDefaultOptions = {
     opacity: 1,
     transform: 'scale(1)',
   },
+  gridSelector: '.filtr-container',
+  gridItemsSelector: '.filtr-item',
   layout: 'sameSize',
   multifilterLogicalOperator: 'or',
   setupControls: true,
