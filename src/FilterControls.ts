@@ -26,7 +26,7 @@ class FilterControls {
    * @param {string} selector optionally the selector of the .filtr-controls, used when
    *                          there is a need to have multiple Filterizr instances
    */
-  constructor(Filterizr: Filterizr, selector = '') {
+  constructor(Filterizr: Filterizr, selector: string = '') {
     this.filterControls = document.querySelectorAll(`${selector}[data-filter]`);
     this.multiFilterControls = document.querySelectorAll(
       `${selector}[data-multifilter]`
