@@ -354,35 +354,11 @@ class Filterizr {
    * @returns {undefined}
    */
   toggleFilter(toggledFilter: string): void {
-    let activeFilters: string | string[] = this.options.filter;
+    this.options.filter = this._toggleFilter(
+      this.options.filter,
+      toggledFilter
+    );
 
-    if (activeFilters === 'all') {
-      // If set to all then just set to new category
-      activeFilters = toggledFilter;
-    } else {
-      if (Array.isArray(activeFilters)) {
-        // If the activeFilters are an array
-        if (activeFilters.includes(toggledFilter)) {
-          // Check if the toggledFilter is in the array and remove it
-          activeFilters = activeFilters.filter(f => f !== toggledFilter);
-          // In case there is only 1 item now left in the array, flatten it
-          if (activeFilters.length === 1) activeFilters = activeFilters[0];
-        } else {
-          // If the item is not in the array then simply push it
-          activeFilters.push(toggledFilter);
-        }
-      } else {
-        activeFilters =
-          activeFilters === toggledFilter
-            ? 'all' // If the activeFilters === toggledFilter revert to 'all'
-            : [activeFilters, toggledFilter]; // Otherwise start array
-      }
-    }
-
-    // Update active filter in Filterizr's options
-    this.options.filter = activeFilters;
-
-    // Trigger a refilter
     this.filter(this.options.filter);
   }
 
@@ -458,6 +434,41 @@ class Filterizr {
     }
 
     return ShuffledItems;
+  }
+
+  /**
+   * Given the active filter(s) and a target filter
+   * to toggle will produce the new active filter(s)
+   *
+   * @param {string|string[]} activeFilter currently active filter(s)
+   * @param {string} targetFilter to toggle
+   * @returns {string|string[]} new active filter
+   */
+  private _toggleFilter(
+    activeFilter: string | string[],
+    targetFilter: string
+  ): string | string[] {
+    if (activeFilter === 'all') {
+      return targetFilter;
+    }
+
+    if (Array.isArray(activeFilter)) {
+      if (activeFilter.includes(targetFilter)) {
+        const newActiveFilter = activeFilter.filter(
+          filter => filter !== targetFilter
+        );
+        return newActiveFilter.length === 1
+          ? newActiveFilter[0]
+          : newActiveFilter;
+      }
+      return [...activeFilter, targetFilter];
+    }
+
+    if (activeFilter === targetFilter) {
+      return 'all';
+    }
+
+    return [activeFilter, targetFilter];
   }
 
   private _render(FilterItems: FilterItem[]): void {
