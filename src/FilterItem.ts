@@ -1,4 +1,8 @@
-import { getDataAttributesOfHTMLNode, setStylesOnHTMLNode } from './utils';
+import {
+  getDataAttributesOfHTMLNode,
+  setStylesOnHTMLNode,
+  TRANSITION_END_EVENTS,
+} from './utils';
 import { IDefaultOptions } from './defaultOptions';
 import { IDictionary } from './types/interfaces/IDictionary';
 
@@ -211,51 +215,20 @@ export default class FilterItem {
    * Sets up the events related to the FilterItem instance
    */
   bindEvents(): void {
-    this.node.addEventListener(
-      'webkitTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.addEventListener(
-      'otransitionend',
-      this.props.onTransitionEndHandler
-    );
-    this.node.addEventListener(
-      'oTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.addEventListener(
-      'msTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.addEventListener(
-      'transitionend',
-      this.props.onTransitionEndHandler
-    );
+    TRANSITION_END_EVENTS.forEach(eventName => {
+      this.node.addEventListener(eventName, this.props.onTransitionEndHandler);
+    });
   }
 
   /**
    * Removes all events related to the FilterItem instance
    */
   unbindEvents(): void {
-    this.node.removeEventListener(
-      'webkitTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.removeEventListener(
-      'otransitionend',
-      this.props.onTransitionEndHandler
-    );
-    this.node.removeEventListener(
-      'oTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.removeEventListener(
-      'msTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.removeEventListener(
-      'transitionend',
-      this.props.onTransitionEndHandler
-    );
+    TRANSITION_END_EVENTS.forEach(eventName => {
+      this.node.removeEventListener(
+        eventName,
+        this.props.onTransitionEndHandler
+      );
+    });
   }
 }

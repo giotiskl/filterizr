@@ -1,6 +1,6 @@
 import { IDefaultOptions, IDefaultOptionsCallbacks } from './defaultOptions';
 import FilterItem from './FilterItem';
-import { debounce, setStylesOnHTMLNode } from './utils';
+import { debounce, setStylesOnHTMLNode, TRANSITION_END_EVENTS } from './utils';
 
 export default class FilterContainer {
   node: Element;
@@ -172,26 +172,9 @@ export default class FilterContainer {
       false
     );
 
-    this.node.addEventListener(
-      'webkitTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.addEventListener(
-      'otransitionend',
-      this.props.onTransitionEndHandler
-    );
-    this.node.addEventListener(
-      'oTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.addEventListener(
-      'msTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.addEventListener(
-      'transitionend',
-      this.props.onTransitionEndHandler
-    );
+    TRANSITION_END_EVENTS.forEach(eventName => {
+      this.node.addEventListener(eventName, this.props.onTransitionEndHandler);
+    });
   }
 
   /**
@@ -211,28 +194,12 @@ export default class FilterContainer {
    * Unbinds all Filterizr related events.
    */
   unbindEvents(callbacks: IDefaultOptionsCallbacks): void {
-    // Transition end
-    this.node.removeEventListener(
-      'webkitTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.removeEventListener(
-      'otransitionend',
-      this.props.onTransitionEndHandler
-    );
-    this.node.removeEventListener(
-      'oTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.removeEventListener(
-      'msTransitionEnd',
-      this.props.onTransitionEndHandler
-    );
-    this.node.removeEventListener(
-      'transitionend',
-      this.props.onTransitionEndHandler
-    );
-    // Rest
+    TRANSITION_END_EVENTS.forEach(eventName => {
+      this.node.removeEventListener(
+        eventName,
+        this.props.onTransitionEndHandler
+      );
+    });
     this.node.removeEventListener('filteringStart', callbacks.onFilteringStart);
     this.node.removeEventListener('filteringEnd', callbacks.onFilteringEnd);
     this.node.removeEventListener('shufflingStart', callbacks.onShufflingStart);

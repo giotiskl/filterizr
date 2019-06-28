@@ -349,3 +349,16 @@ const FILTERIZR_STATE = {
 };
 
 export { FILTERIZR_STATE };
+
+/**
+ * Transition end events with vendor prefixing
+ */
+const TRANSITION_END_EVENTS = [
+  'webkitTransitionEnd',
+  'otransitionend',
+  'oTransitionEnd',
+  'msTransitionEnd',
+  'transitionend',
+];
+
+export { TRANSITION_END_EVENTS };
