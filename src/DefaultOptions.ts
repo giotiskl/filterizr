@@ -5,6 +5,7 @@ export interface IDefaultOptionsCallbacks {
   onShufflingEnd?: EventListener;
   onSortingStart?: EventListener;
   onSortingEnd?: EventListener;
+  onTransitionEnd?: EventListener;
 }
 
 export interface IDefaultOptions {

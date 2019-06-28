@@ -157,31 +157,17 @@ export default class FilterContainer {
   }
 
   /**
-   * Binds the FilterContainer transitionEnd event, which serves as the
-   * space to trigger Filterizr related events, e.g. onFilteringEnd etc.
-   * @param {Function} callback for the transitionEnd event
-   * @param {Number} debounceDuration in milliseconds
+   * Binds all Filterizr related events.
+   * @param {Object} callbacks wrapper object
    * @returns {undefined}
    */
-  bindTransitionEnd(callback: Function, debounceDuration: number): void {
-    this.props.onTransitionEndHandler = <EventListener>debounce(
-      () => {
-        callback();
-      },
-      debounceDuration,
-      false
-    );
-
+  bindEvents(callbacks: IDefaultOptionsCallbacks): void {
+    // Bind transition end
+    this.props.onTransitionEndHandler = callbacks.onTransitionEnd;
     TRANSITION_END_EVENTS.forEach(eventName => {
       this.node.addEventListener(eventName, this.props.onTransitionEndHandler);
     });
-  }
-
-  /**
-   * Binds all Filterizr related events.
-   * @param {Object} callbacks object containing all callback functions
-   */
-  bindEvents(callbacks: IDefaultOptionsCallbacks): void {
+    // Public Filterizr events
     this.node.addEventListener('filteringStart', callbacks.onFilteringStart);
     this.node.addEventListener('filteringEnd', callbacks.onFilteringEnd);
     this.node.addEventListener('shufflingStart', callbacks.onShufflingStart);
@@ -192,6 +178,8 @@ export default class FilterContainer {
 
   /**
    * Unbinds all Filterizr related events.
+   * @param {Object} callbacks wrapper object
+   * @returns {undefined}
    */
   unbindEvents(callbacks: IDefaultOptionsCallbacks): void {
     TRANSITION_END_EVENTS.forEach(eventName => {

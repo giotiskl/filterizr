@@ -533,10 +533,16 @@ class Filterizr {
     FilterContainer.unbindEvents(callbacks);
 
     // Rebind evts
-    FilterContainer.bindEvents(callbacks);
-    FilterContainer.bindTransitionEnd(() => {
-      this._onTransitionEndCallback();
-    }, animationDuration);
+    FilterContainer.bindEvents({
+      ...callbacks,
+      onTransitionEnd: <EventListener>(
+        debounce(
+          this._onTransitionEndCallback.bind(this),
+          animationDuration,
+          false
+        )
+      ),
+    });
   }
 
   private _bindEvents(): void {
