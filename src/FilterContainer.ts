@@ -113,7 +113,7 @@ export default class FilterContainer {
 
     FilterItems.forEach(FilterItem =>
       setStylesOnHTMLNode(FilterItem.node, {
-        transition: `all ${animationDuration}s ${easing} ${FilterItem.calcDelay(
+        transition: `all ${animationDuration}s ${easing} ${FilterItem.getTransitionDelay(
           delay,
           delayMode
         )}ms`,

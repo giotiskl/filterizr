@@ -69,7 +69,7 @@ export default class FilterItem {
         '-webkit-perspective': '1000px',
         '-webkit-transform-style': 'preserve-3d',
         position: 'absolute',
-        transition: `all ${animationDuration}s ${easing} ${this.calcDelay(
+        transition: `all ${animationDuration}s ${easing} ${this.getTransitionDelay(
           delay,
           delayMode
         )}ms`,
@@ -130,7 +130,7 @@ export default class FilterItem {
    * @param {String} delayMode can be 'alternate' or 'progressive'
    * @return {Number} delay in ms
    */
-  calcDelay(delay: number, delayMode: 'progressive' | 'alternate'): number {
+  getTransitionDelay(delay: number, delayMode: 'progressive' | 'alternate'): number {
     let ret = 0;
 
     if (delayMode === 'progressive') {
