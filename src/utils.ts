@@ -1,3 +1,5 @@
+import { IDictionary } from './types/interfaces/IDictionary';
+
 /**
  * A function to check that all elements of an array are found within another array.
  * @param {Array} arr1 is the array of strings to be checked
@@ -68,7 +70,7 @@ export { setStylesOnHTMLNode };
  * @returns {Object} map of data attributes / values
  */
 function getDataAttributesOfHTMLNode(node: Element) {
-  const data: { [key: string]: any } = {
+  const data: IDictionary = {
     category: '',
     sort: '',
   };
@@ -113,7 +115,7 @@ export { checkDataAttributeExists };
  * @return {Object} deep clone
  */
 const makeShallowClone = (o: any) => {
-  let ret: { [key: string]: any } = {};
+  let ret: IDictionary = {};
   for (const p in o) {
     ret[p] = o[p];
   }
