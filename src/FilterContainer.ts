@@ -1,10 +1,11 @@
-import { IDefaultOptions, IDefaultOptionsCallbacks } from './defaultOptions';
+import { IUserOptionsCallbacks } from './FilterizrOptions/defaultOptions';
+import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import FilterItem from './FilterItem';
 import { setStylesOnHTMLNode, TRANSITION_END_EVENTS } from './utils';
 
 export default class FilterContainer {
   node: Element;
-  options: IDefaultOptions;
+  options: FilterizrOptions;
   props: {
     filterItems: FilterItem[];
     w: number;
@@ -18,7 +19,7 @@ export default class FilterContainer {
    * @param {Object} options with which to instantiate the container
    * @return {FilterContainer} FilterContainer instance
    */
-  constructor(node: Element, options: IDefaultOptions) {
+  constructor(node: Element, options: FilterizrOptions) {
     if (!node) {
       throw new Error(
         'Filterizr: could not initialize container, check the selector or node you passed to the constructor exists.'
@@ -39,7 +40,7 @@ export default class FilterContainer {
     });
 
     // Initialize FilterItems
-    const filterItems = this.getFilterItems(options);
+    const filterItems = this.getFilterItems(this.options);
     if (!filterItems.length) {
       throw new Error(
         "Filterizr: cannot initialize empty container. Make sure the gridItemsSelector option corresponds to the selector of your grid's items"
@@ -64,10 +65,10 @@ export default class FilterContainer {
     // Remove all inline styles and unbind all events
     this.node.removeAttribute('style');
     const filterItemNodes = Array.from(
-      this.node.querySelectorAll(this.options.gridItemsSelector)
+      this.node.querySelectorAll(this.options.get().gridItemsSelector)
     );
     filterItemNodes.forEach(node => node.removeAttribute('style'));
-    this.unbindEvents(this.options.callbacks);
+    this.unbindEvents(this.options.get().callbacks);
   }
 
   /**
@@ -76,9 +77,9 @@ export default class FilterContainer {
    * @param {Object} options - of Filterizr instance
    * @return {Object[]} array of FilterItem instances
    */
-  getFilterItems(options: IDefaultOptions) {
+  getFilterItems(options: FilterizrOptions) {
     const filterItems = Array.from(
-      this.node.querySelectorAll(options.gridItemsSelector)
+      this.node.querySelectorAll(options.get().gridItemsSelector)
     );
     return filterItems.map(
       (node, index) => new FilterItem(node, index, options)
@@ -90,7 +91,7 @@ export default class FilterContainer {
    * @param {Object} node - HTML node to instantiate as FilterItem and append to the grid
    * @param {Object} options - Filterizr instance options
    */
-  push(node: Element, options: IDefaultOptions): void {
+  push(node: Element, options: FilterizrOptions): void {
     const { filterItems } = this.props;
     // Add new item to DOM
     this.node.appendChild(node);
@@ -173,7 +174,7 @@ export default class FilterContainer {
    * @param {Object} callbacks wrapper object
    * @returns {undefined}
    */
-  bindEvents(callbacks: IDefaultOptionsCallbacks): void {
+  bindEvents(callbacks: IUserOptionsCallbacks): void {
     // Bind transition end
     this.props.onTransitionEndHandler = callbacks.onTransitionEnd;
     TRANSITION_END_EVENTS.forEach(eventName => {
@@ -193,7 +194,7 @@ export default class FilterContainer {
    * @param {Object} callbacks wrapper object
    * @returns {undefined}
    */
-  unbindEvents(callbacks: IDefaultOptionsCallbacks): void {
+  unbindEvents(callbacks: IUserOptionsCallbacks): void {
     TRANSITION_END_EVENTS.forEach(eventName => {
       this.node.removeEventListener(
         eventName,

@@ -1,19 +1,19 @@
+import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
-import ActiveFilter, { Filter } from './ActiveFilter';
+import { Filter } from './ActiveFilter';
 import getLayoutPositions from './getLayoutPositions';
-import defaultOptions, { IDefaultOptions } from './defaultOptions';
+import defaultOptions, {
+  IUserOptions,
+} from './FilterizrOptions/defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
 import {
   FILTERIZR_STATE,
   allStringsOfArray1InArray2,
-  checkOptionForErrors,
-  cssEasingValuesRegexp,
   debounce,
   filterItemArraysHaveSameSorting,
   intersection,
-  merge,
   shuffle,
   sortBy,
 } from './utils';
@@ -21,11 +21,10 @@ import {
 class Filterizr {
   FilterContainer: FilterContainer;
   FilterItem: FilterItem;
-  defaultOptions: IDefaultOptions;
+  defaultOptions: IUserOptions;
 
-  options: IDefaultOptions;
+  options: FilterizrOptions;
   props: {
-    activeFilter: ActiveFilter;
     filterContainer: FilterContainer;
     filterControls?: FilterControls;
     filterItems: FilterItem[];
@@ -51,27 +50,26 @@ class Filterizr {
 
   constructor(
     selectorOrNode: string | HTMLElement = defaultOptions.gridSelector,
-    userOptions: IDefaultOptions = {}
+    userOptions: IUserOptions = {}
   ) {
-    // Make the options a property of the Filterizr instance
-    // so that we can later easily modify/update them.
-    this.options = merge(defaultOptions, userOptions);
-
     const filterContainerNode =
       typeof selectorOrNode === 'string'
         ? document.querySelector(selectorOrNode)
         : selectorOrNode;
+
+    this.options = new FilterizrOptions(userOptions);
 
     const filterContainer = new FilterContainer(
       filterContainerNode,
       this.options
     );
 
+    const { setupControls, controlsSelector, filter } = this.options.get();
+
     this.props = {
-      activeFilter: new ActiveFilter(this.options),
       filterContainer: filterContainer,
-      ...(this.options.setupControls && {
-        filterControls: new FilterControls(this, this.options.controlsSelector),
+      ...(setupControls && {
+        filterControls: new FilterControls(this, controlsSelector),
       }),
       filterItems: filterContainer.props.filterItems,
       filteredItems: [],
@@ -86,7 +84,7 @@ class Filterizr {
     this._bindEvents();
 
     // Init Filterizr
-    this.filter(this.props.activeFilter.filter);
+    this.filter(filter.get());
   }
 
   /**
@@ -113,7 +111,7 @@ class Filterizr {
       : category.toString();
 
     // Update filter in options
-    this.props.activeFilter.set(category);
+    this.options.get().filter.set(category);
 
     // First filter items then apply search if a search term exists
     const filteredItems = this._filter(filterItems, category);
@@ -137,7 +135,7 @@ class Filterizr {
     window.removeEventListener('resize', this.props.windowResizeHandler);
 
     // Destroy all controls of the instance
-    if (this.options.setupControls && filterControls) {
+    if (this.options.get().setupControls && filterControls) {
       filterControls.destroy();
     }
   }
@@ -159,7 +157,7 @@ class Filterizr {
     // Retrigger filter for new item to assume position in the grid
     const filteredItems = this._filter(
       this.props.filterItems,
-      this.props.activeFilter.filter
+      this.options.get().filter.get()
     );
 
     this._render(filteredItems);
@@ -188,7 +186,7 @@ class Filterizr {
     // Apply filters
     const filteredItems = this._filter(
       this.props.filterItems,
-      this.props.activeFilter.filter
+      this.options.get().filter.get()
     );
 
     this.props.filteredItems = filteredItems;
@@ -208,7 +206,7 @@ class Filterizr {
 
     // Filter items and optionally apply search if a search term exists
     const filteredItems = this._search(
-      this._filter(filterItems, this.props.activeFilter.filter),
+      this._filter(filterItems, this.options.get().filter.get()),
       searchTerm
     );
 
@@ -253,58 +251,14 @@ class Filterizr {
    * @param {Object} newOptions to override the defaults.
    * @returns {undefined}
    */
-  setOptions(newOptions: IDefaultOptions): void {
-    // error checking
-    checkOptionForErrors(
-      'animationDuration',
-      newOptions.animationDuration,
-      'number'
-    );
-    checkOptionForErrors('callbacks', newOptions.callbacks, 'object');
-    checkOptionForErrors(
-      'controlsSelector',
-      newOptions.controlsSelector,
-      'string'
-    );
-    checkOptionForErrors('delay', newOptions.delay, 'number');
-    checkOptionForErrors(
-      'easing',
-      newOptions.easing,
-      'string',
-      cssEasingValuesRegexp,
-      'https://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp'
-    );
-    checkOptionForErrors('delayMode', newOptions.delayMode, 'string', [
-      'progressive',
-      'alternate',
-    ]);
-    checkOptionForErrors('filter', newOptions.filter, 'string|number|array');
-    checkOptionForErrors('filterOutCss', newOptions.filterOutCss, 'object');
-    checkOptionForErrors('filterInCss', newOptions.filterOutCss, 'object');
-    checkOptionForErrors('layout', newOptions.layout, 'string', [
-      'sameSize',
-      'vertical',
-      'horizontal',
-      'sameHeight',
-      'sameWidth',
-      'packed',
-    ]);
-    checkOptionForErrors(
-      'multifilterLogicalOperator',
-      newOptions.multifilterLogicalOperator,
-      'string',
-      ['and', 'or']
-    );
-    checkOptionForErrors('setupControls', newOptions.setupControls, 'boolean');
-
+  setOptions(newOptions: IUserOptions): void {
     if (newOptions.callbacks) {
       // If user has passed in a callback, deregister the old ones
-      const { filterContainer } = this.props;
-      filterContainer.unbindEvents(this.options.callbacks);
+      this.props.filterContainer.unbindEvents(this.options.get().callbacks);
     }
 
     // Update options
-    this.options = merge(this.options, newOptions);
+    this.options.set(newOptions);
 
     // If one of the options that updates the transition properties
     // of the grid items is set, call the update method
@@ -314,7 +268,12 @@ class Filterizr {
       newOptions.delayMode ||
       newOptions.easing
     ) {
-      const { animationDuration, easing, delay, delayMode } = this.options;
+      const {
+        animationDuration,
+        easing,
+        delay,
+        delayMode,
+      } = this.options.get();
       this.props.filterContainer.updateFilterItemsTransitionStyle(
         animationDuration,
         easing,
@@ -339,7 +298,7 @@ class Filterizr {
     // If the multifilterLogicalOperator has been defined and its
     // value changed then a refilter should be trigger.
     if (newOptions.multifilterLogicalOperator) {
-      this.filter(this.props.activeFilter.filter);
+      this.filter(this.options.get().filter.get());
     }
   }
 
@@ -349,8 +308,8 @@ class Filterizr {
    * @returns {undefined}
    */
   toggleFilter(toggledFilter: string): void {
-    this.props.activeFilter.toggle(toggledFilter);
-    this.filter(this.props.activeFilter.filter);
+    this.options.get().filter.toggle(toggledFilter);
+    this.filter(this.options.get().filter.get());
   }
 
   // Helper methods
@@ -358,7 +317,7 @@ class Filterizr {
     filterItems: FilterItem[],
     filters: string | string[]
   ): FilterItem[] {
-    const { multifilterLogicalOperator } = this.options;
+    const { multifilterLogicalOperator } = this.options.get();
 
     if (filters === 'all') {
       return filterItems;
@@ -428,13 +387,13 @@ class Filterizr {
   }
 
   private _render(filterItems: FilterItem[]): void {
-    const { filter } = this.props.activeFilter;
+    const filter = this.options.get().filter.get();
     const {
       filterInCss,
       filterOutCss,
       layout,
       multifilterLogicalOperator,
-    } = this.options;
+    } = this.options.get();
 
     // Get items to be filtered out
     const FilteredOutItems = this.props.filterItems.filter(filterItem => {
@@ -494,7 +453,7 @@ class Filterizr {
 
   private _rebindFilterContainerEvents(): void {
     const { filterContainer } = this.props;
-    const { animationDuration, callbacks } = this.options;
+    const { animationDuration, callbacks } = this.options.get();
 
     // Cancel existing evts
     filterContainer.unbindEvents(callbacks);
@@ -526,7 +485,7 @@ class Filterizr {
         filterContainer.updateWidth();
         filterContainer.updateFilterItemsDimensions();
         // Refilter the grid to assume new positions
-        this.filter(this.props.activeFilter.filter);
+        this.filter(this.options.get().filter.get());
       },
       250,
       false

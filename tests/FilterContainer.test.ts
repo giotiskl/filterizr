@@ -5,7 +5,7 @@ import { fakeDom } from './testSetup';
 import Filterizr from '../src/Filterizr';
 import FilterContainer from '../src/FilterContainer';
 import FilterItem from '../src/FilterItem';
-import defaultOptions from '../src/defaultOptions';
+import FilterizrOptions from '../src/FilterizrOptions/FilterizrOptions';
 
 // General setup
 (<any>window).$ = $;
@@ -20,10 +20,10 @@ describe('FilterContainer', () => {
 
   beforeEach(() => {
     $('body').html(fakeDom);
-    filterizr = new Filterizr('.filtr-container', defaultOptions);
+    filterizr = new Filterizr('.filtr-container', {});
     filterContainer = new FilterContainer(
       document.querySelector('.filtr-container'),
-      defaultOptions
+      filterizr.options
     );
   });
 
@@ -68,14 +68,14 @@ describe('FilterContainer', () => {
 
     it('should increase the length of the FilterItems array by 1', () => {
       const oldLength = filterContainer.props.filterItems.length;
-      filterContainer.push(<Element>cloned, defaultOptions);
+      filterContainer.push(<Element>cloned, filterizr.options);
       const newLength = filterContainer.props.filterItems.length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
     it('should set the index property of the newly added FilterItem in the array to array.length', () => {
       const oldLength = filterContainer.props.filterItems.length;
-      filterContainer.push(<Element>cloned, defaultOptions);
+      filterContainer.push(<Element>cloned, filterizr.options);
       const newlyAddedFilterItem = filterContainer.props.filterItems[oldLength];
       expect(newlyAddedFilterItem.props.index).toEqual(oldLength);
     });
@@ -83,7 +83,7 @@ describe('FilterContainer', () => {
 
   describe('#getFilterItems', () => {
     it('should return an array of FilterItems with length equal to the .filtr-item elements of the DOM', () => {
-      expect(filterContainer.getFilterItems(defaultOptions).length).toEqual(
+      expect(filterContainer.getFilterItems(filterizr.options).length).toEqual(
         $('.filtr-item').length
       );
     });

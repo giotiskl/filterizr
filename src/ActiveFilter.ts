@@ -1,27 +1,22 @@
-import { IDefaultOptions } from './defaultOptions';
-
 export type Filter = string | string[];
 
 export default class ActiveFilter {
-  private _options: IDefaultOptions;
+  private _filter: Filter;
 
-  constructor(options: IDefaultOptions) {
-    this._options = options;
+  constructor(filter: Filter) {
+    this._filter = filter;
   }
 
-  get filter(): Filter {
-    return this._options.filter;
+  get(): Filter {
+    return this._filter;
   }
 
   set(targetFilter: Filter): void {
-    this._options.filter = targetFilter;
+    this._filter = targetFilter;
   }
 
   toggle(targetFilter: string): void {
-    this._options.filter = this._toggle(
-      this._options.filter,
-      targetFilter
-    );
+    this._filter = this._toggle(this._filter, targetFilter);
   }
 
   private _toggle(

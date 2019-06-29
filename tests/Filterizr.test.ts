@@ -1,3 +1,6 @@
+import defaultOptions, {
+  IUserOptions,
+} from '../src/FilterizrOptions/defaultOptions';
 // import test utils
 import * as $ from 'jquery';
 import { fakeDom } from './testSetup';
@@ -5,7 +8,6 @@ import { fakeDom } from './testSetup';
 import Filterizr from '../src/Filterizr';
 import FilterContainer from '../src/FilterContainer';
 import FilterItem from '../src/FilterItem';
-import defaultOptions, { IDefaultOptions } from '../src/defaultOptions';
 
 // General setup
 (<any>window).$ = $;
@@ -127,27 +129,27 @@ describe('Filterizr', () => {
     it('should set the filter back to "all" if it was set to only 1 category and that category is toggled', () => {
       filterizr.toggleFilter('1');
       filterizr.toggleFilter('1');
-      const { filter } = filterizr.options;
+      const filter = filterizr.options.get().filter.get();
       expect(filter).toEqual('all');
     });
 
     it('should create an array of active filters if multiple filters are toggled', () => {
       filterizr.toggleFilter('1');
       filterizr.toggleFilter('2');
-      const { filter } = filterizr.options;
+      const filter = filterizr.options.get().filter.get();
       expect(filter).toEqual(['1', '2']);
     });
 
     it('should set the filter to be of type string if there is only 1 active filter', () => {
       filterizr.toggleFilter('1');
-      const { filter } = filterizr.options;
+      const filter = filterizr.options.get().filter.get();
       expect(typeof filter).toEqual('string');
     });
 
     it('should set the filter to be of type array if there are many active filters', () => {
       filterizr.toggleFilter('1');
       filterizr.toggleFilter('2');
-      const { filter } = filterizr.options;
+      const filter = filterizr.options.get().filter.get();
       expect(Array.isArray(filter)).toEqual(true);
     });
 
@@ -156,7 +158,7 @@ describe('Filterizr', () => {
       filterizr.toggleFilter('2');
       filterizr.toggleFilter('3');
       filterizr.toggleFilter('3');
-      const { filter } = filterizr.options;
+      const filter = filterizr.options.get().filter.get();
       expect(filter).toEqual(['1', '2']);
     });
   });
@@ -226,7 +228,7 @@ describe('Filterizr', () => {
   // });
 
   describe('#setOptions', () => {
-    const newOptions: IDefaultOptions = {
+    const newOptions: IUserOptions = {
       animationDuration: 0.25,
       callbacks: {
         onFilteringStart: () => {
@@ -254,7 +256,7 @@ describe('Filterizr', () => {
       setupControls: false,
     };
 
-    const callToSetOptions = (options: IDefaultOptions) => {
+    const callToSetOptions = (options: IUserOptions) => {
       return () => {
         filterizr.setOptions(options);
       };
@@ -262,7 +264,7 @@ describe('Filterizr', () => {
 
     it('should update the options of the Filterizr with valid values', () => {
       filterizr.setOptions(newOptions);
-      const { options } = filterizr;
+      const options = filterizr.options.getRaw();
       expect(typeof options).toBe('object');
       expect(typeof options.callbacks).toBe('object');
       expect(options.animationDuration).toEqual(0.25);

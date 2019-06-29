@@ -3,8 +3,8 @@ import {
   setStylesOnHTMLNode,
   TRANSITION_END_EVENTS,
 } from './utils';
-import { IDefaultOptions } from './defaultOptions';
 import { IDictionary } from './types/interfaces/IDictionary';
+import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 
 interface IPosition {
   left: number;
@@ -14,7 +14,7 @@ interface IPosition {
 export default class FilterItem {
   node: Element;
   index: number;
-  options: IDefaultOptions;
+  options: FilterizrOptions;
   props: {
     data: IDictionary;
     onTransitionEndHandler: EventListener;
@@ -33,14 +33,14 @@ export default class FilterItem {
    * @param {Object} options the options Filterizr was initialized with
    * @return {Object} FilterItem instance
    */
-  constructor(node: Element, index: number, options: IDefaultOptions) {
+  constructor(node: Element, index: number, options: FilterizrOptions) {
     const {
       delay,
       delayMode,
       filterOutCss,
       animationDuration,
       easing,
-    } = options;
+    } = options.get();
 
     // Cache element node
     this.node = node;

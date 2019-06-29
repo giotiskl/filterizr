@@ -3,6 +3,7 @@
 * Add `gridSelector` and `gridItemsSelector` to options
 * Extend constructor of `Filterizr` to accept either a selector or an `HTMLElement` as the first argument
 * Add `ActiveFilter` class to abstract away some complexity from `toggleFilter`
+* Add `FilterizrOptions` class to abstract away some complexity from the options
 
 ## Version 2.0.1
 * Fix bug where `setupControls` in options was no functional

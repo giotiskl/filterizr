@@ -1,4 +1,6 @@
-export interface IDefaultOptionsCallbacks {
+import ActiveFilter from '../ActiveFilter';
+
+export interface IUserOptionsCallbacks {
   onFilteringStart?: EventListener;
   onFilteringEnd?: EventListener;
   onShufflingStart?: EventListener;
@@ -8,14 +10,13 @@ export interface IDefaultOptionsCallbacks {
   onTransitionEnd?: EventListener;
 }
 
-export interface IDefaultOptions {
+export interface IBaseOptions {
   animationDuration?: number;
-  callbacks?: IDefaultOptionsCallbacks;
+  callbacks?: IUserOptionsCallbacks;
   controlsSelector?: string;
   delay?: number;
   delayMode?: 'alternate' | 'progressive';
   easing?: string;
-  filter?: string | string[];
   filterOutCss?: object;
   filterInCss?: object;
   gridSelector?: string;
@@ -31,7 +32,15 @@ export interface IDefaultOptions {
   setupControls?: boolean;
 }
 
-const options: IDefaultOptions = {
+export interface IUserOptions extends IBaseOptions {
+  filter?: string | string[];
+}
+
+export interface IFilterizrOptions extends IBaseOptions {
+  filter: ActiveFilter;
+}
+
+const defaultUserOptions: IUserOptions = {
   animationDuration: 0.5,
   callbacks: {
     onFilteringStart: () => {},
@@ -61,4 +70,4 @@ const options: IDefaultOptions = {
   setupControls: true,
 };
 
-export default options;
+export default defaultUserOptions;
