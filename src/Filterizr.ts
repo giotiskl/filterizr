@@ -37,18 +37,6 @@ class Filterizr {
     sortOrder: string;
   };
 
-  /**
-   * Filterizr classes
-   */
-  static FilterContainer = FilterContainer;
-  static FilterItem = FilterItem;
-  static defaultOptions = defaultOptions;
-  /**
-   * Static method that receives the jQuery object and extends
-   * its prototype with a .filterizr method.
-   */
-  static installAsJQueryPlugin = _installAsJQueryPlugin;
-
   constructor(
     selectorOrNode: string | HTMLElement = defaultOptions.gridSelector,
     userOptions: IUserOptions = {}
@@ -89,8 +77,17 @@ class Filterizr {
   }
 
   /**
-   * Public API of Filterizr
+   * Main Filterizr classes exported as static members
    */
+  static FilterContainer = FilterContainer;
+  static FilterItem = FilterItem;
+  static defaultOptions = defaultOptions;
+
+  /**
+   * Static method that receives the jQuery object and extends
+   * its prototype with a .filterizr method.
+   */
+  static installAsJQueryPlugin = _installAsJQueryPlugin;
 
   /**
    * Filters the items in the grid by a category
@@ -169,24 +166,15 @@ class Filterizr {
   sort(sortAttr: string = 'index', sortOrder: string = 'asc'): void {
     const { filterContainer, filterItems } = this.props;
 
-    // Trigger filteringStart event
     filterContainer.trigger('sortingStart');
 
-    // Set animation state to trigger callbacks
     this.props.filterizrState = FILTERIZR_STATE.SORTING;
-
-    // Update sortOrder in props
     this.props.sortOrder = sortOrder;
 
-    // Sort main array
     this.props.filterItems = this._sort(filterItems, sortAttr, sortOrder);
+    this.props.filteredItems = this._filter(this.props.filterItems);
 
-    // Apply filters
-    const filteredItems = this._filter(this.props.filterItems);
-
-    this.props.filteredItems = filteredItems;
-
-    this._render(filteredItems);
+    this._render(this.props.filteredItems);
   }
 
   /**
@@ -374,7 +362,7 @@ class Filterizr {
     // Get items to be filtered out
     const filteredOutItems = this.props.filterItems.filter(filterItem => {
       const categories: string[] = filterItem.getCategories();
-      const shouldBeFiltered = this._shouldBeFiltered(categories);
+      const shouldBeFiltered: boolean = this._shouldBeFiltered(categories);
       const contentsMatchSearch: boolean = filterItem.contentsMatchSearch(
         this.props.searchTerm
       );
@@ -411,7 +399,6 @@ class Filterizr {
         break;
     }
 
-    // Reset filterizrState to idle
     this.props.filterizrState = FILTERIZR_STATE.IDLE;
   }
 
@@ -419,10 +406,8 @@ class Filterizr {
     const { filterContainer } = this.props;
     const { animationDuration, callbacks } = this.options.get();
 
-    // Cancel existing evts
     filterContainer.unbindEvents(callbacks);
 
-    // Rebind evts
     filterContainer.bindEvents({
       ...callbacks,
       onTransitionEnd: <EventListener>(
@@ -438,10 +423,8 @@ class Filterizr {
   private _bindEvents(): void {
     const { browserWindow, filterContainer } = this.props;
 
-    // FilterContainer events
     this._rebindFilterContainerEvents();
 
-    // Browser window events
     browserWindow.setResizeEventHandler(() => {
       // Update dimensions of items based on new window size
       filterContainer.updateWidth();
