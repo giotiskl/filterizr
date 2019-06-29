@@ -354,17 +354,17 @@ class Filterizr {
   }
 
   private _shuffle(filterItems: FilterItem[]): FilterItem[] {
-    let ShuffledItems = shuffle(filterItems);
+    let shuffledItems = shuffle(filterItems);
 
     // Shuffle items until they are different from the initial filteredItems
     while (
       filterItems.length > 1 &&
-      filterItemArraysHaveSameSorting(filterItems, ShuffledItems)
+      filterItemArraysHaveSameSorting(filterItems, shuffledItems)
     ) {
-      ShuffledItems = shuffle(filterItems);
+      shuffledItems = shuffle(filterItems);
     }
 
-    return ShuffledItems;
+    return shuffledItems;
   }
 
   private _render(filterItems: FilterItem[]): void {
