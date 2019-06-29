@@ -114,7 +114,7 @@ class Filterizr {
     this.options.get().filter.set(category);
 
     // First filter items then apply search if a search term exists
-    const filteredItems = this._filter(filterItems, category);
+    const filteredItems = this._filter(filterItems);
     const filteredAndSearchedItems = this._search(filteredItems, searchTerm);
 
     this.props.filteredItems = filteredAndSearchedItems;
@@ -155,10 +155,7 @@ class Filterizr {
     filterContainer.push(nodeModified, this.options);
 
     // Retrigger filter for new item to assume position in the grid
-    const filteredItems = this._filter(
-      this.props.filterItems,
-      this.options.get().filter.get()
-    );
+    const filteredItems = this._filter(this.props.filterItems);
 
     this._render(filteredItems);
   }
@@ -184,10 +181,7 @@ class Filterizr {
     this.props.filterItems = this._sort(filterItems, sortAttr, sortOrder);
 
     // Apply filters
-    const filteredItems = this._filter(
-      this.props.filterItems,
-      this.options.get().filter.get()
-    );
+    const filteredItems = this._filter(this.props.filterItems);
 
     this.props.filteredItems = filteredItems;
 
@@ -205,10 +199,7 @@ class Filterizr {
     this.props.searchTerm = searchTerm.toLowerCase();
 
     // Filter items and optionally apply search if a search term exists
-    const filteredItems = this._search(
-      this._filter(filterItems, this.options.get().filter.get()),
-      searchTerm
-    );
+    const filteredItems = this._search(this._filter(filterItems), searchTerm);
 
     this.props.filteredItems = filteredItems;
 
@@ -298,32 +289,37 @@ class Filterizr {
   }
 
   // Helper methods
-  private _filter(
-    filterItems: FilterItem[],
-    filters: string | string[]
-  ): FilterItem[] {
-    const { multifilterLogicalOperator } = this.options.get();
-
-    if (filters === 'all') {
+  private _filter(filterItems: FilterItem[]): FilterItem[] {
+    if (this.options.get().filter.get() === 'all') {
       return filterItems;
     }
 
-    const multiFilteringEnabled = Array.isArray(filters);
-
     return filterItems.filter(filterItem => {
       const categories = filterItem.getCategories();
-
-      if (!multiFilteringEnabled && typeof filters === 'string') {
-        // Simple filtering
-        return categories.includes(filters);
-      } else if (multiFilteringEnabled && Array.isArray(filters)) {
-        // Multifiltering
-        if (multifilterLogicalOperator === 'or') {
-          return intersection(categories, filters).length;
-        }
-        return allStringsOfArray1InArray2(filters, categories);
-      }
+      return this._shouldBeFiltered(categories);
     });
+  }
+
+  /**
+   * Determines if item should be filtered or not based on target
+   * categories being activated and the current filtering logic
+   * @param  {string[]} categories active
+   * @returns {undefined}
+   */
+  private _shouldBeFiltered(categories: string[]): boolean {
+    const { multifilterLogicalOperator } = this.options.get();
+    const filter = this.options.get().filter.get();
+    const isMultifilteringEnabled = Array.isArray(filter);
+
+    if (!isMultifilteringEnabled) {
+      return categories.includes(<string>filter);
+    }
+
+    if (multifilterLogicalOperator === 'or') {
+      return !!intersection(categories, <string[]>filter).length;
+    }
+
+    return allStringsOfArray1InArray2(<string[]>filter, categories);
   }
 
   private _sort(
@@ -372,39 +368,21 @@ class Filterizr {
   }
 
   private _render(filterItems: FilterItem[]): void {
-    const filter = this.options.get().filter.get();
-    const {
-      filterInCss,
-      filterOutCss,
-      layout,
-      multifilterLogicalOperator,
-    } = this.options.get();
+    const { filterInCss, filterOutCss, layout } = this.options.get();
 
     // Get items to be filtered out
-    const FilteredOutItems = this.props.filterItems.filter(filterItem => {
+    const filteredOutItems = this.props.filterItems.filter(filterItem => {
       const categories: string[] = filterItem.getCategories();
-      const multiFilteringEnabled: boolean = Array.isArray(filter);
-      // Flags that determine whether item should be filtered out
-      let filtersMatch: boolean;
+      const shouldBeFiltered = this._shouldBeFiltered(categories);
       const contentsMatchSearch: boolean = filterItem.contentsMatchSearch(
         this.props.searchTerm
       );
 
-      if (multiFilteringEnabled && Array.isArray(filter)) {
-        if (multifilterLogicalOperator === 'or') {
-          filtersMatch = intersection(categories, filter).length;
-        } else {
-          filtersMatch = allStringsOfArray1InArray2(filter, categories);
-        }
-      } else if (!multiFilteringEnabled && typeof filter === 'string') {
-        filtersMatch = categories.includes(filter);
-      }
-
-      return !filtersMatch || !contentsMatchSearch;
+      return !shouldBeFiltered || !contentsMatchSearch;
     });
 
     // Filter out old items
-    FilteredOutItems.forEach(filterItem => {
+    filteredOutItems.forEach(filterItem => {
       filterItem.filterOut(filterOutCss);
     });
 
