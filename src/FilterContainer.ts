@@ -1,4 +1,7 @@
-import { IUserOptionsCallbacks } from './FilterizrOptions/defaultOptions';
+import {
+  IUserOptionsCallbacks,
+  IUserOptions,
+} from './FilterizrOptions/defaultOptions';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import FilterItem from './FilterItem';
 import { setStylesOnHTMLNode, TRANSITION_END_EVENTS } from './utils';
@@ -111,17 +114,15 @@ export default class FilterContainer {
 
   /**
    * Updates the transition inline styles of all contained grid items
-   * @param {Number} animationDuration duration of the animation in seconds
-   * @param {String} easing function for the animation
-   * @param {Number} delay in ms
-   * @param {String} delayMode alternate or progressive
+   * @param {Object} options Filterizr instance options
+   * @returns {undefined}
    */
-  updateFilterItemsTransitionStyle(
-    animationDuration: number,
-    easing: string,
-    delay: number,
-    delayMode: 'progressive' | 'alternate'
-  ): void {
+  updateFilterItemsTransitionStyle({
+    animationDuration,
+    easing,
+    delay,
+    delayMode,
+  }: IUserOptions): void {
     const { filterItems } = this.props;
 
     filterItems.forEach(filterItem =>

@@ -268,17 +268,8 @@ class Filterizr {
       newOptions.delayMode ||
       newOptions.easing
     ) {
-      const {
-        animationDuration,
-        easing,
-        delay,
-        delayMode,
-      } = this.options.get();
       this.props.filterContainer.updateFilterItemsTransitionStyle(
-        animationDuration,
-        easing,
-        delay,
-        delayMode
+        this.options.getRaw()
       );
     }
 
@@ -290,14 +281,8 @@ class Filterizr {
       this._rebindFilterContainerEvents();
     }
 
-    // If the filter is explicitly set in the new options object, trigger a refiltering.
-    if (newOptions.filter) {
-      this.filter(newOptions.filter);
-    }
-
-    // If the multifilterLogicalOperator has been defined and its
-    // value changed then a refilter should be trigger.
-    if (newOptions.multifilterLogicalOperator) {
+    // If filter or filtering logic has been changed retrigger filtering
+    if (newOptions.filter || newOptions.multifilterLogicalOperator) {
       this.filter(this.options.get().filter.get());
     }
   }
