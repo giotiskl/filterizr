@@ -1,3 +1,4 @@
+import BrowserWindow from './BrowserWindow';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
@@ -25,6 +26,7 @@ class Filterizr {
 
   options: FilterizrOptions;
   props: {
+    browserWindow: BrowserWindow;
     filterContainer: FilterContainer;
     filterControls?: FilterControls;
     filterItems: FilterItem[];
@@ -33,7 +35,6 @@ class Filterizr {
     searchTerm: string;
     sort: string;
     sortOrder: string;
-    windowResizeHandler?: EventListener;
   };
 
   /**
@@ -67,6 +68,7 @@ class Filterizr {
     const { setupControls, controlsSelector, filter } = this.options.get();
 
     this.props = {
+      browserWindow: new BrowserWindow(),
       filterContainer: filterContainer,
       ...(setupControls && {
         filterControls: new FilterControls(this, controlsSelector),
@@ -77,7 +79,6 @@ class Filterizr {
       searchTerm: '',
       sort: 'index',
       sortOrder: 'asc',
-      windowResizeHandler: null,
     };
 
     // Set up events needed by Filterizr
@@ -127,12 +128,12 @@ class Filterizr {
    * @returns {undefined}
    */
   destroy(): void {
-    const { filterControls, filterContainer } = this.props;
+    const { browserWindow, filterControls, filterContainer } = this.props;
 
     // Unbind all events of FilterContainer and Filterizr
     // and remove inline styles.
     filterContainer.destroy();
-    window.removeEventListener('resize', this.props.windowResizeHandler);
+    browserWindow.destroy();
 
     // Destroy all controls of the instance
     if (this.options.get().setupControls && filterControls) {
@@ -435,26 +436,19 @@ class Filterizr {
   }
 
   private _bindEvents(): void {
-    const { filterContainer } = this.props;
+    const { browserWindow, filterContainer } = this.props;
 
     // FilterContainer events
     this._rebindFilterContainerEvents();
 
-    // Generic Filterizr events
-    // Filter grid again on window resize
-    this.props.windowResizeHandler = <EventListener>debounce(
-      () => {
-        // Update dimensions of items based on new window size
-        filterContainer.updateWidth();
-        filterContainer.updateFilterItemsDimensions();
-        // Refilter the grid to assume new positions
-        this.filter(this.options.get().filter.get());
-      },
-      250,
-      false
-    );
-
-    window.addEventListener('resize', this.props.windowResizeHandler);
+    // Browser window events
+    browserWindow.setResizeEventHandler(() => {
+      // Update dimensions of items based on new window size
+      filterContainer.updateWidth();
+      filterContainer.updateFilterItemsDimensions();
+      // Refilter the grid to assume new positions
+      this.filter(this.options.get().filter.get());
+    });
   }
 }
 
