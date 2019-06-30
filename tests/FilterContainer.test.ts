@@ -93,13 +93,13 @@ describe('FilterContainer', () => {
     });
   });
 
-  describe('#calcColumns', () => {
+  describe('#calculateColumns', () => {
     it('should return the number of columns that can fit in the FilterContainer', () => {
       // make necessary set up to get 4 columns
       const containerWidth = 1000;
       filterContainer.props.w = containerWidth;
       filterContainer.props.filterItems[0].props.w = containerWidth / 4;
-      expect(filterContainer.calcColumns()).toEqual(4);
+      expect(filterContainer.calculateColumns()).toEqual(4);
     });
   });
 

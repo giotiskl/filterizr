@@ -10,7 +10,7 @@ const getSameSizeLayoutPosition = (filterizr: Filterizr) => {
     filterizr.options.get().filter.get()
   );
   // calculate number of columns and rows the grid should have
-  let cols = filterContainer.calcColumns();
+  let cols = filterContainer.calculateColumns();
   let row = 0;
   // calculate array of positions
   const targetPositions = filteredItems.map(({ props: { w, h } }, index) => {

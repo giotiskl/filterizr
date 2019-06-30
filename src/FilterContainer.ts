@@ -80,7 +80,7 @@ export default class FilterContainer {
    * @param {Object} options - of Filterizr instance
    * @return {Object[]} array of FilterItem instances
    */
-  getFilterItems(options: FilterizrOptions) {
+  getFilterItems(options: FilterizrOptions): FilterItem[] {
     const filterItems = Array.from(
       this.node.querySelectorAll(options.get().gridItemsSelector)
     );
@@ -108,7 +108,7 @@ export default class FilterContainer {
    * Calculates the amount of columns the Filterizr grid should have
    * @returns {number} number of columns for the grid
    */
-  calcColumns(): number {
+  calculateColumns(): number {
     return Math.round(this.props.w / this.props.filterItems[0].props.w);
   }
 

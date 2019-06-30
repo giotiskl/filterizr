@@ -12,7 +12,7 @@ const getSameWidthLayoutPositions = (filterizr: Filterizr) => {
   );
 
   // Calculate number of columns and rows the grid should have
-  let cols = filterContainer.calcColumns(),
+  let cols = filterContainer.calculateColumns(),
     row = 0,
     columnHeights = Array.apply(null, Array(cols)).map(
       Number.prototype.valueOf,
