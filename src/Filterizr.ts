@@ -10,12 +10,7 @@ import defaultOptions, {
   IUserOptions,
 } from './FilterizrOptions/defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
-import {
-  FILTERIZR_STATE,
-  debounce,
-  getHTMLElement,
-  setStylesOnHTMLNode,
-} from './utils';
+import { FILTERIZR_STATE, debounce, getHTMLElement } from './utils';
 
 const imagesLoaded = require('imagesloaded');
 

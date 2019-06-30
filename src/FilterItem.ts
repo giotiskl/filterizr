@@ -6,6 +6,8 @@ import {
 import { IDictionary } from './types/interfaces/IDictionary';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 
+const imagesLoaded = require('imagesloaded');
+
 interface IPosition {
   left: number;
   top: number;
@@ -13,58 +15,57 @@ interface IPosition {
 
 export default class FilterItem {
   node: Element;
-  index: number;
   options: FilterizrOptions;
   props: {
     data: IDictionary;
-    onTransitionEndHandler: EventListener;
-    index: number;
-    sortData: string;
-    lastPosition: IPosition;
     filteredOut: boolean;
+    index: number;
+    lastPosition: IPosition;
+    onTransitionEndHandler: EventListener;
+    sortData: string;
     w: number;
     h: number;
   };
 
   /**
    * Constructor of FilterItem
+   *
    * @param {Object} node is the HTML node to create the FilterItem out of
    * @param {Number} index is the index of the FilterItem when iterating over them
    * @param {Object} options the options Filterizr was initialized with
-   * @return {Object} FilterItem instance
+   * @returns {Object} FilterItem instance
    */
   constructor(node: Element, index: number, options: FilterizrOptions) {
+    this.options = options;
+    this.node = node;
     const {
+      animationDuration,
       delay,
       delayMode,
       filterOutCss,
-      animationDuration,
       easing,
-    } = options.get();
+    } = this.options.get();
 
-    // Cache element node
-    this.node = node;
-
-    // Set props
     this.props = {
       data: getDataAttributesOfHTMLNode(this.node),
+      filteredOut: false,
+      index,
+      lastPosition: { left: 0, top: 0 },
       onTransitionEndHandler: () => {
-        // On transitionEnd determine if the item is filtered out or not,
-        // in case it is add the .filteredOut class for easy targeting by
-        // the user and set the z-index to -1000 to prevent mouse events
-        // from being intercepted.
+        // On transition end determines if the item is filtered out or not.
+        // It adds a .filteredOut class so that user can target these items
+        // via css if needed. It sets the z-index to -1000 to prevent mouse
+        // events from being triggered.
         const { filteredOut } = this.props;
         if (filteredOut) {
           this.node.classList.add('filteredOut');
+          setStylesOnHTMLNode(this.node, { zIndex: -1000 });
         } else {
           this.node.classList.remove('filteredOut');
+          setStylesOnHTMLNode(this.node, { zIndex: '' });
         }
-        setStylesOnHTMLNode(this.node, { zIndex: filteredOut ? -1000 : '' });
       },
-      index,
       sortData: this.node.getAttribute('data-sort'),
-      lastPosition: { left: 0, top: 0 },
-      filteredOut: false, // Used for the onTransitionEnd event
       w: this.getWidth(),
       h: this.getHeight(),
     };
@@ -78,12 +79,10 @@ export default class FilterItem {
         '-webkit-perspective': '1000px',
         '-webkit-transform-style': 'preserve-3d',
         position: 'absolute',
-        transition: `all ${animationDuration}s ${easing} ${this.getTransitionDelay(
-          delay,
-          delayMode
-        )}ms`,
       })
     );
+
+    this.setTransitionStyle();
 
     // Finally bind events
     this.bindEvents();
@@ -230,5 +229,51 @@ export default class FilterItem {
         this.props.onTransitionEndHandler
       );
     });
+  }
+
+  /**
+   * Calculates and returns the transition css property based on options.
+   *
+   * @returns {string} transition css property
+   */
+  getTransitionStyle(): string {
+    const { animationDuration, easing, delay, delayMode } = this.options.get();
+    return `all ${animationDuration}s ${easing} ${this.getTransitionDelay(
+      delay,
+      delayMode
+    )}ms`;
+  }
+
+  /**
+   * Sets the transition css property as an inline style on the FilterItem.
+   *
+   * The idea here is that during the very first render items should assume
+   * their positions directly.
+   *
+   * Following renders should actually trigger the transitions, which is why
+   * we need to delay setting the transition property.
+   *
+   * Unfortunately, JavaScript code executes on the same thread as the
+   * browser's rendering. Everything that needs to be drawn waits for
+   * JavaScript execution to complete. Thus, we need to use a setTimeout
+   * here to defer setting the transition style at the first rendering cycle.
+   */
+  setTransitionStyle(): void {
+    const hasImage = !!this.node.querySelectorAll('img').length;
+    if (hasImage) {
+      imagesLoaded(this.node, () => {
+        setTimeout(() => {
+          setStylesOnHTMLNode(this.node, {
+            transition: this.getTransitionStyle(),
+          });
+        }, 10);
+      });
+    } else {
+      setTimeout(() => {
+        setStylesOnHTMLNode(this.node, {
+          transition: this.getTransitionStyle(),
+        });
+      }, 10);
+    }
   }
 }
