@@ -83,14 +83,8 @@ describe('Filterizr', () => {
 
     beforeEach(() => {
       filterizr.filter(filter);
-      filteredOutItems = filterizr.props.filterItems.filter(FilterItem => {
-        const categories = FilterItem.getCategories();
-        return !categories.includes(filter);
-      });
-      filteredInItems = filterizr.props.filterItems.filter(FilterItem => {
-        const categories = FilterItem.getCategories();
-        return categories.includes(filter);
-      });
+      filteredOutItems = filterizr.props.filterItems.getFilteredOut(filter);
+      filteredInItems = filterizr.props.filterItems.getFiltered(filter);
     });
 
     it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter', () => {
@@ -169,19 +163,19 @@ describe('Filterizr', () => {
     beforeEach(() => {
       const nodes = filterContainer.node.querySelectorAll('.filtr-item');
       nodeToAdd = nodes[nodes.length - 1];
-      oldLength = filterizr.props.filterItems.length;
+      oldLength = filterizr.props.filterItems.get().length;
     });
 
     it('should increase the length of the FilterItems array by 1', () => {
       filterizr.insertItem(<HTMLElement>nodeToAdd);
-      const newLength = filterizr.props.filterItems.length;
+      const newLength = filterizr.props.filterItems.get().length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
     it('should add into the grid a new FilterItem with the index property equal to the length of the FilterItems array', () => {
       filterizr.insertItem(<HTMLElement>nodeToAdd);
-      const indexOfNewLastItem =
-        filterizr.props.filterItems[oldLength].props.index;
+      const lastItem = filterizr.props.filterItems.get()[oldLength];
+      const indexOfNewLastItem = lastItem.props.index;
       expect(indexOfNewLastItem).toEqual(oldLength);
     });
   });
@@ -189,7 +183,7 @@ describe('Filterizr', () => {
   describe('#sort', () => {
     it('should return a sorted grid', () => {
       filterizr.sort('index', 'desc');
-      const { filterItems } = filterizr.props;
+      const filterItems = filterizr.props.filterItems.get();
       const { length } = filterItems;
       for (let i = 0; i < length; i++) {
         expect(filterItems[i].props.index).toEqual(length - 1 - i);
@@ -200,19 +194,20 @@ describe('Filterizr', () => {
   describe('#search', () => {
     it('should apply an extra layer of filtering based on the search term', () => {
       filterizr.filter('1'); // by this point 3 items should be visible
-      filterizr.search('city'); // by this point 2 items should be visible
-      expect(filterizr.props.filteredItems.length).toEqual(2);
+      expect(filterizr.props.filterItems.getSearched('city').length).toEqual(2);
     });
 
     it('should render an empty grid if no item was found', () => {
-      filterizr.search('term not contained anywhere in the grid');
-      expect(filterizr.props.filteredItems.length).toEqual(0);
+      expect(
+        filterizr.props.filterItems.getSearched(
+          'term not contained a nywhere in grid'
+        ).length
+      ).toEqual(0);
     });
 
     it('should render only items containing the search term', () => {
       const term = 'city';
-      filterizr.search('city');
-      filterizr.props.filteredItems.forEach(filteredItem => {
+      filterizr.props.filterItems.getSearched(term).forEach(filteredItem => {
         const contents = $(filteredItem.node)
           .find('.item-desc')
           .text()
@@ -264,7 +259,7 @@ describe('Filterizr', () => {
 
     it('should update the options of the Filterizr with valid values', () => {
       filterizr.setOptions(newOptions);
-      const options = filterizr.options.getRaw();
+      const options = filterizr.options.get();
       expect(typeof options).toBe('object');
       expect(typeof options.callbacks).toBe('object');
       expect(options.animationDuration).toEqual(0.25);
@@ -272,7 +267,7 @@ describe('Filterizr', () => {
       expect(options.delay).toEqual(1150);
       expect(options.delayMode).toEqual('alternate');
       expect(options.easing).toEqual('ease-in-out');
-      expect(options.filter).toEqual('2');
+      expect(filterizr.options.filter).toEqual('2');
       expect(options.layout).toEqual('packed');
       expect(options.multifilterLogicalOperator).toEqual('and');
       expect(options.setupControls).toEqual(false);
