@@ -332,6 +332,20 @@ const checkOptionForErrors = (
 export { checkOptionForErrors };
 
 /**
+ * Wrapper around document.querySelector, will function as
+ * an identity function if an HTML element is passed in
+ * @param {HTMLElement|string} nodeOrSelector
+ */
+const getHTMLElement = (selectorOrNode: HTMLElement | string): HTMLElement => {
+  if (typeof selectorOrNode === 'string') {
+    return document.querySelector(selectorOrNode);
+  }
+  return selectorOrNode;
+};
+
+export { getHTMLElement };
+
+/**
  * A Regexp to validate potential values for the CSS easing property of transitions.
  */
 const cssEasingValuesRegexp: RegExp = /(^linear$)|(^ease-in-out$)|(^ease-in$)|(^ease-out$)|(^ease$)|(^step-start$)|(^step-end$)|(^steps\(\d\s*,\s*(end|start)\))$|(^cubic-bezier\((\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\))$/;

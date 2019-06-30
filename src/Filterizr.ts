@@ -10,7 +10,7 @@ import defaultOptions, {
   IUserOptions,
 } from './FilterizrOptions/defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
-import { FILTERIZR_STATE, debounce } from './utils';
+import { FILTERIZR_STATE, debounce, getHTMLElement } from './utils';
 
 class Filterizr {
   FilterContainer: FilterContainer;
@@ -30,15 +30,10 @@ class Filterizr {
     selectorOrNode: string | HTMLElement = defaultOptions.gridSelector,
     userOptions: IUserOptions = {}
   ) {
-    const filterContainerNode =
-      typeof selectorOrNode === 'string'
-        ? document.querySelector(selectorOrNode)
-        : selectorOrNode;
-
     this.options = new FilterizrOptions(userOptions);
 
     const filterContainer = new FilterContainer(
-      filterContainerNode,
+      getHTMLElement(selectorOrNode),
       this.options
     );
 
@@ -46,7 +41,7 @@ class Filterizr {
 
     this.props = {
       browserWindow: new BrowserWindow(),
-      filterContainer: filterContainer,
+      filterContainer,
       ...(setupControls && {
         filterControls: new FilterControls(this, controlsSelector),
       }),
