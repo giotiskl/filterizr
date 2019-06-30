@@ -4,16 +4,20 @@ import Filterizr from '../Filterizr';
  * Same height layout for items that have the same height, but can have varying width
  * @param {object} Filterizr instance.
  */
-const getSameHeightLayoutPositions = (Filterizr: Filterizr) => {
-  const { filterContainer, filteredItems } = Filterizr.props;
+const getSameHeightLayoutPositions = (filterizr: Filterizr) => {
+  const { filterContainer } = filterizr.props;
+  const filteredItems = filterizr.props.filterItems.getFiltered(
+    filterizr.options.get().filter.get()
+  );
+
   const gridWidth = filterContainer.props.w,
     itemHeight = filteredItems[0].props.h;
   let row = 0,
     left = 0;
 
   // calculate array of positions
-  const targetPositions = filteredItems.map(FilterItem => {
-    const w = FilterItem.props.w;
+  const targetPositions = filteredItems.map(filterItem => {
+    const w = filterItem.props.w;
     // in case the item exceeds the grid then move to next row and reset left
     if (left + w > gridWidth) {
       row++;

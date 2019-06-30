@@ -1,3 +1,4 @@
+import { Filter } from './../ActiveFilter';
 import defaultUserOptions, {
   IBaseOptions,
   IUserOptions,
@@ -15,6 +16,26 @@ export default class FilterizrOptions {
   constructor(userOptions: IUserOptions) {
     const options = merge(defaultUserOptions, this.validate(userOptions));
     this._options = this.convertToFilterizrOptions(options);
+  }
+
+  get filter(): Filter {
+    return this._options.filter.get();
+  }
+
+  set filter(filter: Filter) {
+    this._options.filter.set(filter);
+  }
+
+  toggleFilter(filter: string) {
+    this._options.filter.toggle(filter);
+  }
+
+  get searchTerm(): string {
+    return this._options.searchTerm;
+  }
+
+  set searchTerm(searchTerm: string) {
+    this._options.searchTerm = searchTerm;
   }
 
   get(): IFilterizrOptions {

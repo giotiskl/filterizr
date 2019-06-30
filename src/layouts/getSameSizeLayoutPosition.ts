@@ -4,21 +4,24 @@ import Filterizr from '../Filterizr';
  * Same size layout for items that have the same width/height
  * @param {object} Filterizr instance.
  */
-const getSameSizeLayoutPosition = (Filterizr: Filterizr) => {
-  const { filterContainer, filteredItems } = Filterizr.props;
+const getSameSizeLayoutPosition = (filterizr: Filterizr) => {
+  const { filterContainer, filterItems } = filterizr.props;
+  const filteredItems = filterItems.getFiltered(
+    filterizr.options.get().filter.get()
+  );
   // calculate number of columns and rows the grid should have
   let cols = filterContainer.calcColumns();
   let row = 0;
   // calculate array of positions
-  const targetPositions = filteredItems.map((FilterItem, index) => {
+  const targetPositions = filteredItems.map(({ props: { w, h } }, index) => {
     // update current row
     if (index % cols === 0 && index >= cols) row++;
     // determine pos in grid
     const spot = index - cols * row;
     // return object with new position in array
     return {
-      left: spot * FilterItem.props.w,
-      top: row * FilterItem.props.h,
+      left: spot * w,
+      top: row * h,
     };
   });
 

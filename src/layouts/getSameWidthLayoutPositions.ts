@@ -3,10 +3,13 @@ import FilterItem from '../FilterItem';
 
 /**
  * Same width layout for items that have the same width, but can have varying height
- * @param {object} Filterizr instance.
+ * @param {object} filterizr instance.
  */
-const getSameWidthLayoutPositions = (Filterizr: Filterizr) => {
-  const { filterContainer, filteredItems } = Filterizr.props;
+const getSameWidthLayoutPositions = (filterizr: Filterizr) => {
+  const { filterContainer, } = filterizr.props;
+  const filteredItems = filterizr.props.filterItems.getFiltered(
+    filterizr.options.get().filter.get()
+  );
 
   // Calculate number of columns and rows the grid should have
   let cols = filterContainer.calcColumns(),
@@ -17,9 +20,9 @@ const getSameWidthLayoutPositions = (Filterizr: Filterizr) => {
     );
 
   // Calculate array of positions
-  const targetPositions = filteredItems.map((FilterItem, index) => {
+  const targetPositions = filteredItems.map((filterItem, index) => {
     // Update height of tallest item in row if needed
-    const { w, h } = FilterItem.props;
+    const { w, h } = filterItem.props;
 
     // Update current row, increment container
     // height and  reset height of tallest in row

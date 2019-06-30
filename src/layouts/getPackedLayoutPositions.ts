@@ -2,10 +2,13 @@ import Filterizr from '../Filterizr';
 
 /**
  * Packed layout for items that can have varying width as well as varying height.
- * @param {object} Filterizr instance.
+ * @param {object} filterizr instance.
  */
-const getPackedLayoutPositions = (Filterizr: Filterizr) => {
-  const { filterContainer, filteredItems } = Filterizr.props;
+const getPackedLayoutPositions = (filterizr: Filterizr) => {
+  const { filterContainer, } = filterizr.props;
+  const filteredItems = filterizr.props.filterItems.getFiltered(
+    filterizr.options.get().filter.get()
+  );
 
   //Instantiate new Packer, set up grid
   const packer = new Packer(filterContainer.props.w);

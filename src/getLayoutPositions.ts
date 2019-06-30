@@ -10,24 +10,24 @@ import getPackedLayoutPositions from './layouts/getPackedLayoutPositions';
  * Calculates and returns an array of objects representing
  * the next positions the FilterItems are supposed to assume.
  * @param {String} layout - name of helper method to be used
- * @param {Object} Filterizr - instance
+ * @param {Object} filterizr - instance
  * @return {Object} layout to be used by Filterizr
  */
-const getLayoutPositions = (layout: string, Filterizr: Filterizr) => {
+const getLayoutPositions = (layout: string, filterizr: Filterizr) => {
   switch (layout) {
     case 'horizontal':
-      return getHorizontalLayoutPositions(Filterizr);
+      return getHorizontalLayoutPositions(filterizr);
     case 'vertical':
-      return getVerticalLayoutPositions(Filterizr);
+      return getVerticalLayoutPositions(filterizr);
     case 'sameHeight':
-      return getSameHeightLayoutPositions(Filterizr);
+      return getSameHeightLayoutPositions(filterizr);
     case 'sameWidth':
-      return getSameWidthLayoutPositions(Filterizr);
+      return getSameWidthLayoutPositions(filterizr);
     case 'packed':
-      return getPackedLayoutPositions(Filterizr);
+      return getPackedLayoutPositions(filterizr);
     case 'sameSize':
     default:
-      return getSameSizeLayoutPosition(Filterizr);
+      return getSameSizeLayoutPosition(filterizr);
   }
 };
 

@@ -29,6 +29,7 @@ export interface IBaseOptions {
     | 'sameSize'
     | 'packed';
   multifilterLogicalOperator?: 'or' | 'and';
+  searchTerm?: string;
   setupControls?: boolean;
 }
 
@@ -67,6 +68,7 @@ const defaultUserOptions: IUserOptions = {
   gridItemsSelector: '.filtr-item',
   layout: 'sameSize',
   multifilterLogicalOperator: 'or',
+  searchTerm: '',
   setupControls: true,
 };
 
