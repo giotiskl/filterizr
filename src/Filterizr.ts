@@ -10,9 +10,16 @@ import defaultOptions, {
   IUserOptions,
 } from './FilterizrOptions/defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
-import { FILTERIZR_STATE, debounce, getHTMLElement } from './utils';
+import {
+  FILTERIZR_STATE,
+  debounce,
+  getHTMLElement,
+  setStylesOnHTMLNode,
+} from './utils';
 
-class Filterizr {
+const imagesLoaded = require('imagesloaded');
+
+export default class Filterizr {
   FilterContainer: FilterContainer;
   FilterItem: FilterItem;
   defaultOptions: IUserOptions;
@@ -55,8 +62,7 @@ class Filterizr {
     // Set up events needed by Filterizr
     this._bindEvents();
 
-    // Init Filterizr
-    this.filter(this.options.filter);
+    this._renderWithImagesLoaded();
   }
 
   /**
@@ -121,15 +127,12 @@ class Filterizr {
    * @returns {undefined}
    */
   insertItem(node: HTMLElement): void {
-    const { filterItems, filterContainer } = this.props;
+    const { filterContainer } = this.props;
 
-    // Add the item to the FilterContainer
-    const nodeModified = <Element>node.cloneNode(true);
-    nodeModified.removeAttribute('style');
-    filterContainer.push(nodeModified, this.options);
+    filterContainer.push(node, this.options);
 
     // Retrigger filter for new item to assume position in the grid
-    this._render(filterItems.getFiltered(this.options.filter));
+    this._renderWithImagesLoaded();
   }
 
   /**
@@ -276,18 +279,54 @@ class Filterizr {
   }
 
   private _bindEvents(): void {
-    const { browserWindow, filterContainer } = this.props;
-
+    const { browserWindow } = this.props;
     this._rebindFilterContainerEvents();
+    browserWindow.setResizeEventHandler(
+      this._updateDimensionsAndRerender.bind(this)
+    );
+  }
 
-    browserWindow.setResizeEventHandler(() => {
-      // Update dimensions of items based on new window size
-      filterContainer.updateWidth();
-      filterContainer.updateFilterItemsDimensions();
-      // Refilter the grid to assume new positions
-      this.filter(this.options.filter);
-    });
+  /**
+   * If it contains images it makes use of the imagesloaded npm package
+   * to trigger the first render after the images have finished loading
+   * in the DOM. Otherwise, overlapping can occur if the images do not
+   * have the height attribute explicitly set on them.
+   *
+   * In case the grid contains no images, then a simple render is performed.
+   *
+   * @returns {undefined}
+   */
+  private _renderWithImagesLoaded(): void {
+    const { filterContainer } = this.props;
+    const hasImages = !!filterContainer.node.querySelectorAll('img').length;
+
+    if (hasImages) {
+      imagesLoaded(
+        filterContainer.node,
+        this._updateDimensionsAndRerender.bind(this)
+      );
+    } else {
+      const {
+        props: { filterItems },
+        options: { filter },
+      } = this;
+      this._render(filterItems.getFiltered(filter));
+    }
+  }
+
+  /**
+   * Updates dimensions of container and items and rerenders the
+   * grid so that the items can assume their new positions.
+   *
+   * @returns {undefined}
+   */
+  private _updateDimensionsAndRerender(): void {
+    const {
+      props: { filterContainer, filterItems },
+      options: { filter },
+    } = this;
+
+    filterContainer.updateDimensions();
+    this._render(filterItems.getFiltered(filter));
   }
 }
-
-export default Filterizr;

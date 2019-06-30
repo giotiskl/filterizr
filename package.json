@@ -29,7 +29,9 @@
     "type": "git",
     "url": "git+ssh://git@github.com/giotiskl/Filterizr.git"
   },
-  "dependencies": {},
+  "dependencies": {
+    "imagesloaded": "^4.1.4"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.15",
     "@types/jquery": "^3.3.30",

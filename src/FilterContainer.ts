@@ -96,12 +96,15 @@ export default class FilterContainer {
    */
   push(node: Element, options: FilterizrOptions): void {
     const { filterItems } = this.props;
+    // Clone node and remove inline styles
+    const nodeModified = <Element>node.cloneNode(true);
+    nodeModified.removeAttribute('style');
     // Add new item to DOM
-    this.node.appendChild(node);
+    this.node.appendChild(nodeModified);
     // Initialize it as a FilterItem and push into array
-    const index = filterItems.length;
-    const filterItem = new FilterItem(node, index, options);
-    this.props.filterItems.push(filterItem);
+    this.props.filterItems.push(
+      new FilterItem(nodeModified, filterItems.length, options)
+    );
   }
 
   /**
@@ -160,6 +163,15 @@ export default class FilterContainer {
   updateFilterItemsDimensions(): void {
     const { filterItems } = this.props;
     filterItems.forEach(filterItem => filterItem.updateDimensions());
+  }
+
+  /**
+   * Updates the dimensions of both the container and the items
+   * @returns {undefined}
+   */
+  updateDimensions(): void {
+    this.updateWidth();
+    this.updateFilterItemsDimensions();
   }
 
   /**
