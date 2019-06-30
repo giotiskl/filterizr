@@ -376,3 +376,10 @@ const TRANSITION_END_EVENTS = [
 ];
 
 export { TRANSITION_END_EVENTS };
+
+/**
+ * A no-operation function
+ */
+const noop = () => {};
+
+export { noop };

@@ -10,7 +10,7 @@ import defaultOptions, {
   IUserOptions,
 } from './FilterizrOptions/defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
-import { FILTERIZR_STATE, debounce, getHTMLElement } from './utils';
+import { FILTERIZR_STATE, debounce, getHTMLElement, noop } from './utils';
 
 const imagesLoaded = require('imagesloaded');
 
@@ -57,7 +57,8 @@ export default class Filterizr {
     // Set up events needed by Filterizr
     this._bindEvents();
 
-    this._renderWithImagesLoaded();
+    // Trigger the first render and fire the onInit callback if defined
+    this._renderWithImagesLoaded(this.options.get().callbacks.onInit);
   }
 
   /**
@@ -291,21 +292,22 @@ export default class Filterizr {
    *
    * @returns {undefined}
    */
-  private _renderWithImagesLoaded(): void {
+  private _renderWithImagesLoaded(onRendered: Function = noop): void {
     const { filterContainer } = this.props;
     const hasImages = !!filterContainer.node.querySelectorAll('img').length;
 
     if (hasImages) {
-      imagesLoaded(
-        filterContainer.node,
-        this._updateDimensionsAndRerender.bind(this)
-      );
+      imagesLoaded(filterContainer.node, () => {
+        this._updateDimensionsAndRerender();
+        onRendered();
+      });
     } else {
       const {
         props: { filterItems },
         options: { filter },
       } = this;
       this._render(filterItems.getFiltered(filter));
+      onRendered();
     }
   }
 

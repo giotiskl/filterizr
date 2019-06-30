@@ -11,6 +11,7 @@
   the animations playing only after the grid has been initialized.
 - Integrate `imagesloaded` with `Filterizr` to solve the common issue
   of overlapping images
+- Implement `onInit` event fired only once on the first render
 
 ## Version 2.0.1
 

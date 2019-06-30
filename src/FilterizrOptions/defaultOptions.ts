@@ -1,6 +1,8 @@
 import ActiveFilter from '../ActiveFilter';
+import { noop } from '../utils';
 
 export interface IUserOptionsCallbacks {
+  onInit?: Function;
   onFilteringStart?: EventListener;
   onFilteringEnd?: EventListener;
   onShufflingStart?: EventListener;
@@ -44,12 +46,13 @@ export interface IFilterizrOptions extends IBaseOptions {
 const defaultUserOptions: IUserOptions = {
   animationDuration: 0.5,
   callbacks: {
-    onFilteringStart: () => {},
-    onFilteringEnd: () => {},
-    onShufflingStart: () => {},
-    onShufflingEnd: () => {},
-    onSortingStart: () => {},
-    onSortingEnd: () => {},
+    onInit: noop,
+    onFilteringStart: noop,
+    onFilteringEnd: noop,
+    onShufflingStart: noop,
+    onShufflingEnd: noop,
+    onSortingStart: noop,
+    onSortingEnd: noop,
   },
   controlsSelector: '',
   delay: 0,
