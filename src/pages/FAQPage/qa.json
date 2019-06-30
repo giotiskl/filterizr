@@ -16,10 +16,6 @@
   ],
   "caveats": [
     {
-      "question": "Images appear without height on first load",
-      "answer": "If the height of your grid items depends on images then you might have trouble on first load as Filterizr is initialized before they finish loading. To solve this issue you can either set the height of your images explicitly via CSS or  make use of <a href=\"https://imagesloaded.desandro.com/\" target=\"_blank\" rel=\"noopener noreferrer\">DeSandro's imagesLoaded script</a> which is only 5kb!"
-    },
-    {
       "question": "Margin don't work for me?",
       "answer": "Bear in mind that Filterizr has no notion of margins. If you wish to create whitespace I suggest using a wrapper element and set padding on it, both for your items and your container. The width of your items will have to sum up to 100% per row."
     },

@@ -69,9 +69,11 @@ const options = {
     opacity: 0,
     transform: 'scale(1)'
   },
+  gridItemsSelector: '.filtr-container',
+  gridSelector: '.filtr-container',
   layout: 'sameSize', // See layouts
   multifilterLogicalOperator: 'or',
-  selector: '.filtr-container',
+  searchTerm: '',
   setupControls: true // Should be false if controlsSelector is set 
 } 
 `;

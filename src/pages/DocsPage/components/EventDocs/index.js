@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Header } from 'semantic-ui-react';
 import Highlight from 'react-highlight';
+import OnInitDocs from './OnInitDocs';
 
 function makeEventSnippet(eventName, variation) {
   if (variation === 'vanilla') {
@@ -24,6 +25,10 @@ function makeEventSnippet(eventName, variation) {
 }
 
 const EventDocs = ({ eventName, variation }) => {
+  if (eventName === 'onInit') {
+    return <OnInitDocs variation={variation} />;
+  }
+
   const [, type, when] = eventName.split(/(?=[A-Z])/);
 
   return (

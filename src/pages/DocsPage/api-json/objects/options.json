@@ -13,6 +13,12 @@
       "description": "Used as the container for your event callbacks. Check the nested list below.",
       "fields": [
         {
+          "name": "onInit",
+          "type": "Function",
+          "defaultValue": "() => {}",
+          "description": "Triggered only once when the grid is initialized."
+        },
+        {
           "name": "onFilteringStart",
           "type": "Function",
           "defaultValue": "() => {}",
@@ -87,6 +93,18 @@
       "description": "A CSS object. This the transition that is triggered when your items are being filtered out."
     },
     {
+      "name": "gridItemsSelector",
+      "type": "String",
+      "defaultValue": ".filtr-item",
+      "description": "The CSS selector of items in your grid's container."
+    },
+    {
+      "name": "gridSelector",
+      "type": "String",
+      "defaultValue": ".filtr-container",
+      "description": "The CSS selector of the container of your gallery grid."
+    },
+    {
       "name": "layout",
       "type": "Enum (sameSize|sameWidth|sameHeight|packed|horizontal|vertical)",
       "defaultValue": "sameSize",
@@ -99,10 +117,10 @@
       "description": "If you are using multifiltering controls, this option defines the logic of how items are rendered. When set to `or` it will render items belonging to either category of the selected filters, when set to `and` it will render only items belonging to both."
     },
     {
-      "name": "selector",
+      "name": "searchTerm",
       "type": "String",
-      "defaultValue": ".filtr-container",
-      "description": "The CSS selector of the container of your gallery grid."
+      "defaultValue": "''",
+      "description": "The search term that applies as an extra layer of filtering over the active categories. If you set a value your grid's item will be searched and filtered on first render."
     },
     {
       "name": "setupControls",

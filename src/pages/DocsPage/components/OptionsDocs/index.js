@@ -8,6 +8,7 @@ const snippet1 = `//Default options
 const options = {
   animationDuration: 0.5,
   callbacks: {
+    onInit: function() { },
     onFilteringStart: function() { },
     onFilteringEnd: function() { },
     onShufflingStart: function() { },
@@ -28,9 +29,11 @@ const options = {
     opacity: 0,
     transform: 'scale(1)'
   },
+  gridSelector: '.filtr-container',
+  gridItemsSelector: '.filtr-item',
   layout: 'sameSize',
   multifilterLogicalOperator: 'or',
-  selector: '.filtr-container',
+  searchTerm: '',
   setupControls: true
 }`;
 

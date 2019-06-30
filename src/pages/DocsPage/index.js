@@ -40,6 +40,7 @@ function getMethods(variation) {
 }
 
 const EVENTS = [
+  'onInit',
   'onFilteringStart',
   'onFilteringEnd',
   'onShufflingStart',
