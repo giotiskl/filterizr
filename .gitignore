@@ -3,4 +3,6 @@
 **/build
 **/dist/*.d.ts
 **/dist/layouts
+**/dist/types
+**/dist/FilterizrOptions
 .DS_STORE
