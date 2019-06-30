@@ -75,10 +75,7 @@ Contents:
 
 ## Why Filterizr?
 
-There is a number of similar plugins some of which are very well-tested and feature-rich (such as Isotope, MixItUp etc).
-However, Filterizr comes with the following advantages:
-
-- Small filesize with compact functionality (~25kb).
+- Small filesize with compact functionality (~30kb).
 - Thoroughly documented and easy to use.
 - Performs great on mobile.
 - Written in TypeScript.
