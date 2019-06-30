@@ -93,7 +93,6 @@ class ShowcasePage extends React.Component {
             </Header>
             <Filterizr
               options={this.state.playgroundValue}
-              useImagesLoaded
               filterControls={[
                 <Filterizr.FilterButton text="All" targetFilter="all" />,
                 <Filterizr.FilterButton text="Cities" targetFilter="1" />,

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import imagesloaded from 'imagesloaded';
 import { isEqual, merge } from 'lodash';
 import { FilterButton } from './components/FilterButton';
 import { Button, Form, Select } from 'semantic-ui-react';
@@ -22,7 +21,6 @@ export default class extends React.Component {
       })
     ),
     sortable: PropTypes.bool,
-    useImagesLoaded: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -47,7 +45,6 @@ export default class extends React.Component {
       { key: 'sortData', value: 'sortData', text: 'Description' },
     ],
     sortable: false,
-    useImagesLoaded: false,
   };
 
   state = {
@@ -65,7 +62,7 @@ export default class extends React.Component {
   }
 
   componentDidMount() {
-    const { useImagesLoaded, options: userOptions, selector } = this.props;
+    const { options: userOptions, selector } = this.props;
     const { activeFilter } = this.state;
     const options = merge(
       {},
@@ -76,15 +73,8 @@ export default class extends React.Component {
       userOptions
     );
 
-    if (useImagesLoaded) {
-      imagesloaded(document.querySelector('main'), () => {
-        const filterizr = new Filterizr(selector, options);
-        this.filterizr = filterizr;
-      });
-    } else {
-      const filterizr = new Filterizr(selector, options);
-      this.filterizr = filterizr;
-    }
+    const filterizr = new Filterizr(selector, options);
+    this.filterizr = filterizr;
   }
 
   componentWillUnmount() {

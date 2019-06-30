@@ -6,7 +6,6 @@
   "dependencies": {
     "filterizr": "^2.0.1",
     "highlight.js": "^9.15.8",
-    "imagesloaded": "^4.1.4",
     "jsoneditor": "^6.0.0",
     "jsoneditor-react": "^1.0.1",
     "lodash": "^4.17.11",
