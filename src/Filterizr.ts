@@ -24,7 +24,6 @@ class Filterizr {
     filterControls?: FilterControls;
     filterItems: FilterItems;
     filterizrState: string;
-    sort: string;
   };
 
   constructor(
@@ -56,7 +55,6 @@ class Filterizr {
         this.options
       ),
       filterizrState: FILTERIZR_STATE.IDLE,
-      sort: 'index',
     };
 
     // Set up events needed by Filterizr
