@@ -109,6 +109,7 @@ export default class FilterizrOptions {
       'string',
       ['and', 'or']
     );
+    checkOptionForErrors('searchTerm', options.searchTerm, 'string');
     checkOptionForErrors('setupControls', options.setupControls, 'boolean');
 
     return options;

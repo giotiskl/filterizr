@@ -206,6 +206,10 @@ class Filterizr {
       this._rebindFilterContainerEvents();
     }
 
+    if ('searchTerm' in newOptions) {
+      this.search(newOptions.searchTerm);
+    }
+
     // If filter or filtering logic has been changed retrigger filtering
     if (newOptions.filter || newOptions.multifilterLogicalOperator) {
       this.filter(this.options.filter);
