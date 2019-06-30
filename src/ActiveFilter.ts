@@ -1,5 +1,11 @@
 export type Filter = string | string[];
 
+/**
+ * ActiveFilter represents the currently active filter over
+ * the grid.
+ *
+ * It can be a plain string value or an array of strings.
+ */
 export default class ActiveFilter {
   private _filter: Filter;
 
