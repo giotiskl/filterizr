@@ -2,11 +2,12 @@ import { Filter } from './ActiveFilter';
 import FilterItem from './FilterItem';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import {
-  intersection,
   allStringsOfArray1InArray2,
-  sortBy,
-  shuffle,
   filterItemArraysHaveSameSorting,
+  intersection,
+  setStylesOnHTMLNode,
+  shuffle,
+  sortBy,
 } from './utils';
 
 export default class FilterItems {
@@ -18,14 +19,69 @@ export default class FilterItems {
     this._options = options;
   }
 
+  public get length(): number {
+    return this._filterItems.length;
+  }
+
   public get(): FilterItem[] {
     return this._filterItems;
+  }
+
+  public getItem(index: number): FilterItem {
+    return this._filterItems[index];
   }
 
   public set(filterItems: FilterItem[]): void {
     this._filterItems = filterItems;
   }
 
+  /**
+   * Updates the transition inline styles of all contained grid items
+   * @param {Object} options Filterizr instance options
+   * @returns {undefined}
+   */
+  public updateFilterItemsTransitionStyle(): void {
+    const {
+      animationDuration,
+      easing,
+      delay,
+      delayMode,
+    } = this._options.getRaw();
+
+    this._filterItems.forEach((filterItem): void =>
+      setStylesOnHTMLNode(filterItem.node, {
+        transition: `all ${animationDuration}s ${easing} ${filterItem.getTransitionDelay(
+          delay,
+          delayMode
+        )}ms`,
+      })
+    );
+  }
+
+  /**
+   * Updates the dimensions of all FilterItems, used for resizing
+   * @returns {undefined}
+   */
+  public updateFilterItemsDimensions(): void {
+    this._filterItems.forEach((filterItem): void =>
+      filterItem.updateDimensions()
+    );
+  }
+
+  /**
+   * Pushes a new item into the array of filter items.
+   *
+   * @param filterItem to push into the array
+   * @returns {number} index
+   */
+  public push(filterItem: FilterItem): number {
+    return this._filterItems.push(filterItem);
+  }
+
+  /**
+   * Returns the items that fulfil the filtering criteria
+   * @param filter to apply
+   */
   public getFiltered(filter: Filter): FilterItem[] {
     const filterItems = this.get();
 
@@ -39,6 +95,10 @@ export default class FilterItems {
     });
   }
 
+  /**
+   * Returns the items that should be filtered out
+   * @param filter to apply
+   */
   public getFilteredOut(filter: Filter): FilterItem[] {
     const filterItems = this.get();
     return filterItems.filter((filterItem: FilterItem): boolean => {
@@ -54,6 +114,12 @@ export default class FilterItems {
     });
   }
 
+  /**
+   * Returns the sorted filter items.
+   *
+   * @param sortAttr attribute by which to sort
+   * @param sortOrder ascending or descending
+   */
   public getSorted(
     sortAttr: string = 'index',
     sortOrder: string = 'asc'
@@ -77,6 +143,11 @@ export default class FilterItems {
     return this.getFiltered(this._options.filter);
   }
 
+  /**
+   * Returns the filtered array based on the search term
+   *
+   * @param searchTerm by which to search
+   */
   public getSearched(searchTerm: string): FilterItem[] {
     const filteredItems = this.getFiltered(this._options.filter);
 
@@ -89,6 +160,9 @@ export default class FilterItems {
     );
   }
 
+  /**
+   * Returns a shuffled array
+   */
   public getShuffled(): FilterItem[] {
     const filteredItems = this.getFiltered(this._options.filter);
 

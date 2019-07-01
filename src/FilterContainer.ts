@@ -1,16 +1,14 @@
-import {
-  RawOptionsCallbacks,
-  RawOptions,
-} from './FilterizrOptions/defaultOptions';
+import { RawOptionsCallbacks } from './FilterizrOptions/defaultOptions';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import FilterItem from './FilterItem';
 import { setStylesOnHTMLNode, TRANSITION_END_EVENTS } from './utils';
+import FilterItems from './FilterItems';
 
 export default class FilterContainer {
   public node: Element;
   public options: FilterizrOptions;
   public props: {
-    filterItems: FilterItem[];
+    filterItems: FilterItems;
     w: number;
     h: number;
     onTransitionEndHandler?: EventListener;
@@ -58,7 +56,7 @@ export default class FilterContainer {
     };
 
     // Update dimensions of contained items on instantiation
-    this.updateFilterItemsDimensions();
+    this.props.filterItems.updateFilterItemsDimensions();
   }
 
   /**
@@ -80,21 +78,22 @@ export default class FilterContainer {
    * @param {Object} options - of Filterizr instance
    * @return {Object[]} array of FilterItem instances
    */
-  public getFilterItems(options: FilterizrOptions): FilterItem[] {
-    const filterItems = Array.from(
+  public getFilterItems(options: FilterizrOptions): FilterItems {
+    const filterItemNodes = Array.from(
       this.node.querySelectorAll(options.get().gridItemsSelector)
     );
-    return filterItems.map(
+    const filterItems = filterItemNodes.map(
       (node, index): FilterItem => new FilterItem(node, index, options)
     );
+    return new FilterItems(filterItems, options);
   }
 
   /**
-   * Pushes a new item into the FilterItem array in the properties of the FilterContainer
-   * @param {Object} node - HTML node to instantiate as FilterItem and append to the grid
-   * @param {Object} options - Filterizr instance options
+   * Inserts a new item into the grid.
+   * @param node - HTML node to instantiate as FilterItem and append to the grid
+   * @param options - Filterizr options
    */
-  public push(node: Element, options: FilterizrOptions): void {
+  public insertItem(node: Element, options: FilterizrOptions): void {
     const { filterItems } = this.props;
     // Clone node and remove inline styles
     const nodeModified = node.cloneNode(true) as Element;
@@ -112,30 +111,7 @@ export default class FilterContainer {
    * @returns {number} number of columns for the grid
    */
   public calculateColumns(): number {
-    return Math.round(this.props.w / this.props.filterItems[0].props.w);
-  }
-
-  /**
-   * Updates the transition inline styles of all contained grid items
-   * @param {Object} options Filterizr instance options
-   * @returns {undefined}
-   */
-  public updateFilterItemsTransitionStyle({
-    animationDuration,
-    easing,
-    delay,
-    delayMode,
-  }: RawOptions): void {
-    const { filterItems } = this.props;
-
-    filterItems.forEach((filterItem): void =>
-      setStylesOnHTMLNode(filterItem.node, {
-        transition: `all ${animationDuration}s ${easing} ${filterItem.getTransitionDelay(
-          delay,
-          delayMode
-        )}ms`,
-      })
-    );
+    return Math.round(this.props.w / this.props.filterItems.getItem(0).props.w);
   }
 
   /**
@@ -154,7 +130,7 @@ export default class FilterContainer {
    */
   public updateDimensions(): void {
     this.updateWidth();
-    this.updateFilterItemsDimensions();
+    this.props.filterItems.updateFilterItemsDimensions();
   }
 
   /**
@@ -213,15 +189,6 @@ export default class FilterContainer {
    */
   private updateWidth(): void {
     this.props.w = this.getWidth();
-  }
-
-  /**
-   * Updates the dimensions of all FilterItems, used for resizing
-   * @returns {undefined}
-   */
-  private updateFilterItemsDimensions(): void {
-    const { filterItems } = this.props;
-    filterItems.forEach((filterItem): void => filterItem.updateDimensions());
   }
 
   /**

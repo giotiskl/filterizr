@@ -3,7 +3,6 @@ import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
-import FilterItems from './FilterItems';
 import { Filter } from './ActiveFilter';
 import getLayoutPositions from './getLayoutPositions';
 import defaultOptions, { RawOptions } from './FilterizrOptions/defaultOptions';
@@ -18,7 +17,6 @@ export default class Filterizr {
     browserWindow: BrowserWindow;
     filterContainer: FilterContainer;
     filterControls?: FilterControls;
-    filterItems: FilterItems;
     filterizrState: string;
   };
 
@@ -41,10 +39,6 @@ export default class Filterizr {
       ...(setupControls && {
         filterControls: new FilterControls(this, controlsSelector),
       }),
-      filterItems: new FilterItems(
-        filterContainer.props.filterItems,
-        this.options
-      ),
       filterizrState: FILTERIZR_STATE.IDLE,
     };
 
@@ -75,6 +69,9 @@ export default class Filterizr {
    */
   public filter(category: Filter): void {
     const { filterContainer } = this.props;
+    const {
+      props: { filterItems },
+    } = filterContainer;
 
     // Trigger filteringStart event
     filterContainer.trigger('filteringStart');
@@ -90,7 +87,7 @@ export default class Filterizr {
     // Update filter in options
     this.options.filter = category;
 
-    this._render(this.props.filterItems.getSearched(this.options.searchTerm));
+    this._render(filterItems.getSearched(this.options.searchTerm));
   }
 
   /**
@@ -119,7 +116,7 @@ export default class Filterizr {
   public insertItem(node: HTMLElement): void {
     const { filterContainer } = this.props;
 
-    filterContainer.push(node, this.options);
+    filterContainer.insertItem(node, this.options);
 
     // Retrigger filter for new item to assume position in the grid
     this._renderWithImagesLoaded();
@@ -131,7 +128,10 @@ export default class Filterizr {
    * @param {String} sortOrder ascending or descending
    */
   public sort(sortAttr: string = 'index', sortOrder: string = 'asc'): void {
-    const { filterContainer, filterItems } = this.props;
+    const { filterContainer } = this.props;
+    const {
+      props: { filterItems },
+    } = filterContainer;
     filterContainer.trigger('sortingStart');
     this.props.filterizrState = FILTERIZR_STATE.SORTING;
     this._render(filterItems.getSorted(sortAttr, sortOrder));
@@ -142,15 +142,21 @@ export default class Filterizr {
    * @param {String} searchTerm the term for which to search
    */
   public search(searchTerm: string = this.options.get().searchTerm): void {
+    const {
+      props: { filterItems },
+    } = this.props.filterContainer;
     this.options.searchTerm = searchTerm.toLowerCase();
-    this._render(this.props.filterItems.getSearched(this.options.searchTerm));
+    this._render(filterItems.getSearched(this.options.searchTerm));
   }
 
   /**
    * Shuffles the FilterItems in the grid, making sure their positions have changed.
    */
   public shuffle(): void {
-    const { filterContainer, filterItems } = this.props;
+    const { filterContainer } = this.props;
+    const {
+      props: { filterItems },
+    } = filterContainer;
     filterContainer.trigger('shufflingStart');
     this.props.filterizrState = FILTERIZR_STATE.SHUFFLING;
     this._render(filterItems.getShuffled());
@@ -179,9 +185,7 @@ export default class Filterizr {
       newOptions.delayMode ||
       newOptions.easing
     ) {
-      this.props.filterContainer.updateFilterItemsTransitionStyle(
-        this.options.getRaw()
-      );
+      this.props.filterContainer.props.filterItems.updateFilterItemsTransitionStyle();
     }
 
     // If inside the new options the callbacks object has been defined
@@ -213,11 +217,14 @@ export default class Filterizr {
   }
 
   // Helper methods
-  private _render(filterItems: FilterItem[]): void {
+  private _render(itemsToFilterIn: FilterItem[]): void {
+    const {
+      props: { filterItems },
+    } = this.props.filterContainer;
     const { filterInCss, filterOutCss, layout } = this.options.get();
 
     // Filter out the items not matching the fiiltering & search criteria
-    this.props.filterItems
+    filterItems
       .getFilteredOut(this.options.filter)
       .forEach((filterItem): void => {
         filterItem.filterOut(filterOutCss);
@@ -227,7 +234,7 @@ export default class Filterizr {
     const positions = getLayoutPositions(layout, this);
 
     // Filter in new items
-    filterItems.forEach((filterItem, index): void => {
+    itemsToFilterIn.forEach((filterItem, index): void => {
       filterItem.filterIn(positions[index], filterInCss);
     });
   }
@@ -295,9 +302,11 @@ export default class Filterizr {
       });
     } else {
       const {
-        props: { filterItems },
         options: { filter },
       } = this;
+      const {
+        props: { filterItems },
+      } = this.props.filterContainer;
       this._render(filterItems.getFiltered(filter));
       onRendered();
     }
@@ -311,9 +320,12 @@ export default class Filterizr {
    */
   private _updateDimensionsAndRerender(): void {
     const {
-      props: { filterContainer, filterItems },
+      props: { filterContainer },
       options: { filter },
     } = this;
+    const {
+      props: { filterItems },
+    } = filterContainer;
 
     filterContainer.updateDimensions();
     this._render(filterItems.getFiltered(filter));

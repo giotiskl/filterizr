@@ -6,7 +6,10 @@ import Filterizr from '../Filterizr';
  * @param {object} Filterizr instance.
  */
 const getSameSizeLayoutPosition = (filterizr: Filterizr): Position[] => {
-  const { filterContainer, filterItems } = filterizr.props;
+  const { filterContainer } = filterizr.props;
+  const {
+    props: { filterItems },
+  } = filterContainer;
   const filteredItems = filterItems.getFiltered(
     filterizr.options.get().filter.get()
   );

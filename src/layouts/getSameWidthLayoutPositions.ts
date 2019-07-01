@@ -36,7 +36,10 @@ const calcItemTop = (
  */
 const getSameWidthLayoutPositions = (filterizr: Filterizr): Position[] => {
   const { filterContainer } = filterizr.props;
-  const filteredItems = filterizr.props.filterItems.getFiltered(
+  const {
+    props: { filterItems },
+  } = filterContainer;
+  const filteredItems = filterItems.getFiltered(
     filterizr.options.get().filter.get()
   );
 

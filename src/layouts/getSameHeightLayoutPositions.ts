@@ -7,7 +7,10 @@ import Filterizr from '../Filterizr';
  */
 const getSameHeightLayoutPositions = (filterizr: Filterizr): Position[] => {
   const { filterContainer } = filterizr.props;
-  const filteredItems = filterizr.props.filterItems.getFiltered(
+  const {
+    props: { filterItems },
+  } = filterContainer;
+  const filteredItems = filterItems.getFiltered(
     filterizr.options.get().filter.get()
   );
 
