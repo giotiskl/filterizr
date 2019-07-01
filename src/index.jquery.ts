@@ -9,8 +9,8 @@
 
 import Filterizr from './Filterizr';
 
-(function($: any) {
+(function($: any): void {
   Filterizr.installAsJQueryPlugin($);
-})((<any>window).jQuery);
+})((window as any).jQuery);
 
 export default Filterizr;

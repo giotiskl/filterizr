@@ -6,3 +6,4 @@
 **/dist/types
 **/dist/FilterizrOptions
 .DS_STORE
+yarn-error.log

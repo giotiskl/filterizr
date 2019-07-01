@@ -1,53 +1,6 @@
+import { Position } from '../FilterItem';
 import Filterizr from '../Filterizr';
 import FilterItem from '../FilterItem';
-
-/**
- * Same width layout for items that have the same width, but can have varying height
- * @param {object} filterizr instance.
- */
-const getSameWidthLayoutPositions = (filterizr: Filterizr) => {
-  const { filterContainer, } = filterizr.props;
-  const filteredItems = filterizr.props.filterItems.getFiltered(
-    filterizr.options.get().filter.get()
-  );
-
-  // Calculate number of columns and rows the grid should have
-  let cols = filterContainer.calculateColumns(),
-    row = 0,
-    columnHeights = Array.apply(null, Array(cols)).map(
-      Number.prototype.valueOf,
-      0
-    );
-
-  // Calculate array of positions
-  const targetPositions = filteredItems.map((filterItem, index) => {
-    // Update height of tallest item in row if needed
-    const { w, h } = filterItem.props;
-
-    // Update current row, increment container
-    // height and  reset height of tallest in row
-    if (index % cols === 0 && index >= cols) row++;
-
-    // Determine pos in grid
-    const spot = index - cols * row;
-
-    // Update height of column
-    columnHeights[spot] += h;
-
-    // Return object with new position in array
-    return {
-      left: spot * w,
-      top: calcItemTop(filteredItems, cols, index),
-    };
-  });
-
-  // Update the height of the FilterContainer
-  // before returning from the method
-  filterContainer.updateHeight(Math.max(...columnHeights));
-
-  // Return the array of new positions
-  return targetPositions;
-};
 
 /**
  * Helper method used to calculate what the top
@@ -60,7 +13,7 @@ const calcItemTop = (
   filteredItems: FilterItem[],
   cols: number,
   index: number
-) => {
+): number => {
   // Prevent infinite loop on window resize when container is not visible
   if (cols <= 0) return 0;
 
@@ -75,6 +28,56 @@ const calcItemTop = (
     index -= cols;
   }
   return itemTop;
+};
+
+/**
+ * Same width layout for items that have the same width, but can have varying height
+ * @param {object} filterizr instance.
+ */
+const getSameWidthLayoutPositions = (filterizr: Filterizr): Position[] => {
+  const { filterContainer } = filterizr.props;
+  const filteredItems = filterizr.props.filterItems.getFiltered(
+    filterizr.options.get().filter.get()
+  );
+
+  // Calculate number of columns and rows the grid should have
+  let cols = filterContainer.calculateColumns(),
+    row = 0,
+    columnHeights = Array.apply(null, Array(cols)).map(
+      Number.prototype.valueOf,
+      0
+    );
+
+  // Calculate array of positions
+  const targetPositions = filteredItems.map(
+    (filterItem, index): Position => {
+      // Update height of tallest item in row if needed
+      const { w, h } = filterItem.props;
+
+      // Update current row, increment container
+      // height and  reset height of tallest in row
+      if (index % cols === 0 && index >= cols) row++;
+
+      // Determine pos in grid
+      const spot = index - cols * row;
+
+      // Update height of column
+      columnHeights[spot] += h;
+
+      // Return object with new position in array
+      return {
+        left: spot * w,
+        top: calcItemTop(filteredItems, cols, index),
+      };
+    }
+  );
+
+  // Update the height of the FilterContainer
+  // before returning from the method
+  filterContainer.updateHeight(Math.max(...columnHeights));
+
+  // Return the array of new positions
+  return targetPositions;
 };
 
 export default getSameWidthLayoutPositions;

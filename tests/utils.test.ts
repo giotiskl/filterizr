@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /**
  * Test suite for the utils module, containing helper methods for Filterizr.
  */

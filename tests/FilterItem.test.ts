@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 // import test utils
 import * as $ from 'jquery';
 import { fakeDom } from './testSetup';
@@ -6,7 +7,7 @@ import FilterItem from '../src/FilterItem';
 import FilterizrOptions from '../src/FilterizrOptions/FilterizrOptions';
 
 // General setup
-(<any>window).$ = $;
+(window as any).$ = $;
 
 /**
  * Test suite for FilterItem
@@ -132,16 +133,6 @@ describe('FilterItem', () => {
     });
   });
 
-  describe('#getContentsLowercase', () => {
-    it('should return the contents of the .filtr-item container in lowercase', () => {
-      const $node = $('.filtr-item:first');
-      const filterItem = new FilterItem($node.get(0), 0, new FilterizrOptions({}));
-      expect($node.text().toLowerCase()).toEqual(
-        filterItem.getContentsLowercase()
-      );
-    });
-  });
-
   describe('#getCategories', () => {
     it('should return an array with the value of the data-category attribute on the .filtr-item delimited by ","', () => {
       const filterItem = new FilterItem(
@@ -152,30 +143,6 @@ describe('FilterItem', () => {
       expect(filterItem.getCategories()).toEqual(['1', '5']);
       filterItem.node.setAttribute('data-category', '1, 5, pizza');
       expect(filterItem.getCategories()).toEqual(['1', '5', 'pizza']);
-    });
-  });
-
-  describe('#getHeight', () => {
-    it('should return the .innerHeight property of the contained .filtr-item node', () => {
-      const filterItem = new FilterItem(
-        $('.filtr-item:first').get(0),
-        0,
-        new FilterizrOptions({})
-      );
-      const innerHeight = filterItem.node.clientHeight;
-      expect(filterItem.getHeight()).toEqual(innerHeight);
-    });
-  });
-
-  describe('#getWidth', () => {
-    it('should return the .innerWidth property of the contained .filtr-item node', () => {
-      const filterItem = new FilterItem(
-        $('.filtr-item:first').get(0),
-        0,
-        new FilterizrOptions({})
-      );
-      const innerWidth = filterItem.node.clientWidth;
-      expect(filterItem.getWidth()).toEqual(innerWidth);
     });
   });
 });

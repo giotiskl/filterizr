@@ -9,19 +9,19 @@ export type Filter = string | string[];
 export default class ActiveFilter {
   private _filter: Filter;
 
-  constructor(filter: Filter) {
+  public constructor(filter: Filter) {
     this._filter = filter;
   }
 
-  get(): Filter {
+  public get(): Filter {
     return this._filter;
   }
 
-  set(targetFilter: Filter): void {
+  public set(targetFilter: Filter): void {
     this._filter = targetFilter;
   }
 
-  toggle(targetFilter: string): void {
+  public toggle(targetFilter: string): void {
     this._filter = this._toggle(this._filter, targetFilter);
   }
 
@@ -36,7 +36,7 @@ export default class ActiveFilter {
     if (Array.isArray(activeFilter)) {
       if (activeFilter.includes(targetFilter)) {
         const newActiveFilter = activeFilter.filter(
-          filter => filter !== targetFilter
+          (filter): boolean => filter !== targetFilter
         );
         return newActiveFilter.length === 1
           ? newActiveFilter[0]

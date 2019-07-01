@@ -1,7 +1,7 @@
 import ActiveFilter from '../ActiveFilter';
 import { noop } from '../utils';
 
-export interface IUserOptionsCallbacks {
+export interface RawOptionsCallbacks {
   onInit?: Function;
   onFilteringStart?: EventListener;
   onFilteringEnd?: EventListener;
@@ -12,9 +12,9 @@ export interface IUserOptionsCallbacks {
   onTransitionEnd?: EventListener;
 }
 
-export interface IBaseOptions {
+export interface BaseOptions {
   animationDuration?: number;
-  callbacks?: IUserOptionsCallbacks;
+  callbacks?: RawOptionsCallbacks;
   controlsSelector?: string;
   delay?: number;
   delayMode?: 'alternate' | 'progressive';
@@ -35,15 +35,15 @@ export interface IBaseOptions {
   setupControls?: boolean;
 }
 
-export interface IUserOptions extends IBaseOptions {
+export interface RawOptions extends BaseOptions {
   filter?: string | string[];
 }
 
-export interface IFilterizrOptions extends IBaseOptions {
+export interface Options extends BaseOptions {
   filter: ActiveFilter;
 }
 
-const defaultUserOptions: IUserOptions = {
+const defaultUserOptions: RawOptions = {
   animationDuration: 0.5,
   callbacks: {
     onInit: noop,

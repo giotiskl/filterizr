@@ -1,15 +1,15 @@
 import {
-  IUserOptionsCallbacks,
-  IUserOptions,
+  RawOptionsCallbacks,
+  RawOptions,
 } from './FilterizrOptions/defaultOptions';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import FilterItem from './FilterItem';
 import { setStylesOnHTMLNode, TRANSITION_END_EVENTS } from './utils';
 
 export default class FilterContainer {
-  node: Element;
-  options: FilterizrOptions;
-  props: {
+  public node: Element;
+  public options: FilterizrOptions;
+  public props: {
     filterItems: FilterItem[];
     w: number;
     h: number;
@@ -22,7 +22,7 @@ export default class FilterContainer {
    * @param {Object} options with which to instantiate the container
    * @return {FilterContainer} FilterContainer instance
    */
-  constructor(node: Element, options: FilterizrOptions) {
+  public constructor(node: Element, options: FilterizrOptions) {
     if (!node) {
       throw new Error(
         'Filterizr: could not initialize container, check the selector or node you passed to the constructor exists.'
@@ -64,13 +64,13 @@ export default class FilterContainer {
   /**
    * Destroys the FilterContainer instance by unbinding all events and resetting inline styles.
    */
-  destroy(): void {
+  public destroy(): void {
     // Remove all inline styles and unbind all events
     this.node.removeAttribute('style');
     const filterItemNodes = Array.from(
       this.node.querySelectorAll(this.options.get().gridItemsSelector)
     );
-    filterItemNodes.forEach(node => node.removeAttribute('style'));
+    filterItemNodes.forEach((node): void => node.removeAttribute('style'));
     this.unbindEvents(this.options.get().callbacks);
   }
 
@@ -80,12 +80,12 @@ export default class FilterContainer {
    * @param {Object} options - of Filterizr instance
    * @return {Object[]} array of FilterItem instances
    */
-  getFilterItems(options: FilterizrOptions): FilterItem[] {
+  public getFilterItems(options: FilterizrOptions): FilterItem[] {
     const filterItems = Array.from(
       this.node.querySelectorAll(options.get().gridItemsSelector)
     );
     return filterItems.map(
-      (node, index) => new FilterItem(node, index, options)
+      (node, index): FilterItem => new FilterItem(node, index, options)
     );
   }
 
@@ -94,10 +94,10 @@ export default class FilterContainer {
    * @param {Object} node - HTML node to instantiate as FilterItem and append to the grid
    * @param {Object} options - Filterizr instance options
    */
-  push(node: Element, options: FilterizrOptions): void {
+  public push(node: Element, options: FilterizrOptions): void {
     const { filterItems } = this.props;
     // Clone node and remove inline styles
-    const nodeModified = <Element>node.cloneNode(true);
+    const nodeModified = node.cloneNode(true) as Element;
     nodeModified.removeAttribute('style');
     // Add new item to DOM
     this.node.appendChild(nodeModified);
@@ -111,7 +111,7 @@ export default class FilterContainer {
    * Calculates the amount of columns the Filterizr grid should have
    * @returns {number} number of columns for the grid
    */
-  calculateColumns(): number {
+  public calculateColumns(): number {
     return Math.round(this.props.w / this.props.filterItems[0].props.w);
   }
 
@@ -120,15 +120,15 @@ export default class FilterContainer {
    * @param {Object} options Filterizr instance options
    * @returns {undefined}
    */
-  updateFilterItemsTransitionStyle({
+  public updateFilterItemsTransitionStyle({
     animationDuration,
     easing,
     delay,
     delayMode,
-  }: IUserOptions): void {
+  }: RawOptions): void {
     const { filterItems } = this.props;
 
-    filterItems.forEach(filterItem =>
+    filterItems.forEach((filterItem): void =>
       setStylesOnHTMLNode(filterItem.node, {
         transition: `all ${animationDuration}s ${easing} ${filterItem.getTransitionDelay(
           delay,
@@ -143,43 +143,18 @@ export default class FilterContainer {
    * @param {Number} newHeight - the new value of the CSS height property
    * @returns {undefined}
    */
-  updateHeight(newHeight: number): void {
+  public updateHeight(newHeight: number): void {
     this.props.h = newHeight;
     setStylesOnHTMLNode(this.node, { height: `${newHeight}px` });
-  }
-
-  /**
-   * Updates the width of the FilterContainer prop
-   * @returns {undefined}
-   */
-  updateWidth(): void {
-    this.props.w = this.getWidth();
-  }
-
-  /**
-   * Updates the dimensions of all FilterItems, used for resizing
-   * @returns {undefined}
-   */
-  updateFilterItemsDimensions(): void {
-    const { filterItems } = this.props;
-    filterItems.forEach(filterItem => filterItem.updateDimensions());
   }
 
   /**
    * Updates the dimensions of both the container and the items
    * @returns {undefined}
    */
-  updateDimensions(): void {
+  public updateDimensions(): void {
     this.updateWidth();
     this.updateFilterItemsDimensions();
-  }
-
-  /**
-   * Gets the clientWidth of the container
-   * @returns {number} width of node
-   */
-  getWidth(): number {
-    return this.node.clientWidth;
   }
 
   /**
@@ -187,10 +162,10 @@ export default class FilterContainer {
    * @param {Object} callbacks wrapper object
    * @returns {undefined}
    */
-  bindEvents(callbacks: IUserOptionsCallbacks): void {
+  public bindEvents(callbacks: RawOptionsCallbacks): void {
     // Bind transition end
     this.props.onTransitionEndHandler = callbacks.onTransitionEnd;
-    TRANSITION_END_EVENTS.forEach(eventName => {
+    TRANSITION_END_EVENTS.forEach((eventName): void => {
       this.node.addEventListener(eventName, this.props.onTransitionEndHandler);
     });
     // Public Filterizr events
@@ -207,8 +182,8 @@ export default class FilterContainer {
    * @param {Object} callbacks wrapper object
    * @returns {undefined}
    */
-  unbindEvents(callbacks: IUserOptionsCallbacks): void {
-    TRANSITION_END_EVENTS.forEach(eventName => {
+  public unbindEvents(callbacks: RawOptionsCallbacks): void {
+    TRANSITION_END_EVENTS.forEach((eventName): void => {
       this.node.removeEventListener(
         eventName,
         this.props.onTransitionEndHandler
@@ -227,8 +202,33 @@ export default class FilterContainer {
    * @param {string} eventType - name of the event
    * @returns {undefined}
    */
-  trigger(eventType: string): void {
+  public trigger(eventType: string): void {
     const event = new Event(eventType);
     this.node.dispatchEvent(event);
+  }
+
+  /**
+   * Updates the width of the FilterContainer prop
+   * @returns {undefined}
+   */
+  private updateWidth(): void {
+    this.props.w = this.getWidth();
+  }
+
+  /**
+   * Updates the dimensions of all FilterItems, used for resizing
+   * @returns {undefined}
+   */
+  private updateFilterItemsDimensions(): void {
+    const { filterItems } = this.props;
+    filterItems.forEach((filterItem): void => filterItem.updateDimensions());
+  }
+
+  /**
+   * Gets the clientWidth of the container
+   * @returns {number} width of node
+   */
+  private getWidth(): number {
+    return this.node.clientWidth;
   }
 }

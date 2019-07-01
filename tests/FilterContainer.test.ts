@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 // import test utils
 import * as $ from 'jquery';
 import { fakeDom } from './testSetup';
@@ -7,7 +8,7 @@ import FilterContainer from '../src/FilterContainer';
 import FilterItem from '../src/FilterItem';
 
 // General setup
-(<any>window).$ = $;
+(window as any).$ = $;
 
 /**
  * Test suite for FilterContainer
@@ -67,14 +68,14 @@ describe('FilterContainer', () => {
 
     it('should increase the length of the FilterItems array by 1', () => {
       const oldLength = filterContainer.props.filterItems.length;
-      filterContainer.push(<Element>cloned, filterizr.options);
+      filterContainer.push(cloned as Element, filterizr.options);
       const newLength = filterContainer.props.filterItems.length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
     it('should set the index property of the newly added FilterItem in the array to array.length', () => {
       const oldLength = filterContainer.props.filterItems.length;
-      filterContainer.push(<Element>cloned, filterizr.options);
+      filterContainer.push(cloned as Element, filterizr.options);
       const newlyAddedFilterItem = filterContainer.props.filterItems[oldLength];
       expect(newlyAddedFilterItem.props.index).toEqual(oldLength);
     });
@@ -87,7 +88,7 @@ describe('FilterContainer', () => {
       );
     });
     it('should find and return all .filtr-item elements as FilterItem instances', () => {
-      filterContainer.props.filterItems.forEach(filterItem => {
+      filterContainer.props.filterItems.forEach((filterItem) => {
         expect(filterItem instanceof FilterItem).toBe(true);
       });
     });
@@ -100,14 +101,6 @@ describe('FilterContainer', () => {
       filterContainer.props.w = containerWidth;
       filterContainer.props.filterItems[0].props.w = containerWidth / 4;
       expect(filterContainer.calculateColumns()).toEqual(4);
-    });
-  });
-
-  describe('#getWidth', () => {
-    it('should return the .innerWidth() of the FilterContainer jQuery node', () => {
-      expect(filterContainer.getWidth()).toEqual(
-        filterContainer.node.clientWidth
-      );
     });
   });
 });

@@ -6,21 +6,15 @@ import FilterItem from './FilterItem';
 import FilterItems from './FilterItems';
 import { Filter } from './ActiveFilter';
 import getLayoutPositions from './getLayoutPositions';
-import defaultOptions, {
-  IUserOptions,
-} from './FilterizrOptions/defaultOptions';
+import defaultOptions, { RawOptions } from './FilterizrOptions/defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
 import { FILTERIZR_STATE, debounce, getHTMLElement, noop } from './utils';
 
 const imagesLoaded = require('imagesloaded');
 
 export default class Filterizr {
-  FilterContainer: FilterContainer;
-  FilterItem: FilterItem;
-  defaultOptions: IUserOptions;
-
-  options: FilterizrOptions;
-  props: {
+  public options: FilterizrOptions;
+  public props: {
     browserWindow: BrowserWindow;
     filterContainer: FilterContainer;
     filterControls?: FilterControls;
@@ -28,9 +22,9 @@ export default class Filterizr {
     filterizrState: string;
   };
 
-  constructor(
+  public constructor(
     selectorOrNode: string | HTMLElement = defaultOptions.gridSelector,
-    userOptions: IUserOptions = {}
+    userOptions: RawOptions = {}
   ) {
     this.options = new FilterizrOptions(userOptions);
 
@@ -64,22 +58,22 @@ export default class Filterizr {
   /**
    * Main Filterizr classes exported as static members
    */
-  static FilterContainer = FilterContainer;
-  static FilterItem = FilterItem;
-  static defaultOptions = defaultOptions;
+  public static FilterContainer = FilterContainer;
+  public static FilterItem = FilterItem;
+  public static defaultOptions = defaultOptions;
 
   /**
    * Static method that receives the jQuery object and extends
    * its prototype with a .filterizr method.
    */
-  static installAsJQueryPlugin = _installAsJQueryPlugin;
+  public static installAsJQueryPlugin: Function = _installAsJQueryPlugin;
 
   /**
    * Filters the items in the grid by a category
    * @param {String|String[]} category by which to filter
    * @returns {undefined}
    */
-  filter(category: Filter): void {
+  public filter(category: Filter): void {
     const { filterContainer } = this.props;
 
     // Trigger filteringStart event
@@ -90,7 +84,7 @@ export default class Filterizr {
 
     // Cast category to string or array of strings
     category = Array.isArray(category)
-      ? category.map(c => c.toString())
+      ? category.map((c): string => c.toString())
       : category.toString();
 
     // Update filter in options
@@ -103,7 +97,7 @@ export default class Filterizr {
    * Destroys the Filterizr instance and unbinds all events.
    * @returns {undefined}
    */
-  destroy(): void {
+  public destroy(): void {
     const { browserWindow, filterControls, filterContainer } = this.props;
 
     // Unbind all events of FilterContainer and Filterizr
@@ -122,7 +116,7 @@ export default class Filterizr {
    * @param {Object} node DOM node to append
    * @returns {undefined}
    */
-  insertItem(node: HTMLElement): void {
+  public insertItem(node: HTMLElement): void {
     const { filterContainer } = this.props;
 
     filterContainer.push(node, this.options);
@@ -136,7 +130,7 @@ export default class Filterizr {
    * @param {String} sortAttr the attribute by which to perform the sort
    * @param {String} sortOrder ascending or descending
    */
-  sort(sortAttr: string = 'index', sortOrder: string = 'asc'): void {
+  public sort(sortAttr: string = 'index', sortOrder: string = 'asc'): void {
     const { filterContainer, filterItems } = this.props;
     filterContainer.trigger('sortingStart');
     this.props.filterizrState = FILTERIZR_STATE.SORTING;
@@ -147,7 +141,7 @@ export default class Filterizr {
    * Searches through the FilterItems for a given string and adds an additional filter layer.
    * @param {String} searchTerm the term for which to search
    */
-  search(searchTerm: string = this.options.get().searchTerm): void {
+  public search(searchTerm: string = this.options.get().searchTerm): void {
     this.options.searchTerm = searchTerm.toLowerCase();
     this._render(this.props.filterItems.getSearched(this.options.searchTerm));
   }
@@ -155,7 +149,7 @@ export default class Filterizr {
   /**
    * Shuffles the FilterItems in the grid, making sure their positions have changed.
    */
-  shuffle(): void {
+  public shuffle(): void {
     const { filterContainer, filterItems } = this.props;
     filterContainer.trigger('shufflingStart');
     this.props.filterizrState = FILTERIZR_STATE.SHUFFLING;
@@ -168,7 +162,7 @@ export default class Filterizr {
    * @param {Object} newOptions to override the defaults.
    * @returns {undefined}
    */
-  setOptions(newOptions: IUserOptions): void {
+  public setOptions(newOptions: RawOptions): void {
     if (newOptions.callbacks) {
       // If user has passed in a callback, deregister the old ones
       this.props.filterContainer.unbindEvents(this.options.get().callbacks);
@@ -213,7 +207,7 @@ export default class Filterizr {
    * @param {String} toggledFilter the filter to toggle
    * @returns {undefined}
    */
-  toggleFilter(toggledFilter: string): void {
+  public toggleFilter(toggledFilter: string): void {
     this.options.toggleFilter(toggledFilter);
     this.filter(this.options.filter);
   }
@@ -225,7 +219,7 @@ export default class Filterizr {
     // Filter out the items not matching the fiiltering & search criteria
     this.props.filterItems
       .getFilteredOut(this.options.filter)
-      .forEach(filterItem => {
+      .forEach((filterItem): void => {
         filterItem.filterOut(filterOutCss);
       });
 
@@ -233,7 +227,7 @@ export default class Filterizr {
     const positions = getLayoutPositions(layout, this);
 
     // Filter in new items
-    filterItems.forEach((filterItem, index) => {
+    filterItems.forEach((filterItem, index): void => {
       filterItem.filterIn(positions[index], filterInCss);
     });
   }
@@ -264,13 +258,11 @@ export default class Filterizr {
 
     filterContainer.bindEvents({
       ...callbacks,
-      onTransitionEnd: <EventListener>(
-        debounce(
-          this._onTransitionEndCallback.bind(this),
-          animationDuration,
-          false
-        )
-      ),
+      onTransitionEnd: debounce(
+        this._onTransitionEndCallback.bind(this),
+        animationDuration,
+        false
+      ) as EventListener,
     });
   }
 
@@ -297,7 +289,7 @@ export default class Filterizr {
     const hasImages = !!filterContainer.node.querySelectorAll('img').length;
 
     if (hasImages) {
-      imagesLoaded(filterContainer.node, () => {
+      imagesLoaded(filterContainer.node, (): void => {
         this._updateDimensionsAndRerender();
         onRendered();
       });

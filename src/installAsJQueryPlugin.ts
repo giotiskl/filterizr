@@ -1,14 +1,14 @@
 import Filterizr from './Filterizr';
 import defaultOptions from './FilterizrOptions/defaultOptions';
 
-export default function installAsJQueryPlugin($: any) {
+export default function installAsJQueryPlugin($: any): void {
   if (!$)
     throw new Error(
       'Filterizr as a jQuery plugin, requires jQuery to work. If you would prefer to use the vanilla JS version, please use the correct bundle file.'
     );
 
   // Add filterizr method on jQuery prototype
-  $.fn.filterizr = function() {
+  $.fn.filterizr = function(): any {
     const selector = `.${$.trim(this.get(0).className).replace(/\s+/g, '.')}`;
     const args = arguments;
 

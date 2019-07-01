@@ -1,0 +1,40 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "jest": true,
+    "jquery": true
+  },
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2018
+  },
+  "rules": {
+    "indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "comma-dangle": [
+      "error",
+      "always-multiline",
+      {
+        "functions": "never"
+      }
+    ],
+    "object-curly-spacing": ["error", "always"],
+    "semi": ["error", "always"],
+    "no-console": ["error"],
+    "no-extra-semi": ["error"],
+    "@typescript-eslint/no-var-requires": 0,
+    "no-unused-vars": ["error"]
+  }
+}

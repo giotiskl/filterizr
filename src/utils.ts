@@ -1,4 +1,4 @@
-import { IDictionary } from './types/interfaces/IDictionary';
+import { Dictionary } from './types/interfaces/Dictionary';
 
 /**
  * A function to check that all elements of an array are found within another array.
@@ -53,9 +53,9 @@ export { getNormalizedCssPropName };
  * @param {Object} styles - object with styles
  * @returns {undefined}
  */
-function setStylesOnHTMLNode(node: Element, styles: any) {
-  Object.entries(styles).forEach(([key, value]) => {
-    (<any>(<HTMLElement>node).style)[getNormalizedCssPropName(key)] = value;
+function setStylesOnHTMLNode(node: Element, styles: any): void {
+  Object.entries(styles).forEach(([key, value]): void => {
+    ((node as HTMLElement).style as any)[getNormalizedCssPropName(key)] = value;
   });
 }
 
@@ -70,7 +70,7 @@ export { setStylesOnHTMLNode };
  * @returns {Object} map of data attributes / values
  */
 function getDataAttributesOfHTMLNode(node: Element) {
-  const data: IDictionary = {
+  const data: Dictionary = {
     category: '',
     sort: '',
   };
@@ -115,7 +115,7 @@ export { checkDataAttributeExists };
  * @return {Object} deep clone
  */
 const makeShallowClone = (o: any) => {
-  let ret: IDictionary = {};
+  let ret: Dictionary = {};
   for (const p in o) {
     ret[p] = o[p];
   }
@@ -307,13 +307,13 @@ const checkOptionForErrors = (
 
   if (Array.isArray(allowed)) {
     let validValue = false;
-    allowed.forEach(el => {
+    allowed.forEach((el) => {
       if (el === value) validValue = true;
     });
     if (!validValue) {
       throw new Error(
         `Filterizr: allowed values for option "${name}" are: ${allowed
-          .map(el => `"${el}"`)
+          .map((el) => `"${el}"`)
           .join(', ')}. Value received: "${value}".${referTo(furtherHelpLink)}`
       );
     }
@@ -348,7 +348,7 @@ export { getHTMLElement };
 /**
  * A Regexp to validate potential values for the CSS easing property of transitions.
  */
-const cssEasingValuesRegexp: RegExp = /(^linear$)|(^ease-in-out$)|(^ease-in$)|(^ease-out$)|(^ease$)|(^step-start$)|(^step-end$)|(^steps\(\d\s*,\s*(end|start)\))$|(^cubic-bezier\((\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\))$/;
+const cssEasingValuesRegexp = /(^linear$)|(^ease-in-out$)|(^ease-in$)|(^ease-out$)|(^ease$)|(^step-start$)|(^step-end$)|(^steps\(\d\s*,\s*(end|start)\))$|(^cubic-bezier\((\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\s*,\s*(\d*\.*\d+)\))$/;
 
 export { cssEasingValuesRegexp };
 
@@ -380,6 +380,6 @@ export { TRANSITION_END_EVENTS };
 /**
  * A no-operation function
  */
-const noop = () => {};
+const noop = (): void => {};
 
 export { noop };

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import defaultOptions, {
-  IUserOptions,
+  RawOptions,
 } from '../src/FilterizrOptions/defaultOptions';
 // import test utils
 import * as $ from 'jquery';
@@ -10,7 +11,7 @@ import FilterContainer from '../src/FilterContainer';
 import FilterItem from '../src/FilterItem';
 
 // General setup
-(<any>window).$ = $;
+(window as any).$ = $;
 
 // Test suite for Filterizr
 describe('Filterizr', () => {
@@ -90,7 +91,7 @@ describe('Filterizr', () => {
     it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter', () => {
       // Wait for animation to finish before test
       setTimeout(() => {
-        filteredInItems.forEach(filterItem => {
+        filteredInItems.forEach((filterItem) => {
           const categories = filterItem.getCategories();
           const belongsToCategory = categories.includes(filter);
           expect(belongsToCategory).toEqual(true);
@@ -101,7 +102,7 @@ describe('Filterizr', () => {
     it('should add the .filteredOut class to all filtered out .filtr-item elements', () => {
       // Wait for animation to finish before test
       setTimeout(() => {
-        filteredOutItems.forEach(filterItem => {
+        filteredOutItems.forEach((filterItem) => {
           expect(Array.from(filterItem.node.classList).includes('filteredOut'));
         });
       });
@@ -110,8 +111,8 @@ describe('Filterizr', () => {
     it('should set an inline style z-index: -1000 on filteringEnd for .filteredOut .filtr-item elements', () => {
       // Wait for animation to finish before test
       setTimeout(() => {
-        filteredOutItems.forEach(filterItem => {
-          const zIndexOfFilteredOutItem = (<HTMLElement>filterItem.node).style
+        filteredOutItems.forEach((filterItem) => {
+          const zIndexOfFilteredOutItem = (filterItem.node as HTMLElement).style
             .zIndex;
           expect(zIndexOfFilteredOutItem).toEqual('-1000');
         });
@@ -167,13 +168,13 @@ describe('Filterizr', () => {
     });
 
     it('should increase the length of the FilterItems array by 1', () => {
-      filterizr.insertItem(<HTMLElement>nodeToAdd);
+      filterizr.insertItem(nodeToAdd as HTMLElement);
       const newLength = filterizr.props.filterItems.get().length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
     it('should add into the grid a new FilterItem with the index property equal to the length of the FilterItems array', () => {
-      filterizr.insertItem(<HTMLElement>nodeToAdd);
+      filterizr.insertItem(nodeToAdd as HTMLElement);
       const lastItem = filterizr.props.filterItems.get()[oldLength];
       const indexOfNewLastItem = lastItem.props.index;
       expect(indexOfNewLastItem).toEqual(oldLength);
@@ -207,7 +208,7 @@ describe('Filterizr', () => {
 
     it('should render only items containing the search term', () => {
       const term = 'city';
-      filterizr.props.filterItems.getSearched(term).forEach(filteredItem => {
+      filterizr.props.filterItems.getSearched(term).forEach((filteredItem) => {
         const contents = $(filteredItem.node)
           .find('.item-desc')
           .text()
@@ -223,7 +224,7 @@ describe('Filterizr', () => {
   // });
 
   describe('#setOptions', () => {
-    const newOptions: IUserOptions = {
+    const newOptions: RawOptions = {
       animationDuration: 0.25,
       callbacks: {
         onFilteringStart: () => {
@@ -251,7 +252,7 @@ describe('Filterizr', () => {
       setupControls: false,
     };
 
-    const callToSetOptions = (options: IUserOptions) => {
+    const callToSetOptions = (options: RawOptions) => {
       return () => {
         filterizr.setOptions(options);
       };

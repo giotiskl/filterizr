@@ -1,3 +1,4 @@
+import { Position } from './FilterItem';
 import Filterizr from './Filterizr';
 import getHorizontalLayoutPositions from './layouts/getHorizontalLayoutPositions';
 import getVerticalLayoutPositions from './layouts/getVerticalLayoutPositions';
@@ -13,7 +14,10 @@ import getPackedLayoutPositions from './layouts/getPackedLayoutPositions';
  * @param {Object} filterizr - instance
  * @return {Object} layout to be used by Filterizr
  */
-const getLayoutPositions = (layout: string, filterizr: Filterizr) => {
+const getLayoutPositions = (
+  layout: string,
+  filterizr: Filterizr
+): Position[] => {
   switch (layout) {
     case 'horizontal':
       return getHorizontalLayoutPositions(filterizr);

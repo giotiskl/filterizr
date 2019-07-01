@@ -1,52 +1,49 @@
 import { Filter } from './../ActiveFilter';
-import defaultUserOptions, {
-  IBaseOptions,
-  IUserOptions,
-} from './defaultOptions';
+import defaultUserOptions, { BaseOptions, RawOptions } from './defaultOptions';
 import { cssEasingValuesRegexp, checkOptionForErrors, merge } from '../utils';
 import ActiveFilter from '../ActiveFilter';
 
-export interface IFilterizrOptions extends IBaseOptions {
+export interface Options extends BaseOptions {
   filter: ActiveFilter;
 }
 
 export default class FilterizrOptions {
-  private _options: IFilterizrOptions;
+  private _options: Options;
 
-  constructor(userOptions: IUserOptions) {
+  public constructor(userOptions: RawOptions) {
     const options = merge(defaultUserOptions, this.validate(userOptions));
     this._options = this.convertToFilterizrOptions(options);
   }
 
-  get filter(): Filter {
+  public get filter(): Filter {
     return this._options.filter.get();
   }
 
-  set filter(filter: Filter) {
+  public set filter(filter: Filter) {
     this._options.filter.set(filter);
   }
 
-  toggleFilter(filter: string) {
+  public toggleFilter(filter: string): void {
     this._options.filter.toggle(filter);
   }
 
-  get searchTerm(): string {
+  public get searchTerm(): string {
     return this._options.searchTerm;
   }
 
-  set searchTerm(searchTerm: string) {
+  public set searchTerm(searchTerm: string) {
     this._options.searchTerm = searchTerm;
   }
 
-  get(): IFilterizrOptions {
+  public get(): Options {
     return this._options;
   }
 
-  getRaw(): IUserOptions {
+  public getRaw(): RawOptions {
     return this.convertToOptions(this._options);
   }
 
-  set(newUserOptions: IUserOptions) {
+  public set(newUserOptions: RawOptions): void {
     const options = merge(
       this.convertToOptions(this._options),
       this.validate(newUserOptions)
@@ -54,21 +51,21 @@ export default class FilterizrOptions {
     this._options = this.convertToFilterizrOptions(options);
   }
 
-  convertToFilterizrOptions(userOptions: IUserOptions): IFilterizrOptions {
+  private convertToFilterizrOptions(userOptions: RawOptions): Options {
     return {
       ...userOptions,
       filter: new ActiveFilter(userOptions.filter),
     };
   }
 
-  convertToOptions(filterizrOptions: IFilterizrOptions): IUserOptions {
+  private convertToOptions(filterizrOptions: Options): RawOptions {
     return {
       ...filterizrOptions,
       filter: filterizrOptions.filter.get(),
     };
   }
 
-  validate(options: IUserOptions): IUserOptions {
+  private validate(options: RawOptions): RawOptions {
     checkOptionForErrors(
       'animationDuration',
       options.animationDuration,
