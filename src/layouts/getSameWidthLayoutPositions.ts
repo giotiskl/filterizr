@@ -1,6 +1,6 @@
 import { Position } from '../FilterItem';
-import Filterizr from '../Filterizr';
 import FilterItem from '../FilterItem';
+import FilterContainer from '../FilterContainer';
 
 /**
  * Helper method used to calculate what the top
@@ -32,15 +32,16 @@ const calcItemTop = (
 
 /**
  * Same width layout for items that have the same width, but can have varying height
- * @param filterizr instance.
+ * @param filterContainer instance.
  */
-const getSameWidthLayoutPositions = (filterizr: Filterizr): Position[] => {
-  const { filterContainer } = filterizr.props;
+const getSameWidthLayoutPositions = (
+  filterContainer: FilterContainer
+): Position[] => {
   const {
     props: { filterItems },
   } = filterContainer;
   const filteredItems = filterItems.getFiltered(
-    filterizr.options.get().filter.get()
+    filterContainer.options.get().filter.get()
   );
 
   // Calculate number of columns and rows the grid should have

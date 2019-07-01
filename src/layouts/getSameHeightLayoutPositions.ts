@@ -1,17 +1,16 @@
 import { Position } from '../FilterItem';
-import Filterizr from '../Filterizr';
+import FilterContainer from '../FilterContainer';
 
 /**
  * Same height layout for items that have the same height, but can have varying width
- * @param filterizr instance.
+ * @param filterContainer instance.
  */
-const getSameHeightLayoutPositions = (filterizr: Filterizr): Position[] => {
-  const { filterContainer } = filterizr.props;
-  const {
-    props: { filterItems },
-  } = filterContainer;
+const getSameHeightLayoutPositions = (
+  filterContainer: FilterContainer
+): Position[] => {
+  const { filterItems } = filterContainer.props;
   const filteredItems = filterItems.getFiltered(
-    filterizr.options.get().filter.get()
+    filterContainer.options.get().filter.get()
   );
 
   const gridWidth = filterContainer.props.w,

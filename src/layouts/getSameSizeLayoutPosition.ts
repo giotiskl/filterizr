@@ -1,17 +1,18 @@
 import { Position } from '../FilterItem';
-import Filterizr from '../Filterizr';
+import FilterContainer from '../FilterContainer';
 
 /**
  * Same size layout for items that have the same width/height
- * @param filterizr instance.
+ * @param filterContainer instance.
  */
-const getSameSizeLayoutPosition = (filterizr: Filterizr): Position[] => {
-  const { filterContainer } = filterizr.props;
+const getSameSizeLayoutPosition = (
+  filterContainer: FilterContainer
+): Position[] => {
   const {
     props: { filterItems },
   } = filterContainer;
   const filteredItems = filterItems.getFiltered(
-    filterizr.options.get().filter.get()
+    filterContainer.options.get().filter.get()
   );
   // calculate number of columns and rows the grid should have
   let cols = filterContainer.calculateColumns();

@@ -1,18 +1,19 @@
 import { Position } from '../FilterItem';
 import Packer from './Packer';
-import Filterizr from '../Filterizr';
+import FilterContainer from '../FilterContainer';
 
 /**
  * Packed layout for items that can have varying width as well as varying height.
- * @param filterizr instance.
+ * @param filterContainer instance.
  */
-const getPackedLayoutPositions = (filterizr: Filterizr): Position[] => {
-  const { filterContainer } = filterizr.props;
+const getPackedLayoutPositions = (
+  filterContainer: FilterContainer
+): Position[] => {
   const {
     props: { filterItems },
   } = filterContainer;
   const filteredItems = filterItems.getFiltered(
-    filterizr.options.get().filter.get()
+    filterContainer.options.get().filter.get()
   );
 
   //Instantiate new Packer, set up grid

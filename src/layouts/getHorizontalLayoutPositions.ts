@@ -1,17 +1,16 @@
 import { Position } from '../FilterItem';
-import Filterizr from '../Filterizr';
+import FilterContainer from '../FilterContainer';
 
 /**
  * Horizontal layout algorithm that arranges all FilterItems in one row. Their width may vary.
- * @param filterizr instance.
+ * @param filterContainer instance.
  */
-const getHorizontalLayoutPositions = (filterizr: Filterizr): Position[] => {
-  const { filterContainer } = filterizr.props;
-  const {
-    props: { filterItems },
-  } = filterContainer;
+const getHorizontalLayoutPositions = (
+  filterContainer: FilterContainer
+): Position[] => {
+  const { filterItems } = filterContainer.props;
   const filteredItems = filterItems.getFiltered(
-    filterizr.options.get().filter.get()
+    filterContainer.options.get().filter.get()
   );
 
   let left = 0,

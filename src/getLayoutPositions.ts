@@ -1,11 +1,11 @@
 import { Position } from './FilterItem';
-import Filterizr from './Filterizr';
 import getHorizontalLayoutPositions from './layouts/getHorizontalLayoutPositions';
 import getVerticalLayoutPositions from './layouts/getVerticalLayoutPositions';
 import getSameHeightLayoutPositions from './layouts/getSameHeightLayoutPositions';
 import getSameWidthLayoutPositions from './layouts/getSameWidthLayoutPositions';
 import getSameSizeLayoutPosition from './layouts/getSameSizeLayoutPosition';
 import getPackedLayoutPositions from './layouts/getPackedLayoutPositions';
+import FilterContainer from './FilterContainer';
 
 /**
  * Calculates and returns an array of objects representing
@@ -15,22 +15,22 @@ import getPackedLayoutPositions from './layouts/getPackedLayoutPositions';
  */
 const getLayoutPositions = (
   layout: string,
-  filterizr: Filterizr
+  filterContainer: FilterContainer
 ): Position[] => {
   switch (layout) {
     case 'horizontal':
-      return getHorizontalLayoutPositions(filterizr);
+      return getHorizontalLayoutPositions(filterContainer);
     case 'vertical':
-      return getVerticalLayoutPositions(filterizr);
+      return getVerticalLayoutPositions(filterContainer);
     case 'sameHeight':
-      return getSameHeightLayoutPositions(filterizr);
+      return getSameHeightLayoutPositions(filterContainer);
     case 'sameWidth':
-      return getSameWidthLayoutPositions(filterizr);
+      return getSameWidthLayoutPositions(filterContainer);
     case 'packed':
-      return getPackedLayoutPositions(filterizr);
+      return getPackedLayoutPositions(filterContainer);
     case 'sameSize':
     default:
-      return getSameSizeLayoutPosition(filterizr);
+      return getSameSizeLayoutPosition(filterContainer);
   }
 };
 

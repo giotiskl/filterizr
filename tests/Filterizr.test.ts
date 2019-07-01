@@ -22,7 +22,7 @@ describe('Filterizr', () => {
   beforeEach(() => {
     $('body').html(fakeDom);
     filterizr = new Filterizr('.filtr-container', defaultOptions);
-    filterContainer = filterizr.props.filterContainer;
+    filterContainer = filterizr['filterContainer'];
   });
 
   describe('#constructor', () => {

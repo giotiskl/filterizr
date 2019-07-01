@@ -68,14 +68,14 @@ describe('FilterContainer', () => {
 
     it('should increase the length of the FilterItems array by 1', () => {
       const oldLength = filterContainer.props.filterItems.length;
-      filterContainer.push(cloned as Element, filterizr.options);
+      filterContainer.insertItem(cloned as Element, filterizr.options);
       const newLength = filterContainer.props.filterItems.length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
     it('should set the index property of the newly added FilterItem in the array to array.length', () => {
       const oldLength = filterContainer.props.filterItems.length;
-      filterContainer.push(cloned as Element, filterizr.options);
+      filterContainer.insertItem(cloned as Element, filterizr.options);
       const newlyAddedFilterItem = filterContainer.props.filterItems[oldLength];
       expect(newlyAddedFilterItem.props.index).toEqual(oldLength);
     });
@@ -88,7 +88,7 @@ describe('FilterContainer', () => {
       );
     });
     it('should find and return all .filtr-item elements as FilterItem instances', () => {
-      filterContainer.props.filterItems.forEach((filterItem) => {
+      filterContainer.props.filterItems.get().forEach((filterItem) => {
         expect(filterItem instanceof FilterItem).toBe(true);
       });
     });
