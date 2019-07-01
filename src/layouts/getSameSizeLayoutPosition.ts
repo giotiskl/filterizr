@@ -3,7 +3,7 @@ import Filterizr from '../Filterizr';
 
 /**
  * Same size layout for items that have the same width/height
- * @param {object} Filterizr instance.
+ * @param filterizr instance.
  */
 const getSameSizeLayoutPosition = (filterizr: Filterizr): Position[] => {
   const { filterContainer } = filterizr.props;

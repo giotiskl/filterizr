@@ -84,8 +84,8 @@ describe('Filterizr', () => {
 
     beforeEach(() => {
       filterizr.filter(filter);
-      filteredOutItems = filterizr.props.filterItems.getFilteredOut(filter);
-      filteredInItems = filterizr.props.filterItems.getFiltered(filter);
+      filteredOutItems = this.filterItems.getFilteredOut(filter);
+      filteredInItems = this.filterItems.getFiltered(filter);
     });
 
     it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter', () => {
@@ -164,18 +164,18 @@ describe('Filterizr', () => {
     beforeEach(() => {
       const nodes = filterContainer.node.querySelectorAll('.filtr-item');
       nodeToAdd = nodes[nodes.length - 1];
-      oldLength = filterizr.props.filterItems.get().length;
+      oldLength = this.filterItems.length;
     });
 
     it('should increase the length of the FilterItems array by 1', () => {
       filterizr.insertItem(nodeToAdd as HTMLElement);
-      const newLength = filterizr.props.filterItems.get().length;
+      const newLength = this.filterItems.length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
     it('should add into the grid a new FilterItem with the index property equal to the length of the FilterItems array', () => {
       filterizr.insertItem(nodeToAdd as HTMLElement);
-      const lastItem = filterizr.props.filterItems.get()[oldLength];
+      const lastItem = this.filterItems.getItem(oldLength);
       const indexOfNewLastItem = lastItem.props.index;
       expect(indexOfNewLastItem).toEqual(oldLength);
     });
@@ -184,7 +184,7 @@ describe('Filterizr', () => {
   describe('#sort', () => {
     it('should return a sorted grid', () => {
       filterizr.sort('index', 'desc');
-      const filterItems = filterizr.props.filterItems.get();
+      const filterItems = this.filterItems.get();
       const { length } = filterItems;
       for (let i = 0; i < length; i++) {
         expect(filterItems[i].props.index).toEqual(length - 1 - i);
@@ -195,20 +195,19 @@ describe('Filterizr', () => {
   describe('#search', () => {
     it('should apply an extra layer of filtering based on the search term', () => {
       filterizr.filter('1'); // by this point 3 items should be visible
-      expect(filterizr.props.filterItems.getSearched('city').length).toEqual(2);
+      expect(this.filterItems.getSearched('city').length).toEqual(2);
     });
 
     it('should render an empty grid if no item was found', () => {
       expect(
-        filterizr.props.filterItems.getSearched(
-          'term not contained a nywhere in grid'
-        ).length
+        this.filterItems.getSearched('term not contained a nywhere in grid')
+          .length
       ).toEqual(0);
     });
 
     it('should render only items containing the search term', () => {
       const term = 'city';
-      filterizr.props.filterItems.getSearched(term).forEach((filteredItem) => {
+      this.filterItems.getSearched(term).forEach((filteredItem) => {
         const contents = $(filteredItem.node)
           .find('.item-desc')
           .text()

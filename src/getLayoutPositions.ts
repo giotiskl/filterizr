@@ -10,9 +10,8 @@ import getPackedLayoutPositions from './layouts/getPackedLayoutPositions';
 /**
  * Calculates and returns an array of objects representing
  * the next positions the FilterItems are supposed to assume.
- * @param {String} layout - name of helper method to be used
- * @param {Object} filterizr - instance
- * @return {Object} layout to be used by Filterizr
+ * @param layout name of helper method to be used
+ * @param filterizr instance
  */
 const getLayoutPositions = (
   layout: string,

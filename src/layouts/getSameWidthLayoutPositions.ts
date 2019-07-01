@@ -5,9 +5,9 @@ import FilterItem from '../FilterItem';
 /**
  * Helper method used to calculate what the top
  * of the current item in the iteration should be.
- * @param {Array} filteredItems collection
- * @param {Number} cols of grid
- * @param {Number} index of current item in filteredItems collection
+ * @param filteredItems collection
+ * @param cols of grid
+ * @param index of current item in filteredItems collection
  */
 const calcItemTop = (
   filteredItems: FilterItem[],
@@ -32,7 +32,7 @@ const calcItemTop = (
 
 /**
  * Same width layout for items that have the same width, but can have varying height
- * @param {object} filterizr instance.
+ * @param filterizr instance.
  */
 const getSameWidthLayoutPositions = (filterizr: Filterizr): Position[] => {
   const { filterContainer } = filterizr.props;

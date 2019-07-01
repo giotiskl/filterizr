@@ -13,6 +13,9 @@ export interface Position {
   top: number;
 }
 
+/**
+ * Resembles an item in the grid of Filterizr.
+ */
 export default class FilterItem {
   public node: Element;
   public options: FilterizrOptions;
@@ -30,10 +33,9 @@ export default class FilterItem {
   /**
    * Constructor of FilterItem
    *
-   * @param {Object} node is the HTML node to create the FilterItem out of
-   * @param {Number} index is the index of the FilterItem when iterating over them
-   * @param {Object} options the options Filterizr was initialized with
-   * @returns {Object} FilterItem instance
+   * @param node is the HTML node to create the FilterItem out of
+   * @param index is the index of the FilterItem when iterating over them
+   * @param options the options Filterizr was initialized with
    */
   public constructor(node: Element, index: number, options: FilterizrOptions) {
     this.options = options;
@@ -92,9 +94,8 @@ export default class FilterItem {
 
   /**
    * Filters in a specific FilterItem out of the grid.
-   * @param {Object} targetPosition the position towards which the element should animate
-   * @param {Object} cssOptions for the animation
-   * @returns {undefined}
+   * @param targetPosition the position towards which the element should animate
+   * @param cssOptions for the animation
    */
   public filterIn(targetPosition: Position, cssOptions: Dictionary): void {
     // Enhance the cssOptions with the target position before animating
@@ -114,7 +115,7 @@ export default class FilterItem {
 
   /**
    * Filters out a specific FilterItem out of the grid.
-   * @param {Object} cssOptions for the animation
+   * @param cssOptions for the animation
    */
   public filterOut(cssOptions: Dictionary): void {
     const { lastPosition: targetPosition } = this.props;
@@ -133,9 +134,8 @@ export default class FilterItem {
 
   /**
    * Helper method to calculate the animation delay for a given grid item
-   * @param {Number} delay in ms
-   * @param {String} delayMode can be 'alternate' or 'progressive'
-   * @return {Number} delay in ms
+   * @param delay in ms
+   * @param delayMode can be 'alternate' or 'progressive'
    */
   public getTransitionDelay(
     delay: number,
@@ -154,8 +154,8 @@ export default class FilterItem {
 
   /**
    * Returns true if the text contents of the FilterItem match the search term
-   * @param {String} searchTerm - the search term
-   * @return {Boolean} if the innerText matches the term
+   * @param searchTerm to look up
+   * @return if the innerText matches the term
    */
   public contentsMatchSearch(searchTerm: string): boolean {
     return Boolean(this.getContentsLowercase().includes(searchTerm));

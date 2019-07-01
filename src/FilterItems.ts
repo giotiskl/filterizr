@@ -70,7 +70,6 @@ export default class FilterItems {
 
   /**
    * Pushes a new item into the array of filter items.
-   *
    * @param filterItem to push into the array
    * @returns {number} index
    */
@@ -116,7 +115,6 @@ export default class FilterItems {
 
   /**
    * Returns the sorted filter items.
-   *
    * @param sortAttr attribute by which to sort
    * @param sortOrder ascending or descending
    */
@@ -145,7 +143,6 @@ export default class FilterItems {
 
   /**
    * Returns the filtered array based on the search term
-   *
    * @param searchTerm by which to search
    */
   public getSearched(searchTerm: string): FilterItem[] {

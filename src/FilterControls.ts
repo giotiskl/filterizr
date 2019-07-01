@@ -22,8 +22,8 @@ class FilterControls {
   };
 
   /**
-   * @param {object} filterizr keep a ref to the Filterizr object to control actions
-   * @param {string} selector optionally the selector of the .filtr-controls, used when
+   * @param filterizr keep a ref to the Filterizr object to control actions
+   * @param selector optionally the selector of the .filtr-controls, used when
    *                          there is a need to have multiple Filterizr instances
    */
   public constructor(filterizr: Filterizr, selector: string = '') {

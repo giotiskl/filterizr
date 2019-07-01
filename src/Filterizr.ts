@@ -8,6 +8,7 @@ import getLayoutPositions from './getLayoutPositions';
 import defaultOptions, { RawOptions } from './FilterizrOptions/defaultOptions';
 import _installAsJQueryPlugin from './installAsJQueryPlugin';
 import { FILTERIZR_STATE, debounce, getHTMLElement, noop } from './utils';
+import FilterItems from './FilterItems';
 
 const imagesLoaded = require('imagesloaded');
 
@@ -26,16 +27,14 @@ export default class Filterizr {
   ) {
     this.options = new FilterizrOptions(userOptions);
 
-    const filterContainer = new FilterContainer(
-      getHTMLElement(selectorOrNode),
-      this.options
-    );
-
     const { setupControls, controlsSelector } = this.options.get();
 
     this.props = {
       browserWindow: new BrowserWindow(),
-      filterContainer,
+      filterContainer: new FilterContainer(
+        getHTMLElement(selectorOrNode),
+        this.options
+      ),
       ...(setupControls && {
         filterControls: new FilterControls(this, controlsSelector),
       }),
@@ -47,6 +46,10 @@ export default class Filterizr {
 
     // Trigger the first render and fire the onInit callback if defined
     this._renderWithImagesLoaded(this.options.get().callbacks.onInit);
+  }
+
+  private get filterItems(): FilterItems {
+    return this.props.filterContainer.props.filterItems;
   }
 
   /**
@@ -64,14 +67,10 @@ export default class Filterizr {
 
   /**
    * Filters the items in the grid by a category
-   * @param {String|String[]} category by which to filter
-   * @returns {undefined}
+   * @param category by which to filter
    */
   public filter(category: Filter): void {
     const { filterContainer } = this.props;
-    const {
-      props: { filterItems },
-    } = filterContainer;
 
     // Trigger filteringStart event
     filterContainer.trigger('filteringStart');
@@ -87,12 +86,11 @@ export default class Filterizr {
     // Update filter in options
     this.options.filter = category;
 
-    this._render(filterItems.getSearched(this.options.searchTerm));
+    this._render(this.filterItems.getSearched(this.options.searchTerm));
   }
 
   /**
    * Destroys the Filterizr instance and unbinds all events.
-   * @returns {undefined}
    */
   public destroy(): void {
     const { browserWindow, filterControls, filterContainer } = this.props;
@@ -110,8 +108,7 @@ export default class Filterizr {
 
   /**
    * Inserts a new FilterItem in the Filterizr grid
-   * @param {Object} node DOM node to append
-   * @returns {undefined}
+   * @param node DOM node to append
    */
   public insertItem(node: HTMLElement): void {
     const { filterContainer } = this.props;
@@ -129,12 +126,9 @@ export default class Filterizr {
    */
   public sort(sortAttr: string = 'index', sortOrder: string = 'asc'): void {
     const { filterContainer } = this.props;
-    const {
-      props: { filterItems },
-    } = filterContainer;
     filterContainer.trigger('sortingStart');
     this.props.filterizrState = FILTERIZR_STATE.SORTING;
-    this._render(filterItems.getSorted(sortAttr, sortOrder));
+    this._render(this.filterItems.getSorted(sortAttr, sortOrder));
   }
 
   /**
@@ -142,11 +136,8 @@ export default class Filterizr {
    * @param {String} searchTerm the term for which to search
    */
   public search(searchTerm: string = this.options.get().searchTerm): void {
-    const {
-      props: { filterItems },
-    } = this.props.filterContainer;
     this.options.searchTerm = searchTerm.toLowerCase();
-    this._render(filterItems.getSearched(this.options.searchTerm));
+    this._render(this.filterItems.getSearched(this.options.searchTerm));
   }
 
   /**
@@ -154,19 +145,15 @@ export default class Filterizr {
    */
   public shuffle(): void {
     const { filterContainer } = this.props;
-    const {
-      props: { filterItems },
-    } = filterContainer;
     filterContainer.trigger('shufflingStart');
     this.props.filterizrState = FILTERIZR_STATE.SHUFFLING;
-    this._render(filterItems.getShuffled());
+    this._render(this.filterItems.getShuffled());
   }
 
   /**
    * Updates the perferences of the users for rendering the Filterizr grid,
    * additionally performs error checking on the new options passed.
-   * @param {Object} newOptions to override the defaults.
-   * @returns {undefined}
+   * @param newOptions to override the defaults.
    */
   public setOptions(newOptions: RawOptions): void {
     if (newOptions.callbacks) {
@@ -185,7 +172,7 @@ export default class Filterizr {
       newOptions.delayMode ||
       newOptions.easing
     ) {
-      this.props.filterContainer.props.filterItems.updateFilterItemsTransitionStyle();
+      this.filterItems.updateFilterItemsTransitionStyle();
     }
 
     // If inside the new options the callbacks object has been defined
@@ -208,8 +195,7 @@ export default class Filterizr {
 
   /**
    * Performs multifiltering with AND/OR logic.
-   * @param {String} toggledFilter the filter to toggle
-   * @returns {undefined}
+   * @param toggledFilter the filter to toggle
    */
   public toggleFilter(toggledFilter: string): void {
     this.options.toggleFilter(toggledFilter);
@@ -218,13 +204,10 @@ export default class Filterizr {
 
   // Helper methods
   private _render(itemsToFilterIn: FilterItem[]): void {
-    const {
-      props: { filterItems },
-    } = this.props.filterContainer;
     const { filterInCss, filterOutCss, layout } = this.options.get();
 
     // Filter out the items not matching the fiiltering & search criteria
-    filterItems
+    this.filterItems
       .getFilteredOut(this.options.filter)
       .forEach((filterItem): void => {
         filterItem.filterOut(filterOutCss);
@@ -288,8 +271,6 @@ export default class Filterizr {
    * have the height attribute explicitly set on them.
    *
    * In case the grid contains no images, then a simple render is performed.
-   *
-   * @returns {undefined}
    */
   private _renderWithImagesLoaded(onRendered: Function = noop): void {
     const { filterContainer } = this.props;
@@ -304,10 +285,7 @@ export default class Filterizr {
       const {
         options: { filter },
       } = this;
-      const {
-        props: { filterItems },
-      } = this.props.filterContainer;
-      this._render(filterItems.getFiltered(filter));
+      this._render(this.filterItems.getFiltered(filter));
       onRendered();
     }
   }
@@ -315,19 +293,13 @@ export default class Filterizr {
   /**
    * Updates dimensions of container and items and rerenders the
    * grid so that the items can assume their new positions.
-   *
-   * @returns {undefined}
    */
   private _updateDimensionsAndRerender(): void {
     const {
       props: { filterContainer },
       options: { filter },
     } = this;
-    const {
-      props: { filterItems },
-    } = filterContainer;
-
     filterContainer.updateDimensions();
-    this._render(filterItems.getFiltered(filter));
+    this._render(this.filterItems.getFiltered(filter));
   }
 }

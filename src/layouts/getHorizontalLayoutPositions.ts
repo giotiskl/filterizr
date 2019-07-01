@@ -3,8 +3,7 @@ import Filterizr from '../Filterizr';
 
 /**
  * Horizontal layout algorithm that arranges all FilterItems in one row. Their width may vary.
- * @param {Object} Filterizr instance.
- * @return {Object[]} positions for the items to assume.
+ * @param filterizr instance.
  */
 const getHorizontalLayoutPositions = (filterizr: Filterizr): Position[] => {
   const { filterContainer } = filterizr.props;

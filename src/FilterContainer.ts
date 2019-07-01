@@ -4,6 +4,9 @@ import FilterItem from './FilterItem';
 import { setStylesOnHTMLNode, TRANSITION_END_EVENTS } from './utils';
 import FilterItems from './FilterItems';
 
+/**
+ * Resembles the grid of items within Filterizr.
+ */
 export default class FilterContainer {
   public node: Element;
   public options: FilterizrOptions;
@@ -16,9 +19,8 @@ export default class FilterContainer {
 
   /**
    * Instantiates a FilterContainer
-   * @param {Element} node of the FilterContainer instance
-   * @param {Object} options with which to instantiate the container
-   * @return {FilterContainer} FilterContainer instance
+   * @param node of the FilterContainer instance
+   * @param options with which to instantiate the container
    */
   public constructor(node: Element, options: FilterizrOptions) {
     if (!node) {
@@ -75,8 +77,7 @@ export default class FilterContainer {
   /**
    * Iterates over the FilterContainer creating FilterItem
    * instances for every grid item found.
-   * @param {Object} options - of Filterizr instance
-   * @return {Object[]} array of FilterItem instances
+   * @param options - of Filterizr instance
    */
   public getFilterItems(options: FilterizrOptions): FilterItems {
     const filterItemNodes = Array.from(
@@ -108,7 +109,6 @@ export default class FilterContainer {
 
   /**
    * Calculates the amount of columns the Filterizr grid should have
-   * @returns {number} number of columns for the grid
    */
   public calculateColumns(): number {
     return Math.round(this.props.w / this.props.filterItems.getItem(0).props.w);
@@ -116,8 +116,7 @@ export default class FilterContainer {
 
   /**
    * Updates the height of the FilterContainer prop and sets it as an inline style
-   * @param {Number} newHeight - the new value of the CSS height property
-   * @returns {undefined}
+   * @param newHeight the new value of the CSS height property
    */
   public updateHeight(newHeight: number): void {
     this.props.h = newHeight;
@@ -126,7 +125,6 @@ export default class FilterContainer {
 
   /**
    * Updates the dimensions of both the container and the items
-   * @returns {undefined}
    */
   public updateDimensions(): void {
     this.updateWidth();
@@ -135,8 +133,7 @@ export default class FilterContainer {
 
   /**
    * Binds all Filterizr related events.
-   * @param {Object} callbacks wrapper object
-   * @returns {undefined}
+   * @param callbacks wrapper object
    */
   public bindEvents(callbacks: RawOptionsCallbacks): void {
     // Bind transition end
@@ -155,8 +152,7 @@ export default class FilterContainer {
 
   /**
    * Unbinds all Filterizr related events.
-   * @param {Object} callbacks wrapper object
-   * @returns {undefined}
+   * @param callbacks wrapper object
    */
   public unbindEvents(callbacks: RawOptionsCallbacks): void {
     TRANSITION_END_EVENTS.forEach((eventName): void => {
@@ -175,8 +171,7 @@ export default class FilterContainer {
 
   /**
    * Dispatches an event to the container
-   * @param {string} eventType - name of the event
-   * @returns {undefined}
+   * @param eventType - name of the event
    */
   public trigger(eventType: string): void {
     const event = new Event(eventType);
@@ -185,7 +180,6 @@ export default class FilterContainer {
 
   /**
    * Updates the width of the FilterContainer prop
-   * @returns {undefined}
    */
   private updateWidth(): void {
     this.props.w = this.getWidth();
@@ -193,7 +187,6 @@ export default class FilterContainer {
 
   /**
    * Gets the clientWidth of the container
-   * @returns {number} width of node
    */
   private getWidth(): number {
     return this.node.clientWidth;

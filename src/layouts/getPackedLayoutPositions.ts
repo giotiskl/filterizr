@@ -4,7 +4,7 @@ import Filterizr from '../Filterizr';
 
 /**
  * Packed layout for items that can have varying width as well as varying height.
- * @param {object} filterizr instance.
+ * @param filterizr instance.
  */
 const getPackedLayoutPositions = (filterizr: Filterizr): Position[] => {
   const { filterContainer } = filterizr.props;
