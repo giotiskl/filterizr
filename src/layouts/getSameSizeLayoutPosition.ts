@@ -17,22 +17,23 @@ const getSameSizeLayoutPosition = (
   let row = 0;
   // calculate array of positions
   const targetPositions = filteredItems.map(
-    ({ props: { w, h } }, index): Position => {
+    ({ dimensions: { width, height } }, index): Position => {
       // update current row
       if (index % cols === 0 && index >= cols) row++;
       // determine pos in grid
       const spot = index - cols * row;
       // return object with new position in array
       return {
-        left: spot * w,
-        top: row * h,
+        left: spot * width,
+        top: row * height,
       };
     }
   );
 
   // Update the height of the FilterContainer
   // before returning from the method
-  const firstItemHeight = (filteredItems[0] && filteredItems[0].props.h) || 0;
+  const firstItemHeight =
+    (filteredItems[0] && filteredItems[0].dimensions.height) || 0;
   filterContainer.updateHeight((row + 1) * firstItemHeight);
 
   // Return the array of new positions

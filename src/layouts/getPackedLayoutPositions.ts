@@ -16,10 +16,12 @@ const getPackedLayoutPositions = (
 
   //Instantiate new Packer, set up grid
   const packer = new Packer(filterContainer.dimensions.width);
-  const filterItemsDimensions = filteredItems.map(({ props }): object => ({
-    w: props.w,
-    h: props.h,
-  }));
+  const filterItemsDimensions = filteredItems.map(
+    ({ dimensions: { width, height } }): object => ({
+      w: width,
+      h: height,
+    })
+  );
 
   // Enhance array with coordinates
   // added in an extra object named fit

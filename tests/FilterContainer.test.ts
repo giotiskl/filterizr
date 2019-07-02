@@ -76,8 +76,10 @@ describe('FilterContainer', () => {
     it('should set the index property of the newly added FilterItem in the array to array.length', () => {
       const oldLength = filterContainer.filterItems.length;
       filterContainer.insertItem(cloned as Element, filterizr.options);
-      const newlyAddedFilterItem = filterContainer.filterItems[oldLength];
-      expect(newlyAddedFilterItem.props.index).toEqual(oldLength);
+      const newlyAddedFilterItem = filterContainer.filterItems.getItem(
+        oldLength
+      );
+      expect(newlyAddedFilterItem['index']).toEqual(oldLength);
     });
   });
 
@@ -99,7 +101,8 @@ describe('FilterContainer', () => {
       // make necessary set up to get 4 columns
       const containerWidth = 1000;
       filterContainer.dimensions.width = containerWidth;
-      filterContainer.filterItems[0].props.w = containerWidth / 4;
+      filterContainer.filterItems.getItem(0).dimensions.width =
+        containerWidth / 4;
       expect(filterContainer.calculateColumns()).toEqual(4);
     });
   });

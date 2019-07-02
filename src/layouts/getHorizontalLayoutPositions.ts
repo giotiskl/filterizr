@@ -18,16 +18,16 @@ const getHorizontalLayoutPositions = (
 
   const targetPositions = filteredItems.map(
     (filterItem): Position => {
-      const { w, h } = filterItem.props;
+      const { width, height } = filterItem.dimensions;
       const pos = {
         left: left,
         top: 0,
       };
 
       // update left for next item
-      left += w;
+      left += width;
       // check if target height of FilterContainer should be increased
-      if (h > containerHeight) containerHeight = h;
+      if (height > containerHeight) containerHeight = height;
 
       return pos;
     }

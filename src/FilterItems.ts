@@ -130,13 +130,8 @@ export default class FilterItems {
 
     const sortedItems = sortBy(filterItems, (filterItem: FilterItem):
       | string
-      | number => {
-      if (sortAttr === 'index' || sortAttr === 'sortData') {
-        // Default sort attribute is used
-        return filterItem.props[sortAttr];
-      }
-      return filterItem.props.data[sortAttr];
-    });
+      | number => filterItem.getSortAttribute(sortAttr));
+
     const orderedSortedItems =
       sortOrder === 'asc' ? sortedItems : sortedItems.reverse();
 

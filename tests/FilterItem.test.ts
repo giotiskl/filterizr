@@ -45,8 +45,8 @@ describe('FilterItem', () => {
       );
       const position = { left: 15, top: 100 };
       filterItem.filterIn(position, {});
-      expect(filterItem.props.lastPosition.left).toEqual(15);
-      expect(filterItem.props.lastPosition.top).toEqual(100);
+      expect(filterItem['lastPosition'].left).toEqual(15);
+      expect(filterItem['lastPosition'].top).toEqual(100);
     });
 
     it('should set the filteredOut property to false', () => {
@@ -57,7 +57,7 @@ describe('FilterItem', () => {
       );
       const position = { left: 15, top: 100 };
       filterItem.filterIn(position, {});
-      expect(filterItem.props.filteredOut).toEqual(false);
+      expect(filterItem['filteredOut']).toEqual(false);
     });
   });
 
@@ -70,7 +70,7 @@ describe('FilterItem', () => {
       );
       const position = { left: 15, top: 100 };
       filterItem.filterOut(position);
-      expect(filterItem.props.filteredOut).toEqual(true);
+      expect(filterItem['filteredOut']).toEqual(true);
     });
   });
 

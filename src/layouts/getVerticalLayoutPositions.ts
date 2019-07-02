@@ -19,13 +19,13 @@ const getVerticalLayoutPositions = (
 
   const targetPositions = filteredItems.map(
     (filterItem): Position => {
-      const { h } = filterItem.props;
+      const { height } = filterItem.dimensions;
       const pos = {
         left: 0,
         top: top,
       };
 
-      top += h;
+      top += height;
 
       return pos;
     }

@@ -194,7 +194,7 @@ export default class Filterizr {
 
     // If filter or filtering logic has been changed retrigger filtering
     if (newOptions.filter || newOptions.multifilterLogicalOperator) {
-      this.filter(filter);
+      this.filter(newOptions.filter || filter);
     }
   }
 

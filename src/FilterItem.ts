@@ -19,16 +19,16 @@ export interface Position {
 export default class FilterItem {
   public node: Element;
   public options: FilterizrOptions;
-  public props: {
-    data: Dictionary;
-    filteredOut: boolean;
-    index: number;
-    lastPosition: Position;
-    onTransitionEndHandler: EventListener;
-    sortData: string;
-    w: number;
-    h: number;
+  public dimensions: {
+    width: number;
+    height: number;
   };
+  private data: Dictionary;
+  private sortData: string;
+  private index: number;
+  private filteredOut: boolean;
+  private lastPosition: Position;
+  private onTransitionEndHandler: EventListener;
 
   /**
    * Constructor of FilterItem
@@ -38,35 +38,34 @@ export default class FilterItem {
    * @param options the options Filterizr was initialized with
    */
   public constructor(node: Element, index: number, options: FilterizrOptions) {
-    this.options = options;
+    this.data = getDataAttributesOfHTMLNode(node);
+    this.filteredOut = false;
+    this.index = index;
+    this.lastPosition = { left: 0, top: 0 };
     this.node = node;
-    const { filterOutCss } = this.options.get();
-
-    this.props = {
-      data: getDataAttributesOfHTMLNode(this.node),
-      filteredOut: false,
-      index,
-      lastPosition: { left: 0, top: 0 },
-      onTransitionEndHandler: (): void => {
-        // On transition end determines if the item is filtered out or not.
-        // It adds a .filteredOut class so that user can target these items
-        // via css if needed. It sets the z-index to -1000 to prevent mouse
-        // events from being triggered.
-        const { filteredOut } = this.props;
-        if (filteredOut) {
-          this.node.classList.add('filteredOut');
-          setStylesOnHTMLNode(this.node, { zIndex: -1000 });
-        } else {
-          this.node.classList.remove('filteredOut');
-          setStylesOnHTMLNode(this.node, { zIndex: '' });
-        }
-      },
-      sortData: this.node.getAttribute('data-sort'),
-      w: this.getWidth(),
-      h: this.getHeight(),
+    this.options = options;
+    this.sortData = node.getAttribute('data-sort');
+    this.dimensions = {
+      width: this.getWidth(),
+      height: this.getHeight(),
+    };
+    this.onTransitionEndHandler = (): void => {
+      // On transition end determines if the item is filtered out or not.
+      // It adds a .filteredOut class so that user can target these items
+      // via css if needed. It sets the z-index to -1000 to prevent mouse
+      // events from being triggered.
+      const { filteredOut } = this;
+      if (filteredOut) {
+        this.node.classList.add('filteredOut');
+        setStylesOnHTMLNode(this.node, { zIndex: -1000 });
+      } else {
+        this.node.classList.remove('filteredOut');
+        setStylesOnHTMLNode(this.node, { zIndex: '' });
+      }
     };
 
     // Set initial styles
+    const { filterOutCss } = this.options.get();
     setStylesOnHTMLNode(
       this.node,
       Object.assign({}, filterOutCss, {
@@ -108,9 +107,9 @@ export default class FilterItem {
       })
     );
     // Update last position to be the targetPosition
-    this.props.lastPosition = targetPosition;
+    this.lastPosition = targetPosition;
     // Update state
-    this.props.filteredOut = false;
+    this.filteredOut = false;
   }
 
   /**
@@ -118,7 +117,7 @@ export default class FilterItem {
    * @param cssOptions for the animation
    */
   public filterOut(cssOptions: Dictionary): void {
-    const { lastPosition: targetPosition } = this.props;
+    const { lastPosition: targetPosition } = this;
     // Enhance the cssOptions with the target position before animating
     setStylesOnHTMLNode(
       this.node,
@@ -129,7 +128,7 @@ export default class FilterItem {
       })
     );
     // Update state
-    this.props.filteredOut = true;
+    this.filteredOut = true;
   }
 
   /**
@@ -144,9 +143,9 @@ export default class FilterItem {
     let ret = 0;
 
     if (delayMode === 'progressive') {
-      ret = delay * this.props.index;
+      ret = delay * this.index;
     } else {
-      if (this.props.index % 2 === 0) ret = delay;
+      if (this.index % 2 === 0) ret = delay;
     }
 
     return ret;
@@ -165,8 +164,8 @@ export default class FilterItem {
    * Recalculates the dimensions of the element and updates them in the state
    */
   public updateDimensions(): void {
-    this.props.w = this.getWidth();
-    this.props.h = this.getHeight();
+    this.dimensions.width = this.getWidth();
+    this.dimensions.height = this.getHeight();
   }
 
   /**
@@ -176,6 +175,18 @@ export default class FilterItem {
    */
   public getCategories(): string[] {
     return this.node.getAttribute('data-category').split(/\s*,\s*/g);
+  }
+
+  /**
+   * Returns the value of the sort attribute
+   * @param sortAttribute "index", "sortData" or custom user data-attribute by which to sort
+   */
+  public getSortAttribute(sortAttribute: string): string | number {
+    if (sortAttribute === 'index' || sortAttribute === 'sortData') {
+      // Default sort attribute is used
+      return this[sortAttribute];
+    }
+    return this.data[sortAttribute];
   }
 
   /**
@@ -207,7 +218,7 @@ export default class FilterItem {
    */
   private bindEvents(): void {
     TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.node.addEventListener(eventName, this.props.onTransitionEndHandler);
+      this.node.addEventListener(eventName, this.onTransitionEndHandler);
     });
   }
 
@@ -216,10 +227,7 @@ export default class FilterItem {
    */
   private unbindEvents(): void {
     TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.node.removeEventListener(
-        eventName,
-        this.props.onTransitionEndHandler
-      );
+      this.node.removeEventListener(eventName, this.onTransitionEndHandler);
     });
   }
 

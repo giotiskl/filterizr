@@ -111,7 +111,7 @@ export default class FilterContainer {
    */
   public calculateColumns(): number {
     return Math.round(
-      this.dimensions.width / this.filterItems.getItem(0).props.w
+      this.dimensions.width / this.filterItems.getItem(0).dimensions.width
     );
   }
 

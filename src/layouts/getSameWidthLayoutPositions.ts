@@ -24,7 +24,7 @@ const calcItemTop = (
   index -= cols;
   // If we're over the first row loop until we calculate the height of all items above
   while (index >= 0) {
-    itemTop += filteredItems[index].props.h;
+    itemTop += filteredItems[index].dimensions.height;
     index -= cols;
   }
   return itemTop;
@@ -54,7 +54,7 @@ const getSameWidthLayoutPositions = (
   const targetPositions = filteredItems.map(
     (filterItem, index): Position => {
       // Update height of tallest item in row if needed
-      const { w, h } = filterItem.props;
+      const { width, height } = filterItem.dimensions;
 
       // Update current row, increment container
       // height and  reset height of tallest in row
@@ -64,11 +64,11 @@ const getSameWidthLayoutPositions = (
       const spot = index - cols * row;
 
       // Update height of column
-      columnHeights[spot] += h;
+      columnHeights[spot] += height;
 
       // Return object with new position in array
       return {
-        left: spot * w,
+        left: spot * width,
         top: calcItemTop(filteredItems, cols, index),
       };
     }
