@@ -67,16 +67,16 @@ describe('FilterContainer', () => {
     });
 
     it('should increase the length of the FilterItems array by 1', () => {
-      const oldLength = filterContainer.props.filterItems.length;
+      const oldLength = filterContainer.filterItems.length;
       filterContainer.insertItem(cloned as Element, filterizr.options);
-      const newLength = filterContainer.props.filterItems.length;
+      const newLength = filterContainer.filterItems.length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
     it('should set the index property of the newly added FilterItem in the array to array.length', () => {
-      const oldLength = filterContainer.props.filterItems.length;
+      const oldLength = filterContainer.filterItems.length;
       filterContainer.insertItem(cloned as Element, filterizr.options);
-      const newlyAddedFilterItem = filterContainer.props.filterItems[oldLength];
+      const newlyAddedFilterItem = filterContainer.filterItems[oldLength];
       expect(newlyAddedFilterItem.props.index).toEqual(oldLength);
     });
   });
@@ -88,7 +88,7 @@ describe('FilterContainer', () => {
       );
     });
     it('should find and return all .filtr-item elements as FilterItem instances', () => {
-      filterContainer.props.filterItems.get().forEach((filterItem) => {
+      filterContainer.filterItems.get().forEach((filterItem) => {
         expect(filterItem instanceof FilterItem).toBe(true);
       });
     });
@@ -98,8 +98,8 @@ describe('FilterContainer', () => {
     it('should return the number of columns that can fit in the FilterContainer', () => {
       // make necessary set up to get 4 columns
       const containerWidth = 1000;
-      filterContainer.props.w = containerWidth;
-      filterContainer.props.filterItems[0].props.w = containerWidth / 4;
+      filterContainer.dimensions.width = containerWidth;
+      filterContainer.filterItems[0].props.w = containerWidth / 4;
       expect(filterContainer.calculateColumns()).toEqual(4);
     });
   });

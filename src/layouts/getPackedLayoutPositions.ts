@@ -9,15 +9,13 @@ import FilterContainer from '../FilterContainer';
 const getPackedLayoutPositions = (
   filterContainer: FilterContainer
 ): Position[] => {
-  const {
-    props: { filterItems },
-  } = filterContainer;
+  const { filterItems } = filterContainer;
   const filteredItems = filterItems.getFiltered(
     filterContainer.options.get().filter.get()
   );
 
   //Instantiate new Packer, set up grid
-  const packer = new Packer(filterContainer.props.w);
+  const packer = new Packer(filterContainer.dimensions.width);
   const filterItemsDimensions = filteredItems.map(({ props }): object => ({
     w: props.w,
     h: props.h,

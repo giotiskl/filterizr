@@ -8,12 +8,12 @@ import FilterContainer from '../FilterContainer';
 const getSameHeightLayoutPositions = (
   filterContainer: FilterContainer
 ): Position[] => {
-  const { filterItems } = filterContainer.props;
+  const { filterItems } = filterContainer;
   const filteredItems = filterItems.getFiltered(
     filterContainer.options.get().filter.get()
   );
 
-  const gridWidth = filterContainer.props.w,
+  const gridWidth = filterContainer.dimensions.width,
     itemHeight = filteredItems[0].props.h;
   let row = 0,
     left = 0;

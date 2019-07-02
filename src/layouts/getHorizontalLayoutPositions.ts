@@ -8,7 +8,7 @@ import FilterContainer from '../FilterContainer';
 const getHorizontalLayoutPositions = (
   filterContainer: FilterContainer
 ): Position[] => {
-  const { filterItems } = filterContainer.props;
+  const { filterItems } = filterContainer;
   const filteredItems = filterItems.getFiltered(
     filterContainer.options.get().filter.get()
   );

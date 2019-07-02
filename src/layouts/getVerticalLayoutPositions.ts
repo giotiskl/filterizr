@@ -8,9 +8,7 @@ import FilterContainer from '../FilterContainer';
 const getVerticalLayoutPositions = (
   filterContainer: FilterContainer
 ): Position[] => {
-  const {
-    props: { filterItems },
-  } = filterContainer;
+  const { filterItems } = filterContainer;
   const filteredItems = filterItems.getFiltered(
     filterContainer.options.get().filter.get()
   );

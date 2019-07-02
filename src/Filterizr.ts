@@ -59,7 +59,7 @@ export default class Filterizr {
   }
 
   private get filterItems(): FilterItems {
-    return this.filterContainer.props.filterItems;
+    return this.filterContainer.filterItems;
   }
 
   /**
