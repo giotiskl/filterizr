@@ -13,11 +13,24 @@ import FilterItems from './FilterItems';
 const imagesLoaded = require('imagesloaded');
 
 export default class Filterizr {
+  /**
+   * Main Filterizr classes exported as static members
+   */
+  public static FilterContainer = FilterContainer;
+  public static FilterItem = FilterItem;
+  public static defaultOptions = defaultOptions;
+
+  /**
+   * Static method that receives the jQuery object and extends
+   * its prototype with a .filterizr method.
+   */
+  public static installAsJQueryPlugin: Function = _installAsJQueryPlugin;
+
+  public options: FilterizrOptions;
   private browserWindow: BrowserWindow;
   private filterContainer: FilterContainer;
   private filterControls?: FilterControls;
   private filterizrState: string;
-  public options: FilterizrOptions;
 
   public constructor(
     selectorOrNode: string | HTMLElement = defaultOptions.gridSelector,
@@ -48,19 +61,6 @@ export default class Filterizr {
   private get filterItems(): FilterItems {
     return this.filterContainer.props.filterItems;
   }
-
-  /**
-   * Main Filterizr classes exported as static members
-   */
-  public static FilterContainer = FilterContainer;
-  public static FilterItem = FilterItem;
-  public static defaultOptions = defaultOptions;
-
-  /**
-   * Static method that receives the jQuery object and extends
-   * its prototype with a .filterizr method.
-   */
-  public static installAsJQueryPlugin: Function = _installAsJQueryPlugin;
 
   /**
    * Filters the items in the grid by a category

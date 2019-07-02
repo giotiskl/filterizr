@@ -35,6 +35,7 @@
     "no-console": ["error"],
     "no-extra-semi": ["error"],
     "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/member-ordering": 2,
     "no-unused-vars": ["error"]
   }
 }
