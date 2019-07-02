@@ -35,6 +35,10 @@ export default class FilterItems {
     this._filterItems = filterItems;
   }
 
+  public destroy(): void {
+    this._filterItems.forEach((filterItem): void => filterItem.destroy());
+  }
+
   /**
    * Updates the transition inline styles of all contained grid items
    * @param {Object} options Filterizr instance options

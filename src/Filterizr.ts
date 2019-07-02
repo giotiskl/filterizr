@@ -90,14 +90,16 @@ export default class Filterizr {
    * Destroys the Filterizr instance and unbinds all events.
    */
   public destroy(): void {
-    const { browserWindow, filterControls, filterContainer } = this;
+    const {
+      browserWindow,
+      filterControls,
+      filterContainer,
+      filterItems,
+    } = this;
 
-    // Unbind all events of FilterContainer and Filterizr
-    // and remove inline styles.
+    filterItems.destroy();
     filterContainer.destroy();
     browserWindow.destroy();
-
-    // Destroy all controls of the instance
     if (this.options.get().setupControls && filterControls) {
       filterControls.destroy();
     }
