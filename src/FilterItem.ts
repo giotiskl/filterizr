@@ -85,7 +85,6 @@ export default class FilterItem {
 
   /**
    * Destroys the FilterItem instance
-   * @returns {undefined}
    */
   public destroy(): void {
     this.unbindEvents();
@@ -233,8 +232,6 @@ export default class FilterItem {
 
   /**
    * Calculates and returns the transition css property based on options.
-   *
-   * @returns {string} transition css property
    */
   private getTransitionStyle(): string {
     const { animationDuration, easing, delay, delayMode } = this.options.get();
