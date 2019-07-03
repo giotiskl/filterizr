@@ -51,10 +51,8 @@ export default class Filterizr {
       this.filterControls = new FilterControls(this, controlsSelector);
     }
 
-    // Set up events needed by Filterizr
     this._bindEvents();
 
-    // Trigger the first render and fire the onInit callback if defined
     this._renderWithImagesLoaded(this.options.get().callbacks.onInit);
   }
 
@@ -69,20 +67,14 @@ export default class Filterizr {
   public filter(category: Filter): void {
     const { filterContainer, filterItems } = this;
 
-    // Trigger filteringStart event
     filterContainer.trigger('filteringStart');
-
-    // Set animation state to trigger callbacks
     this.filterizrState = FILTERIZR_STATE.FILTERING;
 
-    // Cast category to string or array of strings
     category = Array.isArray(category)
       ? category.map((c): string => c.toString())
       : category.toString();
 
-    // Update filter in options
     this.options.filter = category;
-
     this._render(filterItems.getSearched(this.options.searchTerm));
   }
 
@@ -110,11 +102,7 @@ export default class Filterizr {
    * @param node DOM node to append
    */
   public insertItem(node: HTMLElement): void {
-    const { filterContainer } = this;
-
-    filterContainer.insertItem(node, this.options);
-
-    // Retrigger filter for new item to assume position in the grid
+    this.filterContainer.insertItem(node, this.options);
     this._renderWithImagesLoaded();
   }
 
@@ -162,15 +150,14 @@ export default class Filterizr {
     } = this;
 
     if (newOptions.callbacks) {
-      // If user has passed in a callback, deregister the old ones
+      // If callbacks are defined the in the options, the old ones
+      // have to be removed while we still have the references to
+      // the handlers.
       filterContainer.unbindEvents(this.options.get().callbacks);
     }
 
-    // Update options
     this.options.set(newOptions);
 
-    // If one of the options that updates the transition properties
-    // of the grid items is set, call the update method
     if (
       newOptions.animationDuration ||
       newOptions.delay ||
@@ -180,10 +167,6 @@ export default class Filterizr {
       filterItems.updateFilterItemsTransitionStyle();
     }
 
-    // If inside the new options the callbacks object has been defined
-    // then the FilterContainer events need to be reset.
-    // Same if the animationDuration is defined as it is a parameter to
-    // the debounce wrapper of the transitionEnd callback.
     if (newOptions.callbacks || newOptions.animationDuration) {
       this._rebindFilterContainerEvents();
     }
@@ -192,7 +175,6 @@ export default class Filterizr {
       this.search(newOptions.searchTerm);
     }
 
-    // If filter or filtering logic has been changed retrigger filtering
     if (newOptions.filter || newOptions.multifilterLogicalOperator) {
       this.filter(newOptions.filter || filter);
     }
@@ -216,15 +198,12 @@ export default class Filterizr {
     } = this;
     const { filterInCss, filterOutCss, layout } = this.options.get();
 
-    // Filter out the items not matching the fiiltering & search criteria
     filterItems.getFilteredOut(filter).forEach((filterItem): void => {
       filterItem.filterOut(filterOutCss);
     });
 
-    // Determine target positions for items to be filtered in
     const positions = getLayoutPositions(layout, filterContainer);
 
-    // Filter in new items
     itemsToFilterIn.forEach((filterItem, index): void => {
       filterItem.filterIn(positions[index], filterInCss);
     });

@@ -18,11 +18,6 @@ export default class FilterContainer {
 
   private onTransitionEndHandler?: EventListener;
 
-  /**
-   * Instantiates a FilterContainer
-   * @param node of the FilterContainer instance
-   * @param options with which to instantiate the container
-   */
   public constructor(node: Element, options: FilterizrOptions) {
     if (!node) {
       throw new Error(
@@ -53,11 +48,10 @@ export default class FilterContainer {
     }
 
     this.dimensions = {
-      width: this.getWidth(),
+      width: this.node.clientWidth,
       height: 0,
     };
 
-    // Update dimensions of contained items on instantiation
     this.filterItems.updateFilterItemsDimensions();
   }
 
@@ -65,12 +59,7 @@ export default class FilterContainer {
    * Destroys the FilterContainer instance by unbinding all events and resetting inline styles.
    */
   public destroy(): void {
-    // Remove all inline styles and unbind all events
     this.node.removeAttribute('style');
-    const filterItemNodes = Array.from(
-      this.node.querySelectorAll(this.options.get().gridItemsSelector)
-    );
-    filterItemNodes.forEach((node): void => node.removeAttribute('style'));
     this.unbindEvents(this.options.get().callbacks);
   }
 
@@ -95,12 +84,11 @@ export default class FilterContainer {
    * @param options - Filterizr options
    */
   public insertItem(node: Element, options: FilterizrOptions): void {
-    // Clone node and remove inline styles
     const nodeModified = node.cloneNode(true) as Element;
     nodeModified.removeAttribute('style');
-    // Add new item to DOM
+
     this.node.appendChild(nodeModified);
-    // Initialize it as a FilterItem and push into array
+
     this.filterItems.push(
       new FilterItem(nodeModified, this.filterItems.length, options)
     );
@@ -137,7 +125,6 @@ export default class FilterContainer {
    * @param callbacks wrapper object
    */
   public bindEvents(callbacks: RawOptionsCallbacks): void {
-    // Bind transition end
     this.onTransitionEndHandler = callbacks.onTransitionEnd;
     TRANSITION_END_EVENTS.forEach((eventName): void => {
       this.node.addEventListener(eventName, this.onTransitionEndHandler);
@@ -180,13 +167,6 @@ export default class FilterContainer {
    * Updates the width of the FilterContainer prop
    */
   private updateWidth(): void {
-    this.dimensions.width = this.getWidth();
-  }
-
-  /**
-   * Gets the clientWidth of the container
-   */
-  private getWidth(): number {
-    return this.node.clientWidth;
+    this.dimensions.width = this.node.clientWidth;
   }
 }

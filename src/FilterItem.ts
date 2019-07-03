@@ -30,13 +30,6 @@ export default class FilterItem {
   private lastPosition: Position;
   private onTransitionEndHandler: EventListener;
 
-  /**
-   * Constructor of FilterItem
-   *
-   * @param node is the HTML node to create the FilterItem out of
-   * @param index is the index of the FilterItem when iterating over them
-   * @param options the options Filterizr was initialized with
-   */
   public constructor(node: Element, index: number, options: FilterizrOptions) {
     this.data = getDataAttributesOfHTMLNode(node);
     this.filteredOut = false;
@@ -46,8 +39,8 @@ export default class FilterItem {
     this.options = options;
     this.sortData = node.getAttribute('data-sort');
     this.dimensions = {
-      width: this.getWidth(),
-      height: this.getHeight(),
+      width: this.node.clientWidth,
+      height: this.node.clientHeight,
     };
     this.onTransitionEndHandler = (): void => {
       // On transition end determines if the item is filtered out or not.
@@ -64,7 +57,6 @@ export default class FilterItem {
       }
     };
 
-    // Set initial styles
     const { filterOutCss } = this.options.get();
     setStylesOnHTMLNode(
       this.node,
@@ -79,7 +71,6 @@ export default class FilterItem {
 
     this.setTransitionStyle();
 
-    // Finally bind events
     this.bindEvents();
   }
 
@@ -87,6 +78,7 @@ export default class FilterItem {
    * Destroys the FilterItem instance
    */
   public destroy(): void {
+    this.node.removeAttribute('style');
     this.unbindEvents();
   }
 
@@ -105,9 +97,7 @@ export default class FilterItem {
         }px, ${targetPosition.top}px, 0)`,
       })
     );
-    // Update last position to be the targetPosition
     this.lastPosition = targetPosition;
-    // Update state
     this.filteredOut = false;
   }
 
@@ -126,7 +116,6 @@ export default class FilterItem {
         }px, ${targetPosition.top}px, 0)`,
       })
     );
-    // Update state
     this.filteredOut = true;
   }
 
@@ -163,8 +152,8 @@ export default class FilterItem {
    * Recalculates the dimensions of the element and updates them in the state
    */
   public updateDimensions(): void {
-    this.dimensions.width = this.getWidth();
-    this.dimensions.height = this.getHeight();
+    this.dimensions.width = this.node.clientWidth;
+    this.dimensions.height = this.node.clientHeight;
   }
 
   /**
@@ -185,6 +174,7 @@ export default class FilterItem {
       // Default sort attribute is used
       return this[sortAttribute];
     }
+    // User defined data attribute is used
     return this.data[sortAttribute];
   }
 
@@ -194,22 +184,6 @@ export default class FilterItem {
    */
   private getContentsLowercase(): string {
     return this.node.textContent.toLowerCase();
-  }
-
-  /**
-   * Calculates the clientHeight (excluding border) of an element
-   * @return {Number} height of FilterItem node
-   */
-  private getHeight(): number {
-    return this.node.clientHeight;
-  }
-
-  /**
-   * Calculates the clientWidth (excluding border) of an element
-   * @return {Number} width of FilterItem node
-   */
-  private getWidth(): number {
-    return this.node.clientWidth;
   }
 
   /**

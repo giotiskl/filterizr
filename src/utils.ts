@@ -1,4 +1,5 @@
 import { Dictionary } from './types/interfaces/Dictionary';
+import FilterItem from './FilterItem';
 
 /**
  * A function to check that all elements of an array are found within another array.
@@ -217,15 +218,18 @@ export { shuffle };
  * @param {Array} arr2 the second array of FilterItems
  * @return {Boolean} equality
  */
-const filterItemArraysHaveSameSorting = (a1: any[], a2: any[]): boolean => {
+const filterItemArraysHaveSameSorting = (
+  filterItemsA: FilterItem[],
+  filterItemsB: FilterItem[]
+): boolean => {
   // Exit case if arrays do not have equal length
-  if (a1.length !== a2.length) return false;
+  if (filterItemsA.length !== filterItemsB.length) return false;
   // Iterate over first array and compare indices with second
-  for (let i = 0; i < a1.length; i++) {
-    const index1 = a1[i].props.index;
-    const index2 = a2[i].props.index;
+  for (let i = 0; i < filterItemsA.length; i++) {
+    const indexA = filterItemsA[i].getSortAttribute('index');
+    const indexB = filterItemsB[i].getSortAttribute('index');
     // Means arrays do not have identical sorting
-    if (index1 !== index2) return false;
+    if (indexA !== indexB) return false;
   }
   return true;
 };
