@@ -61,6 +61,7 @@ export default class FilterContainer {
   public destroy(): void {
     this.node.removeAttribute('style');
     this.unbindEvents(this.options.get().callbacks);
+    this.filterItems.destroy();
   }
 
   /**

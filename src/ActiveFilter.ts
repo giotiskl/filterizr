@@ -7,25 +7,25 @@ export type Filter = string | string[];
  * It can be a plain string value or an array of strings.
  */
 export default class ActiveFilter {
-  private _filter: Filter;
+  private filter: Filter;
 
   public constructor(filter: Filter) {
-    this._filter = filter;
+    this.filter = filter;
   }
 
   public get(): Filter {
-    return this._filter;
+    return this.filter;
   }
 
   public set(targetFilter: Filter): void {
-    this._filter = targetFilter;
+    this.filter = targetFilter;
   }
 
   public toggle(targetFilter: string): void {
-    this._filter = this._toggle(this._filter, targetFilter);
+    this.filter = this.toggleFilter(this.filter, targetFilter);
   }
 
-  private _toggle(
+  private toggleFilter(
     activeFilter: string | string[],
     targetFilter: string
   ): string | string[] {

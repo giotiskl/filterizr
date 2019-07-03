@@ -8,47 +8,47 @@ export interface Options extends BaseOptions {
 }
 
 export default class FilterizrOptions {
-  private _options: Options;
+  private options: Options;
 
   public constructor(userOptions: RawOptions) {
     const options = merge(defaultUserOptions, this.validate(userOptions));
-    this._options = this.convertToFilterizrOptions(options);
+    this.options = this.convertToFilterizrOptions(options);
   }
 
   public get filter(): Filter {
-    return this._options.filter.get();
+    return this.options.filter.get();
   }
 
   public set filter(filter: Filter) {
-    this._options.filter.set(filter);
+    this.options.filter.set(filter);
   }
 
   public toggleFilter(filter: string): void {
-    this._options.filter.toggle(filter);
+    this.options.filter.toggle(filter);
   }
 
   public get searchTerm(): string {
-    return this._options.searchTerm;
+    return this.options.searchTerm;
   }
 
   public set searchTerm(searchTerm: string) {
-    this._options.searchTerm = searchTerm;
+    this.options.searchTerm = searchTerm;
   }
 
   public get(): Options {
-    return this._options;
+    return this.options;
   }
 
   public getRaw(): RawOptions {
-    return this.convertToOptions(this._options);
+    return this.convertToOptions(this.options);
   }
 
   public set(newUserOptions: RawOptions): void {
     const options = merge(
-      this.convertToOptions(this._options),
+      this.convertToOptions(this.options),
       this.validate(newUserOptions)
     );
-    this._options = this.convertToFilterizrOptions(options);
+    this.options = this.convertToFilterizrOptions(options);
   }
 
   private convertToFilterizrOptions(userOptions: RawOptions): Options {

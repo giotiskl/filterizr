@@ -6,7 +6,7 @@ import FilterItem from './FilterItem';
 import { Filter } from './ActiveFilter';
 import getLayoutPositions from './getLayoutPositions';
 import defaultOptions, { RawOptions } from './FilterizrOptions/defaultOptions';
-import _installAsJQueryPlugin from './installAsJQueryPlugin';
+import installAsJQueryPlugin from './installAsJQueryPlugin';
 import { FILTERIZR_STATE, debounce, getHTMLElement, noop } from './utils';
 import FilterItems from './FilterItems';
 
@@ -24,7 +24,7 @@ export default class Filterizr {
    * Static method that receives the jQuery object and extends
    * its prototype with a .filterizr method.
    */
-  public static installAsJQueryPlugin: Function = _installAsJQueryPlugin;
+  public static installAsJQueryPlugin: Function = installAsJQueryPlugin;
 
   public options: FilterizrOptions;
   private browserWindow: BrowserWindow;
@@ -51,9 +51,9 @@ export default class Filterizr {
       this.filterControls = new FilterControls(this, controlsSelector);
     }
 
-    this._bindEvents();
+    this.bindEvents();
 
-    this._renderWithImagesLoaded(this.options.get().callbacks.onInit);
+    this.renderWithImagesLoaded(this.options.get().callbacks.onInit);
   }
 
   private get filterItems(): FilterItems {
@@ -75,7 +75,7 @@ export default class Filterizr {
       : category.toString();
 
     this.options.filter = category;
-    this._render(filterItems.getSearched(this.options.searchTerm));
+    this.render(filterItems.getSearched(this.options.searchTerm));
   }
 
   /**
@@ -89,7 +89,6 @@ export default class Filterizr {
       filterItems,
     } = this;
 
-    filterItems.destroy();
     filterContainer.destroy();
     browserWindow.destroy();
     if (this.options.get().setupControls && filterControls) {
@@ -103,7 +102,7 @@ export default class Filterizr {
    */
   public insertItem(node: HTMLElement): void {
     this.filterContainer.insertItem(node, this.options);
-    this._renderWithImagesLoaded();
+    this.renderWithImagesLoaded();
   }
 
   /**
@@ -115,7 +114,7 @@ export default class Filterizr {
     const { filterContainer, filterItems } = this;
     filterContainer.trigger('sortingStart');
     this.filterizrState = FILTERIZR_STATE.SORTING;
-    this._render(filterItems.getSorted(sortAttr, sortOrder));
+    this.render(filterItems.getSorted(sortAttr, sortOrder));
   }
 
   /**
@@ -124,7 +123,7 @@ export default class Filterizr {
    */
   public search(searchTerm: string = this.options.get().searchTerm): void {
     this.options.searchTerm = searchTerm.toLowerCase();
-    this._render(this.filterItems.getSearched(this.options.searchTerm));
+    this.render(this.filterItems.getSearched(this.options.searchTerm));
   }
 
   /**
@@ -134,7 +133,7 @@ export default class Filterizr {
     const { filterContainer, filterItems } = this;
     filterContainer.trigger('shufflingStart');
     this.filterizrState = FILTERIZR_STATE.SHUFFLING;
-    this._render(filterItems.getShuffled());
+    this.render(filterItems.getShuffled());
   }
 
   /**
@@ -168,7 +167,7 @@ export default class Filterizr {
     }
 
     if (newOptions.callbacks || newOptions.animationDuration) {
-      this._rebindFilterContainerEvents();
+      this.rebindFilterContainerEvents();
     }
 
     if ('searchTerm' in newOptions) {
@@ -190,7 +189,7 @@ export default class Filterizr {
   }
 
   // Helper methods
-  private _render(itemsToFilterIn: FilterItem[]): void {
+  private render(itemsToFilterIn: FilterItem[]): void {
     const {
       filterContainer,
       filterItems,
@@ -209,7 +208,7 @@ export default class Filterizr {
     });
   }
 
-  private _onTransitionEndCallback(): void {
+  private onTransitionEndCallback(): void {
     const { filterizrState, filterContainer } = this;
 
     switch (filterizrState) {
@@ -227,7 +226,7 @@ export default class Filterizr {
     this.filterizrState = FILTERIZR_STATE.IDLE;
   }
 
-  private _rebindFilterContainerEvents(): void {
+  private rebindFilterContainerEvents(): void {
     const { filterContainer } = this;
     const { animationDuration, callbacks } = this.options.get();
 
@@ -236,18 +235,18 @@ export default class Filterizr {
     filterContainer.bindEvents({
       ...callbacks,
       onTransitionEnd: debounce(
-        this._onTransitionEndCallback.bind(this),
+        this.onTransitionEndCallback.bind(this),
         animationDuration,
         false
       ) as EventListener,
     });
   }
 
-  private _bindEvents(): void {
+  private bindEvents(): void {
     const { browserWindow } = this;
-    this._rebindFilterContainerEvents();
+    this.rebindFilterContainerEvents();
     browserWindow.setResizeEventHandler(
-      this._updateDimensionsAndRerender.bind(this)
+      this.updateDimensionsAndRerender.bind(this)
     );
   }
 
@@ -259,7 +258,7 @@ export default class Filterizr {
    *
    * In case the grid contains no images, then a simple render is performed.
    */
-  private _renderWithImagesLoaded(onRendered: Function = noop): void {
+  private renderWithImagesLoaded(onRendered: Function = noop): void {
     const {
       filterContainer,
       filterItems,
@@ -269,11 +268,11 @@ export default class Filterizr {
 
     if (hasImages) {
       imagesLoaded(filterContainer.node, (): void => {
-        this._updateDimensionsAndRerender();
+        this.updateDimensionsAndRerender();
         onRendered();
       });
     } else {
-      this._render(filterItems.getFiltered(filter));
+      this.render(filterItems.getFiltered(filter));
       onRendered();
     }
   }
@@ -282,13 +281,13 @@ export default class Filterizr {
    * Updates dimensions of container and items and rerenders the
    * grid so that the items can assume their new positions.
    */
-  private _updateDimensionsAndRerender(): void {
+  private updateDimensionsAndRerender(): void {
     const {
       filterContainer,
       filterItems,
       options: { filter },
     } = this;
     filterContainer.updateDimensions();
-    this._render(filterItems.getFiltered(filter));
+    this.render(filterItems.getFiltered(filter));
   }
 }

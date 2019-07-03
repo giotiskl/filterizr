@@ -11,32 +11,32 @@ import {
 } from './utils';
 
 export default class FilterItems {
-  private _filterItems: FilterItem[];
-  private _options: FilterizrOptions;
+  private filterItems: FilterItem[];
+  private options: FilterizrOptions;
 
   public constructor(filterItems: FilterItem[], options: FilterizrOptions) {
-    this._filterItems = filterItems;
-    this._options = options;
+    this.filterItems = filterItems;
+    this.options = options;
   }
 
   public get length(): number {
-    return this._filterItems.length;
+    return this.filterItems.length;
   }
 
   public get(): FilterItem[] {
-    return this._filterItems;
+    return this.filterItems;
   }
 
   public getItem(index: number): FilterItem {
-    return this._filterItems[index];
+    return this.filterItems[index];
   }
 
   public set(filterItems: FilterItem[]): void {
-    this._filterItems = filterItems;
+    this.filterItems = filterItems;
   }
 
   public destroy(): void {
-    this._filterItems.forEach((filterItem): void => filterItem.destroy());
+    this.filterItems.forEach((filterItem): void => filterItem.destroy());
   }
 
   /**
@@ -50,9 +50,9 @@ export default class FilterItems {
       easing,
       delay,
       delayMode,
-    } = this._options.getRaw();
+    } = this.options.getRaw();
 
-    this._filterItems.forEach((filterItem): void =>
+    this.filterItems.forEach((filterItem): void =>
       setStylesOnHTMLNode(filterItem.node, {
         transition: `all ${animationDuration}s ${easing} ${filterItem.getTransitionDelay(
           delay,
@@ -67,7 +67,7 @@ export default class FilterItems {
    * @returns {undefined}
    */
   public updateFilterItemsDimensions(): void {
-    this._filterItems.forEach((filterItem): void =>
+    this.filterItems.forEach((filterItem): void =>
       filterItem.updateDimensions()
     );
   }
@@ -78,7 +78,7 @@ export default class FilterItems {
    * @returns {number} index
    */
   public push(filterItem: FilterItem): number {
-    return this._filterItems.push(filterItem);
+    return this.filterItems.push(filterItem);
   }
 
   /**
@@ -111,7 +111,7 @@ export default class FilterItems {
         filter
       );
       const contentsMatchSearch: boolean = filterItem.contentsMatchSearch(
-        this._options.searchTerm
+        this.options.searchTerm
       );
       return !shouldBeFiltered || !contentsMatchSearch;
     });
@@ -137,7 +137,7 @@ export default class FilterItems {
 
     this.set(orderedSortedItems);
 
-    return this.getFiltered(this._options.filter);
+    return this.getFiltered(this.options.filter);
   }
 
   /**
@@ -145,7 +145,7 @@ export default class FilterItems {
    * @param searchTerm by which to search
    */
   public getSearched(searchTerm: string): FilterItem[] {
-    const filteredItems = this.getFiltered(this._options.filter);
+    const filteredItems = this.getFiltered(this.options.filter);
 
     if (!searchTerm) {
       return filteredItems;
@@ -160,13 +160,13 @@ export default class FilterItems {
    * Returns a shuffled array
    */
   public getShuffled(): FilterItem[] {
-    const filteredItems = this.getFiltered(this._options.filter);
+    const filteredItems = this.getFiltered(this.options.filter);
 
     if (filteredItems.length <= 1) {
       return filteredItems;
     }
 
-    const indicesBeforeShuffling = this.getFiltered(this._options.filter)
+    const indicesBeforeShuffling = this.getFiltered(this.options.filter)
       .map((filterItem: FilterItem): number => this.get().indexOf(filterItem))
       .slice();
 
@@ -193,7 +193,7 @@ export default class FilterItems {
   }
 
   private _shouldBeFiltered(categories: string[], filter: Filter): boolean {
-    const { multifilterLogicalOperator } = this._options.get();
+    const { multifilterLogicalOperator } = this.options.get();
     const isMultifilteringEnabled = Array.isArray(filter);
 
     if (!isMultifilteringEnabled) {
