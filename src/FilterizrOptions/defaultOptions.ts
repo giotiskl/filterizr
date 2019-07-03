@@ -21,7 +21,6 @@ export interface BaseOptions {
   easing?: string;
   filterOutCss?: object;
   filterInCss?: object;
-  gridSelector?: string;
   gridItemsSelector?: string;
   layout?:
     | 'horizontal'
@@ -67,7 +66,6 @@ const defaultUserOptions: RawOptions = {
     opacity: 1,
     transform: 'scale(1)',
   },
-  gridSelector: '.filtr-container',
   gridItemsSelector: '.filtr-item',
   layout: 'sameSize',
   multifilterLogicalOperator: 'or',

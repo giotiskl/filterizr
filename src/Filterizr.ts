@@ -33,7 +33,7 @@ export default class Filterizr {
   private filterizrState: string;
 
   public constructor(
-    selectorOrNode: string | HTMLElement = defaultOptions.gridSelector,
+    selectorOrNode: string | HTMLElement = '.filtr-container',
     userOptions: RawOptions = {}
   ) {
     this.options = new FilterizrOptions(userOptions);

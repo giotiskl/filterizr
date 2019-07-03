@@ -1,3 +1,8 @@
+## Version 2.2.0
+
+- Remove `gridSelector` as it could not be used in any viable use case
+- Further simplification/optimization of codebase
+
 ## Version 2.1.0
 
 - Export TS type declarations for package consumers
