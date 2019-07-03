@@ -70,7 +70,6 @@ const options = {
     transform: 'scale(1)'
   },
   gridItemsSelector: '.filtr-container',
-  gridSelector: '.filtr-container',
   layout: 'sameSize', // See layouts
   multifilterLogicalOperator: 'or',
   searchTerm: '',

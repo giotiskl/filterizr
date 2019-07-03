@@ -99,12 +99,6 @@
       "description": "The CSS selector of items in your grid's container."
     },
     {
-      "name": "gridSelector",
-      "type": "String",
-      "defaultValue": ".filtr-container",
-      "description": "The CSS selector of the container of your gallery grid."
-    },
-    {
       "name": "layout",
       "type": "Enum (sameSize|sameWidth|sameHeight|packed|horizontal|vertical)",
       "defaultValue": "sameSize",

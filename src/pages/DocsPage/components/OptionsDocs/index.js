@@ -29,7 +29,6 @@ const options = {
     opacity: 0,
     transform: 'scale(1)'
   },
-  gridSelector: '.filtr-container',
   gridItemsSelector: '.filtr-item',
   layout: 'sameSize',
   multifilterLogicalOperator: 'or',
