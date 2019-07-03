@@ -39,8 +39,7 @@ export default class FilterContainer {
       flexWrap: 'wrap',
     });
 
-    // Initialize FilterItems
-    this.filterItems = this.getFilterItems(this.options);
+    this.filterItems = this.makeFilterItems(this.options);
     if (!this.filterItems.length) {
       throw new Error(
         "Filterizr: cannot initialize empty container. Make sure the gridItemsSelector option corresponds to the selector of your grid's items"
@@ -52,12 +51,9 @@ export default class FilterContainer {
       height: 0,
     };
 
-    this.filterItems.updateFilterItemsDimensions();
+    this.filterItems.updateDimensions();
   }
 
-  /**
-   * Destroys the FilterContainer instance by unbinding all events and resetting inline styles.
-   */
   public destroy(): void {
     this.node.removeAttribute('style');
     this.unbindEvents(this.options.get().callbacks);
@@ -65,11 +61,10 @@ export default class FilterContainer {
   }
 
   /**
-   * Iterates over the FilterContainer creating FilterItem
-   * instances for every grid item found.
-   * @param options - of Filterizr instance
+   * Turn the HTML elements in the grid to FilterItem
+   * instances and return a collection of them.
    */
-  public getFilterItems(options: FilterizrOptions): FilterItems {
+  public makeFilterItems(options: FilterizrOptions): FilterItems {
     const filterItemNodes = Array.from(
       this.node.querySelectorAll(options.get().gridItemsSelector)
     );
@@ -87,44 +82,28 @@ export default class FilterContainer {
   public insertItem(node: Element, options: FilterizrOptions): void {
     const nodeModified = node.cloneNode(true) as Element;
     nodeModified.removeAttribute('style');
-
     this.node.appendChild(nodeModified);
-
     this.filterItems.push(
       new FilterItem(nodeModified, this.filterItems.length, options)
     );
   }
 
-  /**
-   * Calculates the amount of columns the Filterizr grid should have
-   */
   public calculateColumns(): number {
     return Math.round(
       this.dimensions.width / this.filterItems.getItem(0).dimensions.width
     );
   }
 
-  /**
-   * Updates the height of the FilterContainer prop and sets it as an inline style
-   * @param newHeight the new value of the CSS height property
-   */
+  public updateDimensions(): void {
+    this.updateWidth();
+    this.filterItems.updateDimensions();
+  }
+
   public updateHeight(newHeight: number): void {
     this.dimensions.height = newHeight;
     setStylesOnHTMLNode(this.node, { height: `${newHeight}px` });
   }
 
-  /**
-   * Updates the dimensions of both the container and the items
-   */
-  public updateDimensions(): void {
-    this.updateWidth();
-    this.filterItems.updateFilterItemsDimensions();
-  }
-
-  /**
-   * Binds all Filterizr related events.
-   * @param callbacks wrapper object
-   */
   public bindEvents(callbacks: RawOptionsCallbacks): void {
     this.onTransitionEndHandler = callbacks.onTransitionEnd;
     TRANSITION_END_EVENTS.forEach((eventName): void => {
@@ -139,10 +118,6 @@ export default class FilterContainer {
     this.node.addEventListener('sortingEnd', callbacks.onSortingEnd);
   }
 
-  /**
-   * Unbinds all Filterizr related events.
-   * @param callbacks wrapper object
-   */
   public unbindEvents(callbacks: RawOptionsCallbacks): void {
     TRANSITION_END_EVENTS.forEach((eventName): void => {
       this.node.removeEventListener(eventName, this.onTransitionEndHandler);
@@ -155,18 +130,11 @@ export default class FilterContainer {
     this.node.removeEventListener('sortingEnd', callbacks.onSortingEnd);
   }
 
-  /**
-   * Dispatches an event to the container
-   * @param eventType - name of the event
-   */
   public trigger(eventType: string): void {
     const event = new Event(eventType);
     this.node.dispatchEvent(event);
   }
 
-  /**
-   * Updates the width of the FilterContainer prop
-   */
   private updateWidth(): void {
     this.dimensions.width = this.node.clientWidth;
   }

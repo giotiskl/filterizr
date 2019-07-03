@@ -78,16 +78,8 @@ export default class Filterizr {
     this.render(filterItems.getSearched(this.options.searchTerm));
   }
 
-  /**
-   * Destroys the Filterizr instance and unbinds all events.
-   */
   public destroy(): void {
-    const {
-      browserWindow,
-      filterControls,
-      filterContainer,
-      filterItems,
-    } = this;
+    const { browserWindow, filterControls, filterContainer } = this;
 
     filterContainer.destroy();
     browserWindow.destroy();
@@ -107,10 +99,13 @@ export default class Filterizr {
 
   /**
    * Sorts the FilterItems in the grid
-   * @param {String} sortAttr the attribute by which to perform the sort
-   * @param {String} sortOrder ascending or descending
+   * @param sortAttr the attribute by which to perform the sort
+   * @param sortOrder ascending or descending
    */
-  public sort(sortAttr: string = 'index', sortOrder: string = 'asc'): void {
+  public sort(
+    sortAttr: string = 'index',
+    sortOrder: 'asc' | 'desc' = 'asc'
+  ): void {
     const { filterContainer, filterItems } = this;
     filterContainer.trigger('sortingStart');
     this.filterizrState = FILTERIZR_STATE.SORTING;
@@ -119,7 +114,7 @@ export default class Filterizr {
 
   /**
    * Searches through the FilterItems for a given string and adds an additional filter layer.
-   * @param {String} searchTerm the term for which to search
+   * @param searchTerm the term for which to search
    */
   public search(searchTerm: string = this.options.get().searchTerm): void {
     this.options.searchTerm = searchTerm.toLowerCase();
@@ -163,7 +158,7 @@ export default class Filterizr {
       newOptions.delayMode ||
       newOptions.easing
     ) {
-      filterItems.updateFilterItemsTransitionStyle();
+      filterItems.updateTransitionStyle();
     }
 
     if (newOptions.callbacks || newOptions.animationDuration) {
@@ -188,7 +183,6 @@ export default class Filterizr {
     this.filter(this.options.filter);
   }
 
-  // Helper methods
   private render(itemsToFilterIn: FilterItem[]): void {
     const {
       filterContainer,
@@ -277,10 +271,6 @@ export default class Filterizr {
     }
   }
 
-  /**
-   * Updates dimensions of container and items and rerenders the
-   * grid so that the items can assume their new positions.
-   */
   private updateDimensionsAndRerender(): void {
     const {
       filterContainer,

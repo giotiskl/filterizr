@@ -39,12 +39,7 @@ export default class FilterItems {
     this.filterItems.forEach((filterItem): void => filterItem.destroy());
   }
 
-  /**
-   * Updates the transition inline styles of all contained grid items
-   * @param {Object} options Filterizr instance options
-   * @returns {undefined}
-   */
-  public updateFilterItemsTransitionStyle(): void {
+  public updateTransitionStyle(): void {
     const {
       animationDuration,
       easing,
@@ -62,29 +57,16 @@ export default class FilterItems {
     );
   }
 
-  /**
-   * Updates the dimensions of all FilterItems, used for resizing
-   * @returns {undefined}
-   */
-  public updateFilterItemsDimensions(): void {
+  public updateDimensions(): void {
     this.filterItems.forEach((filterItem): void =>
       filterItem.updateDimensions()
     );
   }
 
-  /**
-   * Pushes a new item into the array of filter items.
-   * @param filterItem to push into the array
-   * @returns {number} index
-   */
   public push(filterItem: FilterItem): number {
     return this.filterItems.push(filterItem);
   }
 
-  /**
-   * Returns the items that fulfil the filtering criteria
-   * @param filter to apply
-   */
   public getFiltered(filter: Filter): FilterItem[] {
     const filterItems = this.get();
 
@@ -94,19 +76,15 @@ export default class FilterItems {
 
     return filterItems.filter((filterItem: FilterItem): boolean => {
       const categories = filterItem.getCategories();
-      return this._shouldBeFiltered(categories, filter);
+      return this.shouldBeFiltered(categories, filter);
     });
   }
 
-  /**
-   * Returns the items that should be filtered out
-   * @param filter to apply
-   */
   public getFilteredOut(filter: Filter): FilterItem[] {
     const filterItems = this.get();
     return filterItems.filter((filterItem: FilterItem): boolean => {
       const categories: string[] = filterItem.getCategories();
-      const shouldBeFiltered: boolean = this._shouldBeFiltered(
+      const shouldBeFiltered: boolean = this.shouldBeFiltered(
         categories,
         filter
       );
@@ -117,14 +95,9 @@ export default class FilterItems {
     });
   }
 
-  /**
-   * Returns the sorted filter items.
-   * @param sortAttr attribute by which to sort
-   * @param sortOrder ascending or descending
-   */
   public getSorted(
     sortAttr: string = 'index',
-    sortOrder: string = 'asc'
+    sortOrder: 'asc' | 'desc' = 'asc'
   ): FilterItem[] {
     const filterItems = this.get();
 
@@ -140,10 +113,6 @@ export default class FilterItems {
     return this.getFiltered(this.options.filter);
   }
 
-  /**
-   * Returns the filtered array based on the search term
-   * @param searchTerm by which to search
-   */
   public getSearched(searchTerm: string): FilterItem[] {
     const filteredItems = this.getFiltered(this.options.filter);
 
@@ -156,9 +125,6 @@ export default class FilterItems {
     );
   }
 
-  /**
-   * Returns a shuffled array
-   */
   public getShuffled(): FilterItem[] {
     const filteredItems = this.getFiltered(this.options.filter);
 
@@ -179,7 +145,7 @@ export default class FilterItems {
       shuffledItems = shuffle(filteredItems);
     }
 
-    // Update the FilterItems to have them in the shuffled order
+    // Update filterItems to have them in the new shuffled order
     shuffledItems.forEach((filterItem, index): void => {
       const newIndex = indicesBeforeShuffling[index];
       this.set(
@@ -192,7 +158,7 @@ export default class FilterItems {
     return shuffledItems;
   }
 
-  private _shouldBeFiltered(categories: string[], filter: Filter): boolean {
+  private shouldBeFiltered(categories: string[], filter: Filter): boolean {
     const { multifilterLogicalOperator } = this.options.get();
     const isMultifilteringEnabled = Array.isArray(filter);
 
