@@ -83,9 +83,9 @@ describe('FilterContainer', () => {
     });
   });
 
-  describe('#getFilterItems', () => {
+  describe('#makeFilterItems', () => {
     it('should return an array of FilterItems with length equal to the .filtr-item elements of the DOM', () => {
-      expect(filterContainer.getFilterItems(filterizr.options).length).toEqual(
+      expect(filterContainer.makeFilterItems(filterizr.options).length).toEqual(
         $('.filtr-item').length
       );
     });
