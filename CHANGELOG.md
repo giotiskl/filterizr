@@ -1,4 +1,4 @@
-## Version 2.2.0
+## Version 2.1.1
 
 - Remove `gridSelector` as it could not be used in any viable use case
 - Further simplification/optimization of codebase

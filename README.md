@@ -1,4 +1,4 @@
-# [<img src="./filterizr_logo.png" width="145" height="30" alt="Filterizr logo" />](http://yiotis.net/filterizr) [![Build Status](https://travis-ci.org/giotiskl/Filterizr.svg?branch=filterizr_revisited)](https://travis-ci.org/giotiskl/Filterizr) <img src="https://img.shields.io/npm/dm/filterizr.svg" alt="NPM monthly downloads" />
+# [<img src="./filterizr_logo.png" width="145" height="30" alt="Filterizr logo" />](http://yiotis.net/filterizr)<br/> [![Build Status](https://travis-ci.org/giotiskl/Filterizr.svg?branch=filterizr_revisited)](https://travis-ci.org/giotiskl/Filterizr) <img src="https://img.shields.io/npm/v/filterizr.svg" alt="NPM version" /> <img src="https://img.shields.io/npm/dm/filterizr.svg" alt="NPM monthly downloads" /> <img src="https://img.shields.io/github/license/giotiskl/filterizr.svg" alt="license badge" />
 
 If you use Filterizr in your project and wish to get it featured on Filterizr's website, let me know!
 
