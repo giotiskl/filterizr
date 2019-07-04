@@ -1,6 +1,6 @@
 import {
   getDataAttributesOfHTMLNode,
-  setStylesOnHTMLNode,
+  setStyles,
   TRANSITION_END_EVENTS,
 } from './utils';
 import { Dictionary } from './types/interfaces/Dictionary';
@@ -50,15 +50,15 @@ export default class FilterItem {
       const { filteredOut } = this;
       if (filteredOut) {
         this.node.classList.add('filteredOut');
-        setStylesOnHTMLNode(this.node, { zIndex: -1000 });
+        setStyles(this.node, { zIndex: -1000 });
       } else {
         this.node.classList.remove('filteredOut');
-        setStylesOnHTMLNode(this.node, { zIndex: '' });
+        setStyles(this.node, { zIndex: '' });
       }
     };
 
     const { filterOutCss } = this.options.get();
-    setStylesOnHTMLNode(
+    setStyles(
       this.node,
       Object.assign({}, filterOutCss, {
         '-webkit-backface-visibility': 'hidden',
@@ -89,7 +89,7 @@ export default class FilterItem {
    */
   public filterIn(targetPosition: Position, cssOptions: Dictionary): void {
     // Enhance the cssOptions with the target position before animating
-    setStylesOnHTMLNode(
+    setStyles(
       this.node,
       Object.assign({}, cssOptions, {
         transform: `${cssOptions.transform || ''} translate3d(${
@@ -108,7 +108,7 @@ export default class FilterItem {
   public filterOut(cssOptions: Dictionary): void {
     const { lastPosition: targetPosition } = this;
     // Enhance the cssOptions with the target position before animating
-    setStylesOnHTMLNode(
+    setStyles(
       this.node,
       Object.assign({}, cssOptions, {
         transform: `${cssOptions.transform || ''} translate3d(${
@@ -234,14 +234,14 @@ export default class FilterItem {
     if (hasImage) {
       imagesLoaded(this.node, (): void => {
         setTimeout((): void => {
-          setStylesOnHTMLNode(this.node, {
+          setStyles(this.node, {
             transition: this.getTransitionStyle(),
           });
         }, 10);
       });
     } else {
       setTimeout((): void => {
-        setStylesOnHTMLNode(this.node, {
+        setStyles(this.node, {
           transition: this.getTransitionStyle(),
         });
       }, 10);

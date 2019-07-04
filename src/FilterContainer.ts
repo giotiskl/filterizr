@@ -1,7 +1,7 @@
 import { RawOptionsCallbacks } from './FilterizrOptions/defaultOptions';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import FilterItem from './FilterItem';
-import { setStylesOnHTMLNode, TRANSITION_END_EVENTS } from './utils';
+import { setStyles, TRANSITION_END_EVENTS } from './utils';
 import FilterItems from './FilterItems';
 
 /**
@@ -30,7 +30,7 @@ export default class FilterContainer {
     this.onTransitionEndHandler = null;
 
     // Set up initial styles of container
-    setStylesOnHTMLNode(this.node, {
+    setStyles(this.node, {
       padding: 0,
       position: 'relative',
       // Needed for flex displays
@@ -101,7 +101,7 @@ export default class FilterContainer {
 
   public updateHeight(newHeight: number): void {
     this.dimensions.height = newHeight;
-    setStylesOnHTMLNode(this.node, { height: `${newHeight}px` });
+    setStyles(this.node, { height: `${newHeight}px` });
   }
 
   public bindEvents(callbacks: RawOptionsCallbacks): void {

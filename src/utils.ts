@@ -54,13 +54,13 @@ export { getNormalizedCssPropName };
  * @param {Object} styles - object with styles
  * @returns {undefined}
  */
-function setStylesOnHTMLNode(node: Element, styles: any): void {
+function setStyles(node: Element, styles: any): void {
   Object.entries(styles).forEach(([key, value]): void => {
     ((node as HTMLElement).style as any)[getNormalizedCssPropName(key)] = value;
   });
 }
 
-export { setStylesOnHTMLNode };
+export { setStyles };
 
 /**
  * Returns an object with value/key pairs of all data

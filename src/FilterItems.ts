@@ -5,7 +5,7 @@ import {
   allStringsOfArray1InArray2,
   filterItemArraysHaveSameSorting,
   intersection,
-  setStylesOnHTMLNode,
+  setStyles,
   shuffle,
   sortBy,
 } from './utils';
@@ -48,7 +48,7 @@ export default class FilterItems {
     } = this.options.getRaw();
 
     this.filterItems.forEach((filterItem): void =>
-      setStylesOnHTMLNode(filterItem.node, {
+      setStyles(filterItem.node, {
         transition: `all ${animationDuration}s ${easing} ${filterItem.getTransitionDelay(
           delay,
           delayMode
