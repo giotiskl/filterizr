@@ -23,24 +23,27 @@ export default class FilterItem {
     width: number;
     height: number;
   };
-  private data: Dictionary;
-  private sortData: string;
+
+  private sortData: Dictionary;
   private index: number;
   private filteredOut: boolean;
   private lastPosition: Position;
   private onTransitionEndHandler: EventListener;
 
   public constructor(node: Element, index: number, options: FilterizrOptions) {
-    this.data = getDataAttributesOfHTMLNode(node);
     this.filteredOut = false;
     this.index = index;
     this.lastPosition = { left: 0, top: 0 };
     this.node = node;
     this.options = options;
-    this.sortData = node.getAttribute('data-sort');
     this.dimensions = {
       width: this.node.clientWidth,
       height: this.node.clientHeight,
+    };
+    this.sortData = {
+      ...getDataAttributesOfHTMLNode(node),
+      index,
+      sortData: node.getAttribute('data-sort'),
     };
     this.onTransitionEndHandler = (): void => {
       // On transition end determines if the item is filtered out or not.
@@ -142,10 +145,9 @@ export default class FilterItem {
   /**
    * Returns true if the text contents of the FilterItem match the search term
    * @param searchTerm to look up
-   * @return if the innerText matches the term
    */
   public contentsMatchSearch(searchTerm: string): boolean {
-    return Boolean(this.getContentsLowercase().includes(searchTerm));
+    return this.node.textContent.toLowerCase().includes(searchTerm);
   }
 
   /**
@@ -159,7 +161,6 @@ export default class FilterItem {
   /**
    * Returns all categories of the grid items data-category attribute
    * with a regexp regarding all whitespace.
-   * @return {String[]} an array of the categories the item belongs to
    */
   public getCategories(): string[] {
     return this.node.getAttribute('data-category').split(/\s*,\s*/g);
@@ -170,20 +171,7 @@ export default class FilterItem {
    * @param sortAttribute "index", "sortData" or custom user data-attribute by which to sort
    */
   public getSortAttribute(sortAttribute: string): string | number {
-    if (sortAttribute === 'index' || sortAttribute === 'sortData') {
-      // Default sort attribute is used
-      return this[sortAttribute];
-    }
-    // User defined data attribute is used
-    return this.data[sortAttribute];
-  }
-
-  /**
-   * Helper method for the search method of Filterizr
-   * @return {String} innerText of the FilterItem in lowercase
-   */
-  private getContentsLowercase(): string {
-    return this.node.textContent.toLowerCase();
+    return this.sortData[sortAttribute];
   }
 
   /**
