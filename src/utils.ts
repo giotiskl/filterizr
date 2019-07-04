@@ -1,26 +1,8 @@
 import { Dictionary } from './types/interfaces/Dictionary';
 import FilterItem from './FilterItem';
 
-/**
- * A function to check that all elements of an array are found within another array.
- * @param {Array} arr1 is the array of strings to be checked
- * @param {Array} arr2 is the array of strings to check against
- * @return {Boolean} whether all string of arr1 are contained in arr2
- */
-const allStringsOfArray1InArray2 = (
-  arr1: string[],
-  arr2: string[]
-): boolean => {
-  for (let i = 0; i < arr1.length; i++) {
-    let found = false;
-    const string = arr1[i];
-    for (let x = 0; x < arr2.length; x++) {
-      if (string === arr2[x]) found = true;
-    }
-    if (!found) return false;
-  }
-  return true;
-};
+const allStringsOfArray1InArray2 = (arr1: string[], arr2: string[]): boolean =>
+  arr1.reduce((acc, item): boolean => acc && arr2.includes(item), true);
 
 export { allStringsOfArray1InArray2 };
 
@@ -40,7 +22,10 @@ const getNormalizedCssPropName = (cssProp: string): string => {
   const first = splitProp[0];
   const rest = splitProp
     .slice(1, splitProp.length)
-    .map((word: string) => word[0].toUpperCase() + word.slice(1, word.length))
+    .map(
+      (word: string): string =>
+        word[0].toUpperCase() + word.slice(1, word.length)
+    )
     .join('');
 
   return `${first}${rest}`;
@@ -101,7 +86,8 @@ function checkDataAttributeExists(
   const atts = Array.from(node.attributes);
   if (atts.length) {
     return (
-      atts.filter(({ nodeName }) => nodeName === dataAttributeName).length > 0
+      atts.filter(({ nodeName }): boolean => nodeName === dataAttributeName)
+        .length > 0
     );
   }
   return false;
@@ -109,18 +95,12 @@ function checkDataAttributeExists(
 
 export { checkDataAttributeExists };
 
-/**
- * A very simple function to perform a basic
- * deep clone of an object.
- * @param {Object} o is the object to perform the deep clone on
- * @return {Object} deep clone
- */
-const makeShallowClone = (o: any) => {
-  let ret: Dictionary = {};
-  for (const p in o) {
-    ret[p] = o[p];
+const makeShallowClone = (toBeCloned: Dictionary): Dictionary => {
+  let clone: Dictionary = {};
+  for (const prop in toBeCloned) {
+    clone[prop] = toBeCloned[prop];
   }
-  return ret;
+  return clone;
 };
 
 export { makeShallowClone };
@@ -158,11 +138,11 @@ export { merge };
 
 /**
  * A function get the intersection of two arrays. IE9+.
- * @param {Array} arr1 is the first array of which to get the intersection
- * @param {Array} arr2 is the second array of which to get the intersection
  */
-const intersection = (arr1: any[], arr2: any[]) => {
-  return Array.prototype.filter.call(arr1, (n: string) => arr2.includes(n));
+const intersection = (arr1: any[], arr2: any[]): any[] => {
+  return Array.prototype.filter.call(arr1, (n: any): boolean =>
+    arr2.includes(n)
+  );
 };
 
 export { intersection };
@@ -176,11 +156,11 @@ const debounce = function(
   immediate: boolean
 ): Function {
   let timeout: number;
-  return function() {
+  return function(): void {
     const context = this;
     const args = arguments;
     clearTimeout(timeout);
-    timeout = window.setTimeout(() => {
+    timeout = window.setTimeout((): void => {
       timeout = null;
       if (!immediate) func.apply(context, args);
     }, wait);
@@ -195,7 +175,7 @@ export { debounce };
  * @param {Array} array the array to shuffle
  * @return {Array} shuffled array without mutating the initial array.
  */
-const shuffle = (array: any[]) => {
+const shuffle = (array: any[]): any[] => {
   // perform deep clone on array to mutate
   let cloned = array.slice(0);
   // array to return
@@ -222,16 +202,15 @@ const filterItemArraysHaveSameSorting = (
   filterItemsA: FilterItem[],
   filterItemsB: FilterItem[]
 ): boolean => {
-  // Exit case if arrays do not have equal length
-  if (filterItemsA.length !== filterItemsB.length) return false;
-  // Iterate over first array and compare indices with second
-  for (let i = 0; i < filterItemsA.length; i++) {
-    const indexA = filterItemsA[i].getSortAttribute('index');
-    const indexB = filterItemsB[i].getSortAttribute('index');
-    // Means arrays do not have identical sorting
-    if (indexA !== indexB) return false;
+  if (filterItemsA.length !== filterItemsB.length) {
+    return false;
   }
-  return true;
+
+  return filterItemsA.reduce((acc, filterItemA, index): boolean => {
+    const indexA = filterItemA.getSortAttribute('index');
+    const indexB = filterItemsB[index].getSortAttribute('index');
+    return acc && indexA === indexB;
+  }, true);
 };
 
 export { filterItemArraysHaveSameSorting };
@@ -246,7 +225,7 @@ const sortBy = (array: any[], propFn: Function): any[] => {
   let cloned = array.slice(0); // perform deep copy of array
 
   const comparator = (propFn: Function) => {
-    return (a: any, b: any) => {
+    return (a: any, b: any): number => {
       const propA = propFn(a);
       const propB = propFn(b);
       if (propA < propB) {
@@ -278,7 +257,7 @@ const checkOptionForErrors = (
   type?: string,
   allowed?: any[] | RegExp,
   furtherHelpLink?: string
-) => {
+): void => {
   if (typeof value === 'undefined') return; // exit case, missing from options
 
   // Define exception for type error
@@ -302,7 +281,7 @@ const checkOptionForErrors = (
   }
 
   // Make sure that the value of the option is within the accepted values
-  const referTo = (link?: string) => {
+  const referTo = (link?: string): string => {
     if (link) {
       return ` For further help read here: ${link}`;
     }
@@ -311,13 +290,13 @@ const checkOptionForErrors = (
 
   if (Array.isArray(allowed)) {
     let validValue = false;
-    allowed.forEach((el) => {
+    allowed.forEach((el): void => {
       if (el === value) validValue = true;
     });
     if (!validValue) {
       throw new Error(
         `Filterizr: allowed values for option "${name}" are: ${allowed
-          .map((el) => `"${el}"`)
+          .map((el): string => `"${el}"`)
           .join(', ')}. Value received: "${value}".${referTo(furtherHelpLink)}`
       );
     }
