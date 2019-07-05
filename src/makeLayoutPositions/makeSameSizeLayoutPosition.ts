@@ -5,9 +5,7 @@ import FilterContainer from '../FilterContainer';
  * Same size layout for items that have the same width/height
  * @param filterContainer instance.
  */
-const getSameSizeLayoutPosition = (
-  filterContainer: FilterContainer
-): Position[] => {
+export default (filterContainer: FilterContainer): Position[] => {
   const { filterItems } = filterContainer;
   const filteredItems = filterItems.getFiltered(
     filterContainer.options.get().filter.get()
@@ -39,5 +37,3 @@ const getSameSizeLayoutPosition = (
   // Return the array of new positions
   return targetPositions;
 };
-
-export default getSameSizeLayoutPosition;

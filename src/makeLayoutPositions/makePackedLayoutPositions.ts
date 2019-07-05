@@ -6,9 +6,7 @@ import FilterContainer from '../FilterContainer';
  * Packed layout for items that can have varying width as well as varying height.
  * @param filterContainer instance.
  */
-const getPackedLayoutPositions = (
-  filterContainer: FilterContainer
-): Position[] => {
+export default (filterContainer: FilterContainer): Position[] => {
   const { filterItems } = filterContainer;
   const filteredItems = filterItems.getFiltered(
     filterContainer.options.get().filter.get()
@@ -40,5 +38,3 @@ const getPackedLayoutPositions = (
 
   return targetPositions;
 };
-
-export default getPackedLayoutPositions;

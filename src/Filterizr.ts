@@ -7,7 +7,7 @@ import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
 import { Filter } from './ActiveFilter';
-import getLayoutPositions from './getLayoutPositions';
+import makeLayoutPositions from './makeLayoutPositions';
 import installAsJQueryPlugin from './installAsJQueryPlugin';
 import { FILTERIZR_STATE, debounce, getHTMLElement, noop } from './utils';
 import FilterItems from './FilterItems';
@@ -197,7 +197,7 @@ export default class Filterizr {
       filterItem.filterOut(filterOutCss);
     });
 
-    const positions = getLayoutPositions(layout, filterContainer);
+    const positions = makeLayoutPositions(layout, filterContainer);
 
     itemsToFilterIn.forEach((filterItem, index): void => {
       filterItem.filterIn(positions[index], filterInCss);

@@ -5,9 +5,7 @@ import FilterContainer from '../FilterContainer';
  * Vertical layout algorithm that arranges all FilterItems in one column. Their height may vary.
  * @param filterizr instance.
  */
-const getVerticalLayoutPositions = (
-  filterContainer: FilterContainer
-): Position[] => {
+export default (filterContainer: FilterContainer): Position[] => {
   const { filterItems } = filterContainer;
   const filteredItems = filterItems.getFiltered(
     filterContainer.options.get().filter.get()
@@ -36,5 +34,3 @@ const getVerticalLayoutPositions = (
 
   return targetPositions;
 };
-
-export default getVerticalLayoutPositions;
