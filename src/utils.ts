@@ -95,43 +95,21 @@ function checkDataAttributeExists(
 
 export { checkDataAttributeExists };
 
-const makeShallowClone = (toBeCloned: Dictionary): Dictionary => {
-  let clone: Dictionary = {};
-  for (const prop in toBeCloned) {
-    clone[prop] = toBeCloned[prop];
-  }
-  return clone;
-};
-
-export { makeShallowClone };
-
 /**
- * A function to recursively merge an object, copying over all
- * properties of the old object missing from the target object.
- * In case a prop in is an object, the method is called recursively.
- * This is a non-mutating method.
- * @param {Object} old is the old object from which the missing props are copied.
- * @param {Object} target is the target object with the updated values.
+ * Non-mutating merge of objects
+ * @param old is the old object from which the missing props are copied.
+ * @param target is the target object with the updated values.
  */
-const merge = (old: any, target: any) => {
-  const ret = makeShallowClone(target);
-  // Iterate over props of old
-  for (let p in old) {
-    if (!(p in ret)) {
-      // Otherwise copy it over
-      ret[p] = old[p];
-    } else {
-      // In case the prop itself is an obj, call method recursively.
-      if (
-        typeof ret[p] === 'object' &&
-        typeof old[p] === 'object' &&
-        !Array.isArray(old[p])
-      ) {
-        ret[p] = merge(old[p], typeof ret[p] === 'object' ? ret[p] : {});
-      }
+const merge = (old: Dictionary, target: Dictionary): Dictionary => {
+  const merged = Object.assign({}, old, target);
+  Object.entries(merged).forEach(([key, value]): void => {
+    const isObject =
+      typeof value === 'object' && value !== null && !(value instanceof Date);
+    if (isObject) {
+      merged[key] = merge(old[key], target[key]);
     }
-  }
-  return ret;
+  });
+  return merged;
 };
 
 export { merge };
