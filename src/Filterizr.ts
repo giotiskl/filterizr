@@ -1,10 +1,10 @@
 import { Filter } from './types';
 import { RawOptions } from './types/interfaces';
-import BrowserWindow from './BrowserWindow';
 import FilterizrOptions, { defaultOptions } from './FilterizrOptions';
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
+import EventReceiver from './EventReceiver';
 import makeLayoutPositions from './makeLayoutPositions';
 import installAsJQueryPlugin from './installAsJQueryPlugin';
 import { FILTERIZR_STATE, debounce, getHTMLElement, noop } from './utils';
@@ -27,7 +27,7 @@ export default class Filterizr {
   public static installAsJQueryPlugin: Function = installAsJQueryPlugin;
 
   public options: FilterizrOptions;
-  private browserWindow: BrowserWindow;
+  private browserWindow: EventReceiver;
   private filterContainer: FilterContainer;
   private filterControls?: FilterControls;
   private filterizrState: string;
@@ -40,7 +40,7 @@ export default class Filterizr {
 
     const { setupControls, controlsSelector } = this.options.get();
 
-    this.browserWindow = new BrowserWindow();
+    this.browserWindow = new EventReceiver(window);
     this.filterContainer = new FilterContainer(
       getHTMLElement(selectorOrNode),
       this.options
@@ -239,9 +239,7 @@ export default class Filterizr {
   private bindEvents(): void {
     const { browserWindow } = this;
     this.rebindFilterContainerEvents();
-    browserWindow.setResizeEventHandler(
-      this.updateDimensionsAndRerender.bind(this)
-    );
+    browserWindow.on('resize', this.updateDimensionsAndRerender.bind(this));
   }
 
   /**

@@ -1,16 +1,16 @@
 import Filterizr from '../Filterizr';
 import { debounce } from '../utils';
-import Controls from './Controls';
+import EventReceiver from '../EventReceiver';
 
-class FilterControls {
-  private filterControls: Controls;
+export default class FilterControls {
+  private filterControls: EventReceiver;
   private filterizr: Filterizr;
-  private multiFilterControls: Controls;
-  private searchControls: Controls;
+  private multiFilterControls: EventReceiver;
+  private searchControls: EventReceiver;
   private selector: string;
-  private shuffleControls: Controls;
-  private sortAscControls: Controls;
-  private sortDescControls: Controls;
+  private shuffleControls: EventReceiver;
+  private sortAscControls: EventReceiver;
+  private sortDescControls: EventReceiver;
 
   /**
    * @param filterizr keep a ref to the Filterizr object to control actions
@@ -20,12 +20,24 @@ class FilterControls {
     this.filterizr = filterizr;
     this.selector = selector;
 
-    this.filterControls = new Controls(`${selector}[data-filter]`);
-    this.multiFilterControls = new Controls(`${selector}[data-multifilter]`);
-    this.shuffleControls = new Controls(`${selector}[data-shuffle]`);
-    this.searchControls = new Controls(`${selector}[data-search]`);
-    this.sortAscControls = new Controls(`${selector}[data-sortAsc]`);
-    this.sortDescControls = new Controls(`${selector}[data-sortDesc]`);
+    this.filterControls = new EventReceiver(
+      document.querySelectorAll(`${selector}[data-filter]`)
+    );
+    this.multiFilterControls = new EventReceiver(
+      document.querySelectorAll(`${selector}[data-multifilter]`)
+    );
+    this.shuffleControls = new EventReceiver(
+      document.querySelectorAll(`${selector}[data-shuffle]`)
+    );
+    this.searchControls = new EventReceiver(
+      document.querySelectorAll(`${selector}[data-search]`)
+    );
+    this.sortAscControls = new EventReceiver(
+      document.querySelectorAll(`${selector}[data-sortAsc]`)
+    );
+    this.sortDescControls = new EventReceiver(
+      document.querySelectorAll(`${selector}[data-sortDesc]`)
+    );
 
     this.initialize();
   }
@@ -42,7 +54,7 @@ class FilterControls {
   private initialize(): void {
     const { filterizr, selector } = this;
 
-    // Filter controls
+    // Filter EventReceiver
     this.filterControls.on('click', (evt): void => {
       const ctrl: Element = evt.currentTarget as Element;
       const targetFilter: string = ctrl.getAttribute('data-filter');
@@ -54,10 +66,10 @@ class FilterControls {
       filterizr.toggleFilter(targetFilter);
     });
 
-    // Shuffle controls
+    // Shuffle EventReceiver
     this.shuffleControls.on('click', filterizr.shuffle.bind(filterizr));
 
-    // Search controls
+    // Search EventReceiver
     this.searchControls.on('keyup', debounce(
       (evt: Event): void => {
         const textfield: HTMLInputElement = evt.target as HTMLInputElement;
@@ -68,7 +80,7 @@ class FilterControls {
       false
     ) as EventListener);
 
-    // Sort controls
+    // Sort EventReceiver
     this.sortAscControls.on('click', (): void => {
       const sortAttr: string = (document.querySelector(
         `${selector}[data-sortOrder]`
@@ -83,5 +95,3 @@ class FilterControls {
     });
   }
 }
-
-export default FilterControls;
