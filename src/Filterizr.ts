@@ -1,12 +1,10 @@
+import { Filter } from './types';
+import { RawOptions } from './types/interfaces';
 import BrowserWindow from './BrowserWindow';
-import FilterizrOptions, {
-  defaultOptions,
-  RawOptions,
-} from './FilterizrOptions';
+import FilterizrOptions, { defaultOptions } from './FilterizrOptions';
 import FilterControls from './FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
-import { Filter } from './ActiveFilter';
 import makeLayoutPositions from './makeLayoutPositions';
 import installAsJQueryPlugin from './installAsJQueryPlugin';
 import { FILTERIZR_STATE, debounce, getHTMLElement, noop } from './utils';

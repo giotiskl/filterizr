@@ -1,4 +1,4 @@
-import { RawOptions } from './RawOptions';
+import { RawOptions } from '../types/interfaces';
 import { noop } from '../utils';
 
 const defaultOptions: RawOptions = {

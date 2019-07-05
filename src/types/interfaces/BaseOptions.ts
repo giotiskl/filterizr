@@ -1,5 +1,4 @@
 import { RawOptionsCallbacks } from './RawOptionsCallbacks';
-import ActiveFilter from '../ActiveFilter';
 
 export interface BaseOptions {
   animationDuration?: number;

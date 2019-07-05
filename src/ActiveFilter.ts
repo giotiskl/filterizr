@@ -1,4 +1,4 @@
-export type Filter = string | string[];
+import { Filter } from './types';
 
 /**
  * ActiveFilter represents the currently active filter over

@@ -1,7 +1,8 @@
-import FilterizrOptions, { RawOptionsCallbacks } from './FilterizrOptions';
+import FilterizrOptions from './FilterizrOptions';
 import FilterItem from './FilterItem';
 import FilterItems from './FilterItems';
 import { setStyles, TRANSITION_END_EVENTS } from './utils';
+import { RawOptionsCallbacks } from './types/interfaces';
 
 /**
  * Resembles the grid of items within Filterizr.

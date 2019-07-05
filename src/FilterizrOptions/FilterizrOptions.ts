@@ -1,6 +1,8 @@
-import { defaultOptions, BaseOptions, RawOptions } from '.';
+import { BaseOptions, RawOptions } from './../types/interfaces';
+import { defaultOptions } from '.';
 import { cssEasingValuesRegexp, checkOptionForErrors, merge } from '../utils';
-import ActiveFilter, { Filter } from '../ActiveFilter';
+import ActiveFilter from '../ActiveFilter';
+import { Filter } from '../types';
 
 export interface Options extends BaseOptions {
   filter: ActiveFilter;
