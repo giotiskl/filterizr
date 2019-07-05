@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "outDir": "./dist/",
-    "noImplicitAny": true,
     "module": "es6",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "outDir": "./dist/",
+    "sourceMap": true,
     "target": "es5",
-    "sourceMap": true
   },
   "exclude": [
     "node_modules",

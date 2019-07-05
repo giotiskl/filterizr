@@ -1,7 +1,6 @@
-import { Filter } from './../ActiveFilter';
-import defaultUserOptions, { BaseOptions, RawOptions } from './defaultOptions';
+import { defaultOptions, BaseOptions, RawOptions } from '.';
 import { cssEasingValuesRegexp, checkOptionForErrors, merge } from '../utils';
-import ActiveFilter from '../ActiveFilter';
+import ActiveFilter, { Filter } from '../ActiveFilter';
 
 export interface Options extends BaseOptions {
   filter: ActiveFilter;
@@ -11,7 +10,7 @@ export default class FilterizrOptions {
   private options: Options;
 
   public constructor(userOptions: RawOptions) {
-    const options = merge(defaultUserOptions, this.validate(userOptions));
+    const options = merge(defaultOptions, this.validate(userOptions));
     this.options = this.convertToFilterizrOptions(options);
   }
 
