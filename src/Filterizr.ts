@@ -1,6 +1,6 @@
 import BrowserWindow from './BrowserWindow';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
-import FilterControls from './FilterControls';
+import FilterControls from './FilterControls/FilterControls';
 import FilterContainer from './FilterContainer';
 import FilterItem from './FilterItem';
 import { Filter } from './ActiveFilter';
