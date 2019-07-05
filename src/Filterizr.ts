@@ -147,7 +147,7 @@ export default class Filterizr {
       // If callbacks are defined the in the options, the old ones
       // have to be removed while we still have the references to
       // the handlers.
-      filterContainer.unbindEvents(this.options.get().callbacks);
+      filterContainer.unbindEvents();
     }
 
     this.options.set(newOptions);
@@ -224,7 +224,7 @@ export default class Filterizr {
     const { filterContainer } = this;
     const { animationDuration, callbacks } = this.options.get();
 
-    filterContainer.unbindEvents(callbacks);
+    filterContainer.unbindEvents();
 
     filterContainer.bindEvents({
       ...callbacks,

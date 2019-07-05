@@ -31,6 +31,24 @@ export default class EventReceiver {
     }
   }
 
+  public off(eventType: string): void {
+    const { receiver } = this;
+    const eventHandler = this.eventDictionary[eventType];
+    const receiversAreMany = receiver instanceof NodeList;
+
+    if (receiversAreMany && !!(receiver as NodeList).length) {
+      Array.from(receiver as NodeList).forEach((node: Element): void => {
+        node.removeEventListener(eventType, eventHandler);
+      });
+    } else if (!receiversAreMany && !!receiver) {
+      (receiver as Element | Window).removeEventListener(
+        eventType,
+        eventHandler
+      );
+    }
+    delete this.eventDictionary[eventType];
+  }
+
   public destroy(): void {
     const { receiver } = this;
     const receiversAreMany = receiver instanceof NodeList;

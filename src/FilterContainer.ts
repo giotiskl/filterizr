@@ -1,6 +1,7 @@
 import FilterizrOptions from './FilterizrOptions';
 import FilterItem from './FilterItem';
 import FilterItems from './FilterItems';
+import EventReceiver from './EventReceiver';
 import { setStyles, TRANSITION_END_EVENTS } from './utils';
 import { RawOptionsCallbacks } from './types/interfaces';
 
@@ -16,7 +17,7 @@ export default class FilterContainer {
     height: number;
   };
 
-  private onTransitionEndHandler?: EventListener;
+  private eventReceiver: EventReceiver;
 
   public constructor(node: Element, options: FilterizrOptions) {
     if (!node) {
@@ -27,7 +28,7 @@ export default class FilterContainer {
 
     this.node = node;
     this.options = options;
-    this.onTransitionEndHandler = null;
+    this.eventReceiver = new EventReceiver(node);
 
     // Set up initial styles of container
     setStyles(this.node, {
@@ -56,7 +57,7 @@ export default class FilterContainer {
 
   public destroy(): void {
     this.node.removeAttribute('style');
-    this.unbindEvents(this.options.get().callbacks);
+    this.unbindEvents();
     this.filterItems.destroy();
   }
 
@@ -105,29 +106,28 @@ export default class FilterContainer {
   }
 
   public bindEvents(callbacks: RawOptionsCallbacks): void {
-    this.onTransitionEndHandler = callbacks.onTransitionEnd;
     TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.node.addEventListener(eventName, this.onTransitionEndHandler);
+      this.eventReceiver.on(eventName, callbacks.onTransitionEnd);
     });
     // Public Filterizr events
-    this.node.addEventListener('filteringStart', callbacks.onFilteringStart);
-    this.node.addEventListener('filteringEnd', callbacks.onFilteringEnd);
-    this.node.addEventListener('shufflingStart', callbacks.onShufflingStart);
-    this.node.addEventListener('shufflingEnd', callbacks.onShufflingEnd);
-    this.node.addEventListener('sortingStart', callbacks.onSortingStart);
-    this.node.addEventListener('sortingEnd', callbacks.onSortingEnd);
+    this.eventReceiver.on('filteringStart', callbacks.onFilteringStart);
+    this.eventReceiver.on('filteringEnd', callbacks.onFilteringEnd);
+    this.eventReceiver.on('shufflingStart', callbacks.onShufflingStart);
+    this.eventReceiver.on('shufflingEnd', callbacks.onShufflingEnd);
+    this.eventReceiver.on('sortingStart', callbacks.onSortingStart);
+    this.eventReceiver.on('sortingEnd', callbacks.onSortingEnd);
   }
 
-  public unbindEvents(callbacks: RawOptionsCallbacks): void {
+  public unbindEvents(): void {
     TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.node.removeEventListener(eventName, this.onTransitionEndHandler);
+      this.eventReceiver.off(eventName);
     });
-    this.node.removeEventListener('filteringStart', callbacks.onFilteringStart);
-    this.node.removeEventListener('filteringEnd', callbacks.onFilteringEnd);
-    this.node.removeEventListener('shufflingStart', callbacks.onShufflingStart);
-    this.node.removeEventListener('shufflingEnd', callbacks.onShufflingEnd);
-    this.node.removeEventListener('sortingStart', callbacks.onSortingStart);
-    this.node.removeEventListener('sortingEnd', callbacks.onSortingEnd);
+    this.eventReceiver.off('filteringStart');
+    this.eventReceiver.off('filteringEnd');
+    this.eventReceiver.off('shufflingStart');
+    this.eventReceiver.off('shufflingEnd');
+    this.eventReceiver.off('sortingStart');
+    this.eventReceiver.off('sortingEnd');
   }
 
   public trigger(eventType: string): void {
