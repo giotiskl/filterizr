@@ -114,15 +114,13 @@ export default class FilterItem {
     delay: number,
     delayMode: 'progressive' | 'alternate'
   ): number {
-    let ret = 0;
-
     if (delayMode === 'progressive') {
-      ret = delay * this.index;
-    } else {
-      if (this.index % 2 === 0) ret = delay;
+      return delay * this.index;
     }
-
-    return ret;
+    if (this.index % 2 === 0) {
+      return delay;
+    }
+    return 0;
   }
 
   /**
