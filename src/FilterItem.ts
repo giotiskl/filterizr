@@ -5,6 +5,7 @@ import {
 } from './utils';
 import { Dictionary } from './types/interfaces/Dictionary';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
+import EventReceiver from './EventReceiver';
 
 const imagesLoaded = require('imagesloaded');
 
@@ -24,17 +25,18 @@ export default class FilterItem {
     height: number;
   };
 
-  private sortData: Dictionary;
-  private index: number;
+  private eventReceiver: EventReceiver;
   private filteredOut: boolean;
+  private index: number;
   private lastPosition: Position;
-  private onTransitionEndHandler: EventListener;
+  private sortData: Dictionary;
 
   public constructor(node: Element, index: number, options: FilterizrOptions) {
     this.filteredOut = false;
     this.index = index;
     this.lastPosition = { left: 0, top: 0 };
     this.node = node;
+    this.eventReceiver = new EventReceiver(node);
     this.options = options;
     this.dimensions = {
       width: this.node.clientWidth,
@@ -44,20 +46,6 @@ export default class FilterItem {
       ...getDataAttributesOfHTMLNode(node),
       index,
       sortData: node.getAttribute('data-sort'),
-    };
-    this.onTransitionEndHandler = (): void => {
-      // On transition end determines if the item is filtered out or not.
-      // It adds a .filteredOut class so that user can target these items
-      // via css if needed. It sets the z-index to -1000 to prevent mouse
-      // events from being triggered.
-      const { filteredOut } = this;
-      if (filteredOut) {
-        this.node.classList.add('filteredOut');
-        setStyles(this.node, { zIndex: -1000 });
-      } else {
-        this.node.classList.remove('filteredOut');
-        setStyles(this.node, { zIndex: '' });
-      }
     };
 
     const { filterOutCss } = this.options.get();
@@ -174,21 +162,28 @@ export default class FilterItem {
     return this.sortData[sortAttribute];
   }
 
-  /**
-   * Sets up the events related to the FilterItem instance
-   */
   private bindEvents(): void {
     TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.node.addEventListener(eventName, this.onTransitionEndHandler);
+      this.eventReceiver.on(eventName, (): void => {
+        // On transition end determines if the item is filtered out or not.
+        // It adds a .filteredOut class so that user can target these items
+        // via css if needed. It sets the z-index to -1000 to prevent mouse
+        // events from being triggered.
+        const { filteredOut } = this;
+        if (filteredOut) {
+          this.node.classList.add('filteredOut');
+          setStyles(this.node, { zIndex: -1000 });
+        } else {
+          this.node.classList.remove('filteredOut');
+          setStyles(this.node, { zIndex: '' });
+        }
+      });
     });
   }
 
-  /**
-   * Removes all events related to the FilterItem instance
-   */
   private unbindEvents(): void {
     TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.node.removeEventListener(eventName, this.onTransitionEndHandler);
+      this.eventReceiver.off(eventName);
     });
   }
 
