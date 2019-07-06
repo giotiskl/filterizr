@@ -1,14 +1,14 @@
-import { Filter } from './types';
-import { RawOptions } from './types/interfaces';
-import FilterizrOptions, { defaultOptions } from './FilterizrOptions';
-import FilterControls from './FilterControls';
-import FilterContainer from './FilterContainer';
-import FilterItem from './FilterItem';
-import EventReceiver from './EventReceiver';
-import makeLayoutPositions from './makeLayoutPositions';
+import { Filter } from '../types';
+import { RawOptions } from '../types/interfaces';
+import FilterizrOptions, { defaultOptions } from '../FilterizrOptions';
+import FilterControls from '../FilterControls';
+import FilterContainer from '../FilterContainer';
+import FilterItem from '../FilterItem';
+import EventReceiver from '../EventReceiver';
+import makeLayoutPositions from '../makeLayoutPositions';
 import installAsJQueryPlugin from './installAsJQueryPlugin';
-import { FILTERIZR_STATE, debounce, getHTMLElement, noop } from './utils';
-import FilterItems from './FilterItems';
+import { FILTERIZR_STATE, debounce, getHTMLElement, noop } from '../utils';
+import FilterItems from '../FilterItems';
 
 const imagesLoaded = require('imagesloaded');
 

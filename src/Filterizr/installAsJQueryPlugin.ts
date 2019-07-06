@@ -1,5 +1,5 @@
 import Filterizr from './Filterizr';
-import defaultOptions from './FilterizrOptions/defaultOptions';
+import { defaultOptions } from '../FilterizrOptions';
 
 export default function installAsJQueryPlugin($: any): void {
   if (!$)
