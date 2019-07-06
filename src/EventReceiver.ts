@@ -1,4 +1,4 @@
-import { Dictionary } from '../types/interfaces';
+import { Dictionary } from './types/interfaces';
 
 type Receiver = NodeListOf<Element> | Element | Window;
 

@@ -1,6 +1,6 @@
-import Filterizr from '../Filterizr';
-import { debounce } from '../utils';
-import EventReceiver from '../EventReceiver';
+import Filterizr from './Filterizr';
+import { debounce } from './utils';
+import EventReceiver from './EventReceiver';
 
 export default class FilterControls {
   private filterControls: EventReceiver;
