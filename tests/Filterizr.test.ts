@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import defaultOptions, {
-  RawOptions,
-} from '../src/FilterizrOptions/defaultOptions';
+import defaultOptions from '../src/FilterizrOptions/defaultOptions';
+import { RawOptions } from '../src/types/interfaces';
 // import test utils
 import * as $ from 'jquery';
 import { fakeDom } from './testSetup';

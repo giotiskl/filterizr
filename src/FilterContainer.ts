@@ -1,9 +1,10 @@
+import { RawOptionsCallbacks } from './types/interfaces';
+import { setStyles } from './utils';
+import { TRANSITION_END_EVENTS } from './config';
 import FilterizrOptions from './FilterizrOptions';
 import FilterItem from './FilterItem';
 import FilterItems from './FilterItems';
 import EventReceiver from './EventReceiver';
-import { setStyles, TRANSITION_END_EVENTS } from './utils';
-import { RawOptionsCallbacks } from './types/interfaces';
 
 /**
  * Resembles the grid of items within Filterizr.

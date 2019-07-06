@@ -1,6 +1,7 @@
+import { cssEasingValuesRegexp } from '../config';
 import { BaseOptions, RawOptions } from './../types/interfaces';
 import { defaultOptions } from '.';
-import { cssEasingValuesRegexp, checkOptionForErrors, merge } from '../utils';
+import { checkOptionForErrors, merge } from '../utils';
 import ActiveFilter from '../ActiveFilter';
 import { Filter } from '../types';
 
@@ -93,6 +94,11 @@ export default class FilterizrOptions {
     checkOptionForErrors('filter', options.filter, 'string|number|array');
     checkOptionForErrors('filterOutCss', options.filterOutCss, 'object');
     checkOptionForErrors('filterInCss', options.filterOutCss, 'object');
+    checkOptionForErrors(
+      'gridItemsSelector',
+      options.gridItemsSelector,
+      'string'
+    );
     checkOptionForErrors('layout', options.layout, 'string', [
       'sameSize',
       'vertical',

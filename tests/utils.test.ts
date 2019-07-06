@@ -5,13 +5,12 @@
 import {
   allStringsOfArray1InArray2,
   debounce,
-  makeShallowClone,
   merge,
   intersection,
   shuffle,
-  cssEasingValuesRegexp,
   sortBy,
 } from '../src/utils';
+import { cssEasingValuesRegexp } from '../src/config';
 
 describe('utils', () => {
   describe('#allStringsOfArray1InArray2', () => {
@@ -38,24 +37,6 @@ describe('utils', () => {
       setTimeout(() => {
         expect(debouncedFn()).toEqual(5);
       }, DEBOUNCE_TIME + 5);
-    });
-  });
-
-  describe('#makeShallowClone', () => {
-    it('should copy all properties of object A to object B', () => {
-      const o1 = { x: 12, y: 15, z: 32 };
-      const o2 = makeShallowClone(o1);
-      expect(Object.keys(o1).length).toEqual(Object.keys(o2).length);
-      expect(o1.x).toEqual(o2.x);
-      expect(o1.y).toEqual(o2.y);
-      expect(o1.z).toEqual(o2.z);
-    });
-
-    it('should return a shallow clone of an object', () => {
-      const o1 = { x: 12 };
-      const o2 = makeShallowClone(o1);
-      o2.x = 15;
-      expect(o2.x !== o1.x).toEqual(true);
     });
   });
 

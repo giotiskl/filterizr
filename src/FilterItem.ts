@@ -1,9 +1,6 @@
+import { TRANSITION_END_EVENTS } from './config';
+import { getDataAttributesOfHTMLNode, setStyles } from './utils';
 import { Dictionary, Position } from './types/interfaces';
-import {
-  getDataAttributesOfHTMLNode,
-  setStyles,
-  TRANSITION_END_EVENTS,
-} from './utils';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import EventReceiver from './EventReceiver';
 
