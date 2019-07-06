@@ -12,7 +12,8 @@ import FilterContainer from '../FilterContainer';
 const calcItemTop = (
   filteredItems: FilterItem[],
   cols: number,
-  index: number
+  index: number,
+  gutterPixels: number
 ): number => {
   // Prevent infinite loop on window resize when container is not visible
   if (cols <= 0) return 0;
@@ -24,7 +25,7 @@ const calcItemTop = (
   index -= cols;
   // If we're over the first row loop until we calculate the height of all items above
   while (index >= 0) {
-    itemTop += filteredItems[index].dimensions.height;
+    itemTop += filteredItems[index].dimensions.height + gutterPixels;
     index -= cols;
   }
   return itemTop;
@@ -36,9 +37,8 @@ const calcItemTop = (
  */
 export default (filterContainer: FilterContainer): Position[] => {
   const { filterItems } = filterContainer;
-  const filteredItems = filterItems.getFiltered(
-    filterContainer.options.get().filter.get()
-  );
+  const { gutterPixels } = filterContainer.options.get();
+  const filteredItems = filterItems.getFiltered(filterContainer.options.filter);
 
   // Calculate number of columns and rows the grid should have
   let cols = filterContainer.calculateColumns(),
@@ -62,19 +62,19 @@ export default (filterContainer: FilterContainer): Position[] => {
       const spot = index - cols * row;
 
       // Update height of column
-      columnHeights[spot] += height;
+      columnHeights[spot] += height + gutterPixels;
 
       // Return object with new position in array
       return {
-        left: spot * width,
-        top: calcItemTop(filteredItems, cols, index),
+        left: spot * (width + gutterPixels),
+        top: calcItemTop(filteredItems, cols, index, gutterPixels),
       };
     }
   );
 
   // Update the height of the FilterContainer
   // before returning from the method
-  filterContainer.updateHeight(Math.max(...columnHeights));
+  filterContainer.updateHeight(Math.max(...columnHeights) - gutterPixels);
 
   // Return the array of new positions
   return targetPositions;

@@ -33,7 +33,7 @@ export default class FilterContainer {
 
     // Set up initial styles of container
     setStyles(this.node, {
-      padding: 0,
+      padding: `0 ${this.options.get().gutterPixels / 2}px`,
       position: 'relative',
       // Needed for flex displays
       width: '100%',
@@ -92,13 +92,20 @@ export default class FilterContainer {
 
   public calculateColumns(): number {
     return Math.floor(
-      this.dimensions.width / this.filterItems.getItem(0).dimensions.width
+      this.dimensions.width /
+        (this.filterItems.getItem(0).dimensions.width +
+          this.options.get().gutterPixels)
     );
   }
 
   public updateDimensions(): void {
     this.updateWidth();
     this.filterItems.updateDimensions();
+  }
+
+  public updatePaddings(): void {
+    const { gutterPixels } = this.options.get();
+    setStyles(this.node, { padding: `0 ${gutterPixels / 2}px` });
   }
 
   public updateHeight(newHeight: number): void {

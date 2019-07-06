@@ -1,73 +1,92 @@
 body {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 img {
   max-width: 100%;
 }
+
 .filtr-item {
-    padding: 1rem;
+  width: calc(50% - 15px);
 }
+
+@media screen and (min-width: 767px) {
+  .filtr-item {
+    width: calc(33.3% - 15px);
+  }
+}
+
+@media screen and (min-width: 991px) {
+  .filtr-item {
+    width: calc(25% - 15px);
+  }
+}
+
 .item-desc {
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    position: absolute;
-    text-transform: uppercase;
-    text-align: center;
-    padding: 1rem;
-    z-index: 1;
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  position: absolute;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 1rem;
+  z-index: 1;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
 }
 
 /* Filter controls */
-.simplefilter, .multifilter, .sortandshuffle, .search-row {
+.simplefilter,
+.multifilter,
+.sortandshuffle,
+.search-row {
   padding-left: 0;
 }
-.simplefilter li, .multifilter li, .sortandshuffle li {
-    color: white;
-    cursor: pointer;
-    display: inline-block;
-    text-transform: uppercase;
-    padding: 1rem 2rem;
+.simplefilter li,
+.multifilter li,
+.sortandshuffle li {
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  text-transform: uppercase;
+  padding: 1rem 2rem;
 }
 .simplefilter li {
-    background-color: #585858;
+  background-color: #585858;
 }
 .simplefilter li.active {
-    background-color: #212121;
+  background-color: #212121;
 }
 .multifilter li {
-    background-color: #4b9eff;
+  background-color: #4b9eff;
 }
 .multifilter li.active {
-    background-color: #2265b4;
+  background-color: #2265b4;
 }
 
 /* Shuffle and sort controls */
 select {
-    padding: 1rem 1rem;
-    text-transform: uppercase;
+  padding: 1rem 1rem;
+  text-transform: uppercase;
 }
 .sortandshuffle .shuffle-btn {
-    background-color: #dec800;
+  background-color: #dec800;
 }
 .sortandshuffle .sort-btn {
-    background-color: #de0000;
+  background-color: #de0000;
 }
 .sortandshuffle .sort-btn.active {
-    background-color: #9d0000;
+  background-color: #9d0000;
 }
 
 /* Search control */
 .filtr-search {
-    padding: 0.5rem;
-    text-transform: uppercase;
+  padding: 0.5rem;
+  text-transform: uppercase;
 }
 
 /* Colored divs */
 .block {
-  box-shadow: 0 1px 4px rgba(0,0,0,.75) inset;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.75) inset;
   color: white;
   text-align: center;
   height: 80px;
@@ -110,6 +129,10 @@ select {
 /* Helpers */
 .push-down {
   margin-bottom: 50px;
+}
+
+.filtr-container {
+  margin-top: 25px;
 }
 
 .filtr-container,

@@ -1,3 +1,8 @@
+## Version 2.2.0
+
+- Add `gutterPixels` options to support margins out of the box
+- Change column calculation logic to use `Math.floor` instead of `Math.round` (fixes overflowing elements at the grid's end)
+
 ## Version 2.1.1
 
 - Remove `gridSelector` as it could not be used in any viable use case

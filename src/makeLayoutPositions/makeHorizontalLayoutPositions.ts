@@ -7,9 +7,8 @@ import FilterContainer from '../FilterContainer';
  */
 export default (filterContainer: FilterContainer): Position[] => {
   const { filterItems } = filterContainer;
-  const filteredItems = filterItems.getFiltered(
-    filterContainer.options.get().filter.get()
-  );
+  const { gutterPixels } = filterContainer.options.get();
+  const filteredItems = filterItems.getFiltered(filterContainer.options.filter);
 
   let left = 0,
     containerHeight = 0;
@@ -23,7 +22,7 @@ export default (filterContainer: FilterContainer): Position[] => {
       };
 
       // update left for next item
-      left += width;
+      left += width + gutterPixels;
       // check if target height of FilterContainer should be increased
       if (height > containerHeight) containerHeight = height;
 

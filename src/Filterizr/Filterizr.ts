@@ -173,6 +173,11 @@ export default class Filterizr {
     if (newOptions.filter || newOptions.multifilterLogicalOperator) {
       this.filter(newOptions.filter || filter);
     }
+
+    if ('gutterPixels' in newOptions) {
+      this.filterContainer.updatePaddings();
+      this.renderWithImagesLoaded();
+    }
   }
 
   /**

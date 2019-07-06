@@ -26,6 +26,7 @@ const defaultOptions: RawOptions = {
     transform: 'scale(1)',
   },
   gridItemsSelector: '.filtr-item',
+  gutterPixels: 0,
   layout: 'sameSize',
   multifilterLogicalOperator: 'or',
   searchTerm: '',

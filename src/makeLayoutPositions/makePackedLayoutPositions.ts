@@ -8,16 +8,15 @@ import FilterContainer from '../FilterContainer';
  */
 export default (filterContainer: FilterContainer): Position[] => {
   const { filterItems } = filterContainer;
-  const filteredItems = filterItems.getFiltered(
-    filterContainer.options.get().filter.get()
-  );
+  const { gutterPixels } = filterContainer.options.get();
+  const filteredItems = filterItems.getFiltered(filterContainer.options.filter);
 
   //Instantiate new Packer, set up grid
   const packer = new Packer(filterContainer.dimensions.width);
   const filterItemsDimensions = filteredItems.map(
     ({ dimensions: { width, height } }): object => ({
-      w: width,
-      h: height,
+      w: width + gutterPixels,
+      h: height + gutterPixels,
     })
   );
 
@@ -34,7 +33,7 @@ export default (filterContainer: FilterContainer): Position[] => {
   );
 
   // set height of container
-  filterContainer.updateHeight(packer.root.h);
+  filterContainer.updateHeight(packer.root.h - gutterPixels);
 
   return targetPositions;
 };

@@ -7,9 +7,8 @@ import FilterContainer from '../FilterContainer';
  */
 export default (filterContainer: FilterContainer): Position[] => {
   const { filterItems } = filterContainer;
-  const filteredItems = filterItems.getFiltered(
-    filterContainer.options.get().filter.get()
-  );
+  const { gutterPixels } = filterContainer.options.get();
+  const filteredItems = filterItems.getFiltered(filterContainer.options.filter);
 
   const gridWidth = filterContainer.dimensions.width,
     itemHeight = filteredItems[0].dimensions.height;
@@ -27,18 +26,21 @@ export default (filterContainer: FilterContainer): Position[] => {
       }
 
       const targetPosition = {
-        left: left,
-        top: itemHeight * row,
+        left,
+        top: (itemHeight + gutterPixels) * row,
       };
 
-      left += width;
+      left += width + filterContainer.options.get().gutterPixels;
 
       return targetPosition;
     }
   );
 
   // update the height of the FilterContainer
-  filterContainer.updateHeight((row + 1) * filteredItems[0].dimensions.height);
+  filterContainer.updateHeight(
+    (row + 1) * (filteredItems[0].dimensions.height + gutterPixels) -
+      gutterPixels
+  );
   // return the array of new positions
   return targetPositions;
 };

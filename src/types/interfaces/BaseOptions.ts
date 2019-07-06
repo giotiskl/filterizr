@@ -10,6 +10,7 @@ export interface BaseOptions {
   filterOutCss?: object;
   filterInCss?: object;
   gridItemsSelector?: string;
+  gutterPixels?: number;
   layout?:
     | 'horizontal'
     | 'vertical'

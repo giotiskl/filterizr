@@ -80,11 +80,7 @@
         <!-- This is the set up of a basic gallery, your items must have the categories they belong to in a data-category
         attribute, which starts from the value 1 and goes up from there -->
         <div class="filtr-container">
-          <div
-            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
-            data-category="1, 5"
-            data-sort="Busy streets"
-          >
+          <div class="filtr-item" data-category="1, 5" data-sort="Busy streets">
             <img
               class="img-responsive"
               src="./img/city_1.jpg"
@@ -93,7 +89,7 @@
             <span class="item-desc">Busy Streets</span>
           </div>
           <div
-            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            class="filtr-item"
             data-category="2, 5"
             data-sort="Luminous night"
           >
@@ -104,11 +100,7 @@
             />
             <span class="item-desc">Luminous night</span>
           </div>
-          <div
-            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
-            data-category="1, 4"
-            data-sort="City wonders"
-          >
+          <div class="filtr-item" data-category="1, 4" data-sort="City wonders">
             <img
               class="img-responsive"
               src="./img/city_3.jpg"
@@ -116,11 +108,7 @@
             />
             <span class="item-desc">city wonders</span>
           </div>
-          <div
-            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
-            data-category="3"
-            data-sort="In production"
-          >
+          <div class="filtr-item" data-category="3" data-sort="In production">
             <img
               class="img-responsive"
               src="./img/industrial_1.jpg"
@@ -129,7 +117,7 @@
             <span class="item-desc">in production</span>
           </div>
           <div
-            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            class="filtr-item"
             data-category="3, 4"
             data-sort="Industrial site"
           >
@@ -141,7 +129,7 @@
             <span class="item-desc">industrial site</span>
           </div>
           <div
-            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            class="filtr-item"
             data-category="2, 4"
             data-sort="Peaceful lake"
           >
@@ -152,11 +140,7 @@
             />
             <span class="item-desc">peaceful lake</span>
           </div>
-          <div
-            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
-            data-category="1, 5"
-            data-sort="City lights"
-          >
+          <div class="filtr-item" data-category="1, 5" data-sort="City lights">
             <img
               class="img-responsive"
               src="./img/city_2.jpg"
@@ -164,11 +148,7 @@
             />
             <span class="item-desc">city lights</span>
           </div>
-          <div
-            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
-            data-category="2, 4"
-            data-sort="Dreamhouse"
-          >
+          <div class="filtr-item" data-category="2, 4" data-sort="Dreamhouse">
             <img
               class="img-responsive"
               src="./img/nature_3.jpg"
@@ -177,7 +157,7 @@
             <span class="item-desc">dreamhouse</span>
           </div>
           <div
-            class="col-xs-6 col-sm-4 col-md-3 filtr-item"
+            class="filtr-item"
             data-category="3"
             data-sort="Restless machines"
           >
@@ -527,36 +507,37 @@
   <script type="text/javascript" src="filterizr.min.js"></script>
   <script type="text/javascript">
     const simpleFilters = document.querySelectorAll('.simplefilter li');
-    Array.from(simpleFilters).forEach(node =>
+    Array.from(simpleFilters).forEach((node) =>
       node.addEventListener('click', function() {
-        simpleFilters.forEach(filter => filter.classList.remove('active'));
+        simpleFilters.forEach((filter) => filter.classList.remove('active'));
         node.classList.add('active');
       })
     );
 
     const multiFilters = document.querySelectorAll('.multifilter li');
-    Array.from(multiFilters).forEach(node =>
+    Array.from(multiFilters).forEach((node) =>
       node.addEventListener('click', function() {
         node.classList.toggle('active');
       })
     );
 
     const sortControls = document.querySelectorAll('.sort-btn');
-    Array.from(sortControls).forEach(node =>
+    Array.from(sortControls).forEach((node) =>
       node.addEventListener('click', function() {
-        sortControls.forEach(control => control.classList.remove('active'));
+        sortControls.forEach((control) => control.classList.remove('active'));
         node.classList.add('active');
       })
     );
 
     const shuffleControl = document.querySelector('.shuffle-btn');
     shuffleControl.addEventListener('click', function() {
-      sortControls.forEach(control => control.classList.remove('active'));
+      sortControls.forEach((control) => control.classList.remove('active'));
     });
 
     // Expose this filterizr as a global for debugging
     window.filterizr = new window.Filterizr('.filtr-container', {
       controlsSelector: '.fltr-controls',
+      gutterPixels: 15,
     });
     new window.Filterizr('.color-container-1', {
       controlsSelector: '.color-controls-1',

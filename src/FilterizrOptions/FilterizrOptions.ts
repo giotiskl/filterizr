@@ -99,6 +99,7 @@ export default class FilterizrOptions {
       options.gridItemsSelector,
       'string'
     );
+    checkOptionForErrors('gutterPixels', options.gutterPixels, 'number');
     checkOptionForErrors('layout', options.layout, 'string', [
       'sameSize',
       'vertical',
