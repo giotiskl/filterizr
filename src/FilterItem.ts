@@ -1,18 +1,13 @@
+import { Dictionary, Position } from './types/interfaces';
 import {
   getDataAttributesOfHTMLNode,
   setStyles,
   TRANSITION_END_EVENTS,
 } from './utils';
-import { Dictionary } from './types/interfaces/Dictionary';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import EventReceiver from './EventReceiver';
 
 const imagesLoaded = require('imagesloaded');
-
-export interface Position {
-  left: number;
-  top: number;
-}
 
 /**
  * Resembles an item in the grid of Filterizr.

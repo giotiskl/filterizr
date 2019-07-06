@@ -1,4 +1,4 @@
-import { Position } from '../FilterItem';
+import { Position } from '../types/interfaces';
 import FilterItem from '../FilterItem';
 import FilterContainer from '../FilterContainer';
 

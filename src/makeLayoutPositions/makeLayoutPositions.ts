@@ -1,4 +1,4 @@
-import { Position } from '../FilterItem';
+import { Position } from '../types/interfaces';
 import makeHorizontalLayoutPositions from './makeHorizontalLayoutPositions';
 import makeVerticalLayoutPositions from './makeVerticalLayoutPositions';
 import makeSameHeightLayoutPositions from './makeSameHeightLayoutPositions';
