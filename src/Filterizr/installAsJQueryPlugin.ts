@@ -32,6 +32,9 @@ export default function installAsJQueryPlugin($: any): void {
         case 'insertItem':
           filterizr.insertItem(...methodArgs);
           return this;
+        case 'removeItem':
+          filterizr.removeItem(...methodArgs);
+          return this;
         case 'toggleFilter':
           filterizr.toggleFilter(...methodArgs);
           return this;

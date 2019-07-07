@@ -90,11 +90,18 @@ export default class Filterizr {
   }
 
   /**
-   * Inserts a new FilterItem in the Filterizr grid
-   * @param node DOM node to append
+   * Inserts a new FilterItem into the grid
    */
   public insertItem(node: HTMLElement): void {
     this.filterContainer.insertItem(node, this.options);
+    this.renderWithImagesLoaded();
+  }
+
+  /**
+   * Removes a FilterItem from the grid
+   */
+  public removeItem(node: HTMLElement): void {
+    this.filterContainer.removeItem(node);
     this.renderWithImagesLoaded();
   }
 

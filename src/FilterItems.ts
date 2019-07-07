@@ -67,6 +67,14 @@ export default class FilterItems {
     return this.filterItems.push(filterItem);
   }
 
+  public remove(node: HTMLElement): void {
+    this.set(
+      this.filterItems.filter(
+        ({ node: filterItemNode }): boolean => filterItemNode !== node
+      )
+    );
+  }
+
   public getFiltered(filter: Filter): FilterItem[] {
     const filterItems = this.get();
 

@@ -76,11 +76,6 @@ export default class FilterContainer {
     return new FilterItems(filterItems, options);
   }
 
-  /**
-   * Inserts a new item into the grid.
-   * @param node - HTML node to instantiate as FilterItem and append to the grid
-   * @param options - Filterizr options
-   */
   public insertItem(node: Element, options: FilterizrOptions): void {
     const nodeModified = node.cloneNode(true) as Element;
     nodeModified.removeAttribute('style');
@@ -88,6 +83,11 @@ export default class FilterContainer {
     this.filterItems.push(
       new FilterItem(nodeModified, this.filterItems.length, options)
     );
+  }
+
+  public removeItem(node: HTMLElement): void {
+    this.filterItems.remove(node);
+    this.node.removeChild(node);
   }
 
   public calculateColumns(): number {

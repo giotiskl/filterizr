@@ -180,6 +180,22 @@ describe('Filterizr', () => {
     });
   });
 
+  describe('#removeItem', () => {
+    let nodeToDelete: Node, oldLength: number;
+
+    beforeEach(() => {
+      const nodes = filterContainer.node.querySelectorAll('.filtr-item');
+      nodeToDelete = nodes[3];
+      oldLength = filterizr['filterItems'].length;
+    });
+
+    it('should decrease the length of the FilterItems array by 1', () => {
+      filterizr.removeItem(nodeToDelete as HTMLElement);
+      const newLength = filterizr['filterItems'].length;
+      expect(newLength).toBeLessThan(oldLength);
+    });
+  });
+
   describe('#sort', () => {
     it('should return a sorted grid', () => {
       filterizr.sort('index', 'desc');
