@@ -31,6 +31,16 @@ const defaultOptions: RawOptions = {
   multifilterLogicalOperator: 'or',
   searchTerm: '',
   setupControls: true,
+  spinner: {
+    enabled: false,
+    fillColor: '#2184D0',
+    styles: {
+      width: '75px',
+      height: '75px',
+      margin: 'auto',
+      'z-index': 2,
+    },
+  },
 };
 
 export default defaultOptions;

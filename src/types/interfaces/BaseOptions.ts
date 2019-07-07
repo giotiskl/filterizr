@@ -1,3 +1,4 @@
+import { SpinnerOptions } from './SpinnerOptions';
 import { RawOptionsCallbacks } from './RawOptionsCallbacks';
 
 export interface BaseOptions {
@@ -21,4 +22,5 @@ export interface BaseOptions {
   multifilterLogicalOperator?: 'or' | 'and';
   searchTerm?: string;
   setupControls?: boolean;
+  spinner?: SpinnerOptions;
 }

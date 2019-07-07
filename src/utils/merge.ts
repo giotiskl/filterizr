@@ -1,18 +1,32 @@
 import { Dictionary } from '../types/interfaces/Dictionary';
 
 /**
- * Non-mutating merge of objects
- * @param old is the old object from which the missing props are copied.
- * @param target is the target object with the updated values.
+ * Simple object check.
  */
-export const merge = (old: Dictionary, target: Dictionary): Dictionary => {
-  const merged = Object.assign({}, old, target);
-  Object.entries(merged).forEach(([key, value]): void => {
-    const isObject =
-      typeof value === 'object' && value !== null && !(value instanceof Date);
-    if (isObject) {
-      merged[key] = merge(old[key], target[key]);
+function isObject(item: any) {
+  return item && typeof item === 'object' && !Array.isArray(item);
+}
+
+/**
+ * Deep merge two objects.
+ */
+export function merge(
+  target: Dictionary,
+  ...sources: Dictionary[]
+): Dictionary {
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        if (!target[key]) Object.assign(target, { [key]: {} });
+        merge(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
     }
-  });
-  return merged;
-};
+  }
+
+  return merge(target, ...sources);
+}

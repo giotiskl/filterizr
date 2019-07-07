@@ -1,5 +1,5 @@
 export interface RawOptionsCallbacks {
-  onInit?: Function;
+  onInit?: EventListener;
   onFilteringStart?: EventListener;
   onFilteringEnd?: EventListener;
   onShufflingStart?: EventListener;

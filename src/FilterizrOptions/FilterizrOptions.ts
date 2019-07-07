@@ -13,7 +13,7 @@ export default class FilterizrOptions {
   private options: Options;
 
   public constructor(userOptions: RawOptions) {
-    const options = merge(defaultOptions, this.validate(userOptions));
+    const options = merge({}, defaultOptions, this.validate(userOptions));
     this.options = this.convertToFilterizrOptions(options);
   }
 
@@ -47,6 +47,7 @@ export default class FilterizrOptions {
 
   public set(newUserOptions: RawOptions): void {
     const options = merge(
+      {},
       this.convertToOptions(this.options),
       this.validate(newUserOptions)
     );

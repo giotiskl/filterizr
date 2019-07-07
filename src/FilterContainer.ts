@@ -118,6 +118,7 @@ export default class FilterContainer {
       this.eventReceiver.on(eventName, callbacks.onTransitionEnd);
     });
     // Public Filterizr events
+    this.eventReceiver.on('init', callbacks.onInit);
     this.eventReceiver.on('filteringStart', callbacks.onFilteringStart);
     this.eventReceiver.on('filteringEnd', callbacks.onFilteringEnd);
     this.eventReceiver.on('shufflingStart', callbacks.onShufflingStart);
@@ -130,6 +131,7 @@ export default class FilterContainer {
     TRANSITION_END_EVENTS.forEach((eventName): void => {
       this.eventReceiver.off(eventName);
     });
+    this.eventReceiver.off('init');
     this.eventReceiver.off('filteringStart');
     this.eventReceiver.off('filteringEnd');
     this.eventReceiver.off('shufflingStart');

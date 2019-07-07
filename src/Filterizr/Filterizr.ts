@@ -10,6 +10,7 @@ import makeLayoutPositions from '../makeLayoutPositions';
 import installAsJQueryPlugin from './installAsJQueryPlugin';
 import { debounce, getHTMLElement, noop } from '../utils';
 import FilterItems from '../FilterItems';
+import Spinner from '../Spinner';
 
 const imagesLoaded = require('imagesloaded');
 
@@ -28,7 +29,7 @@ export default class Filterizr {
   public static installAsJQueryPlugin: Function = installAsJQueryPlugin;
 
   public options: FilterizrOptions;
-  private browserWindow: EventReceiver;
+  private windowEventReceiver: EventReceiver;
   private filterContainer: FilterContainer;
   private filterControls?: FilterControls;
   private filterizrState: string;
@@ -39,9 +40,13 @@ export default class Filterizr {
   ) {
     this.options = new FilterizrOptions(userOptions);
 
-    const { setupControls, controlsSelector } = this.options.get();
+    const {
+      spinner: { enabled: isSpinnerEnabled },
+      setupControls,
+      controlsSelector,
+    } = this.options.get();
 
-    this.browserWindow = new EventReceiver(window);
+    this.windowEventReceiver = new EventReceiver(window);
     this.filterContainer = new FilterContainer(
       getHTMLElement(selectorOrNode),
       this.options
@@ -52,9 +57,13 @@ export default class Filterizr {
       this.filterControls = new FilterControls(this, controlsSelector);
     }
 
+    if (isSpinnerEnabled) {
+      new Spinner(this.filterContainer, this.options);
+    }
+
     this.bindEvents();
 
-    this.renderWithImagesLoaded(this.options.get().callbacks.onInit);
+    this.renderWithImagesLoaded(() => this.filterContainer.trigger('init'));
   }
 
   private get filterItems(): FilterItems {
@@ -80,10 +89,10 @@ export default class Filterizr {
   }
 
   public destroy(): void {
-    const { browserWindow, filterControls, filterContainer } = this;
+    const { windowEventReceiver, filterControls, filterContainer } = this;
 
     filterContainer.destroy();
-    browserWindow.destroy();
+    windowEventReceiver.destroy();
     if (this.options.get().setupControls && filterControls) {
       filterControls.destroy();
     }
@@ -250,9 +259,12 @@ export default class Filterizr {
   }
 
   private bindEvents(): void {
-    const { browserWindow } = this;
+    const { windowEventReceiver } = this;
     this.rebindFilterContainerEvents();
-    browserWindow.on('resize', this.updateDimensionsAndRerender.bind(this));
+    windowEventReceiver.on(
+      'resize',
+      this.updateDimensionsAndRerender.bind(this)
+    );
   }
 
   /**

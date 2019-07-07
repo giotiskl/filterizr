@@ -3,6 +3,7 @@
 - Add `gutterPixels` options to support margins out of the box
 - Change column calculation logic to use `Math.floor` instead of `Math.round` (fixes overflowing elements at the grid's end)
 - Add new public method `removeItem` that removes an item from the grid
+- Add a built-in loading spinner animation controlled through the `spinner` option in options.
 
 ## Version 2.1.1
 
