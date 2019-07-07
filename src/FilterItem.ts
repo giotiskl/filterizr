@@ -210,14 +210,14 @@ export default class FilterItem {
           setStyles(this.node, {
             transition: this.getTransitionStyle(),
           });
-        }, 10);
+        }, 100);
       });
     } else {
       setTimeout((): void => {
         setStyles(this.node, {
           transition: this.getTransitionStyle(),
         });
-      }, 10);
+      }, 100);
     }
   }
 }
