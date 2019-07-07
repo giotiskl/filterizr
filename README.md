@@ -1,7 +1,5 @@
 # [<img src="./filterizr_logo.png" width="145" height="30" alt="Filterizr logo" />](http://yiotis.net/filterizr)<br/> [![Build Status](https://travis-ci.org/giotiskl/Filterizr.svg?branch=filterizr_revisited)](https://travis-ci.org/giotiskl/Filterizr) <img src="https://img.shields.io/npm/v/filterizr.svg" alt="NPM version" /> <img src="https://img.shields.io/npm/dm/filterizr.svg" alt="NPM monthly downloads" /> <img src="https://img.shields.io/github/license/giotiskl/filterizr.svg" alt="license badge" />
 
-If you use Filterizr in your project and wish to get it featured on Filterizr's website, let me know!
-
 ## Description
 
 Filterizr is a JavaScript library that sorts, shuffles, searches and applies stunning filters over responsive galleries using CSS3 transitions. Write your very own, custom effects in CSS and watch your gallery come to life!
