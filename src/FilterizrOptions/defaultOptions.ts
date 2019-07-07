@@ -35,9 +35,9 @@ const defaultOptions: RawOptions = {
     enabled: false,
     fillColor: '#2184D0',
     styles: {
-      width: '75px',
       height: '75px',
-      margin: 'auto',
+      margin: '0 auto',
+      width: '75px',
       'z-index': 2,
     },
   },

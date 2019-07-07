@@ -2,17 +2,17 @@ import FilterizrOptions from './FilterizrOptions';
 import { makeSpinner } from './makeSpinner/makeSpinner';
 import FilterContainer from './FilterContainer';
 import EventReceiver from './EventReceiver';
+import animate from './animate';
 
 export default class Spinner {
-  private parent: FilterContainer;
+  public spinner: HTMLElement;
   private eventReceiver: EventReceiver;
-  private spinner: HTMLElement;
+  private parent: FilterContainer;
 
   public constructor(parent: FilterContainer, options: FilterizrOptions) {
     this.parent = parent;
     this.spinner = makeSpinner(options.get().spinner);
-    this.eventReceiver = new EventReceiver(parent.node);
-    this.eventReceiver.on('init', this.destroy.bind(this));
+    this.eventReceiver = new EventReceiver(this.spinner);
     this.render();
   }
 
@@ -20,7 +20,8 @@ export default class Spinner {
     this.parent.node.appendChild(this.spinner);
   }
 
-  private destroy(): void {
+  public async destroy(): Promise<void> {
+    await animate(this.spinner, { opacity: 0 });
     this.eventReceiver.destroy();
     this.parent.node.removeChild(this.spinner);
   }

@@ -11,8 +11,11 @@ export function makeSpinner({
   svgImg.classList.add('Filterizr__spinner');
   svgImg.src = `data:image/svg+xml;base64,${window.btoa(svg)}`;
   svgImg.alt = 'Spinner';
-
-  setStyles(svgImg, styles);
+  setStyles(svgImg, {
+    ...styles,
+    opacity: 1,
+    transition: 'all ease-out 1000ms',
+  });
 
   return svgImg;
 }

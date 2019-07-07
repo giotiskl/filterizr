@@ -63,6 +63,19 @@ export default class FilterItems {
     );
   }
 
+  public async enableCssTransitions(): Promise<void> {
+    this.filterItems.forEach(
+      async (filterItem): Promise<void> =>
+        await filterItem.enableCssTransitions()
+    );
+  }
+
+  public setStyles(styles: object): void {
+    this.filterItems.forEach((filterItem): void =>
+      setStyles(filterItem.node, styles)
+    );
+  }
+
   public push(filterItem: FilterItem): number {
     return this.filterItems.push(filterItem);
   }

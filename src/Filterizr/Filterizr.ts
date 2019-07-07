@@ -1,16 +1,16 @@
 import { FILTERIZR_STATE } from '../config';
 import { Filter } from '../types';
 import { RawOptions } from '../types/interfaces';
+import { debounce, getHTMLElement } from '../utils';
+import EventReceiver from '../EventReceiver';
 import FilterizrOptions, { defaultOptions } from '../FilterizrOptions';
 import FilterControls from '../FilterControls';
 import FilterContainer from '../FilterContainer';
+import FilterItems from '../FilterItems';
 import FilterItem from '../FilterItem';
-import EventReceiver from '../EventReceiver';
+import Spinner from '../Spinner';
 import makeLayoutPositions from '../makeLayoutPositions';
 import installAsJQueryPlugin from './installAsJQueryPlugin';
-import { debounce, getHTMLElement, noop } from '../utils';
-import FilterItems from '../FilterItems';
-import Spinner from '../Spinner';
 
 const imagesLoaded = require('imagesloaded');
 
@@ -33,6 +33,8 @@ export default class Filterizr {
   private filterContainer: FilterContainer;
   private filterControls?: FilterControls;
   private filterizrState: string;
+  private imagesHaveLoaded: boolean;
+  private spinner: Spinner;
 
   public constructor(
     selectorOrNode: string | HTMLElement = '.filtr-container',
@@ -40,34 +42,26 @@ export default class Filterizr {
   ) {
     this.options = new FilterizrOptions(userOptions);
 
-    const {
-      spinner: { enabled: isSpinnerEnabled },
-      setupControls,
-      controlsSelector,
-    } = this.options.get();
+    const { areControlsEnabled, controlsSelector, isSpinnerEnabled } = this.options;
 
     this.windowEventReceiver = new EventReceiver(window);
     this.filterContainer = new FilterContainer(
       getHTMLElement(selectorOrNode),
       this.options
     );
+    this.imagesHaveLoaded = !this.filterContainer.node.querySelectorAll('img')
+      .length;
     this.filterizrState = FILTERIZR_STATE.IDLE;
 
-    if (setupControls) {
+    if (areControlsEnabled) {
       this.filterControls = new FilterControls(this, controlsSelector);
     }
-
     if (isSpinnerEnabled) {
-      new Spinner(this.filterContainer, this.options);
+      this.spinner = new Spinner(this.filterContainer, this.options);
     }
 
     this.bindEvents();
-
-    this.renderWithImagesLoaded(() => this.filterContainer.trigger('init'));
-  }
-
-  private get filterItems(): FilterItems {
-    return this.filterContainer.filterItems;
+    this.initialize();
   }
 
   /**
@@ -101,17 +95,20 @@ export default class Filterizr {
   /**
    * Inserts a new FilterItem into the grid
    */
-  public insertItem(node: HTMLElement): void {
-    this.filterContainer.insertItem(node, this.options);
-    this.renderWithImagesLoaded();
+  public async insertItem(node: HTMLElement): Promise<void> {
+    const { filterContainer, filterItems, options } = this;
+    filterContainer.insertItem(node, options);
+    await this.waitForImagesToLoad();
+    this.render(filterItems.getFiltered(options.filter));
   }
 
   /**
    * Removes a FilterItem from the grid
    */
   public removeItem(node: HTMLElement): void {
-    this.filterContainer.removeItem(node);
-    this.renderWithImagesLoaded();
+    const { filterContainer, filterItems } = this;
+    filterContainer.removeItem(node);
+    this.render(filterItems.getFiltered(this.options.filter));
   }
 
   /**
@@ -154,16 +151,10 @@ export default class Filterizr {
    * @param newOptions to override the defaults.
    */
   public setOptions(newOptions: RawOptions): void {
-    const {
-      filterContainer,
-      filterItems,
-      options: { filter },
-    } = this;
+    const { filterContainer, filterItems } = this;
 
     if (newOptions.callbacks) {
-      // If callbacks are defined the in the options, the old ones
-      // have to be removed while we still have the references to
-      // the handlers.
+      // Remove old callbacks before setting the new ones in the options
       filterContainer.unbindEvents();
     }
 
@@ -187,12 +178,12 @@ export default class Filterizr {
     }
 
     if (newOptions.filter || newOptions.multifilterLogicalOperator) {
-      this.filter(newOptions.filter || filter);
+      this.filter(this.options.filter);
     }
 
     if ('gutterPixels' in newOptions) {
       this.filterContainer.updatePaddings();
-      this.renderWithImagesLoaded();
+      this.render(filterItems.getFiltered(this.options.filter));
     }
   }
 
@@ -206,14 +197,12 @@ export default class Filterizr {
   }
 
   private render(itemsToFilterIn: FilterItem[]): void {
-    const {
-      filterContainer,
-      filterItems,
-      options: { filter },
-    } = this;
+    const { filterContainer, filterItems, options } = this;
     const { filterInCss, filterOutCss, layout } = this.options.get();
 
-    filterItems.getFilteredOut(filter).forEach((filterItem): void => {
+    filterContainer.updateDimensions();
+
+    filterItems.getFilteredOut(options.filter).forEach((filterItem): void => {
       filterItem.filterOut(filterOutCss);
     });
 
@@ -222,6 +211,31 @@ export default class Filterizr {
     itemsToFilterIn.forEach((filterItem, index): void => {
       filterItem.filterIn(positions[index], filterInCss);
     });
+  }
+
+  /**
+   * Initialization sequence of Filterizr when the grid is first loaded
+   */
+  private async initialize(): Promise<void> {
+    const { filterContainer, filterItems, options, spinner } = this;
+
+    await this.waitForImagesToLoad();
+
+    if (this.options.isSpinnerEnabled) {
+      // The spinner will first fade out (opacity: 0) before being removed
+      await spinner.destroy();
+    }
+
+    // Enable animations after the initial render, to let
+    // the items assume their positions before animating
+    this.render(filterItems.getFiltered(options.filter));
+    await filterItems.enableCssTransitions();
+
+    filterContainer.trigger('init');
+  }
+
+  private get filterItems(): FilterItems {
+    return this.filterContainer.filterItems;
   }
 
   private onTransitionEndCallback(): void {
@@ -245,9 +259,7 @@ export default class Filterizr {
   private rebindFilterContainerEvents(): void {
     const { filterContainer } = this;
     const { animationDuration, callbacks } = this.options.get();
-
     filterContainer.unbindEvents();
-
     filterContainer.bindEvents({
       ...callbacks,
       onTransitionEnd: debounce(
@@ -259,48 +271,26 @@ export default class Filterizr {
   }
 
   private bindEvents(): void {
-    const { windowEventReceiver } = this;
+    const { filterItems, options, windowEventReceiver } = this;
     this.rebindFilterContainerEvents();
-    windowEventReceiver.on(
-      'resize',
-      this.updateDimensionsAndRerender.bind(this)
-    );
+    windowEventReceiver.on('resize', () => {
+      this.render(filterItems.getFiltered(options.filter));
+    });
   }
 
   /**
-   * If it contains images it makes use of the imagesloaded npm package
-   * to trigger the first render after the images have finished loading
-   * in the DOM. Otherwise, overlapping can occur if the images do not
-   * have the height attribute explicitly set on them.
-   *
-   * In case the grid contains no images, then a simple render is performed.
+   * Resolves when the images of the grid have finished loading into the DOM
    */
-  private renderWithImagesLoaded(onRendered: Function = noop): void {
-    const {
-      filterContainer,
-      filterItems,
-      options: { filter },
-    } = this;
-    const hasImages = !!filterContainer.node.querySelectorAll('img').length;
-
-    if (hasImages) {
-      imagesLoaded(filterContainer.node, (): void => {
-        this.updateDimensionsAndRerender();
-        onRendered();
-      });
-    } else {
-      this.render(filterItems.getFiltered(filter));
-      onRendered();
+  private async waitForImagesToLoad(): Promise<void> {
+    const { imagesHaveLoaded, filterContainer } = this;
+    if (imagesHaveLoaded) {
+      return Promise.resolve();
     }
-  }
-
-  private updateDimensionsAndRerender(): void {
-    const {
-      filterContainer,
-      filterItems,
-      options: { filter },
-    } = this;
-    filterContainer.updateDimensions();
-    this.render(filterItems.getFiltered(filter));
+    return new Promise((resolve) => {
+      imagesLoaded(filterContainer.node, (): void => {
+        this.imagesHaveLoaded = true;
+        resolve();
+      });
+    });
   }
 }

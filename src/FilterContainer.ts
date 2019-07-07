@@ -80,9 +80,13 @@ export default class FilterContainer {
     const nodeModified = node.cloneNode(true) as Element;
     nodeModified.removeAttribute('style');
     this.node.appendChild(nodeModified);
-    this.filterItems.push(
-      new FilterItem(nodeModified, this.filterItems.length, options)
+    const filterItem = new FilterItem(
+      nodeModified,
+      this.filterItems.length,
+      options
     );
+    filterItem.enableCssTransitions();
+    this.filterItems.push(filterItem);
   }
 
   public removeItem(node: HTMLElement): void {

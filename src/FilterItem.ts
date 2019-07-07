@@ -52,8 +52,6 @@ export default class FilterItem {
       })
     );
 
-    this.setTransitionStyle();
-
     this.bindEvents();
   }
 
@@ -152,6 +150,43 @@ export default class FilterItem {
     return this.sortData[sortAttribute];
   }
 
+  /**
+   * Sets the transition css property as an inline style on the FilterItem.
+   *
+   * The idea here is that during the very first render items should assume
+   * their positions directly.
+   *
+   * Following renders should actually trigger the transitions, which is why
+   * we need to delay setting the transition property.
+   *
+   * Unfortunately, JavaScript code executes on the same thread as the
+   * browser's rendering. Everything that needs to be drawn waits for
+   * JavaScript execution to complete. Thus, we need to use a setTimeout
+   * here to defer setting the transition style at the first rendering cycle.
+   */
+  public async enableCssTransitions(): Promise<void> {
+    return new Promise((resolve) => {
+      const hasImage = !!this.node.querySelectorAll('img').length;
+      if (hasImage) {
+        imagesLoaded(this.node, (): void => {
+          setTimeout((): void => {
+            setStyles(this.node, {
+              transition: this.getTransitionStyle(),
+            });
+            resolve();
+          }, 10);
+        });
+      } else {
+        setTimeout((): void => {
+          setStyles(this.node, {
+            transition: this.getTransitionStyle(),
+          });
+          resolve();
+        }, 10);
+      }
+    });
+  }
+
   private bindEvents(): void {
     TRANSITION_END_EVENTS.forEach((eventName): void => {
       this.eventReceiver.on(eventName, (): void => {
@@ -186,38 +221,5 @@ export default class FilterItem {
       delay,
       delayMode
     )}ms`;
-  }
-
-  /**
-   * Sets the transition css property as an inline style on the FilterItem.
-   *
-   * The idea here is that during the very first render items should assume
-   * their positions directly.
-   *
-   * Following renders should actually trigger the transitions, which is why
-   * we need to delay setting the transition property.
-   *
-   * Unfortunately, JavaScript code executes on the same thread as the
-   * browser's rendering. Everything that needs to be drawn waits for
-   * JavaScript execution to complete. Thus, we need to use a setTimeout
-   * here to defer setting the transition style at the first rendering cycle.
-   */
-  private setTransitionStyle(): void {
-    const hasImage = !!this.node.querySelectorAll('img').length;
-    if (hasImage) {
-      imagesLoaded(this.node, (): void => {
-        setTimeout((): void => {
-          setStyles(this.node, {
-            transition: this.getTransitionStyle(),
-          });
-        }, 100);
-      });
-    } else {
-      setTimeout((): void => {
-        setStyles(this.node, {
-          transition: this.getTransitionStyle(),
-        });
-      }, 100);
-    }
   }
 }

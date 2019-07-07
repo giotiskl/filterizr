@@ -17,6 +17,18 @@ export default class FilterizrOptions {
     this.options = this.convertToFilterizrOptions(options);
   }
 
+  public get isSpinnerEnabled(): boolean {
+    return this.options.spinner.enabled;
+  }
+
+  public get areControlsEnabled(): boolean {
+    return this.options.setupControls;
+  }
+
+  public get controlsSelector(): string {
+    return this.options.controlsSelector;
+  }
+
   public get filter(): Filter {
     return this.options.filter.get();
   }
