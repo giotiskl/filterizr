@@ -85,10 +85,9 @@ export default class Filterizr implements Destructible {
 
   public destroy(): void {
     const { windowEventReceiver, filterControls, filterContainer } = this;
-
     filterContainer.destroy();
     windowEventReceiver.destroy();
-    if (this.options.get().setupControls && filterControls) {
+    if (this.options.areControlsEnabled && filterControls) {
       filterControls.destroy();
     }
   }
