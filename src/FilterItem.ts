@@ -7,33 +7,29 @@ import {
 } from './types/interfaces';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import EventReceiver from './EventReceiver';
+import FilterizrElement from './FilterizrElement';
 
 const imagesLoaded = require('imagesloaded');
 
 /**
  * Resembles an item in the grid of Filterizr.
  */
-export default class FilterItem implements Destructible, Resizable {
-  public node: Element;
-  public options: FilterizrOptions;
+export default class FilterItem extends FilterizrElement implements Resizable {
   public dimensions: {
     width: number;
     height: number;
   };
 
-  private eventReceiver: EventReceiver;
   private filteredOut: boolean;
   private index: number;
   private lastPosition: Position;
   private sortData: Dictionary;
 
   public constructor(node: Element, index: number, options: FilterizrOptions) {
+    super(node, options);
     this.filteredOut = false;
     this.index = index;
     this.lastPosition = { left: 0, top: 0 };
-    this.node = node;
-    this.eventReceiver = new EventReceiver(node);
-    this.options = options;
     this.dimensions = {
       width: this.node.clientWidth,
       height: this.node.clientHeight,
@@ -191,7 +187,7 @@ export default class FilterItem implements Destructible, Resizable {
     });
   }
 
-  private bindEvents(): void {
+  protected bindEvents(): void {
     this.eventReceiver.on('transitionend', (): void => {
       // On transition end determines if the item is filtered out or not.
       // It adds a .filteredOut class so that user can target these items
@@ -208,7 +204,7 @@ export default class FilterItem implements Destructible, Resizable {
     });
   }
 
-  private unbindEvents(): void {
+  protected unbindEvents(): void {
     this.eventReceiver.off('transitionend');
   }
 

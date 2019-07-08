@@ -1,25 +1,23 @@
 import { FILTERIZR_STATE } from './config';
 import { FilterizrState } from './types';
-import { Destructible, Resizable } from './types/interfaces';
-import { setStyles, debounce } from './utils';
+import { Resizable } from './types/interfaces';
+import { debounce } from './utils';
 import FilterizrOptions from './FilterizrOptions';
 import FilterItem from './FilterItem';
 import FilterItems from './FilterItems';
-import EventReceiver from './EventReceiver';
+import FilterizrElement from './FilterizrElement';
 
 /**
  * Resembles the grid of items within Filterizr.
  */
-export default class FilterContainer implements Destructible, Resizable {
-  public node: Element;
-  public options: FilterizrOptions;
+export default class FilterContainer extends FilterizrElement
+  implements Resizable {
   public filterItems: FilterItems;
   public dimensions: {
     width: number;
     height: number;
   };
 
-  private eventReceiver: EventReceiver;
   private _filterizrState: FilterizrState;
 
   public constructor(node: Element, options: FilterizrOptions) {
@@ -29,13 +27,12 @@ export default class FilterContainer implements Destructible, Resizable {
       );
     }
 
-    this.node = node;
-    this.options = options;
-    this.eventReceiver = new EventReceiver(node);
+    super(node, options);
+
     this._filterizrState = FILTERIZR_STATE.IDLE;
 
     // Set up initial styles of container
-    setStyles(this.node, {
+    this.setStyles({
       padding: `0 ${this.options.get().gutterPixels / 2}px`,
       position: 'relative',
       // Needed for flex displays
@@ -112,18 +109,18 @@ export default class FilterContainer implements Destructible, Resizable {
   }
 
   public updateDimensions(): void {
-    this.updateWidth();
+    this.dimensions.width = this.node.clientWidth;
     this.filterItems.updateDimensions();
   }
 
   public updatePaddings(): void {
     const { gutterPixels } = this.options.get();
-    setStyles(this.node, { padding: `0 ${gutterPixels / 2}px` });
+    this.setStyles({ padding: `0 ${gutterPixels / 2}px` });
   }
 
   public updateHeight(newHeight: number): void {
     this.dimensions.height = newHeight;
-    setStyles(this.node, { height: `${newHeight}px` });
+    this.setStyles({ height: `${newHeight}px` });
   }
 
   public bindEvents(): void {
@@ -180,14 +177,5 @@ export default class FilterContainer implements Destructible, Resizable {
     this.eventReceiver.off('shufflingEnd');
     this.eventReceiver.off('sortingStart');
     this.eventReceiver.off('sortingEnd');
-  }
-
-  public trigger(eventType: string): void {
-    const event = new Event(eventType);
-    this.node.dispatchEvent(event);
-  }
-
-  private updateWidth(): void {
-    this.dimensions.width = this.node.clientWidth;
   }
 }
