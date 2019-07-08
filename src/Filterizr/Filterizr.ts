@@ -1,6 +1,6 @@
 import { FILTERIZR_STATE } from '../config';
 import { Filter } from '../types';
-import { RawOptions } from '../types/interfaces';
+import { RawOptions, Destructible } from '../types/interfaces';
 import { getHTMLElement } from '../utils';
 import EventReceiver from '../EventReceiver';
 import FilterizrOptions, { defaultOptions } from '../FilterizrOptions';
@@ -14,7 +14,7 @@ import installAsJQueryPlugin from './installAsJQueryPlugin';
 
 const imagesLoaded = require('imagesloaded');
 
-export default class Filterizr {
+export default class Filterizr implements Destructible {
   /**
    * Main Filterizr classes exported as static members
    */

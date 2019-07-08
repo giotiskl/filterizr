@@ -1,8 +1,8 @@
-import { Dictionary } from './types/interfaces';
+import { Destructible, Dictionary } from './types/interfaces';
 
 type Receiver = NodeListOf<Element> | Element | Window;
 
-export default class EventReceiver {
+export default class EventReceiver implements Destructible {
   private receiver: Receiver;
   private eventDictionary: Dictionary;
 

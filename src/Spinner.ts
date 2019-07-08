@@ -1,10 +1,11 @@
+import { Destructible } from './types/interfaces';
 import FilterizrOptions from './FilterizrOptions';
 import { makeSpinner } from './makeSpinner/makeSpinner';
 import FilterContainer from './FilterContainer';
 import EventReceiver from './EventReceiver';
 import animate from './animate';
 
-export default class Spinner {
+export default class Spinner implements Destructible {
   public spinner: HTMLElement;
   private eventReceiver: EventReceiver;
   private parent: FilterContainer;

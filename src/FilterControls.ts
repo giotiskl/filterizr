@@ -1,8 +1,9 @@
 import Filterizr from './Filterizr';
 import { debounce } from './utils';
 import EventReceiver from './EventReceiver';
+import { Destructible } from './types/interfaces';
 
-export default class FilterControls {
+export default class FilterControls implements Destructible {
   private filterControls: EventReceiver;
   private filterizr: Filterizr;
   private multiFilterControls: EventReceiver;

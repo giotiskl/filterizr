@@ -1,6 +1,6 @@
 import { FILTERIZR_STATE } from './config';
 import { FilterizrState } from './types';
-import { RawOptionsCallbacks } from './types/interfaces';
+import { Destructible } from './types/interfaces';
 import { setStyles, debounce } from './utils';
 import FilterizrOptions from './FilterizrOptions';
 import FilterItem from './FilterItem';
@@ -10,7 +10,7 @@ import EventReceiver from './EventReceiver';
 /**
  * Resembles the grid of items within Filterizr.
  */
-export default class FilterContainer {
+export default class FilterContainer implements Destructible {
   public node: Element;
   public options: FilterizrOptions;
   public filterItems: FilterItems;
