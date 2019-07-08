@@ -9,6 +9,7 @@ import {
   shuffle,
   sortBy,
 } from './utils';
+import { makeTransitionStyles } from './FilterItem/styles';
 
 export default class FilterItems {
   private filterItems: FilterItem[];
@@ -40,20 +41,8 @@ export default class FilterItems {
   }
 
   public updateTransitionStyle(): void {
-    const {
-      animationDuration,
-      easing,
-      delay,
-      delayMode,
-    } = this.options.getRaw();
-
     this.filterItems.forEach((filterItem): void =>
-      setStyles(filterItem.node, {
-        transition: `all ${animationDuration}s ${easing} ${filterItem.getTransitionDelay(
-          delay,
-          delayMode
-        )}ms`,
-      })
+      filterItem.updateTransitionStyle()
     );
   }
 

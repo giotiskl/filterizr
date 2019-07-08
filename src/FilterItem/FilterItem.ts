@@ -1,13 +1,12 @@
-import { getDataAttributesOfHTMLNode, setStyles } from './utils';
+import { getDataAttributesOfHTMLNode, setStyles } from '../utils';
+import { Dictionary, Position, Resizable } from '../types/interfaces';
+import FilterizrOptions from '../FilterizrOptions/FilterizrOptions';
+import FilterizrElement from '../FilterizrElement';
 import {
-  Destructible,
-  Dictionary,
-  Position,
-  Resizable,
-} from './types/interfaces';
-import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
-import EventReceiver from './EventReceiver';
-import FilterizrElement from './FilterizrElement';
+  makeInitialStyles,
+  makeFilteringStyles,
+  makeTransitionStyles,
+} from './styles';
 
 const imagesLoaded = require('imagesloaded');
 
@@ -39,19 +38,7 @@ export default class FilterItem extends FilterizrElement implements Resizable {
       index,
       sortData: node.getAttribute('data-sort'),
     };
-
-    const { filterOutCss } = this.options.get();
-    setStyles(
-      this.node,
-      Object.assign({}, filterOutCss, {
-        '-webkit-backface-visibility': 'hidden',
-        perspective: '1000px',
-        '-webkit-perspective': '1000px',
-        '-webkit-transform-style': 'preserve-3d',
-        position: 'absolute',
-      })
-    );
-
+    this.setStyles(makeInitialStyles(this.options));
     this.bindEvents();
   }
 
@@ -69,15 +56,7 @@ export default class FilterItem extends FilterizrElement implements Resizable {
    * @param cssOptions for the animation
    */
   public filterIn(targetPosition: Position, cssOptions: Dictionary): void {
-    // Enhance the cssOptions with the target position before animating
-    setStyles(
-      this.node,
-      Object.assign({}, cssOptions, {
-        transform: `${cssOptions.transform || ''} translate3d(${
-          targetPosition.left
-        }px, ${targetPosition.top}px, 0)`,
-      })
-    );
+    this.setStyles(makeFilteringStyles(targetPosition, cssOptions));
     this.lastPosition = targetPosition;
     this.filteredOut = false;
   }
@@ -87,35 +66,8 @@ export default class FilterItem extends FilterizrElement implements Resizable {
    * @param cssOptions for the animation
    */
   public filterOut(cssOptions: Dictionary): void {
-    const { lastPosition: targetPosition } = this;
-    // Enhance the cssOptions with the target position before animating
-    setStyles(
-      this.node,
-      Object.assign({}, cssOptions, {
-        transform: `${cssOptions.transform || ''} translate3d(${
-          targetPosition.left
-        }px, ${targetPosition.top}px, 0)`,
-      })
-    );
+    this.setStyles(makeFilteringStyles(this.lastPosition, cssOptions));
     this.filteredOut = true;
-  }
-
-  /**
-   * Helper method to calculate the animation delay for a given grid item
-   * @param delay in ms
-   * @param delayMode can be 'alternate' or 'progressive'
-   */
-  public getTransitionDelay(
-    delay: number,
-    delayMode: 'progressive' | 'alternate'
-  ): number {
-    if (delayMode === 'progressive') {
-      return delay * this.index;
-    }
-    if (this.index % 2 === 0) {
-      return delay;
-    }
-    return 0;
   }
 
   /**
@@ -150,6 +102,10 @@ export default class FilterItem extends FilterizrElement implements Resizable {
     return this.sortData[sortAttribute];
   }
 
+  public updateTransitionStyle(): void {
+    this.setStyles(makeTransitionStyles(this.index, this.options));
+  }
+
   /**
    * Sets the transition css property as an inline style on the FilterItem.
    *
@@ -170,17 +126,13 @@ export default class FilterItem extends FilterizrElement implements Resizable {
       if (hasImage) {
         imagesLoaded(this.node, (): void => {
           setTimeout((): void => {
-            setStyles(this.node, {
-              transition: this.getTransitionStyle(),
-            });
+            this.updateTransitionStyle();
             resolve();
           }, 10);
         });
       } else {
         setTimeout((): void => {
-          setStyles(this.node, {
-            transition: this.getTransitionStyle(),
-          });
+          this.updateTransitionStyle();
           resolve();
         }, 10);
       }
@@ -196,26 +148,15 @@ export default class FilterItem extends FilterizrElement implements Resizable {
       const { filteredOut } = this;
       if (filteredOut) {
         this.node.classList.add('filteredOut');
-        setStyles(this.node, { zIndex: -1000 });
+        this.setStyles({ zIndex: -1000 });
       } else {
         this.node.classList.remove('filteredOut');
-        setStyles(this.node, { zIndex: '' });
+        this.setStyles({ zIndex: '' });
       }
     });
   }
 
   protected unbindEvents(): void {
     this.eventReceiver.off('transitionend');
-  }
-
-  /**
-   * Calculates and returns the transition css property based on options.
-   */
-  private getTransitionStyle(): string {
-    const { animationDuration, easing, delay, delayMode } = this.options.get();
-    return `all ${animationDuration}s ${easing} ${this.getTransitionDelay(
-      delay,
-      delayMode
-    )}ms`;
   }
 }
