@@ -1,11 +1,16 @@
-import { FILTERIZR_STATE } from './config';
-import { FilterizrState } from './types';
-import { Resizable } from './types/interfaces';
-import { debounce } from './utils';
-import FilterizrOptions from './FilterizrOptions';
-import FilterItem from './FilterItem';
-import FilterItems from './FilterItems';
-import FilterizrElement from './FilterizrElement';
+import { FILTERIZR_STATE } from '../config';
+import { FilterizrState } from '../types';
+import { Resizable } from '../types/interfaces';
+import { debounce } from '../utils';
+import FilterizrOptions from '../FilterizrOptions';
+import FilterItem from '../FilterItem';
+import FilterItems from '../FilterItems';
+import FilterizrElement from '../FilterizrElement';
+import {
+  makeInitialStyles,
+  makePaddingStyles,
+  makeHeightStyles,
+} from './styles';
 
 /**
  * Resembles the grid of items within Filterizr.
@@ -26,35 +31,15 @@ export default class FilterContainer extends FilterizrElement
         'Filterizr: could not initialize container, check the selector or node you passed to the constructor exists.'
       );
     }
-
     super(node, options);
-
     this._filterizrState = FILTERIZR_STATE.IDLE;
-
-    // Set up initial styles of container
-    this.setStyles({
-      padding: `0 ${this.options.get().gutterPixels / 2}px`,
-      position: 'relative',
-      // Needed for flex displays
-      width: '100%',
-      display: 'flex',
-      flexWrap: 'wrap',
-    });
-
+    this.setStyles(makeInitialStyles(this.options));
     this.filterItems = this.makeFilterItems(this.options);
-    if (!this.filterItems.length) {
-      throw new Error(
-        "Filterizr: cannot initialize empty container. Make sure the gridItemsSelector option corresponds to the selector of your grid's items"
-      );
-    }
-
     this.dimensions = {
       width: this.node.clientWidth,
       height: 0,
     };
-
     this.filterItems.updateDimensions();
-
     this.bindEvents();
   }
 
@@ -71,15 +56,24 @@ export default class FilterContainer extends FilterizrElement
   /**
    * Turn the HTML elements in the grid to FilterItem
    * instances and return a collection of them.
+   * @throws when no filter items are found in the grid.
    */
   public makeFilterItems(options: FilterizrOptions): FilterItems {
     const filterItemNodes = Array.from(
       this.node.querySelectorAll(options.get().gridItemsSelector)
     );
-    const filterItems = filterItemNodes.map(
+    const filterItemsArray = filterItemNodes.map(
       (node, index): FilterItem => new FilterItem(node, index, options)
     );
-    return new FilterItems(filterItems, options);
+
+    const filterItems = new FilterItems(filterItemsArray, options);
+    if (!filterItems.length) {
+      throw new Error(
+        "Filterizr: cannot initialize empty container. Make sure the gridItemsSelector option corresponds to the selector of your grid's items"
+      );
+    }
+
+    return filterItems;
   }
 
   public insertItem(node: Element, options: FilterizrOptions): void {
@@ -114,13 +108,12 @@ export default class FilterContainer extends FilterizrElement
   }
 
   public updatePaddings(): void {
-    const { gutterPixels } = this.options.get();
-    this.setStyles({ padding: `0 ${gutterPixels / 2}px` });
+    this.setStyles(makePaddingStyles(this.options));
   }
 
   public updateHeight(newHeight: number): void {
     this.dimensions.height = newHeight;
-    this.setStyles({ height: `${newHeight}px` });
+    this.setStyles(makeHeightStyles(newHeight));
   }
 
   public bindEvents(): void {
