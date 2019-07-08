@@ -1,5 +1,10 @@
 import { getDataAttributesOfHTMLNode, setStyles } from './utils';
-import { Destructible, Dictionary, Position } from './types/interfaces';
+import {
+  Destructible,
+  Dictionary,
+  Position,
+  Resizable,
+} from './types/interfaces';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
 import EventReceiver from './EventReceiver';
 
@@ -8,7 +13,7 @@ const imagesLoaded = require('imagesloaded');
 /**
  * Resembles an item in the grid of Filterizr.
  */
-export default class FilterItem implements Destructible {
+export default class FilterItem implements Destructible, Resizable {
   public node: Element;
   public options: FilterizrOptions;
   public dimensions: {
