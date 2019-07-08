@@ -1,6 +1,7 @@
+import { FILTERIZR_STATE } from './config';
+import { FilterizrState } from './types';
 import { RawOptionsCallbacks } from './types/interfaces';
-import { setStyles } from './utils';
-import { TRANSITION_END_EVENTS } from './config';
+import { setStyles, debounce } from './utils';
 import FilterizrOptions from './FilterizrOptions';
 import FilterItem from './FilterItem';
 import FilterItems from './FilterItems';
@@ -19,6 +20,7 @@ export default class FilterContainer {
   };
 
   private eventReceiver: EventReceiver;
+  private _filterizrState: FilterizrState;
 
   public constructor(node: Element, options: FilterizrOptions) {
     if (!node) {
@@ -30,6 +32,7 @@ export default class FilterContainer {
     this.node = node;
     this.options = options;
     this.eventReceiver = new EventReceiver(node);
+    this._filterizrState = FILTERIZR_STATE.IDLE;
 
     // Set up initial styles of container
     setStyles(this.node, {
@@ -54,6 +57,12 @@ export default class FilterContainer {
     };
 
     this.filterItems.updateDimensions();
+
+    this.bindEvents();
+  }
+
+  public set filterizrState(filterizrState: FilterizrState) {
+    this._filterizrState = filterizrState;
   }
 
   public destroy(): void {
@@ -117,10 +126,41 @@ export default class FilterContainer {
     setStyles(this.node, { height: `${newHeight}px` });
   }
 
-  public bindEvents(callbacks: RawOptionsCallbacks): void {
-    TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.eventReceiver.on(eventName, callbacks.onTransitionEnd);
-    });
+  public bindEvents(): void {
+    const {
+      animationDuration,
+      callbacks,
+      delay,
+      delayMode,
+      gridItemsSelector,
+    } = this.options.get();
+    const animationDelay =
+      delayMode === 'progressive' ? delay * this.filterItems.length : delay;
+    this.eventReceiver.on('transitionend', debounce(
+      (event: any) => {
+        const targetIsFilterItem = Array.from(event.target.classList).reduce(
+          (acc: boolean, val: string): boolean =>
+            acc || gridItemsSelector.includes(val),
+          false
+        );
+        if (targetIsFilterItem) {
+          switch (this._filterizrState) {
+            case FILTERIZR_STATE.FILTERING:
+              this.trigger('filteringEnd');
+              break;
+            case FILTERIZR_STATE.SORTING:
+              this.trigger('sortingEnd');
+              break;
+            case FILTERIZR_STATE.SHUFFLING:
+              this.trigger('shufflingEnd');
+              break;
+          }
+          this.filterizrState = FILTERIZR_STATE.IDLE;
+        }
+      },
+      animationDuration * 100 + animationDelay,
+      false
+    ) as EventListener);
     // Public Filterizr events
     this.eventReceiver.on('init', callbacks.onInit);
     this.eventReceiver.on('filteringStart', callbacks.onFilteringStart);
@@ -132,9 +172,7 @@ export default class FilterContainer {
   }
 
   public unbindEvents(): void {
-    TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.eventReceiver.off(eventName);
-    });
+    this.eventReceiver.off('transitionend');
     this.eventReceiver.off('init');
     this.eventReceiver.off('filteringStart');
     this.eventReceiver.off('filteringEnd');

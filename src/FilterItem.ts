@@ -1,4 +1,3 @@
-import { TRANSITION_END_EVENTS } from './config';
 import { getDataAttributesOfHTMLNode, setStyles } from './utils';
 import { Dictionary, Position } from './types/interfaces';
 import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
@@ -188,28 +187,24 @@ export default class FilterItem {
   }
 
   private bindEvents(): void {
-    TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.eventReceiver.on(eventName, (): void => {
-        // On transition end determines if the item is filtered out or not.
-        // It adds a .filteredOut class so that user can target these items
-        // via css if needed. It sets the z-index to -1000 to prevent mouse
-        // events from being triggered.
-        const { filteredOut } = this;
-        if (filteredOut) {
-          this.node.classList.add('filteredOut');
-          setStyles(this.node, { zIndex: -1000 });
-        } else {
-          this.node.classList.remove('filteredOut');
-          setStyles(this.node, { zIndex: '' });
-        }
-      });
+    this.eventReceiver.on('transitionend', (): void => {
+      // On transition end determines if the item is filtered out or not.
+      // It adds a .filteredOut class so that user can target these items
+      // via css if needed. It sets the z-index to -1000 to prevent mouse
+      // events from being triggered.
+      const { filteredOut } = this;
+      if (filteredOut) {
+        this.node.classList.add('filteredOut');
+        setStyles(this.node, { zIndex: -1000 });
+      } else {
+        this.node.classList.remove('filteredOut');
+        setStyles(this.node, { zIndex: '' });
+      }
     });
   }
 
   private unbindEvents(): void {
-    TRANSITION_END_EVENTS.forEach((eventName): void => {
-      this.eventReceiver.off(eventName);
-    });
+    this.eventReceiver.off('transitionend');
   }
 
   /**

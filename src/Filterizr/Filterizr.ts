@@ -1,7 +1,7 @@
 import { FILTERIZR_STATE } from '../config';
 import { Filter } from '../types';
 import { RawOptions } from '../types/interfaces';
-import { debounce, getHTMLElement } from '../utils';
+import { getHTMLElement } from '../utils';
 import EventReceiver from '../EventReceiver';
 import FilterizrOptions, { defaultOptions } from '../FilterizrOptions';
 import FilterControls from '../FilterControls';
@@ -21,7 +21,6 @@ export default class Filterizr {
   public static FilterContainer = FilterContainer;
   public static FilterItem = FilterItem;
   public static defaultOptions = defaultOptions;
-
   /**
    * Static method that receives the jQuery object and extends
    * its prototype with a .filterizr method.
@@ -29,12 +28,12 @@ export default class Filterizr {
   public static installAsJQueryPlugin: Function = installAsJQueryPlugin;
 
   public options: FilterizrOptions;
+
   private windowEventReceiver: EventReceiver;
   private filterContainer: FilterContainer;
   private filterControls?: FilterControls;
-  private filterizrState: string;
   private imagesHaveLoaded: boolean;
-  private spinner: Spinner;
+  private spinner?: Spinner;
 
   public constructor(
     selectorOrNode: string | HTMLElement = '.filtr-container',
@@ -42,7 +41,11 @@ export default class Filterizr {
   ) {
     this.options = new FilterizrOptions(userOptions);
 
-    const { areControlsEnabled, controlsSelector, isSpinnerEnabled } = this.options;
+    const {
+      areControlsEnabled,
+      controlsSelector,
+      isSpinnerEnabled,
+    } = this.options;
 
     this.windowEventReceiver = new EventReceiver(window);
     this.filterContainer = new FilterContainer(
@@ -51,7 +54,6 @@ export default class Filterizr {
     );
     this.imagesHaveLoaded = !this.filterContainer.node.querySelectorAll('img')
       .length;
-    this.filterizrState = FILTERIZR_STATE.IDLE;
 
     if (areControlsEnabled) {
       this.filterControls = new FilterControls(this, controlsSelector);
@@ -60,7 +62,6 @@ export default class Filterizr {
       this.spinner = new Spinner(this.filterContainer, this.options);
     }
 
-    this.bindEvents();
     this.initialize();
   }
 
@@ -72,7 +73,7 @@ export default class Filterizr {
     const { filterContainer, filterItems } = this;
 
     filterContainer.trigger('filteringStart');
-    this.filterizrState = FILTERIZR_STATE.FILTERING;
+    filterContainer.filterizrState = FILTERIZR_STATE.FILTERING;
 
     category = Array.isArray(category)
       ? category.map((c): string => c.toString())
@@ -122,7 +123,7 @@ export default class Filterizr {
   ): void {
     const { filterContainer, filterItems } = this;
     filterContainer.trigger('sortingStart');
-    this.filterizrState = FILTERIZR_STATE.SORTING;
+    filterContainer.filterizrState = FILTERIZR_STATE.SORTING;
     this.render(filterItems.getSorted(sortAttr, sortOrder));
   }
 
@@ -141,7 +142,7 @@ export default class Filterizr {
   public shuffle(): void {
     const { filterContainer, filterItems } = this;
     filterContainer.trigger('shufflingStart');
-    this.filterizrState = FILTERIZR_STATE.SHUFFLING;
+    filterContainer.filterizrState = FILTERIZR_STATE.SHUFFLING;
     this.render(filterItems.getShuffled());
   }
 
@@ -152,25 +153,24 @@ export default class Filterizr {
    */
   public setOptions(newOptions: RawOptions): void {
     const { filterContainer, filterItems } = this;
+    const animationPropIsSet =
+      'animationDuration' in newOptions ||
+      'delay' in newOptions ||
+      'delayMode' in newOptions;
 
-    if (newOptions.callbacks) {
+    if (newOptions.callbacks || animationPropIsSet) {
       // Remove old callbacks before setting the new ones in the options
       filterContainer.unbindEvents();
     }
 
     this.options.set(newOptions);
 
-    if (
-      newOptions.animationDuration ||
-      newOptions.delay ||
-      newOptions.delayMode ||
-      newOptions.easing
-    ) {
+    if (newOptions.easing || animationPropIsSet) {
       filterItems.updateTransitionStyle();
     }
 
-    if (newOptions.callbacks || newOptions.animationDuration) {
-      this.rebindFilterContainerEvents();
+    if (newOptions.callbacks || animationPropIsSet) {
+      filterContainer.bindEvents();
     }
 
     if ('searchTerm' in newOptions) {
@@ -218,19 +218,16 @@ export default class Filterizr {
    */
   private async initialize(): Promise<void> {
     const { filterContainer, filterItems, options, spinner } = this;
-
+    this.bindEvents();
     await this.waitForImagesToLoad();
-
     if (this.options.isSpinnerEnabled) {
       // The spinner will first fade out (opacity: 0) before being removed
       await spinner.destroy();
     }
-
     // Enable animations after the initial render, to let
     // the items assume their positions before animating
     this.render(filterItems.getFiltered(options.filter));
     await filterItems.enableCssTransitions();
-
     filterContainer.trigger('init');
   }
 
@@ -238,41 +235,8 @@ export default class Filterizr {
     return this.filterContainer.filterItems;
   }
 
-  private onTransitionEndCallback(): void {
-    const { filterizrState, filterContainer } = this;
-
-    switch (filterizrState) {
-      case FILTERIZR_STATE.FILTERING:
-        filterContainer.trigger('filteringEnd');
-        break;
-      case FILTERIZR_STATE.SORTING:
-        filterContainer.trigger('sortingEnd');
-        break;
-      case FILTERIZR_STATE.SHUFFLING:
-        filterContainer.trigger('shufflingEnd');
-        break;
-    }
-
-    this.filterizrState = FILTERIZR_STATE.IDLE;
-  }
-
-  private rebindFilterContainerEvents(): void {
-    const { filterContainer } = this;
-    const { animationDuration, callbacks } = this.options.get();
-    filterContainer.unbindEvents();
-    filterContainer.bindEvents({
-      ...callbacks,
-      onTransitionEnd: debounce(
-        this.onTransitionEndCallback.bind(this),
-        animationDuration,
-        false
-      ) as EventListener,
-    });
-  }
-
   private bindEvents(): void {
     const { filterItems, options, windowEventReceiver } = this;
-    this.rebindFilterContainerEvents();
     windowEventReceiver.on('resize', () => {
       this.render(filterItems.getFiltered(options.filter));
     });

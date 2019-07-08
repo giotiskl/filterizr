@@ -1,4 +1,3 @@
-import { TRANSITION_END_EVENTS } from './config';
 import EventReceiver from './EventReceiver';
 import { setStyles } from './utils';
 
@@ -22,11 +21,9 @@ class Animator {
 
   private static async process(transition: AnimatorTransition): Promise<void> {
     return new Promise((resolve) => {
-      TRANSITION_END_EVENTS.forEach((eventName): void => {
-        transition.eventReceiver.on(eventName, () => {
-          transition.eventReceiver.destroy();
-          resolve();
-        });
+      transition.eventReceiver.on('transitionend', () => {
+        transition.eventReceiver.destroy();
+        resolve();
       });
 
       setTimeout(() => {

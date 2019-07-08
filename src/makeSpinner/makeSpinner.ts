@@ -14,7 +14,7 @@ export function makeSpinner({
   setStyles(svgImg, {
     ...styles,
     opacity: 1,
-    transition: 'all ease-out 1000ms',
+    transition: 'all ease-out 500ms',
   });
 
   return svgImg;
