@@ -73,7 +73,6 @@ Contents:
 
 ## Why Filterizr?
 
-- Small filesize with compact functionality (~30kb).
 - Thoroughly documented and easy to use.
 - Performs great on mobile.
 - Written in TypeScript.
