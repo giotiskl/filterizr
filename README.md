@@ -68,6 +68,7 @@ Contents:
   - [Searching](https://yiotis.net/filterizr/#/tutorials/searching)
   - [Delay modes](https://yiotis.net/filterizr/#/tutorials/delay-modes)
   - [Layouts](https://yiotis.net/filterizr/#/tutorials/layouts)
+  - [Loading spinner](https://yiotis.net/filterizr/#/tutorials/loading-animation)
   - [Using as jQuery plugin](https://yiotis.net/filterizr/#/tutorials/as-jquery-plugin)
 - [FAQ & Caveats](https://yiotis.net/filterizr/#/faq)
 
