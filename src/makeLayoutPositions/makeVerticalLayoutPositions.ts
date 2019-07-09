@@ -29,7 +29,7 @@ export default (filterContainer: FilterContainer): Position[] => {
   );
 
   // Update the height of the FilterContainer
-  filterContainer.setHeight(top - gutterPixels);
+  filterContainer.setHeight(top + gutterPixels);
 
   return targetPositions;
 };

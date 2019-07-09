@@ -39,7 +39,7 @@ export default (filterContainer: FilterContainer): Position[] => {
   const firstItemHeight =
     (filteredItems[0] && filteredItems[0].dimensions.height) || 0;
   filterContainer.setHeight(
-    rows * (firstItemHeight + gutterPixels) - gutterPixels
+    rows * (firstItemHeight + gutterPixels) + gutterPixels
   );
 
   // Return the array of new positions

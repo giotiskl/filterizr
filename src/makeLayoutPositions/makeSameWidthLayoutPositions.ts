@@ -79,7 +79,7 @@ export default (filterContainer: FilterContainer): Position[] => {
 
   // Update the height of the FilterContainer
   // before returning from the method
-  filterContainer.setHeight(Math.max(...columnHeights) - gutterPixels);
+  filterContainer.setHeight(Math.max(...columnHeights) + gutterPixels);
 
   // Return the array of new positions
   return targetPositions;
