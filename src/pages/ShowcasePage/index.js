@@ -49,7 +49,6 @@ class ShowcasePage extends React.Component {
                 Smooth performance — optimized for smooth experience on mobile
                 devices
               </li>
-              <li>Lightweight — around 20kb</li>
               <li>Responsive — with your Media Queries (resize the window!)</li>
               <li>
                 Platform support: Chrome, Firefox, Safari, Opera Android and iOS

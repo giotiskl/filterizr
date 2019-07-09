@@ -10,6 +10,7 @@ import filterMethodJSON from './api-json/methods/filter.json';
 import filterizrMethodJSON from './api-json/methods/filterizr.json';
 import insertItemMethodJSON from './api-json/methods/insertItem.json';
 import installAsJQueryPluginMethodJSON from './api-json/methods/installAsJQueryPlugin.json';
+import removeItemMethodJSON from './api-json/methods/removeItem.json';
 import searchMethodJSON from './api-json/methods/search.json';
 import setOptionsMethodJSON from './api-json/methods/setOptions.json';
 import shuffleMethodJSON from './api-json/methods/shuffle.json';
@@ -30,6 +31,7 @@ function getMethods(variation) {
     destroy: destroyMethodJSON[variation],
     filter: filterMethodJSON[variation],
     insertItem: insertItemMethodJSON[variation],
+    removeItem: removeItemMethodJSON[variation],
     search: searchMethodJSON[variation],
     setOptions: setOptionsMethodJSON[variation],
     shuffle: shuffleMethodJSON[variation],

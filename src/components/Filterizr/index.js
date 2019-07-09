@@ -69,6 +69,9 @@ export default class extends React.Component {
       {
         filter: activeFilter,
         setupControls: false,
+        spinner: {
+          enabled: true,
+        },
       },
       userOptions
     );

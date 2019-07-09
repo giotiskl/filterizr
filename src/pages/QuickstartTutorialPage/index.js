@@ -70,10 +70,21 @@ const options = {
     transform: 'scale(1)'
   },
   gridItemsSelector: '.filtr-container',
+  gutterPixels: 0, // Items spacing in pixels
   layout: 'sameSize', // See layouts
   multifilterLogicalOperator: 'or',
   searchTerm: '',
-  setupControls: true // Should be false if controlsSelector is set 
+  setupControls: true, // Should be false if controlsSelector is set 
+  spinner: { // Configuration for built-in spinner
+    enabled: false,
+    fillColor: '#2184D0',
+    styles: {
+      height: '75px',
+      margin: '0 auto',
+      width: '75px',
+      'z-index': 2,
+    },
+  },
 } 
 `;
 

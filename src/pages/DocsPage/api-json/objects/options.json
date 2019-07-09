@@ -96,7 +96,13 @@
       "name": "gridItemsSelector",
       "type": "String",
       "defaultValue": ".filtr-item",
-      "description": "The CSS selector of items in your grid's container."
+      "description": "The CSS selector of the items in your grid's container."
+    },
+    {
+      "name": "gutterPixels",
+      "type": "Number",
+      "defaultValue": "0",
+      "description": "Spacing between the items in your grid, in pixels."
     },
     {
       "name": "layout",
@@ -121,6 +127,31 @@
       "type": "Boolean",
       "defaultValue": "true",
       "description": "If set to true then Filterizr will try to detect and set up filtering, shuffling and sorting controls. In case you have multiple Filterizrs in your view, you might decide to set this to false and set up your own controls, using the public API, so as to avoid interference the controls of your Filterizr instances."
+    },
+    {
+      "name": "spinner",
+      "type": "Object",
+      "description": "Configuration for the built-in spinner.",
+      "fields": [
+        {
+          "name": "enabled",
+          "type": "Boolean",
+          "defaultValue": "false",
+          "description": "Enables rendering a spinner while your grid is initializing."
+        },
+        {
+          "name": "fillColor",
+          "type": "String",
+          "defaultValue": "#2184D0",
+          "description": "The spinner's color in hexadecimal format."
+        },
+        {
+          "name": "styles",
+          "type": "Object",
+          "defaultValue": "{ width: '75px', height: '75px', margin: '0 auto', 'z-index': 2 }",
+          "description": "Triggered when filtering of the grid ends."
+        }
+      ]
     }
   ]
 }

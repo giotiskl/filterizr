@@ -30,10 +30,21 @@ const options = {
     transform: 'scale(1)'
   },
   gridItemsSelector: '.filtr-item',
+  gutterPixels: 0,
   layout: 'sameSize',
   multifilterLogicalOperator: 'or',
   searchTerm: '',
-  setupControls: true
+  setupControls: true,
+  spinner: {
+    enabled: false,
+    fillColor: '#2184D0',
+    styles: {
+      height: '75px',
+      margin: '0 auto',
+      width: '75px',
+      'z-index': 2,
+    },
+  },
 }`;
 
 const OptionsDocs = () => (

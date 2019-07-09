@@ -1,0 +1,24 @@
+{
+  "vanilla": {
+    "preview": "filterizr.removeItem(node);",
+    "description": "Removes an item from the grid.",
+    "args": [
+      {
+        "name": "node",
+        "type": "HTMLElement",
+        "description": "The item to be removed."
+      }
+    ]
+  },
+  "jquery": {
+    "preview": "filterizrInstance.filterizr('removeItem', node);",
+    "description": "Removes an item from the grid.",
+    "args": [
+      {
+        "name": "node",
+        "type": "HTMLElement",
+        "description": "The item to be removed."
+      }
+    ]
+  }
+}
