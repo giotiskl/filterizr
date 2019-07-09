@@ -1,5 +1,6 @@
 import { Position } from '../types/interfaces';
 import FilterContainer from '../FilterContainer';
+import { calculateColumnsForSameWidthLayouts } from './calculateColumnsForSameWidthLayouts';
 
 /**
  * Same size layout for items that have the same width/height
@@ -9,8 +10,12 @@ export default (filterContainer: FilterContainer): Position[] => {
   const { filterItems } = filterContainer;
   const { gutterPixels } = filterContainer.options.get();
   const filteredItems = filterItems.getFiltered(filterContainer.options.filter);
-  // calculate number of columns and rows the grid should have
-  let cols = filterContainer.calculateColumns();
+  // Calculate number of columns and rows the grid should have
+  let cols = calculateColumnsForSameWidthLayouts(
+    filterContainer.dimensions.width,
+    filterItems.getItem(0).dimensions.width,
+    gutterPixels
+  );
   let row = 0;
   // calculate array of positions
   const targetPositions = filteredItems.map(
@@ -33,7 +38,7 @@ export default (filterContainer: FilterContainer): Position[] => {
   // before returning from the method
   const firstItemHeight =
     (filteredItems[0] && filteredItems[0].dimensions.height) || 0;
-  filterContainer.updateHeight(
+  filterContainer.setHeight(
     rows * (firstItemHeight + gutterPixels) - gutterPixels
   );
 

@@ -94,14 +94,6 @@ export default class FilterContainer extends FilterizrElement
     this.node.removeChild(node);
   }
 
-  public calculateColumns(): number {
-    return Math.floor(
-      this.dimensions.width /
-        (this.filterItems.getItem(0).dimensions.width +
-          this.options.get().gutterPixels)
-    );
-  }
-
   public updateDimensions(): void {
     this.dimensions.width = this.node.clientWidth;
     this.filterItems.updateDimensions();
@@ -111,7 +103,7 @@ export default class FilterContainer extends FilterizrElement
     this.setStyles(makePaddingStyles(this.options));
   }
 
-  public updateHeight(newHeight: number): void {
+  public setHeight(newHeight: number): void {
     this.dimensions.height = newHeight;
     this.setStyles(makeHeightStyles(newHeight));
   }

@@ -1,6 +1,7 @@
 import { Position } from '../types/interfaces';
 import FilterItem from '../FilterItem';
 import FilterContainer from '../FilterContainer';
+import { calculateColumnsForSameWidthLayouts } from './calculateColumnsForSameWidthLayouts';
 
 /**
  * Helper method used to calculate what the top
@@ -41,12 +42,16 @@ export default (filterContainer: FilterContainer): Position[] => {
   const filteredItems = filterItems.getFiltered(filterContainer.options.filter);
 
   // Calculate number of columns and rows the grid should have
-  let cols = filterContainer.calculateColumns(),
-    row = 0,
-    columnHeights = Array.apply(null, Array(cols)).map(
-      Number.prototype.valueOf,
-      0
-    );
+  let cols = calculateColumnsForSameWidthLayouts(
+    filterContainer.dimensions.width,
+    filterItems.getItem(0).dimensions.width,
+    gutterPixels
+  );
+  let row = 0;
+  let columnHeights = Array.apply(null, Array(cols)).map(
+    Number.prototype.valueOf,
+    0
+  );
 
   // Calculate array of positions
   const targetPositions = filteredItems.map(
@@ -74,7 +79,7 @@ export default (filterContainer: FilterContainer): Position[] => {
 
   // Update the height of the FilterContainer
   // before returning from the method
-  filterContainer.updateHeight(Math.max(...columnHeights) - gutterPixels);
+  filterContainer.setHeight(Math.max(...columnHeights) - gutterPixels);
 
   // Return the array of new positions
   return targetPositions;

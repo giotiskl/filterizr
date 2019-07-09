@@ -31,7 +31,7 @@ export default (filterContainer: FilterContainer): Position[] => {
   );
 
   // update the height of the FilterContainer
-  filterContainer.updateHeight(containerHeight);
+  filterContainer.setHeight(containerHeight);
 
   return targetPositions;
 };

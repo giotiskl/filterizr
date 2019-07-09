@@ -37,7 +37,7 @@ export default (filterContainer: FilterContainer): Position[] => {
   );
 
   // update the height of the FilterContainer
-  filterContainer.updateHeight(
+  filterContainer.setHeight(
     (row + 1) * (filteredItems[0].dimensions.height + gutterPixels) -
       gutterPixels
   );
