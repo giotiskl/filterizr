@@ -1,4 +1,4 @@
-const fakeDom: string = `
+const fakeDom = `
 <div class="container">
     <div class="row">
         <ul class="simplefilter">
