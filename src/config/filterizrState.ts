@@ -1,4 +1,4 @@
-interface filterizrState {
+interface FilterizrState {
   IDLE: 'IDLE';
   FILTERING: 'FILTERING';
   SORTING: 'SORTING';
@@ -8,7 +8,7 @@ interface filterizrState {
 /**
  * Possible animation states for Filterizr
  */
-export const FILTERIZR_STATE: filterizrState = {
+export const FILTERIZR_STATE: FilterizrState = {
   IDLE: 'IDLE',
   FILTERING: 'FILTERING',
   SORTING: 'SORTING',

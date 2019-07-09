@@ -17,12 +17,12 @@ export default class Spinner implements Destructible {
     this.render();
   }
 
-  private render(): void {
-    this.filterContainer.node.appendChild(this.node);
-  }
-
   public async destroy(): Promise<void> {
     await animate(this.node, { opacity: 0 });
     this.filterContainer.node.removeChild(this.node);
+  }
+
+  private render(): void {
+    this.filterContainer.node.appendChild(this.node);
   }
 }
