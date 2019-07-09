@@ -176,7 +176,10 @@ export default class Filterizr implements Destructible {
       this.search(newOptions.searchTerm);
     }
 
-    if (newOptions.filter || newOptions.multifilterLogicalOperator) {
+    if (
+      'filter' in newOptions ||
+      'multifilterLomultifilterLogicalOperator' in newOptions
+    ) {
       this.filter(this.options.filter);
     }
 
