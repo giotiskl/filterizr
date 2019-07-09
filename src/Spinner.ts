@@ -1,29 +1,28 @@
 import { Destructible } from './types/interfaces';
-import FilterizrOptions from './FilterizrOptions';
 import { makeSpinner } from './makeSpinner/makeSpinner';
+import FilterizrOptions from './FilterizrOptions';
 import FilterContainer from './FilterContainer';
-import EventReceiver from './EventReceiver';
 import animate from './animate';
 
 export default class Spinner implements Destructible {
-  public spinner: HTMLElement;
-  private eventReceiver: EventReceiver;
-  private parent: FilterContainer;
+  private node: HTMLElement;
+  private filterContainer: FilterContainer;
 
-  public constructor(parent: FilterContainer, options: FilterizrOptions) {
-    this.parent = parent;
-    this.spinner = makeSpinner(options.get().spinner);
-    this.eventReceiver = new EventReceiver(this.spinner);
+  public constructor(
+    filterContainer: FilterContainer,
+    options: FilterizrOptions
+  ) {
+    this.filterContainer = filterContainer;
+    this.node = makeSpinner(options.get().spinner);
     this.render();
   }
 
   private render(): void {
-    this.parent.node.appendChild(this.spinner);
+    this.filterContainer.node.appendChild(this.node);
   }
 
   public async destroy(): Promise<void> {
-    await animate(this.spinner, { opacity: 0 });
-    this.eventReceiver.destroy();
-    this.parent.node.removeChild(this.spinner);
+    await animate(this.node, { opacity: 0 });
+    this.filterContainer.node.removeChild(this.node);
   }
 }
