@@ -74,45 +74,6 @@ describe('FilterItem', () => {
     });
   });
 
-  describe('#calcDelay', () => {
-    let filterItem1: FilterItem,
-      filterItem2: FilterItem,
-      filterItem3: FilterItem;
-    beforeEach(() => {
-      filterItem1 = new FilterItem(
-        $('.filtr-item:first').get(0),
-        0,
-        new FilterizrOptions({})
-      );
-      filterItem2 = new FilterItem(
-        $('.filtr-item:first').get(0),
-        1,
-        new FilterizrOptions({})
-      );
-      filterItem3 = new FilterItem(
-        $('.filtr-item:first').get(0),
-        2,
-        new FilterizrOptions({})
-      );
-    });
-
-    it('should return delay multiplied by index for "progressive" mode', () => {
-      const delay = 150;
-      const mode = 'progressive';
-      expect(filterItem1.getTransitionDelay(delay, mode)).toEqual(0);
-      expect(filterItem2.getTransitionDelay(delay, mode)).toEqual(150);
-      expect(filterItem3.getTransitionDelay(delay, mode)).toEqual(300);
-    });
-
-    it('should return delay for even items and 0 for odd items for "alternate" mode', () => {
-      const delay = 150;
-      const mode = 'alternate';
-      expect(filterItem1.getTransitionDelay(delay, mode)).toEqual(150);
-      expect(filterItem2.getTransitionDelay(delay, mode)).toEqual(0);
-      expect(filterItem3.getTransitionDelay(delay, mode)).toEqual(150);
-    });
-  });
-
   describe('#contentsMatchSearch', () => {
     it('should return true when the innerText of the FilterItem matches the search term', () => {
       const filterItem = new FilterItem(

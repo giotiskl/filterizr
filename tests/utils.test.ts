@@ -41,9 +41,9 @@ describe('utils', () => {
   });
 
   describe('#merge', () => {
-    it('should merge object A with object B without performing mutations', () => {
+    it('should merge object A with object B', () => {
       const o1 = { x: 12, y: 15, z: 32 };
-      const o2 = merge(o1, { x: 10, greeting: 'hello' });
+      const o2 = merge({}, o1, { x: 10, greeting: 'hello' });
       expect(o1.x).toEqual(12);
       expect(o2.x).toEqual(10);
       expect(o2.y).toEqual(15);
