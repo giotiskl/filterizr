@@ -96,10 +96,10 @@ export default class Filterizr implements Destructible {
    * Inserts a new FilterItem into the grid
    */
   public async insertItem(node: HTMLElement): Promise<void> {
-    const { filterContainer, filterItems, options } = this;
-    filterContainer.insertItem(node, options);
+    const { filterContainer, filterItems } = this;
+    filterContainer.insertItem(node);
     await this.waitForImagesToLoad();
-    this.render(filterItems.getFiltered(options.filter));
+    this.render(filterItems.getFiltered(this.options.filter));
   }
 
   /**

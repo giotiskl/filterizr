@@ -76,14 +76,14 @@ export default class FilterContainer extends FilterizrElement
     return filterItems;
   }
 
-  public insertItem(node: Element, options: FilterizrOptions): void {
+  public insertItem(node: HTMLElement): void {
     const nodeModified = node.cloneNode(true) as Element;
     nodeModified.removeAttribute('style');
     this.node.appendChild(nodeModified);
     const filterItem = new FilterItem(
       nodeModified,
       this.filterItems.length,
-      options
+      this.options
     );
     filterItem.enableCssTransitions();
     this.filterItems.push(filterItem);
