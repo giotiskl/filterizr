@@ -48,7 +48,7 @@ export default class FilterContainer extends FilterizrElement
   }
 
   public destroy(): void {
-    this.node.removeAttribute('style');
+    super.destroy();
     this.unbindEvents();
     this.filterItems.destroy();
   }

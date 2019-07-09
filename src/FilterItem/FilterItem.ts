@@ -46,7 +46,7 @@ export default class FilterItem extends FilterizrElement implements Resizable {
    * Destroys the FilterItem instance
    */
   public destroy(): void {
-    this.node.removeAttribute('style');
+    super.destroy();
     this.unbindEvents();
   }
 

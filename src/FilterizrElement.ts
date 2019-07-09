@@ -14,7 +14,9 @@ export default abstract class FilterizrElement implements Destructible {
     this.options = options;
     this.eventReceiver = new EventReceiver(this.node);
   }
-  public abstract destroy(): void | Promise<void>;
+  public destroy(): void | Promise<void> {
+    this.removeStyles();
+  };
   public async animate(targetStyles: object): Promise<void> {
     animate(this.node as HTMLElement, targetStyles);
   }
@@ -28,4 +30,8 @@ export default abstract class FilterizrElement implements Destructible {
 
   protected abstract bindEvents(): void;
   protected abstract unbindEvents(): void;
+
+  private removeStyles(): void {
+    this.node.removeAttribute('style');
+  }
 }
