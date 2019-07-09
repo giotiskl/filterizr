@@ -9,6 +9,7 @@ import {
   FAQPage,
   FilteringtutorialPage,
   LayoutsTutorialPage,
+  LoadingAnimationTutorialPage,
   QuickstartTutorialPage,
   SearchingTutorialPage,
   ShowcasePage,
@@ -55,6 +56,11 @@ function App() {
             path="/tutorials/layouts"
             exact
             component={LayoutsTutorialPage}
+          />
+          <Route
+            path="/tutorials/loading-animation"
+            exact
+            component={LoadingAnimationTutorialPage}
           />
           <Route
             path="/tutorials/as-jquery-plugin"

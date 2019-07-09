@@ -60,6 +60,10 @@ class Navigation extends Component {
                 <Dropdown.Item as={Link} to="/tutorials/layouts">
                   Layouts
                 </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/tutorials/loading-animation">
+                  Loading spinner
+                </Dropdown.Item>
+                <Dropdown.Divider />
                 <Dropdown.Item as={Link} to="/tutorials/as-jquery-plugin">
                   As jQuery plugin
                 </Dropdown.Item>
