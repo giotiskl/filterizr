@@ -5,11 +5,9 @@ import {
   allStringsOfArray1InArray2,
   filterItemArraysHaveSameSorting,
   intersection,
-  setStyles,
   shuffle,
   sortBy,
 } from './utils';
-import { makeTransitionStyles } from './FilterItem/styles';
 
 export default class FilterItems {
   private filterItems: FilterItem[];
@@ -61,7 +59,7 @@ export default class FilterItems {
 
   public setStyles(styles: object): void {
     this.filterItems.forEach((filterItem): void =>
-      setStyles(filterItem.node, styles)
+      filterItem.setStyles(styles)
     );
   }
 

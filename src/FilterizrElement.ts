@@ -22,10 +22,10 @@ export default abstract class FilterizrElement implements Destructible {
     const event = new Event(eventType);
     this.node.dispatchEvent(event);
   }
-
-  protected setStyles(targetStyles: object): void {
+  public setStyles(targetStyles: object): void {
     setStyles(this.node, targetStyles);
   }
+
   protected abstract bindEvents(): void;
   protected abstract unbindEvents(): void;
 }
