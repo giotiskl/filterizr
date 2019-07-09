@@ -20,13 +20,13 @@ class Animator {
   }
 
   private static async process(transition: AnimatorTransition): Promise<void> {
-    return new Promise((resolve) => {
-      transition.eventReceiver.on('transitionend', () => {
+    return new Promise((resolve): void => {
+      transition.eventReceiver.on('transitionend', (): void => {
         transition.eventReceiver.destroy();
         resolve();
       });
 
-      setTimeout(() => {
+      setTimeout((): void => {
         setStyles(transition.node, transition.targetStyles);
       }, 10);
     });

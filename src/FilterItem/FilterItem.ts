@@ -1,4 +1,4 @@
-import { getDataAttributesOfHTMLNode, setStyles } from '../utils';
+import { getDataAttributesOfHTMLNode } from '../utils';
 import { Dictionary, Position, Resizable } from '../types/interfaces';
 import FilterizrOptions from '../FilterizrOptions/FilterizrOptions';
 import FilterizrElement from '../FilterizrElement';
@@ -121,7 +121,7 @@ export default class FilterItem extends FilterizrElement implements Resizable {
    * here to defer setting the transition style at the first rendering cycle.
    */
   public async enableCssTransitions(): Promise<void> {
-    return new Promise((resolve) => {
+    return new Promise((resolve): void => {
       const hasImage = !!this.node.querySelectorAll('img').length;
       if (hasImage) {
         imagesLoaded(this.node, (): void => {

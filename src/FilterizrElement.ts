@@ -16,7 +16,7 @@ export default abstract class FilterizrElement implements Destructible {
   }
   public destroy(): void | Promise<void> {
     this.removeStyles();
-  };
+  }
   public async animate(targetStyles: object): Promise<void> {
     animate(this.node as HTMLElement, targetStyles);
   }
@@ -28,10 +28,10 @@ export default abstract class FilterizrElement implements Destructible {
     setStyles(this.node, targetStyles);
   }
 
-  protected abstract bindEvents(): void;
-  protected abstract unbindEvents(): void;
-
   private removeStyles(): void {
     this.node.removeAttribute('style');
   }
+
+  protected abstract bindEvents(): void;
+  protected abstract unbindEvents(): void;
 }

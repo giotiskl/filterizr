@@ -119,8 +119,10 @@ export default class FilterContainer extends FilterizrElement
     const animationDelay =
       delayMode === 'progressive' ? delay * this.filterItems.length : delay;
     this.eventReceiver.on('transitionend', debounce(
-      (event: any) => {
-        const targetIsFilterItem = Array.from(event.target.classList).reduce(
+      (event: Event): void => {
+        const targetIsFilterItem = Array.from(
+          (event.target as HTMLElement).classList
+        ).reduce(
           (acc: boolean, val: string): boolean =>
             acc || gridItemsSelector.includes(val),
           false

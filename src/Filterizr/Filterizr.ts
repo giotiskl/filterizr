@@ -239,7 +239,7 @@ export default class Filterizr implements Destructible {
 
   private bindEvents(): void {
     const { filterItems, options, windowEventReceiver } = this;
-    windowEventReceiver.on('resize', () => {
+    windowEventReceiver.on('resize', (): void => {
       this.render(filterItems.getFiltered(options.filter));
     });
   }
@@ -252,7 +252,7 @@ export default class Filterizr implements Destructible {
     if (imagesHaveLoaded) {
       return Promise.resolve();
     }
-    return new Promise((resolve) => {
+    return new Promise((resolve): void => {
       imagesLoaded(filterContainer.node, (): void => {
         this.imagesHaveLoaded = true;
         resolve();
