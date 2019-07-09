@@ -68,14 +68,14 @@ describe('FilterContainer', () => {
 
     it('should increase the length of the FilterItems array by 1', () => {
       const oldLength = filterContainer.filterItems.length;
-      filterContainer.insertItem(cloned as Element, filterizr.options);
+      filterContainer.insertItem(cloned as HTMLElement);
       const newLength = filterContainer.filterItems.length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
 
     it('should set the index property of the newly added FilterItem in the array to array.length', () => {
       const oldLength = filterContainer.filterItems.length;
-      filterContainer.insertItem(cloned as Element, filterizr.options);
+      filterContainer.insertItem(cloned as HTMLElement);
       const newlyAddedFilterItem = filterContainer.filterItems.getItem(
         oldLength
       );
@@ -93,17 +93,6 @@ describe('FilterContainer', () => {
       filterContainer.filterItems.get().forEach((filterItem) => {
         expect(filterItem instanceof FilterItem).toBe(true);
       });
-    });
-  });
-
-  describe('#calculateColumns', () => {
-    it('should return the number of columns that can fit in the FilterContainer', () => {
-      // make necessary set up to get 4 columns
-      const containerWidth = 1000;
-      filterContainer.dimensions.width = containerWidth;
-      filterContainer.filterItems.getItem(0).dimensions.width =
-        containerWidth / 4;
-      expect(filterContainer.calculateColumns()).toEqual(4);
     });
   });
 });
