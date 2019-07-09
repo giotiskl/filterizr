@@ -20,7 +20,7 @@
     "coverage": "jest --coverage",
     "showcoverage": "xdg-open ./coverage/lcov-report/index.html",
     "lint": "./node_modules/.bin/eslint .",
-    "preversion": "yarn test && yarn lint",
+    "preversion": "yarn test",
     "version": "yarn build",
     "postversion": "git push && git push --tags",
     "watch": "webpack --watch"
