@@ -16,8 +16,8 @@
   ],
   "caveats": [
     {
-      "question": "Margin don't work for me?",
-      "answer": "Bear in mind that Filterizr has no notion of margins. If you wish to create whitespace I suggest using a wrapper element and set padding on it, both for your items and your container. The width of your items will have to sum up to 100% per row."
+      "question": "How can I use margins?",
+      "answer": "There are two options to use margins. Either make use of the gutterPixels option, or create wrapper elements and set paddings on them. What's important is that the items amount to a total of 100% width."
     },
     {
       "question": "The CSS for my filtering has bad performance",
