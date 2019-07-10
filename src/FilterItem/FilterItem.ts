@@ -1,14 +1,8 @@
 import { getDataAttributesOfHTMLNode } from '../utils';
 import { Dictionary, Position, Resizable } from '../types/interfaces';
-import FilterizrOptions from '../FilterizrOptions/FilterizrOptions';
+import FilterizrOptions from '../FilterizrOptions';
 import FilterizrElement from '../FilterizrElement';
-import {
-  makeInitialStyles,
-  makeFilteringStyles,
-  makeTransitionStyles,
-} from './styles';
-
-const imagesLoaded = require('imagesloaded');
+import StyledFilterItem from './StyledFilterItem';
 
 /**
  * Resembles an item in the grid of Filterizr.
@@ -19,15 +13,15 @@ export default class FilterItem extends FilterizrElement implements Resizable {
     height: number;
   };
 
+  protected styledNode: StyledFilterItem;
+
   private filteredOut: boolean;
-  private index: number;
   private lastPosition: Position;
   private sortData: Dictionary;
 
   public constructor(node: Element, index: number, options: FilterizrOptions) {
     super(node, options);
     this.filteredOut = false;
-    this.index = index;
     this.lastPosition = { left: 0, top: 0 };
     this.dimensions = {
       width: this.node.clientWidth,
@@ -38,8 +32,13 @@ export default class FilterItem extends FilterizrElement implements Resizable {
       index,
       sortData: node.getAttribute('data-sort'),
     };
-    this.setStyles(makeInitialStyles(this.options));
+    this.styledNode = new StyledFilterItem(node as HTMLElement, index, options);
+    this.styles.initialize();
     this.bindEvents();
+  }
+
+  public get styles(): StyledFilterItem {
+    return this.styledNode;
   }
 
   /**
@@ -56,7 +55,7 @@ export default class FilterItem extends FilterizrElement implements Resizable {
    * @param cssOptions for the animation
    */
   public filterIn(targetPosition: Position, cssOptions: Dictionary): void {
-    this.setStyles(makeFilteringStyles(targetPosition, cssOptions));
+    this.styles.setFilteredStyles(targetPosition, cssOptions);
     this.lastPosition = targetPosition;
     this.filteredOut = false;
   }
@@ -66,7 +65,7 @@ export default class FilterItem extends FilterizrElement implements Resizable {
    * @param cssOptions for the animation
    */
   public filterOut(cssOptions: Dictionary): void {
-    this.setStyles(makeFilteringStyles(this.lastPosition, cssOptions));
+    this.styles.setFilteredStyles(this.lastPosition, cssOptions);
     this.filteredOut = true;
   }
 
@@ -102,57 +101,6 @@ export default class FilterItem extends FilterizrElement implements Resizable {
     return this.sortData[sortAttribute];
   }
 
-  public updateTransitionStyle(): void {
-    this.setStyles(makeTransitionStyles(this.index, this.options));
-  }
-
-  public updateWidth(filterContainerWidth: number): void {
-    const { gutterPixels } = this.options.get();
-    const computedWidth = parseInt(getComputedStyle(this.node).width);
-    const timesItFitsContainer = Math.floor(
-      filterContainerWidth / computedWidth
-    );
-    const width = `${computedWidth - gutterPixels - timesItFitsContainer}px`;
-    this.setStyles({ width });
-  }
-
-  public disableCssTransitions(): void {
-    (this.node as HTMLElement).style.removeProperty('transition');
-  }
-
-  /**
-   * Sets the transition css property as an inline style on the FilterItem.
-   *
-   * The idea here is that during the very first render items should assume
-   * their positions directly.
-   *
-   * Following renders should actually trigger the transitions, which is why
-   * we need to delay setting the transition property.
-   *
-   * Unfortunately, JavaScript code executes on the same thread as the
-   * browser's rendering. Everything that needs to be drawn waits for
-   * JavaScript execution to complete. Thus, we need to use a setTimeout
-   * here to defer setting the transition style at the first rendering cycle.
-   */
-  public async enableCssTransitions(): Promise<void> {
-    return new Promise((resolve): void => {
-      const hasImage = !!this.node.querySelectorAll('img').length;
-      if (hasImage) {
-        imagesLoaded(this.node, (): void => {
-          setTimeout((): void => {
-            this.updateTransitionStyle();
-            resolve();
-          }, 10);
-        });
-      } else {
-        setTimeout((): void => {
-          this.updateTransitionStyle();
-          resolve();
-        }, 10);
-      }
-    });
-  }
-
   protected bindEvents(): void {
     this.eventReceiver.on('transitionend', (): void => {
       // On transition end determines if the item is filtered out or not.
@@ -162,10 +110,10 @@ export default class FilterItem extends FilterizrElement implements Resizable {
       const { filteredOut } = this;
       if (filteredOut) {
         this.node.classList.add('filteredOut');
-        this.setStyles({ zIndex: -1000 });
+        this.styles.setZIndex(-1000);
       } else {
         this.node.classList.remove('filteredOut');
-        this.setStyles({ zIndex: '' });
+        this.styles.removeZIndex();
       }
     });
   }

@@ -1,21 +1,29 @@
-import { Filter } from './types';
-import FilterItem from './FilterItem';
-import FilterizrOptions from './FilterizrOptions/FilterizrOptions';
+import StyledFilterItems from './StyledFilterItems';
+import { Filter } from '../types';
+import FilterItem from '../FilterItem';
+import FilterizrOptions from '../FilterizrOptions/FilterizrOptions';
 import {
   allStringsOfArray1InArray2,
   filterItemArraysHaveSameSorting,
   intersection,
   shuffle,
   sortBy,
-} from './utils';
+} from '../utils';
+import { Styleable } from '../types/interfaces';
 
-export default class FilterItems {
+export default class FilterItems implements Styleable {
   private filterItems: FilterItem[];
+  private styledFilterItems: StyledFilterItems;
   private options: FilterizrOptions;
 
   public constructor(filterItems: FilterItem[], options: FilterizrOptions) {
     this.filterItems = filterItems;
+    this.styledFilterItems = new StyledFilterItems(filterItems);
     this.options = options;
+  }
+
+  public get styles(): StyledFilterItems {
+    return this.styledFilterItems;
   }
 
   public get length(): number {
@@ -41,43 +49,6 @@ export default class FilterItems {
   public updateDimensions(): void {
     this.filterItems.forEach((filterItem): void =>
       filterItem.updateDimensions()
-    );
-  }
-
-  public updateTransitionStyle(): void {
-    this.filterItems.forEach((filterItem): void =>
-      filterItem.updateTransitionStyle()
-    );
-  }
-
-  public async enableCssTransitions(): Promise<void> {
-    this.filterItems.forEach(
-      async (filterItem): Promise<void> =>
-        await filterItem.enableCssTransitions()
-    );
-  }
-
-  public disableCssTransitions(): void {
-    this.filterItems.forEach((filterItem): void =>
-      filterItem.disableCssTransitions()
-    );
-  }
-
-  public setStyles(styles: object): void {
-    this.filterItems.forEach((filterItem): void =>
-      filterItem.setStyles(styles)
-    );
-  }
-
-  public removeStyle(propertyName: string): void {
-    this.filterItems.forEach((filterItem): void =>
-      filterItem.removeStyle(propertyName)
-    );
-  }
-
-  public updateWidth(filterContainerWidth: number): void {
-    this.filterItems.forEach((filterItem): void =>
-      filterItem.updateWidth(filterContainerWidth)
     );
   }
 

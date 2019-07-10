@@ -7,3 +7,4 @@ export { RawOptions } from './RawOptions';
 export { RawOptionsCallbacks } from './RawOptionsCallbacks';
 export { Resizable } from './Resizable';
 export { SpinnerOptions } from './SpinnerOptions';
+export { Styleable } from './Styleable';

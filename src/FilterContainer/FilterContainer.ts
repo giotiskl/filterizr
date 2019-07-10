@@ -6,11 +6,7 @@ import FilterizrOptions from '../FilterizrOptions';
 import FilterItem from '../FilterItem';
 import FilterItems from '../FilterItems';
 import FilterizrElement from '../FilterizrElement';
-import {
-  makeInitialStyles,
-  makePaddingStyles,
-  makeHeightStyles,
-} from './styles';
+import StyledFilterContainer from './StyledFilterContainer';
 
 /**
  * Resembles the grid of items within Filterizr.
@@ -23,6 +19,7 @@ export default class FilterContainer extends FilterizrElement
     height: number;
   };
 
+  protected styledNode: StyledFilterContainer;
   private _filterizrState: FilterizrState;
 
   public constructor(node: Element, options: FilterizrOptions) {
@@ -32,16 +29,21 @@ export default class FilterContainer extends FilterizrElement
       );
     }
     super(node, options);
+    this.styledNode = new StyledFilterContainer(node as HTMLElement, options);
     this._filterizrState = FILTERIZR_STATE.IDLE;
-    this.setStyles(makeInitialStyles(this.options));
+    this.styles.initialize();
     this.filterItems = this.makeFilterItems(this.options);
     this.dimensions = {
       width: this.node.clientWidth,
       height: 0,
     };
     this.filterItems.updateDimensions();
-    this.filterItems.updateWidth(this.dimensions.width);
+    this.filterItems.styles.setWidth(this.dimensions.width);
     this.bindEvents();
+  }
+
+  public get styles(): StyledFilterContainer {
+    return this.styledNode;
   }
 
   public set filterizrState(filterizrState: FilterizrState) {
@@ -86,7 +88,7 @@ export default class FilterContainer extends FilterizrElement
       this.filterItems.length,
       this.options
     );
-    filterItem.enableCssTransitions();
+    filterItem.styles.enableTransitions();
     this.filterItems.push(filterItem);
   }
 
@@ -100,13 +102,9 @@ export default class FilterContainer extends FilterizrElement
     this.filterItems.updateDimensions();
   }
 
-  public updatePaddings(): void {
-    this.setStyles(makePaddingStyles(this.options));
-  }
-
   public setHeight(newHeight: number): void {
     this.dimensions.height = newHeight;
-    this.setStyles(makeHeightStyles(newHeight));
+    this.styles.setHeight(newHeight);
   }
 
   public bindEvents(): void {

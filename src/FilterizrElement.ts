@@ -1,10 +1,10 @@
-import { Destructible } from './types/interfaces';
+import { Destructible, Styleable } from './types/interfaces';
 import FilterizrOptions from './FilterizrOptions';
 import EventReceiver from './EventReceiver';
-import animate from './animate';
-import { setStyles } from './utils';
+import StyledFilterizrElement from './StyledFilterizrElement';
 
-export default abstract class FilterizrElement implements Destructible {
+export default abstract class FilterizrElement
+  implements Destructible, Styleable {
   public node: Element;
   public options: FilterizrOptions;
   protected eventReceiver: EventReceiver;
@@ -14,27 +14,19 @@ export default abstract class FilterizrElement implements Destructible {
     this.options = options;
     this.eventReceiver = new EventReceiver(this.node);
   }
+
   public destroy(): void | Promise<void> {
-    this.removeStyles();
+    this.styles.destroy();
   }
-  public async animate(targetStyles: object): Promise<void> {
-    animate(this.node as HTMLElement, targetStyles);
-  }
+
   public trigger(eventType: string): void {
     const event = new Event(eventType);
     this.node.dispatchEvent(event);
   }
-  public setStyles(targetStyles: object): void {
-    setStyles(this.node, targetStyles);
-  }
-  public removeStyle(propertyName: string): void {
-    (this.node as HTMLElement).style.removeProperty(propertyName);
-  }
 
-  private removeStyles(): void {
-    this.node.removeAttribute('style');
-  }
+  public abstract get styles(): StyledFilterizrElement;
 
   protected abstract bindEvents(): void;
+
   protected abstract unbindEvents(): void;
 }

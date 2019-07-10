@@ -165,7 +165,7 @@ export default class Filterizr implements Destructible {
     this.options.set(newOptions);
 
     if (newOptions.easing || animationPropIsSet) {
-      filterItems.updateTransitionStyle();
+      filterItems.styles.updateTransitionStyle();
     }
 
     if (newOptions.callbacks || animationPropIsSet) {
@@ -184,7 +184,7 @@ export default class Filterizr implements Destructible {
     }
 
     if ('gutterPixels' in newOptions) {
-      this.filterContainer.updatePaddings();
+      this.filterContainer.styles.updatePaddings();
       this.render(filterItems.getFiltered(this.options.filter));
     }
   }
@@ -229,7 +229,7 @@ export default class Filterizr implements Destructible {
     // Enable animations after the initial render, to let
     // the items assume their positions before animating
     this.render(filterItems.getFiltered(options.filter));
-    await filterItems.enableCssTransitions();
+    await filterItems.styles.enableTransitions();
     filterContainer.trigger('init');
   }
 
@@ -242,10 +242,10 @@ export default class Filterizr implements Destructible {
     windowEventReceiver.on('resize', debounce(
       (): void => {
         const { width: filterContainerWidth } = this.filterContainer.dimensions;
-        this.filterItems.disableCssTransitions();
-        this.filterItems.removeStyle('width');
-        this.filterItems.updateWidth(filterContainerWidth);
-        this.filterItems.enableCssTransitions();
+        this.filterItems.styles.disableTransitions();
+        this.filterItems.styles.removeWidth();
+        this.filterItems.styles.setWidth(filterContainerWidth);
+        this.filterItems.styles.enableTransitions();
         this.render(filterItems.getFiltered(options.filter));
       },
       50,

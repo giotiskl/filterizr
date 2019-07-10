@@ -16,13 +16,6 @@
     "ecmaVersion": 2018
   },
   "rules": {
-    "indent": [
-      "error",
-      2,
-      {
-        "SwitchCase": 1
-      }
-    ],
     "comma-dangle": [
       "error",
       "always-multiline",
