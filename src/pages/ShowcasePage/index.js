@@ -104,6 +104,9 @@ class ShowcasePage extends React.Component {
               searchable
               sortable
               selector=".filtr-container"
+              options={{
+                gutterPixels: 15,
+              }}
             >
               <div
                 className="filtr-item"
