@@ -33,13 +33,15 @@ export default class StyledFilterItem extends StyledFilterizrElement {
     this.set(makeTransitionStyles(this._index, this.options));
   }
 
-  public setWidth(filterContainerWidth: number): void {
+  public updateWidth(): void {
     const { gutterPixels } = this.options.get();
-    const computedWidth = parseInt(this.computedStyle.width);
-    const timesItFitsContainer = Math.floor(
-      filterContainerWidth / computedWidth
+    const containerWidth = parseInt(
+      getComputedStyle(this.node.parentElement).width
     );
-    const width = `${computedWidth - gutterPixels - timesItFitsContainer}px`;
+    const computedWidth = parseInt(this.computedStyle.width);
+    const timesItFitsContainer = Math.floor(containerWidth / computedWidth);
+    const gutterRatio = 1 / timesItFitsContainer + 1;
+    const width = `${computedWidth - gutterPixels * gutterRatio}px`;
     this.set({ width });
   }
 

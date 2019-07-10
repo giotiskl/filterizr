@@ -38,7 +38,7 @@ export default class FilterContainer extends FilterizrElement
       height: 0,
     };
     this.filterItems.updateDimensions();
-    this.filterItems.styles.setWidth(this.dimensions.width);
+    this.filterItems.styles.updateWidth();
     this.bindEvents();
   }
 

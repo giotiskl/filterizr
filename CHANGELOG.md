@@ -1,3 +1,9 @@
+## Version 2.2.1
+
+- Fix grid behavior when changing `gutterPixels` through `setOptions`
+- Improve calculation of grid paddings when tweaking `gutterPixels`
+- Improve behavior of window resize event in reordering the grid
+
 ## Version 2.2.0
 
 - Add `gutterPixels` options to support margins out of the box

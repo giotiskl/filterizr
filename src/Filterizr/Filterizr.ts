@@ -185,6 +185,7 @@ export default class Filterizr implements Destructible {
 
     if ('gutterPixels' in newOptions) {
       this.filterContainer.styles.updatePaddings();
+      this.filterItems.styles.updateWidthWithTransitionsDisabled();
       this.render(filterItems.getFiltered(this.options.filter));
     }
   }
@@ -241,11 +242,7 @@ export default class Filterizr implements Destructible {
     const { filterItems, options, windowEventReceiver } = this;
     windowEventReceiver.on('resize', debounce(
       (): void => {
-        const { width: filterContainerWidth } = this.filterContainer.dimensions;
-        this.filterItems.styles.disableTransitions();
-        this.filterItems.styles.removeWidth();
-        this.filterItems.styles.setWidth(filterContainerWidth);
-        this.filterItems.styles.enableTransitions();
+        filterItems.styles.updateWidthWithTransitionsDisabled();
         this.render(filterItems.getFiltered(options.filter));
       },
       50,

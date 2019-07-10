@@ -14,10 +14,8 @@ export default class StyledFilterItems extends StyledFilterizrElements {
     this._filterItems.forEach((filterItem): void => filterItem.removeWidth());
   }
 
-  public setWidth(filterContainerWidth: number): void {
-    this._filterItems.forEach((filterItem): void =>
-      filterItem.setWidth(filterContainerWidth)
-    );
+  public updateWidth(): void {
+    this._filterItems.forEach((filterItem): void => filterItem.updateWidth());
   }
 
   public updateTransitionStyle(): void {
@@ -36,5 +34,12 @@ export default class StyledFilterItems extends StyledFilterizrElements {
     this._filterItems.forEach(
       async (filterItem): Promise<void> => await filterItem.enableTransitions()
     );
+  }
+
+  public updateWidthWithTransitionsDisabled(): void {
+    this.disableTransitions();
+    this.removeWidth();
+    this.updateWidth();
+    this.enableTransitions();
   }
 }
