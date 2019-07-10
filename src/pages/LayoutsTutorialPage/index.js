@@ -49,6 +49,9 @@ class LayoutsTutorialPage extends React.Component {
                 />,
               ]}
               selector=".same-size-layout"
+              options={{
+                gutterPixels: 10,
+              }}
             >
               <ColoredFilteritems />
             </Filterizr>
@@ -80,6 +83,7 @@ class LayoutsTutorialPage extends React.Component {
               selector=".same-width-layout"
               options={{
                 layout: 'sameWidth',
+                gutterPixels: 10,
               }}
             >
               <ColoredFilteritems />
@@ -112,6 +116,7 @@ class LayoutsTutorialPage extends React.Component {
               selector=".same-height-layout"
               options={{
                 layout: 'sameHeight',
+                gutterPixels: 10,
               }}
             >
               <ColoredFilteritems />
@@ -152,6 +157,7 @@ class LayoutsTutorialPage extends React.Component {
               selector=".packed-layout"
               options={{
                 layout: 'packed',
+                gutterPixels: 10,
               }}
             >
               <ColoredFilteritems />
@@ -183,6 +189,7 @@ class LayoutsTutorialPage extends React.Component {
               selector=".horizontal-layout"
               options={{
                 layout: 'horizontal',
+                gutterPixels: 10,
               }}
             >
               <ColoredFilteritems />
@@ -214,6 +221,7 @@ class LayoutsTutorialPage extends React.Component {
               selector=".vertical-layout"
               options={{
                 layout: 'vertical',
+                gutterPixels: 10,
               }}
             >
               <ColoredFilteritems />

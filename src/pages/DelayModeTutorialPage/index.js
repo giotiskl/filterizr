@@ -59,6 +59,7 @@ class DelayModeTutorialPage extends React.Component {
               options={{
                 delay: 50,
                 delayMode: 'progressive',
+                gutterPixels: 10,
               }}
             >
               <ColoredFilteritems />
@@ -95,6 +96,7 @@ class DelayModeTutorialPage extends React.Component {
               options={{
                 delay: 250,
                 delayMode: 'alternate',
+                gutterPixels: 10,
               }}
             >
               <ColoredFilteritems />

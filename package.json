@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "filterizr": "^2.0.1",
+    "filterizr": "^2.2.1",
     "highlight.js": "^9.15.8",
     "jsoneditor": "^6.0.0",
     "jsoneditor-react": "^1.0.1",

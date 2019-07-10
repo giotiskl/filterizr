@@ -72,6 +72,9 @@ class SortingTutorialPage extends React.Component {
               ]}
               sortable
               selector=".sortable-grid"
+              options={{
+                gutterPixels: 10,
+              }}
             >
               <div
                 className="filtr-item"

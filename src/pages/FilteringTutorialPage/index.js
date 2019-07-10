@@ -71,6 +71,9 @@ class FilteringTutorialPage extends React.Component {
                 />,
               ]}
               selector=".active-filter"
+              options={{
+                gutterPixels: 10,
+              }}
             >
               <ColoredFilteritems />
             </Filterizr>
@@ -101,6 +104,9 @@ class FilteringTutorialPage extends React.Component {
                 <Filterizr.FilterButton text="Purple" targetFilter="purple" />,
               ]}
               selector=".toggle-filter"
+              options={{
+                gutterPixels: 10,
+              }}
             >
               <ColoredFilteritems />
             </Filterizr>

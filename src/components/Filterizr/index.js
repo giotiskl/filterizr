@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { isEqual, merge } from 'lodash';
 import { FilterButton } from './components/FilterButton';
 import { Button, Form, Select } from 'semantic-ui-react';
-import Filterizr from '../../vendor/filterizr.min';
+import Filterizr from 'filterizr';
 
 export default class extends React.Component {
   static propTypes = {
