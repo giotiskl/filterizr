@@ -26,27 +26,27 @@ export default class FilterItems {
     return this.filterItems;
   }
 
-  public getItem(index: number): FilterItem {
-    return this.filterItems[index];
-  }
-
   public set(filterItems: FilterItem[]): void {
     this.filterItems = filterItems;
+  }
+
+  public getItem(index: number): FilterItem {
+    return this.filterItems[index];
   }
 
   public destroy(): void {
     this.filterItems.forEach((filterItem): void => filterItem.destroy());
   }
 
-  public updateTransitionStyle(): void {
-    this.filterItems.forEach((filterItem): void =>
-      filterItem.updateTransitionStyle()
-    );
-  }
-
   public updateDimensions(): void {
     this.filterItems.forEach((filterItem): void =>
       filterItem.updateDimensions()
+    );
+  }
+
+  public updateTransitionStyle(): void {
+    this.filterItems.forEach((filterItem): void =>
+      filterItem.updateTransitionStyle()
     );
   }
 
@@ -57,9 +57,27 @@ export default class FilterItems {
     );
   }
 
+  public disableCssTransitions(): void {
+    this.filterItems.forEach((filterItem): void =>
+      filterItem.disableCssTransitions()
+    );
+  }
+
   public setStyles(styles: object): void {
     this.filterItems.forEach((filterItem): void =>
       filterItem.setStyles(styles)
+    );
+  }
+
+  public removeStyle(propertyName: string): void {
+    this.filterItems.forEach((filterItem): void =>
+      filterItem.removeStyle(propertyName)
+    );
+  }
+
+  public updateWidth(filterContainerWidth: number): void {
+    this.filterItems.forEach((filterItem): void =>
+      filterItem.updateWidth(filterContainerWidth)
     );
   }
 

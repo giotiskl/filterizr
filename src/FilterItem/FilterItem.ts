@@ -106,6 +106,20 @@ export default class FilterItem extends FilterizrElement implements Resizable {
     this.setStyles(makeTransitionStyles(this.index, this.options));
   }
 
+  public updateWidth(filterContainerWidth: number): void {
+    const { gutterPixels } = this.options.get();
+    const computedWidth = parseInt(getComputedStyle(this.node).width);
+    const timesItFitsContainer = Math.floor(
+      filterContainerWidth / computedWidth
+    );
+    const width = `${computedWidth - gutterPixels - timesItFitsContainer}px`;
+    this.setStyles({ width });
+  }
+
+  public disableCssTransitions(): void {
+    (this.node as HTMLElement).style.removeProperty('transition');
+  }
+
   /**
    * Sets the transition css property as an inline style on the FilterItem.
    *

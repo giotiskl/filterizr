@@ -27,6 +27,9 @@ export default abstract class FilterizrElement implements Destructible {
   public setStyles(targetStyles: object): void {
     setStyles(this.node, targetStyles);
   }
+  public removeStyle(propertyName: string): void {
+    (this.node as HTMLElement).style.removeProperty(propertyName);
+  }
 
   private removeStyles(): void {
     this.node.removeAttribute('style');

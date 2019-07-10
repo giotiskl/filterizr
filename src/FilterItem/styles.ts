@@ -40,6 +40,6 @@ export const makeTransitionStyles = (
     transition: `all ${animationDuration}s ${easing} ${getTransitionDelay(
       index,
       options
-    )}ms`,
+    )}ms, width 1ms`,
   };
 };

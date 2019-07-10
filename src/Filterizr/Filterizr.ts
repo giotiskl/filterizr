@@ -1,7 +1,7 @@
 import { FILTERIZR_STATE } from '../config';
 import { Filter } from '../types';
 import { RawOptions, Destructible } from '../types/interfaces';
-import { getHTMLElement } from '../utils';
+import { getHTMLElement, debounce } from '../utils';
 import EventReceiver from '../EventReceiver';
 import FilterizrOptions, { defaultOptions } from '../FilterizrOptions';
 import FilterControls from '../FilterControls';
@@ -239,9 +239,18 @@ export default class Filterizr implements Destructible {
 
   private bindEvents(): void {
     const { filterItems, options, windowEventReceiver } = this;
-    windowEventReceiver.on('resize', (): void => {
-      this.render(filterItems.getFiltered(options.filter));
-    });
+    windowEventReceiver.on('resize', debounce(
+      (): void => {
+        const { width: filterContainerWidth } = this.filterContainer.dimensions;
+        this.filterItems.disableCssTransitions();
+        this.filterItems.removeStyle('width');
+        this.filterItems.updateWidth(filterContainerWidth);
+        this.filterItems.enableCssTransitions();
+        this.render(filterItems.getFiltered(options.filter));
+      },
+      50,
+      false
+    ) as EventListener);
   }
 
   /**
