@@ -175,7 +175,7 @@ describe('Filterizr', () => {
     it('should add into the grid a new FilterItem with the index property equal to the length of the FilterItems array', () => {
       filterizr.insertItem(nodeToAdd as HTMLElement);
       const lastItem = filterizr['filterItems'].getItem(oldLength);
-      const indexOfNewLastItem = lastItem['index'];
+      const indexOfNewLastItem = lastItem.getSortAttribute('index');
       expect(indexOfNewLastItem).toEqual(oldLength);
     });
   });
@@ -202,7 +202,9 @@ describe('Filterizr', () => {
       const filterItems = filterizr['filterItems'].get();
       const { length } = filterItems;
       for (let i = 0; i < length; i++) {
-        expect(filterItems[i]['index']).toEqual(length - 1 - i);
+        expect(filterItems[i].getSortAttribute('index')).toEqual(
+          length - 1 - i
+        );
       }
     });
   });

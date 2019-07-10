@@ -72,15 +72,6 @@ describe('FilterContainer', () => {
       const newLength = filterContainer.filterItems.length;
       expect(newLength).toBeGreaterThan(oldLength);
     });
-
-    it('should set the index property of the newly added FilterItem in the array to array.length', () => {
-      const oldLength = filterContainer.filterItems.length;
-      filterContainer.insertItem(cloned as HTMLElement);
-      const newlyAddedFilterItem = filterContainer.filterItems.getItem(
-        oldLength
-      );
-      expect(newlyAddedFilterItem['index']).toEqual(oldLength);
-    });
   });
 
   describe('#makeFilterItems', () => {
