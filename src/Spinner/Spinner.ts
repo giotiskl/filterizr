@@ -1,8 +1,8 @@
-import { Destructible } from './types/interfaces';
-import { makeSpinner } from './makeSpinner/makeSpinner';
-import FilterizrOptions from './FilterizrOptions';
-import FilterContainer from './FilterContainer';
-import animate from './animate';
+import { Destructible } from '../types/interfaces';
+import { makeSpinner } from './makeSpinner';
+import FilterizrOptions from '../FilterizrOptions';
+import FilterContainer from '../FilterContainer';
+import animate from '../animate';
 
 export default class Spinner implements Destructible {
   private node: HTMLElement;

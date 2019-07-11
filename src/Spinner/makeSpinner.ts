@@ -1,4 +1,4 @@
-import { SpinnerOptions } from './../types/interfaces';
+import { SpinnerOptions } from '../types/interfaces';
 import { setStyles } from '../utils';
 
 export function makeSpinner({
