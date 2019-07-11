@@ -140,5 +140,6 @@ select {
 .color-container-2,
 .color-container-3,
 .color-container-4 {
+  display: none;
   transition: height 500ms ease-out;
 }
