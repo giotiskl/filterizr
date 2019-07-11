@@ -65,6 +65,10 @@ export default class Filterizr implements Destructible {
     this.initialize();
   }
 
+  private get filterItems(): FilterItems {
+    return this.filterContainer.filterItems;
+  }
+
   /**
    * Filters the items in the grid by a category
    * @param category by which to filter
@@ -230,10 +234,6 @@ export default class Filterizr implements Destructible {
     this.render(filterItems.getFiltered(options.filter));
     await filterItems.styles.enableTransitions();
     filterContainer.trigger('init');
-  }
-
-  private get filterItems(): FilterItems {
-    return this.filterContainer.filterItems;
   }
 
   private bindEvents(): void {
