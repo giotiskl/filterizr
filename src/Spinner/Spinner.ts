@@ -1,5 +1,4 @@
-import { Styleable } from './../../dist/types/interfaces/Styleable.d';
-import { Destructible } from '../types/interfaces';
+import { Destructible, Styleable } from '../types/interfaces';
 import { makeSpinner } from './makeSpinner';
 import FilterizrOptions from '../FilterizrOptions';
 import FilterContainer from '../FilterContainer';
