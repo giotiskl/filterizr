@@ -1,5 +1,5 @@
 import { getDataAttributesOfHTMLNode } from '../utils';
-import { Dictionary, Position, Resizable } from '../types/interfaces';
+import { Dictionary, Position } from '../types/interfaces';
 import FilterizrOptions from '../FilterizrOptions';
 import FilterizrElement from '../FilterizrElement';
 import StyledFilterItem from './StyledFilterItem';
@@ -7,12 +7,7 @@ import StyledFilterItem from './StyledFilterItem';
 /**
  * Resembles an item in the grid of Filterizr.
  */
-export default class FilterItem extends FilterizrElement implements Resizable {
-  public dimensions: {
-    width: number;
-    height: number;
-  };
-
+export default class FilterItem extends FilterizrElement {
   protected styledNode: StyledFilterItem;
 
   private filteredOut: boolean;
@@ -23,10 +18,6 @@ export default class FilterItem extends FilterizrElement implements Resizable {
     super(node, options);
     this.filteredOut = false;
     this.lastPosition = { left: 0, top: 0 };
-    this.dimensions = {
-      width: this.node.clientWidth,
-      height: this.node.clientHeight,
-    };
     this.sortData = {
       ...getDataAttributesOfHTMLNode(node),
       index,
@@ -75,14 +66,6 @@ export default class FilterItem extends FilterizrElement implements Resizable {
    */
   public contentsMatchSearch(searchTerm: string): boolean {
     return this.node.textContent.toLowerCase().includes(searchTerm);
-  }
-
-  /**
-   * Recalculates the dimensions of the element and updates them in the state
-   */
-  public updateDimensions(): void {
-    this.dimensions.width = this.node.clientWidth;
-    this.dimensions.height = this.node.clientHeight;
   }
 
   /**

@@ -1,7 +1,6 @@
 export interface Resizable {
-  dimensions: {
+  readonly dimensions: {
     width: number;
     height: number;
   };
-  updateDimensions(): void;
 }

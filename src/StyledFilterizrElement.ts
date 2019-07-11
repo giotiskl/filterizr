@@ -20,10 +20,6 @@ export default abstract class StyledFilterizrElement implements Destructible {
     animate(this.node, targetStyles);
   }
 
-  protected get computedStyle(): CSSStyleDeclaration {
-    return getComputedStyle(this.node);
-  }
-
   protected set(targetStyles: object): void {
     setStyles(this.node, targetStyles);
   }

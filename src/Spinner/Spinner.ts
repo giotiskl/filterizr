@@ -25,7 +25,7 @@ export default class Spinner implements Destructible, Styleable {
   }
 
   public async destroy(): Promise<void> {
-    this.styles.fadeOut();
+    await this.styles.fadeOut();
     this.filterContainer.node.removeChild(this.node);
   }
 

@@ -46,12 +46,6 @@ export default class FilterItems implements Styleable {
     this.filterItems.forEach((filterItem): void => filterItem.destroy());
   }
 
-  public updateDimensions(): void {
-    this.filterItems.forEach((filterItem): void =>
-      filterItem.updateDimensions()
-    );
-  }
-
   public push(filterItem: FilterItem): number {
     return this.filterItems.push(filterItem);
   }

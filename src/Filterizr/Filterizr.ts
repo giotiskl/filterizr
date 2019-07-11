@@ -203,8 +203,6 @@ export default class Filterizr implements Destructible {
     const { filterContainer, filterItems, options } = this;
     const { filterInCss, filterOutCss, layout } = this.options.get();
 
-    filterContainer.updateDimensions();
-
     filterItems.getFilteredOut(options.filter).forEach((filterItem): void => {
       filterItem.filterOut(filterOutCss);
     });

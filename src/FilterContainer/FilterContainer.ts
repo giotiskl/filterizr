@@ -1,6 +1,5 @@
 import { FILTERIZR_STATE } from '../config';
 import { FilterizrState } from '../types';
-import { Resizable } from '../types/interfaces';
 import { debounce } from '../utils';
 import FilterizrOptions from '../FilterizrOptions';
 import FilterItem from '../FilterItem';
@@ -11,13 +10,8 @@ import StyledFilterContainer from './StyledFilterContainer';
 /**
  * Resembles the grid of items within Filterizr.
  */
-export default class FilterContainer extends FilterizrElement
-  implements Resizable {
+export default class FilterContainer extends FilterizrElement {
   public filterItems: FilterItems;
-  public dimensions: {
-    width: number;
-    height: number;
-  };
 
   protected styledNode: StyledFilterContainer;
   private _filterizrState: FilterizrState;
@@ -33,12 +27,6 @@ export default class FilterContainer extends FilterizrElement
     this._filterizrState = FILTERIZR_STATE.IDLE;
     this.styles.initialize();
     this.filterItems = this.makeFilterItems(this.options);
-    this.dimensions = {
-      width: this.node.clientWidth,
-      height: 0,
-    };
-    this.filterItems.updateDimensions();
-    this.filterItems.styles.updateWidth();
     this.bindEvents();
   }
 
@@ -76,6 +64,8 @@ export default class FilterContainer extends FilterizrElement
       );
     }
 
+    filterItems.styles.updateWidth();
+
     return filterItems;
   }
 
@@ -95,11 +85,6 @@ export default class FilterContainer extends FilterizrElement
   public removeItem(node: HTMLElement): void {
     this.filterItems.remove(node);
     this.node.removeChild(node);
-  }
-
-  public updateDimensions(): void {
-    this.dimensions.width = this.node.clientWidth;
-    this.filterItems.updateDimensions();
   }
 
   public setHeight(newHeight: number): void {

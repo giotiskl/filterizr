@@ -1,10 +1,10 @@
-import { Destructible, Styleable } from './types/interfaces';
+import { Destructible, Styleable, Resizable } from './types/interfaces';
 import FilterizrOptions from './FilterizrOptions';
 import EventReceiver from './EventReceiver';
 import StyledFilterizrElement from './StyledFilterizrElement';
 
 export default abstract class FilterizrElement
-  implements Destructible, Styleable {
+  implements Destructible, Resizable, Styleable {
   public node: Element;
   public options: FilterizrOptions;
   protected eventReceiver: EventReceiver;
@@ -13,6 +13,13 @@ export default abstract class FilterizrElement
     this.node = node;
     this.options = options;
     this.eventReceiver = new EventReceiver(this.node);
+  }
+
+  public get dimensions(): { width: number; height: number } {
+    return {
+      width: this.node.clientWidth,
+      height: this.node.clientHeight,
+    };
   }
 
   public destroy(): void | Promise<void> {
