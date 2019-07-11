@@ -42,21 +42,20 @@ export default class FilterItem extends FilterizrElement {
 
   /**
    * Filters in a specific FilterItem out of the grid.
-   * @param targetPosition the position towards which the element should animate
-   * @param cssOptions for the animation
    */
-  public filterIn(targetPosition: Position, cssOptions: Dictionary): void {
-    this.styles.setFilteredStyles(targetPosition, cssOptions);
+  public filterIn(targetPosition: Position): void {
+    const { filterInCss } = this.options.get();
+    this.styles.setFilteredStyles(targetPosition, filterInCss);
     this.lastPosition = targetPosition;
     this.filteredOut = false;
   }
 
   /**
    * Filters out a specific FilterItem out of the grid.
-   * @param cssOptions for the animation
    */
-  public filterOut(cssOptions: Dictionary): void {
-    this.styles.setFilteredStyles(this.lastPosition, cssOptions);
+  public filterOut(): void {
+    const { filterOutCss } = this.options.get();
+    this.styles.setFilteredStyles(this.lastPosition, filterOutCss);
     this.filteredOut = true;
   }
 
