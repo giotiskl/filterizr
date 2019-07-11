@@ -31,4 +31,6 @@ export default abstract class StyledFilterizrElement implements Destructible {
   protected remove(propertyName: string): void {
     this.node.style.removeProperty(propertyName);
   }
+
+  public abstract initialize(): void | Promise<void>;
 }

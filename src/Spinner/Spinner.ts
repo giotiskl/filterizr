@@ -1,11 +1,13 @@
+import { Styleable } from './../../dist/types/interfaces/Styleable.d';
 import { Destructible } from '../types/interfaces';
 import { makeSpinner } from './makeSpinner';
 import FilterizrOptions from '../FilterizrOptions';
 import FilterContainer from '../FilterContainer';
-import animate from '../animate';
+import StyledSpinner from './StyledSpinner';
 
-export default class Spinner implements Destructible {
+export default class Spinner implements Destructible, Styleable {
   private node: HTMLElement;
+  private styledNode: StyledSpinner;
   private filterContainer: FilterContainer;
 
   public constructor(
@@ -14,15 +16,21 @@ export default class Spinner implements Destructible {
   ) {
     this.filterContainer = filterContainer;
     this.node = makeSpinner(options.get().spinner);
-    this.render();
+    this.styledNode = new StyledSpinner(this.node, options);
+    this.initialize();
+  }
+
+  public get styles(): StyledSpinner {
+    return this.styledNode;
   }
 
   public async destroy(): Promise<void> {
-    await animate(this.node, { opacity: 0 });
+    this.styles.fadeOut();
     this.filterContainer.node.removeChild(this.node);
   }
 
-  private render(): void {
+  private initialize(): void {
+    this.styles.initialize();
     this.filterContainer.node.appendChild(this.node);
   }
 }
