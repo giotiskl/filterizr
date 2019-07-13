@@ -1,4 +1,9 @@
-import { Destructible, Styleable, Resizable } from './types/interfaces';
+import {
+  Destructible,
+  Dimensions,
+  Resizable,
+  Styleable,
+} from './types/interfaces';
 import FilterizrOptions from './FilterizrOptions';
 import EventReceiver from './EventReceiver';
 import StyledFilterizrElement from './StyledFilterizrElement';
@@ -15,7 +20,7 @@ export default abstract class FilterizrElement
     this.eventReceiver = new EventReceiver(this.node);
   }
 
-  public get dimensions(): { width: number; height: number } {
+  public get dimensions(): Dimensions {
     return {
       width: this.node.clientWidth,
       height: this.node.clientHeight,
