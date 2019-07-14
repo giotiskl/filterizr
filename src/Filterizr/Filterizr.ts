@@ -74,7 +74,7 @@ export default class Filterizr implements Destructible {
    * @param category by which to filter
    */
   public filter(category: Filter): void {
-    const { filterContainer, filterItems } = this;
+    const { filterContainer } = this;
 
     filterContainer.trigger('filteringStart');
     filterContainer.filterizrState = FILTERIZR_STATE.FILTERING;
@@ -84,7 +84,7 @@ export default class Filterizr implements Destructible {
       : category.toString();
 
     this.options.filter = category;
-    this.render(filterItems.getSearched(this.options.searchTerm));
+    this.render();
   }
 
   public destroy(): void {
@@ -100,19 +100,19 @@ export default class Filterizr implements Destructible {
    * Inserts a new FilterItem into the grid
    */
   public async insertItem(node: HTMLElement): Promise<void> {
-    const { filterContainer, filterItems } = this;
+    const { filterContainer } = this;
     filterContainer.insertItem(node);
     await this.waitForImagesToLoad();
-    this.render(filterItems.getFiltered(this.options.filter));
+    this.render();
   }
 
   /**
    * Removes a FilterItem from the grid
    */
   public removeItem(node: HTMLElement): void {
-    const { filterContainer, filterItems } = this;
+    const { filterContainer } = this;
     filterContainer.removeItem(node);
-    this.render(filterItems.getFiltered(this.options.filter));
+    this.render();
   }
 
   /**
@@ -127,16 +127,16 @@ export default class Filterizr implements Destructible {
     const { filterContainer, filterItems } = this;
     filterContainer.trigger('sortingStart');
     filterContainer.filterizrState = FILTERIZR_STATE.SORTING;
-    this.render(filterItems.getSorted(sortAttr, sortOrder));
+    filterItems.sort(sortAttr, sortOrder);
+    this.render();
   }
 
   /**
    * Searches through the FilterItems for a given string and adds an additional filter layer.
-   * @param searchTerm the term for which to search
    */
   public search(searchTerm: string = this.options.get().searchTerm): void {
     this.options.searchTerm = searchTerm.toLowerCase();
-    this.render(this.filterItems.getSearched(this.options.searchTerm));
+    this.render();
   }
 
   /**
@@ -146,7 +146,8 @@ export default class Filterizr implements Destructible {
     const { filterContainer, filterItems } = this;
     filterContainer.trigger('shufflingStart');
     filterContainer.filterizrState = FILTERIZR_STATE.SHUFFLING;
-    this.render(filterItems.getShuffled());
+    filterItems.shuffle();
+    this.render();
   }
 
   /**
@@ -190,7 +191,7 @@ export default class Filterizr implements Destructible {
     if ('gutterPixels' in newOptions) {
       this.filterContainer.styles.updatePaddings();
       this.filterItems.styles.updateWidthWithTransitionsDisabled();
-      this.render(filterItems.getFiltered(this.options.filter));
+      this.render();
     }
   }
 
@@ -203,8 +204,9 @@ export default class Filterizr implements Destructible {
     this.filter(this.options.filter);
   }
 
-  private render(itemsToFilterIn: FilterItem[]): void {
+  private render(): void {
     const { filterContainer, filterItems, options } = this;
+    const itemsToFilterIn = filterItems.getFiltered(options.filter);
 
     filterItems.getFilteredOut(options.filter).forEach((filterItem): void => {
       filterItem.filterOut();
@@ -226,7 +228,7 @@ export default class Filterizr implements Destructible {
    * Initialization sequence of Filterizr when the grid is first loaded
    */
   private async initialize(): Promise<void> {
-    const { filterContainer, filterItems, options, spinner } = this;
+    const { filterContainer, filterItems, spinner } = this;
     this.bindEvents();
     await this.waitForImagesToLoad();
     if (this.options.isSpinnerEnabled) {
@@ -235,17 +237,17 @@ export default class Filterizr implements Destructible {
     }
     // Enable animations after the initial render, to let
     // the items assume their positions before animating
-    this.render(filterItems.getFiltered(options.filter));
+    this.render();
     await filterItems.styles.enableTransitions();
     filterContainer.trigger('init');
   }
 
   private bindEvents(): void {
-    const { filterItems, options, windowEventReceiver } = this;
+    const { filterItems, windowEventReceiver } = this;
     windowEventReceiver.on('resize', debounce(
       (): void => {
         filterItems.styles.updateWidthWithTransitionsDisabled();
-        this.render(filterItems.getFiltered(options.filter));
+        this.render();
       },
       50,
       false

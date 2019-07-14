@@ -9,9 +9,9 @@ import {
   shuffle,
   sortBy,
 } from '../utils';
-import { Styleable } from '../types/interfaces';
+import { Destructible, Styleable } from '../types/interfaces';
 
-export default class FilterItems implements Styleable {
+export default class FilterItems implements Destructible, Styleable {
   private filterItems: FilterItem[];
   private styledFilterItems: StyledFilterItems;
   private options: FilterizrOptions;
@@ -62,13 +62,14 @@ export default class FilterItems implements Styleable {
     const filterItems = this.get();
 
     if (filter === 'all') {
-      return filterItems;
+      return this.applySearchFilter(filterItems);
     }
 
-    return filterItems.filter((filterItem: FilterItem): boolean => {
-      const categories = filterItem.getCategories();
-      return this.shouldBeFiltered(categories, filter);
-    });
+    const filteredItems = filterItems.filter((filterItem): boolean =>
+      this.shouldBeFiltered(filterItem.getCategories(), filter)
+    );
+
+    return this.applySearchFilter(filteredItems);
   }
 
   public getFilteredOut(filter: Filter): FilterItem[] {
@@ -86,10 +87,10 @@ export default class FilterItems implements Styleable {
     });
   }
 
-  public getSorted(
+  public sort(
     sortAttr: string = 'index',
     sortOrder: 'asc' | 'desc' = 'asc'
-  ): FilterItem[] {
+  ): void {
     const filterItems = this.get();
 
     const sortedItems = sortBy(filterItems, (filterItem: FilterItem):
@@ -100,12 +101,39 @@ export default class FilterItems implements Styleable {
       sortOrder === 'asc' ? sortedItems : sortedItems.reverse();
 
     this.set(orderedSortedItems);
-
-    return this.getFiltered(this.options.filter);
   }
 
-  public getSearched(searchTerm: string): FilterItem[] {
+  public shuffle(): void {
     const filteredItems = this.getFiltered(this.options.filter);
+
+    if (filteredItems.length > 1) {
+      const indicesBeforeShuffling = this.getFiltered(this.options.filter)
+        .map((filterItem: FilterItem): number => this.get().indexOf(filterItem))
+        .slice();
+
+      // Shuffle filtered items (until they have a new order)
+      let shuffledItems;
+      do {
+        shuffledItems = shuffle(filteredItems);
+      } while (filterItemArraysHaveSameSorting(filteredItems, shuffledItems));
+      {
+        shuffledItems = shuffle(filteredItems);
+      }
+
+      // Update filterItems to have them in the new shuffled order
+      shuffledItems.forEach((filterItem, index): void => {
+        const newIndex = indicesBeforeShuffling[index];
+        this.set(
+          Object.assign([], this.get(), {
+            [newIndex]: filterItem,
+          })
+        );
+      });
+    }
+  }
+
+  private applySearchFilter(filteredItems: FilterItem[]): FilterItem[] {
+    const { searchTerm } = this.options;
 
     if (!searchTerm) {
       return filteredItems;
@@ -114,39 +142,6 @@ export default class FilterItems implements Styleable {
     return filteredItems.filter((filterItem: FilterItem): boolean =>
       filterItem.contentsMatchSearch(searchTerm)
     );
-  }
-
-  public getShuffled(): FilterItem[] {
-    const filteredItems = this.getFiltered(this.options.filter);
-
-    if (filteredItems.length <= 1) {
-      return filteredItems;
-    }
-
-    const indicesBeforeShuffling = this.getFiltered(this.options.filter)
-      .map((filterItem: FilterItem): number => this.get().indexOf(filterItem))
-      .slice();
-
-    // Shuffle filtered items (until they have a new order)
-    let shuffledItems;
-    do {
-      shuffledItems = shuffle(filteredItems);
-    } while (filterItemArraysHaveSameSorting(filteredItems, shuffledItems));
-    {
-      shuffledItems = shuffle(filteredItems);
-    }
-
-    // Update filterItems to have them in the new shuffled order
-    shuffledItems.forEach((filterItem, index): void => {
-      const newIndex = indicesBeforeShuffling[index];
-      this.set(
-        Object.assign([], this.get(), {
-          [newIndex]: filterItem,
-        })
-      );
-    });
-
-    return shuffledItems;
   }
 
   private shouldBeFiltered(categories: string[], filter: Filter): boolean {
