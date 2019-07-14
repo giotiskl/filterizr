@@ -18,9 +18,7 @@ export default (
     })
   );
 
-  // Enhance array with coordinates
-  // added in an extra object named fit
-  // by the packing algorithm
+  // Use packer to convert dimensions into coordinates
   packer.fit(itemsDimensionsWithGutter);
 
   const itemsPositions = itemsDimensionsWithGutter.map(
