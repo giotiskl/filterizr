@@ -17,6 +17,13 @@ export default (
   itemsDimensions: Dimensions[],
   { gutterPixels, layout }: Options
 ): ContainerLayout => {
+  if (!itemsDimensions.length) {
+    return {
+      containerHeight: 0,
+      itemsPositions: [],
+    };
+  }
+
   switch (layout) {
     case 'horizontal':
       return makeHorizontalLayoutPositions(
