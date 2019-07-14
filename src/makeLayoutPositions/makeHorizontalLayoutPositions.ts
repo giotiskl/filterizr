@@ -1,37 +1,34 @@
-import { Position } from '../types/interfaces';
-import FilterContainer from '../FilterContainer';
+import { ContainerLayout, Dimensions, Position } from '../types/interfaces';
+
+function calculateWidthSumWithGutters(
+  itemsDimensions: Dimensions[],
+  gutterPixels: number
+): number {
+  return (
+    itemsDimensions.reduce((acc, { width }): number => acc + width, 0) +
+    gutterPixels
+  );
+}
 
 /**
  * Horizontal layout algorithm that arranges all FilterItems in one row. Their width may vary.
- * @param filterContainer instance.
  */
-export default (filterContainer: FilterContainer): Position[] => {
-  const { filterItems } = filterContainer;
-  const { gutterPixels } = filterContainer.options.get();
-  const filteredItems = filterItems.getFiltered(filterContainer.options.filter);
-
-  let left = 0,
-    containerHeight = 0;
-
-  const targetPositions = filteredItems.map(
-    (filterItem): Position => {
-      const { width, height } = filterItem.dimensions;
-      const pos = {
-        left: left,
-        top: 0,
-      };
-
-      // update left for next item
-      left += width + gutterPixels;
-      // check if target height of FilterContainer should be increased
-      if (height > containerHeight) containerHeight = height;
-
-      return pos;
-    }
-  );
-
-  // update the height of the FilterContainer
-  filterContainer.setHeight(containerHeight + gutterPixels * 2);
-
-  return targetPositions;
-};
+export default (
+  containerWidth: number,
+  itemsDimensions: Dimensions[],
+  gutterPixels: number
+): ContainerLayout => ({
+  containerHeight: Math.max.apply(
+    Math,
+    itemsDimensions.map(({ height }): number => height)
+  ),
+  itemsPositions: itemsDimensions.map(
+    ({}, index: number): Position => ({
+      left: calculateWidthSumWithGutters(
+        itemsDimensions.slice(0, index),
+        gutterPixels
+      ),
+      top: 0,
+    })
+  ),
+});

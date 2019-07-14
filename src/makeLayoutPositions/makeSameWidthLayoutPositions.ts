@@ -1,17 +1,12 @@
-import { Position } from '../types/interfaces';
-import FilterItem from '../FilterItem';
-import FilterContainer from '../FilterContainer';
+import { ContainerLayout, Dimensions, Position } from '../types/interfaces';
 import { calculateColumnsForSameWidthLayouts } from './calculateColumnsForSameWidthLayouts';
 
 /**
  * Helper method used to calculate what the top
  * of the current item in the iteration should be.
- * @param filteredItems collection
- * @param cols of grid
- * @param index of current item in filteredItems collection
  */
 const calcItemTop = (
-  filteredItems: FilterItem[],
+  itemsDimensions: Dimensions[],
   cols: number,
   index: number,
   gutterPixels: number
@@ -26,7 +21,7 @@ const calcItemTop = (
   index -= cols;
   // If we're over the first row loop until we calculate the height of all items above
   while (index >= 0) {
-    itemTop += filteredItems[index].dimensions.height + gutterPixels;
+    itemTop += itemsDimensions[index].height + gutterPixels;
     index -= cols;
   }
   return itemTop;
@@ -36,15 +31,15 @@ const calcItemTop = (
  * Same width layout for items that have the same width, but can have varying height
  * @param filterContainer instance.
  */
-export default (filterContainer: FilterContainer): Position[] => {
-  const { filterItems } = filterContainer;
-  const { gutterPixels } = filterContainer.options.get();
-  const filteredItems = filterItems.getFiltered(filterContainer.options.filter);
-
+export default (
+  containerWidth: number,
+  itemsDimensions: Dimensions[],
+  gutterPixels: number
+): ContainerLayout => {
   // Calculate number of columns and rows the grid should have
   let cols = calculateColumnsForSameWidthLayouts(
-    filterContainer.dimensions.width,
-    filterItems.getItem(0).dimensions.width,
+    containerWidth,
+    itemsDimensions[0].width,
     gutterPixels
   );
   let row = 0;
@@ -54,11 +49,8 @@ export default (filterContainer: FilterContainer): Position[] => {
   );
 
   // Calculate array of positions
-  const targetPositions = filteredItems.map(
-    (filterItem, index): Position => {
-      // Update height of tallest item in row if needed
-      const { width, height } = filterItem.dimensions;
-
+  const itemsPositions = itemsDimensions.map(
+    ({ width, height }, index): Position => {
       // Update current row, increment container
       // height and  reset height of tallest in row
       if (index % cols === 0 && index >= cols) row++;
@@ -72,15 +64,13 @@ export default (filterContainer: FilterContainer): Position[] => {
       // Return object with new position in array
       return {
         left: spot * (width + gutterPixels),
-        top: calcItemTop(filteredItems, cols, index, gutterPixels),
+        top: calcItemTop(itemsDimensions, cols, index, gutterPixels),
       };
     }
   );
 
-  // Update the height of the FilterContainer
-  // before returning from the method
-  filterContainer.setHeight(Math.max(...columnHeights) + gutterPixels);
-
-  // Return the array of new positions
-  return targetPositions;
+  return {
+    containerHeight: Math.max(...columnHeights) + gutterPixels,
+    itemsPositions,
+  };
 };

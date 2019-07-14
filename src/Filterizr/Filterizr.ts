@@ -1,6 +1,6 @@
 import { FILTERIZR_STATE } from '../config';
 import { Filter } from '../types';
-import { RawOptions, Destructible } from '../types/interfaces';
+import { RawOptions, Destructible, Dimensions } from '../types/interfaces';
 import { getHTMLElement, debounce } from '../utils';
 import EventReceiver from '../EventReceiver';
 import FilterizrOptions, { defaultOptions } from '../FilterizrOptions';
@@ -205,16 +205,20 @@ export default class Filterizr implements Destructible {
 
   private render(itemsToFilterIn: FilterItem[]): void {
     const { filterContainer, filterItems, options } = this;
-    const { layout } = this.options.get();
 
     filterItems.getFilteredOut(options.filter).forEach((filterItem): void => {
       filterItem.filterOut();
     });
 
-    const positions = makeLayoutPositions(layout, filterContainer);
+    const { containerHeight, itemsPositions } = makeLayoutPositions(
+      filterContainer.dimensions.width,
+      itemsToFilterIn.map(({ dimensions }): Dimensions => dimensions),
+      this.options.get()
+    );
+    filterContainer.setHeight(containerHeight);
 
     itemsToFilterIn.forEach((filterItem, index): void => {
-      filterItem.filterIn(positions[index]);
+      filterItem.filterIn(itemsPositions[index]);
     });
   }
 

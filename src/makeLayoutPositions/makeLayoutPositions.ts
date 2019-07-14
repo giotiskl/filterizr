@@ -1,11 +1,10 @@
-import { Position } from '../types/interfaces';
+import { ContainerLayout, Dimensions, Options } from '../types/interfaces';
 import makeHorizontalLayoutPositions from './makeHorizontalLayoutPositions';
 import makeVerticalLayoutPositions from './makeVerticalLayoutPositions';
 import makeSameHeightLayoutPositions from './makeSameHeightLayoutPositions';
 import makeSameWidthLayoutPositions from './makeSameWidthLayoutPositions';
 import makeSameSizeLayoutPosition from './makeSameSizeLayoutPosition';
 import makePackedLayoutPositions from './makePackedLayoutPositions';
-import FilterContainer from '../FilterContainer';
 
 /**
  * Calculates and returns an array of objects representing
@@ -14,22 +13,47 @@ import FilterContainer from '../FilterContainer';
  * @param filterizr instance
  */
 export default (
-  layout: string,
-  filterContainer: FilterContainer
-): Position[] => {
+  containerWidth: number,
+  itemsDimensions: Dimensions[],
+  { gutterPixels, layout }: Options
+): ContainerLayout => {
   switch (layout) {
     case 'horizontal':
-      return makeHorizontalLayoutPositions(filterContainer);
+      return makeHorizontalLayoutPositions(
+        containerWidth,
+        itemsDimensions,
+        gutterPixels
+      );
     case 'vertical':
-      return makeVerticalLayoutPositions(filterContainer);
+      return makeVerticalLayoutPositions(
+        containerWidth,
+        itemsDimensions,
+        gutterPixels
+      );
     case 'sameHeight':
-      return makeSameHeightLayoutPositions(filterContainer);
+      return makeSameHeightLayoutPositions(
+        containerWidth,
+        itemsDimensions,
+        gutterPixels
+      );
     case 'sameWidth':
-      return makeSameWidthLayoutPositions(filterContainer);
+      return makeSameWidthLayoutPositions(
+        containerWidth,
+        itemsDimensions,
+        gutterPixels
+      );
     case 'packed':
-      return makePackedLayoutPositions(filterContainer);
+      return makePackedLayoutPositions(
+        containerWidth,
+        itemsDimensions,
+        gutterPixels
+      );
     case 'sameSize':
     default:
-      return makeSameSizeLayoutPosition(filterContainer);
+      return makeSameSizeLayoutPosition(
+        containerWidth,
+        itemsDimensions,
+        gutterPixels
+      );
   }
 };

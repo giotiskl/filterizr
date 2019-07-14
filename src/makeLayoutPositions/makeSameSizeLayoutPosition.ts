@@ -1,25 +1,23 @@
-import { Position } from '../types/interfaces';
-import FilterContainer from '../FilterContainer';
+import { ContainerLayout, Position, Dimensions } from '../types/interfaces';
 import { calculateColumnsForSameWidthLayouts } from './calculateColumnsForSameWidthLayouts';
 
 /**
  * Same size layout for items that have the same width/height
- * @param filterContainer instance.
  */
-export default (filterContainer: FilterContainer): Position[] => {
-  const { filterItems } = filterContainer;
-  const { gutterPixels } = filterContainer.options.get();
-  const filteredItems = filterItems.getFiltered(filterContainer.options.filter);
-  // Calculate number of columns and rows the grid should have
+export default (
+  containerWidth: number,
+  itemsDimensions: Dimensions[],
+  gutterPixels: number
+): ContainerLayout => {
   let cols = calculateColumnsForSameWidthLayouts(
-    filterContainer.dimensions.width,
-    filterItems.getItem(0).dimensions.width,
+    containerWidth,
+    itemsDimensions[0].width,
     gutterPixels
   );
   let row = 0;
-  // calculate array of positions
-  const targetPositions = filteredItems.map(
-    ({ dimensions: { width, height } }, index): Position => {
+
+  const itemsPositions = itemsDimensions.map(
+    ({ width, height }, index): Position => {
       // update current row
       if (index % cols === 0 && index >= cols) row++;
       // determine pos in grid
@@ -32,16 +30,13 @@ export default (filterContainer: FilterContainer): Position[] => {
     }
   );
 
-  const rows = row + 1;
+  // These help calculate the final container height
+  const totalRows = row + 1;
+  const firstItemHeight = (itemsDimensions[0].height || 0) + gutterPixels;
+  const containerHeight = totalRows * firstItemHeight + gutterPixels;
 
-  // Update the height of the FilterContainer
-  // before returning from the method
-  const firstItemHeight =
-    (filteredItems[0] && filteredItems[0].dimensions.height) || 0;
-  filterContainer.setHeight(
-    rows * (firstItemHeight + gutterPixels) + gutterPixels
-  );
-
-  // Return the array of new positions
-  return targetPositions;
+  return {
+    containerHeight,
+    itemsPositions,
+  };
 };

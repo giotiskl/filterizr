@@ -1,4 +1,5 @@
 export { BaseOptions } from './BaseOptions';
+export { ContainerLayout } from './ContainerLayout';
 export { Destructible } from './Destructible';
 export { Dictionary } from './Dictionary';
 export { Dimensions } from './Dimensions';
