@@ -9,30 +9,25 @@ export default (
   itemsDimensions: Dimensions[],
   gutterPixels: number
 ): ContainerLayout => {
-  let cols = calculateColumnsForSameWidthLayouts(
+  const columns = calculateColumnsForSameWidthLayouts(
     containerWidth,
     itemsDimensions[0].width,
     gutterPixels
   );
-  let row = 0;
 
   const itemsPositions = itemsDimensions.map(
     ({ width, height }, index): Position => {
-      // update current row
-      if (index % cols === 0 && index >= cols) row++;
-      // determine pos in grid
-      const spot = index - cols * row;
-      // return object with new position in array
+      const row = Math.floor(index / columns);
+      const col = index - columns * row;
       return {
-        left: spot * (width + gutterPixels),
+        left: col * (width + gutterPixels),
         top: row * (height + gutterPixels),
       };
     }
   );
 
-  // These help calculate the final container height
-  const totalRows = row + 1;
-  const firstItemHeight = (itemsDimensions[0].height || 0) + gutterPixels;
+  const totalRows = Math.floor(itemsDimensions.length / columns) + 1;
+  const firstItemHeight = itemsDimensions[0].height + gutterPixels;
   const containerHeight = totalRows * firstItemHeight + gutterPixels;
 
   return {
