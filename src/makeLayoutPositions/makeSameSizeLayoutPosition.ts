@@ -1,5 +1,4 @@
 import { ContainerLayout, Position, Dimensions } from '../types/interfaces';
-import { calculateColumnsForSameWidthLayouts } from './calculateColumnsForSameWidthLayouts';
 
 /**
  * Same size layout for items that have the same width/height
@@ -9,10 +8,8 @@ export default (
   itemsDimensions: Dimensions[],
   gutterPixels: number
 ): ContainerLayout => {
-  const columns = calculateColumnsForSameWidthLayouts(
-    containerWidth,
-    itemsDimensions[0].width,
-    gutterPixels
+  const columns = Math.floor(
+    containerWidth / (itemsDimensions[0].width + gutterPixels)
   );
 
   const itemsPositions = itemsDimensions.map(
