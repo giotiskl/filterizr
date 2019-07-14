@@ -14,7 +14,6 @@ function calculateWidthSumWithGutters(
  * Horizontal layout algorithm that arranges all FilterItems in one row. Their width may vary.
  */
 export default (
-  containerWidth: number,
   itemsDimensions: Dimensions[],
   gutterPixels: number
 ): ContainerLayout => ({

@@ -26,17 +26,9 @@ export default memoize(
 
     switch (layout) {
       case 'horizontal':
-        return makeHorizontalLayoutPositions(
-          containerWidth,
-          itemsDimensions,
-          gutterPixels
-        );
+        return makeHorizontalLayoutPositions(itemsDimensions, gutterPixels);
       case 'vertical':
-        return makeVerticalLayoutPositions(
-          containerWidth,
-          itemsDimensions,
-          gutterPixels
-        );
+        return makeVerticalLayoutPositions(itemsDimensions, gutterPixels);
       case 'sameHeight':
         return makeSameHeightLayoutPositions(
           containerWidth,

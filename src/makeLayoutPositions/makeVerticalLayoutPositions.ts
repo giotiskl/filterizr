@@ -14,7 +14,6 @@ function calculateHeightSumWithGutters(
  * Vertical layout algorithm that arranges all FilterItems in one column. Their height may vary.
  */
 export default (
-  containerWidth: number,
   itemsDimensions: Dimensions[],
   gutterPixels: number
 ): ContainerLayout => ({
