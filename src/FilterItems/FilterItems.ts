@@ -1,3 +1,4 @@
+import memoize from 'fast-memoize';
 import StyledFilterItems from './StyledFilterItems';
 import { Filter } from '../types';
 import FilterItem from '../FilterItem';
@@ -11,8 +12,16 @@ import {
 } from '../utils';
 import { Destructible, Styleable } from '../types/interfaces';
 
+type MemoizedFilteringFunction = (
+  filterItems: FilterItem[],
+  filter: Filter,
+  searchTerm: string
+) => FilterItem[];
+
 export default class FilterItems implements Destructible, Styleable {
   private filterItems: FilterItem[];
+  private memoizedGetFiltered: MemoizedFilteringFunction;
+  private memoizedGetFilteredOut: MemoizedFilteringFunction;
   private styledFilterItems: StyledFilterItems;
   private options: FilterizrOptions;
 
@@ -20,6 +29,8 @@ export default class FilterItems implements Destructible, Styleable {
     this.filterItems = filterItems;
     this.styledFilterItems = new StyledFilterItems(filterItems);
     this.options = options;
+    this.memoizedGetFiltered = this.makeMemoizedGetFiltered();
+    this.memoizedGetFilteredOut = this.makeMemoizedGetFilteredOut();
   }
 
   public get styles(): StyledFilterItems {
@@ -28,14 +39,6 @@ export default class FilterItems implements Destructible, Styleable {
 
   public get length(): number {
     return this.filterItems.length;
-  }
-
-  public get(): FilterItem[] {
-    return this.filterItems;
-  }
-
-  public set(filterItems: FilterItem[]): void {
-    this.filterItems = filterItems;
   }
 
   public getItem(index: number): FilterItem {
@@ -51,56 +54,33 @@ export default class FilterItems implements Destructible, Styleable {
   }
 
   public remove(node: HTMLElement): void {
-    this.set(
-      this.filterItems.filter(
-        ({ node: filterItemNode }): boolean => filterItemNode !== node
-      )
+    this.filterItems = this.filterItems.filter(
+      ({ node: filterItemNode }): boolean => filterItemNode !== node
     );
   }
 
   public getFiltered(filter: Filter): FilterItem[] {
-    const filterItems = this.get();
-
-    if (filter === 'all') {
-      return this.applySearchFilter(filterItems);
-    }
-
-    const filteredItems = filterItems.filter((filterItem): boolean =>
-      this.shouldBeFiltered(filterItem.getCategories(), filter)
-    );
-
-    return this.applySearchFilter(filteredItems);
+    const { filterItems, options } = this;
+    return this.memoizedGetFiltered(filterItems, filter, options.searchTerm);
   }
 
   public getFilteredOut(filter: Filter): FilterItem[] {
-    const filterItems = this.get();
-    return filterItems.filter((filterItem: FilterItem): boolean => {
-      const categories: string[] = filterItem.getCategories();
-      const shouldBeFiltered: boolean = this.shouldBeFiltered(
-        categories,
-        filter
-      );
-      const contentsMatchSearch: boolean = filterItem.contentsMatchSearch(
-        this.options.searchTerm
-      );
-      return !shouldBeFiltered || !contentsMatchSearch;
-    });
+    const { filterItems, options } = this;
+    return this.memoizedGetFilteredOut(filterItems, filter, options.searchTerm);
   }
 
   public sort(
     sortAttr: string = 'index',
     sortOrder: 'asc' | 'desc' = 'asc'
   ): void {
-    const filterItems = this.get();
-
-    const sortedItems = sortBy(filterItems, (filterItem: FilterItem):
+    const sortedItems = sortBy(this.filterItems, (filterItem: FilterItem):
       | string
       | number => filterItem.getSortAttribute(sortAttr));
 
     const orderedSortedItems =
       sortOrder === 'asc' ? sortedItems : sortedItems.reverse();
 
-    this.set(orderedSortedItems);
+    this.filterItems = orderedSortedItems;
   }
 
   public shuffle(): void {
@@ -108,7 +88,7 @@ export default class FilterItems implements Destructible, Styleable {
 
     if (filteredItems.length > 1) {
       const indicesBeforeShuffling = this.getFiltered(this.options.filter)
-        .map((filterItem: FilterItem): number => this.get().indexOf(filterItem))
+        .map((filterItem): number => this.filterItems.indexOf(filterItem))
         .slice();
 
       // Shuffle filtered items (until they have a new order)
@@ -123,22 +103,57 @@ export default class FilterItems implements Destructible, Styleable {
       // Update filterItems to have them in the new shuffled order
       shuffledItems.forEach((filterItem, index): void => {
         const newIndex = indicesBeforeShuffling[index];
-        this.set(
-          Object.assign([], this.get(), {
-            [newIndex]: filterItem,
-          })
-        );
+        this.filterItems = Object.assign([], this.filterItems, {
+          [newIndex]: filterItem,
+        });
       });
     }
   }
 
-  private applySearchFilter(filteredItems: FilterItem[]): FilterItem[] {
-    const { searchTerm } = this.options;
+  private makeMemoizedGetFiltered(): MemoizedFilteringFunction {
+    return memoize(
+      (
+        filterItems: FilterItem[],
+        filter: Filter,
+        searchTerm: string
+      ): FilterItem[] => {
+        const searchedFilterItems = this.search(filterItems, searchTerm);
+        if (filter === 'all') {
+          return searchedFilterItems;
+        }
+        return searchedFilterItems.filter((filterItem): boolean =>
+          this.shouldBeFiltered(filterItem.getCategories(), filter)
+        );
+      }
+    );
+  }
 
+  private makeMemoizedGetFilteredOut(): MemoizedFilteringFunction {
+    return memoize(
+      (
+        filterItems: FilterItem[],
+        filter: Filter,
+        searchTerm: string
+      ): FilterItem[] => {
+        return filterItems.filter((filterItem: FilterItem): boolean => {
+          const categories = filterItem.getCategories();
+          const shouldBeFiltered = this.shouldBeFiltered(categories, filter);
+          const contentsMatchSearch = filterItem.contentsMatchSearch(
+            searchTerm
+          );
+          return !shouldBeFiltered || !contentsMatchSearch;
+        });
+      }
+    );
+  }
+
+  private search(
+    filteredItems: FilterItem[],
+    searchTerm: string
+  ): FilterItem[] {
     if (!searchTerm) {
       return filteredItems;
     }
-
     return filteredItems.filter((filterItem: FilterItem): boolean =>
       filterItem.contentsMatchSearch(searchTerm)
     );
