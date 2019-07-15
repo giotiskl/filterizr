@@ -4,9 +4,9 @@ function calculateWidthSumWithGutters(
   itemsDimensions: Dimensions[],
   gutterPixels: number
 ): number {
-  return (
-    itemsDimensions.reduce((acc, { width }): number => acc + width, 0) +
-    gutterPixels
+  return itemsDimensions.reduce(
+    (acc, { width }): number => acc + width + gutterPixels,
+    0
   );
 }
 
@@ -17,10 +17,9 @@ export default (
   itemsDimensions: Dimensions[],
   gutterPixels: number
 ): ContainerLayout => ({
-  containerHeight: Math.max.apply(
-    Math,
-    itemsDimensions.map(({ height }): number => height)
-  ),
+  containerHeight:
+    Math.max(...itemsDimensions.map(({ height }): number => height)) +
+    gutterPixels * 2,
   itemsPositions: itemsDimensions.map(
     ({}, index: number): Position => ({
       left: calculateWidthSumWithGutters(

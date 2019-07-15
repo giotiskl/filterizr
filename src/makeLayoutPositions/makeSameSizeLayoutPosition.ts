@@ -23,7 +23,7 @@ export default (
     }
   );
 
-  const totalRows = Math.floor(itemsDimensions.length / columns) + 1;
+  const totalRows = Math.ceil(itemsDimensions.length / columns);
   const firstItemHeight = itemsDimensions[0].height + gutterPixels;
   const containerHeight = totalRows * firstItemHeight + gutterPixels;
 

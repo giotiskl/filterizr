@@ -1,4 +1,9 @@
-import { ContainerLayout, Position, Dimensions } from '../types/interfaces';
+import {
+  ContainerLayout,
+  Position,
+  Dimensions,
+  Dictionary,
+} from '../types/interfaces';
 
 /**
  * Same height layout for items that have the same height, but can have varying width
@@ -9,36 +14,39 @@ export default (
   gutterPixels: number
 ): ContainerLayout => {
   const endWidths = itemsDimensions.map(({ width }, index): number => {
-    const previousItemsWidthSum = itemsDimensions
+    const prevWidth = itemsDimensions
       .slice(0, index)
-      .reduce((sum, { width }): number => sum + width + gutterPixels, 0);
-    return width + previousItemsWidthSum + gutterPixels;
+      .reduce((acc, { width }): number => acc + width + gutterPixels * 2, 0);
+    return prevWidth + width + gutterPixels;
   });
+
+  const rowStartIndexes: Dictionary = endWidths.reduce(
+    (acc: Dictionary, width, index): object => {
+      const accLength = Object.keys(acc).length;
+      const rowMustBreak = width > containerWidth * accLength;
+      return {
+        ...acc,
+        ...(rowMustBreak && { [accLength]: index }),
+      };
+    },
+    { 0: 0 }
+  );
 
   const itemsPositions = itemsDimensions.map(
     ({ height }, index): Position => {
       const row = Math.floor(endWidths[index] / containerWidth);
-      const sameRowPreviousItemsWidthSum = itemsDimensions
-        .slice(0, index)
-        .filter((_, previousItemIndex): boolean => {
-          const previousItemRow = Math.floor(
-            endWidths[previousItemIndex] / containerWidth
-          );
-          return previousItemRow === row;
-        })
-        .reduce((sum, { width }): number => sum + width + gutterPixels, 0);
-
       return {
-        left: sameRowPreviousItemsWidthSum,
+        left: itemsDimensions
+          .slice(rowStartIndexes[row], index)
+          .reduce((acc, { width }): number => acc + width + gutterPixels, 0),
         top: (height + gutterPixels) * row,
       };
     }
   );
 
-  const lastEndWidth = endWidths[endWidths.length - 1];
-  const totalRows = Math.floor(lastEndWidth / containerWidth) + 1;
-  const itemHeight = itemsDimensions[0].height + gutterPixels;
-  const containerHeight = totalRows * itemHeight + gutterPixels;
+  const totalRows = Object.keys(rowStartIndexes).length;
+  const totalItemHeight = itemsDimensions[0].height + gutterPixels;
+  const containerHeight = totalRows * totalItemHeight + gutterPixels;
 
   return {
     containerHeight,

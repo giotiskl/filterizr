@@ -4,9 +4,13 @@ function calculateHeightSumWithGutters(
   itemsDimensions: Dimensions[],
   gutterPixels: number
 ): number {
-  return (
-    itemsDimensions.reduce((acc, { height }): number => acc + height, 0) +
-    gutterPixels
+  if (!itemsDimensions.length) {
+    return 0;
+  }
+
+  return itemsDimensions.reduce(
+    (acc, { height }): number => acc + height + gutterPixels,
+    0
   );
 }
 
@@ -17,9 +21,10 @@ export default (
   itemsDimensions: Dimensions[],
   gutterPixels: number
 ): ContainerLayout => ({
-  containerHeight: calculateHeightSumWithGutters(itemsDimensions, gutterPixels),
+  containerHeight:
+    calculateHeightSumWithGutters(itemsDimensions, gutterPixels) + gutterPixels,
   itemsPositions: itemsDimensions.map(
-    ({}, index): Position => ({
+    (_, index): Position => ({
       left: 0,
       top: calculateHeightSumWithGutters(
         itemsDimensions.slice(0, index),
