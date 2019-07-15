@@ -26,7 +26,7 @@ export default class ActiveFilter {
   }
 
   private toggleFilter(
-    activeFilter: string | string[],
+    activeFilter: Filter,
     targetFilter: string
   ): string | string[] {
     if (activeFilter === 'all') {
