@@ -1,3 +1,4 @@
+import { LAYOUT } from './../config';
 import { ContainerLayout, Dimensions, Options } from '../types/interfaces';
 import memoize from 'fast-memoize';
 import makeHorizontalLayoutPositions from './makeHorizontalLayoutPositions';
@@ -25,29 +26,29 @@ export default memoize(
     }
 
     switch (layout) {
-      case 'horizontal':
+      case LAYOUT.HORIZONTAL:
         return makeHorizontalLayoutPositions(itemsDimensions, gutterPixels);
-      case 'vertical':
+      case LAYOUT.VERTICAL:
         return makeVerticalLayoutPositions(itemsDimensions, gutterPixels);
-      case 'sameHeight':
+      case LAYOUT.SAME_HEIGHT:
         return makeSameHeightLayoutPositions(
           containerWidth,
           itemsDimensions,
           gutterPixels
         );
-      case 'sameWidth':
+      case LAYOUT.SAME_WIDTH:
         return makeSameWidthLayoutPositions(
           containerWidth,
           itemsDimensions,
           gutterPixels
         );
-      case 'packed':
+      case LAYOUT.PACKED:
         return makePackedLayoutPositions(
           containerWidth,
           itemsDimensions,
           gutterPixels
         );
-      case 'sameSize':
+      case LAYOUT.SAME_SIZE:
       default:
         return makeSameSizeLayoutPosition(
           containerWidth,

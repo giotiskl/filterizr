@@ -1,3 +1,4 @@
+import { LAYOUT } from './../config';
 import { RawOptions } from '../types/interfaces';
 import { noop } from '../utils';
 
@@ -27,7 +28,7 @@ const defaultOptions: RawOptions = {
   },
   gridItemsSelector: '.filtr-item',
   gutterPixels: 0,
-  layout: 'sameSize',
+  layout: LAYOUT.SAME_SIZE,
   multifilterLogicalOperator: 'or',
   searchTerm: '',
   setupControls: true,

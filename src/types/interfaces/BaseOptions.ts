@@ -1,5 +1,6 @@
 import { SpinnerOptions } from './SpinnerOptions';
 import { RawOptionsCallbacks } from './RawOptionsCallbacks';
+import { Layout } from '..';
 
 export interface BaseOptions {
   animationDuration?: number;
@@ -12,13 +13,7 @@ export interface BaseOptions {
   filterInCss?: object;
   gridItemsSelector?: string;
   gutterPixels?: number;
-  layout?:
-    | 'horizontal'
-    | 'vertical'
-    | 'sameHeight'
-    | 'sameWidth'
-    | 'sameSize'
-    | 'packed';
+  layout?: Layout;
   multifilterLogicalOperator?: 'or' | 'and';
   searchTerm?: string;
   setupControls?: boolean;

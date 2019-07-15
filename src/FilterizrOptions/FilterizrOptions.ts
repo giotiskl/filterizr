@@ -1,4 +1,4 @@
-import { cssEasingValuesRegexp } from '../config';
+import { cssEasingValuesRegexp, LAYOUT } from '../config';
 import { BaseOptions, RawOptions } from './../types/interfaces';
 import { defaultOptions } from '.';
 import { checkOptionForErrors, merge } from '../utils';
@@ -113,14 +113,12 @@ export default class FilterizrOptions {
       'string'
     );
     checkOptionForErrors('gutterPixels', options.gutterPixels, 'number');
-    checkOptionForErrors('layout', options.layout, 'string', [
-      'sameSize',
-      'vertical',
-      'horizontal',
-      'sameHeight',
-      'sameWidth',
-      'packed',
-    ]);
+    checkOptionForErrors(
+      'layout',
+      options.layout,
+      'string',
+      Object.values(LAYOUT)
+    );
     checkOptionForErrors(
       'multifilterLogicalOperator',
       options.multifilterLogicalOperator,
