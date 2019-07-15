@@ -44,7 +44,7 @@ describe('FilterItem', () => {
         new FilterizrOptions({})
       );
       const position = { left: 15, top: 100 };
-      filterItem.filterIn(position, {});
+      filterItem.filterIn(position);
       expect(filterItem['lastPosition'].left).toEqual(15);
       expect(filterItem['lastPosition'].top).toEqual(100);
     });
@@ -56,7 +56,7 @@ describe('FilterItem', () => {
         new FilterizrOptions({})
       );
       const position = { left: 15, top: 100 };
-      filterItem.filterIn(position, {});
+      filterItem.filterIn(position);
       expect(filterItem['filteredOut']).toEqual(false);
     });
   });
@@ -68,8 +68,7 @@ describe('FilterItem', () => {
         0,
         new FilterizrOptions({})
       );
-      const position = { left: 15, top: 100 };
-      filterItem.filterOut(position);
+      filterItem.filterOut();
       expect(filterItem['filteredOut']).toEqual(true);
     });
   });

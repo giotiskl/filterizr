@@ -12,6 +12,8 @@ import FilterItem from '../src/FilterItem';
 // General setup
 (window as any).$ = $;
 
+jest.mock('fast-memoize', () => ({ default: (a: any) => a }));
+
 // Test suite for Filterizr
 describe('Filterizr', () => {
   // Basic setup before all tests
@@ -199,10 +201,10 @@ describe('Filterizr', () => {
   describe('#sort', () => {
     it('should return a sorted grid', () => {
       filterizr.sort('index', 'desc');
-      const filterItems = filterizr['filterItems'].get();
+      const filterItems = filterizr['filterItems'];
       const { length } = filterItems;
       for (let i = 0; i < length; i++) {
-        expect(filterItems[i].getSortAttribute('index')).toEqual(
+        expect(filterItems['filterItems'][i].getSortAttribute('index')).toEqual(
           length - 1 - i
         );
       }
@@ -212,27 +214,34 @@ describe('Filterizr', () => {
   describe('#search', () => {
     it('should apply an extra layer of filtering based on the search term', () => {
       filterizr.filter('1'); // by this point 3 items should be visible
-      expect(filterizr['filterItems'].getSearched('city').length).toEqual(2);
+      filterizr.setOptions({ searchTerm: 'city' });
+      expect(
+        filterizr['filterItems'].getFiltered(filterizr.options.filter).length
+      ).toEqual(2);
     });
 
     it('should render an empty grid if no item was found', () => {
+      filterizr.setOptions({
+        searchTerm: 'term not contained a nywhere in grid',
+      });
       expect(
-        filterizr['filterItems'].getSearched(
-          'term not contained a nywhere in grid'
-        ).length
+        filterizr['filterItems'].getFiltered(filterizr.options.filter).length
       ).toEqual(0);
     });
 
     it('should render only items containing the search term', () => {
       const term = 'city';
-      filterizr['filterItems'].getSearched(term).forEach((filteredItem) => {
-        const contents = $(filteredItem.node)
-          .find('.item-desc')
-          .text()
-          .toLowerCase();
-        const termFound = ~contents.lastIndexOf(term);
-        expect(termFound).toBeTruthy();
-      });
+      filterizr.setOptions({ searchTerm: term });
+      filterizr['filterItems']
+        .getFiltered(filterizr.options.filter)
+        .forEach((filteredItem) => {
+          const contents = $(filteredItem.node)
+            .find('.item-desc')
+            .text()
+            .toLowerCase();
+          const termFound = ~contents.lastIndexOf(term);
+          expect(termFound).toBeTruthy();
+        });
     });
   });
 

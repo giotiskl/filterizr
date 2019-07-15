@@ -10,6 +10,8 @@ import FilterItem from '../src/FilterItem';
 // General setup
 (window as any).$ = $;
 
+jest.mock('fast-memoize', () => ({ default: (a: any) => a }));
+
 /**
  * Test suite for FilterContainer
  */
@@ -81,7 +83,7 @@ describe('FilterContainer', () => {
       );
     });
     it('should find and return all .filtr-item elements as FilterItem instances', () => {
-      filterContainer.filterItems.get().forEach((filterItem) => {
+      filterContainer.filterItems['filterItems'].forEach((filterItem) => {
         expect(filterItem instanceof FilterItem).toBe(true);
       });
     });
