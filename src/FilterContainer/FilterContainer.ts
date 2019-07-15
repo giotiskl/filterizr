@@ -79,6 +79,7 @@ export default class FilterContainer extends FilterizrElement {
       this.options
     );
     filterItem.styles.enableTransitions();
+    filterItem.styles.updateWidth();
     this.filterItems.push(filterItem);
   }
 
