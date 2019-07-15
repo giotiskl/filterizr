@@ -1,3 +1,8 @@
+## Version 2.2.2
+
+- Performance optimization (by use of memoization)
+- Fix `insertItem` behavior when using `gutterPixels`
+
 ## Version 2.2.1
 
 - Fix grid behavior when changing `gutterPixels` through `setOptions`
