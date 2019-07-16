@@ -1,4 +1,3 @@
-import memoize from 'fast-memoize';
 import StyledFilterItems from './StyledFilterItems';
 import { Filter } from '../types';
 import FilterItem from '../FilterItem';
@@ -12,16 +11,8 @@ import {
 } from '../utils';
 import { Destructible, Styleable } from '../types/interfaces';
 
-type MemoizedFilteringFunction = (
-  filterItems: FilterItem[],
-  filter: Filter,
-  searchTerm: string
-) => FilterItem[];
-
 export default class FilterItems implements Destructible, Styleable {
   private filterItems: FilterItem[];
-  private memoizedGetFiltered: MemoizedFilteringFunction;
-  private memoizedGetFilteredOut: MemoizedFilteringFunction;
   private styledFilterItems: StyledFilterItems;
   private options: FilterizrOptions;
 
@@ -29,8 +20,6 @@ export default class FilterItems implements Destructible, Styleable {
     this.filterItems = filterItems;
     this.styledFilterItems = new StyledFilterItems(filterItems);
     this.options = options;
-    this.memoizedGetFiltered = this.makeMemoizedGetFiltered();
-    this.memoizedGetFilteredOut = this.makeMemoizedGetFilteredOut();
   }
 
   public get styles(): StyledFilterItems {
@@ -60,13 +49,24 @@ export default class FilterItems implements Destructible, Styleable {
   }
 
   public getFiltered(filter: Filter): FilterItem[] {
-    const { filterItems, options } = this;
-    return this.memoizedGetFiltered(filterItems, filter, options.searchTerm);
+    const { searchTerm } = this.options;
+    const searchedFilterItems = this.search(this.filterItems, searchTerm);
+    if (filter === 'all') {
+      return searchedFilterItems;
+    }
+    return searchedFilterItems.filter((filterItem): boolean =>
+      this.shouldBeFiltered(filterItem.getCategories(), filter)
+    );
   }
 
   public getFilteredOut(filter: Filter): FilterItem[] {
-    const { filterItems, options } = this;
-    return this.memoizedGetFilteredOut(filterItems, filter, options.searchTerm);
+    const { searchTerm } = this.options;
+    return this.filterItems.filter((filterItem: FilterItem): boolean => {
+      const categories = filterItem.getCategories();
+      const shouldBeFiltered = this.shouldBeFiltered(categories, filter);
+      const contentsMatchSearch = filterItem.contentsMatchSearch(searchTerm);
+      return !shouldBeFiltered || !contentsMatchSearch;
+    });
   }
 
   public sort(
@@ -110,43 +110,6 @@ export default class FilterItems implements Destructible, Styleable {
     }
   }
 
-  private makeMemoizedGetFiltered(): MemoizedFilteringFunction {
-    return memoize(
-      (
-        filterItems: FilterItem[],
-        filter: Filter,
-        searchTerm: string
-      ): FilterItem[] => {
-        const searchedFilterItems = this.search(filterItems, searchTerm);
-        if (filter === 'all') {
-          return searchedFilterItems;
-        }
-        return searchedFilterItems.filter((filterItem): boolean =>
-          this.shouldBeFiltered(filterItem.getCategories(), filter)
-        );
-      }
-    );
-  }
-
-  private makeMemoizedGetFilteredOut(): MemoizedFilteringFunction {
-    return memoize(
-      (
-        filterItems: FilterItem[],
-        filter: Filter,
-        searchTerm: string
-      ): FilterItem[] => {
-        return filterItems.filter((filterItem: FilterItem): boolean => {
-          const categories = filterItem.getCategories();
-          const shouldBeFiltered = this.shouldBeFiltered(categories, filter);
-          const contentsMatchSearch = filterItem.contentsMatchSearch(
-            searchTerm
-          );
-          return !shouldBeFiltered || !contentsMatchSearch;
-        });
-      }
-    );
-  }
-
   private search(
     filteredItems: FilterItem[],
     searchTerm: string
@@ -160,7 +123,7 @@ export default class FilterItems implements Destructible, Styleable {
   }
 
   private shouldBeFiltered(categories: string[], filter: Filter): boolean {
-    const { multifilterLogicalOperator } = this.options.get();
+    const { multifilterLogicalOperator } = this.options.getRaw();
     const isMultifilteringEnabled = Array.isArray(filter);
 
     if (!isMultifilteringEnabled) {
