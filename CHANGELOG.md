@@ -1,5 +1,9 @@
 ## Version 2.2.2
 
+- Fix bug with circular JSON ref by dememoizing `getFiltered`
+
+## Version 2.2.2
+
 - Performance optimization (by use of memoization)
 - Fix `insertItem` behavior when using `gutterPixels`
 
