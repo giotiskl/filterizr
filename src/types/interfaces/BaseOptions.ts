@@ -18,4 +18,10 @@ export interface BaseOptions {
   searchTerm?: string;
   setupControls?: boolean;
   spinner?: SpinnerOptions;
+  pagination? : PaginationOptions
+}
+
+export interface PaginationOptions {
+  pageSize : number;
+  currentPage : number;
 }

@@ -3,7 +3,8 @@ import { BaseOptions, RawOptions } from './../types/interfaces';
 import { defaultOptions } from '.';
 import { checkOptionForErrors, merge } from '../utils';
 import ActiveFilter from '../ActiveFilter';
-import { Filter } from '../types';
+import { Filter, Pagination } from '../types';
+import { PaginationOptions } from '../types/interfaces/BaseOptions';
 
 export interface Options extends BaseOptions {
   filter: ActiveFilter;
@@ -47,6 +48,13 @@ export default class FilterizrOptions {
 
   public set searchTerm(searchTerm: string) {
     this.options.searchTerm = searchTerm;
+  }
+
+  public getPageRange() : Pagination {
+    return this.options.pagination && {
+      start : this.options.pagination.pageSize * this.options.pagination.currentPage,
+      end : this.options.pagination.pageSize * (this.options.pagination.currentPage+1),
+    }
   }
 
   public get(): Options {
@@ -127,7 +135,13 @@ export default class FilterizrOptions {
     );
     checkOptionForErrors('searchTerm', options.searchTerm, 'string');
     checkOptionForErrors('setupControls', options.setupControls, 'boolean');
-
+    checkOptionForErrors('pagination', options.pagination, 'object');
+    if(options.pagination) {
+      checkOptionForErrors('pagination.pageSize', options.pagination.pageSize, 'number');
+      checkOptionForErrors('pagination.currentPage', options.pagination.currentPage, 'number');
+      if(options.pagination.pageSize < 0) {options.pagination.pageSize = 0}
+      if(options.pagination.currentPage < 0) {options.pagination.currentPage = 0}
+    }
     return options;
   }
 }

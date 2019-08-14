@@ -7,3 +7,4 @@ export type Layout =
   | 'sameWidth'
   | 'sameSize'
   | 'packed';
+export type Pagination = {start : number, end : number};

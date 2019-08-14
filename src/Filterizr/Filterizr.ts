@@ -184,7 +184,8 @@ export default class Filterizr implements Destructible {
 
     if (
       'filter' in newOptions ||
-      'multifilterLomultifilterLogicalOperator' in newOptions
+      'multifilterLogicalOperator' in newOptions ||
+      'pagination' in newOptions
     ) {
       this.filter(this.options.filter);
     }
@@ -205,11 +206,56 @@ export default class Filterizr implements Destructible {
     this.filter(this.options.filter);
   }
 
+  /**
+   * page are 0 indexed.
+   * @param page the page where to go.
+   */
+  public gotoPage(page : number) {
+    const opt = this.options.get();
+    if(opt.pagination) {
+      const nbrItem = this.filterItems.getFiltered(this.options.filter, this.options.searchTerm, null).length;
+      const lastPage = Math.floor(nbrItem / opt.pagination.pageSize);
+      if(page < 0) {
+        page = 0;
+      } else if(page > lastPage) {
+        page = lastPage;
+      }
+      opt.pagination.currentPage = page;
+    }
+    this.render();
+  }
+
+  public nextPage() {
+    const opt = this.options.get();
+    if(opt.pagination) {
+      const nbrItem = this.filterItems.getFiltered(this.options.filter, this.options.searchTerm, null).length;
+      const lastPage = Math.floor(nbrItem / opt.pagination.pageSize);
+      let page = opt.pagination.currentPage + 1;
+      if(page > lastPage) {
+        page = lastPage;
+      }
+      opt.pagination.currentPage = page;
+    }
+    this.render();
+  }
+
+  public previousPage() {
+    const opt = this.options.get();
+    if(opt.pagination) {
+      let page = opt.pagination.currentPage - 1;
+      if(page < 0) {
+        page = 0;
+      }
+      opt.pagination.currentPage = page;
+    }
+    this.render();
+  }
+
   private render(): void {
     const { filterContainer, filterItems, options } = this;
-    const itemsToFilterIn = filterItems.getFiltered(options.filter, options.searchTerm);
+    const itemsToFilterIn = filterItems.getFiltered(options.filter, options.searchTerm, options.getPageRange());
 
-    filterItems.getFilteredOut(options.filter, options.searchTerm).forEach((filterItem): void => {
+    filterItems.getFilteredOut(options.filter, options.searchTerm, options.getPageRange()).forEach((filterItem): void => {
       filterItem.filterOut();
     });
 

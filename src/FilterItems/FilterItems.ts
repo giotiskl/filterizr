@@ -1,5 +1,5 @@
 import StyledFilterItems from './StyledFilterItems';
-import { Filter } from '../types';
+import { Filter, Pagination } from '../types';
 import FilterItem from '../FilterItem';
 import FilterizrOptions from '../FilterizrOptions/FilterizrOptions';
 import {
@@ -10,6 +10,7 @@ import {
   sortBy,
 } from '../utils';
 import { Destructible, Styleable } from '../types/interfaces';
+
 
 export default class FilterItems implements Destructible, Styleable {
   private filterItems: FilterItem[];
@@ -51,18 +52,18 @@ export default class FilterItems implements Destructible, Styleable {
   /**
    * returns all item that are positive, this mean all the items that should be keeped.
    */
-  public getFiltered(filter: Filter, searchTerm : string): FilterItem[] {
+  public getFiltered(filter: Filter, searchTerm : string, pagination : Pagination): FilterItem[] {
     searchTerm = searchTerm || ""; //replace empty search term by empty string, who always match.
-    return this.filterItems.filter(this.getFilterPredicate(filter, searchTerm, true));
+    return this.filterItems.filter(this.getFilterPredicate(filter, searchTerm, pagination, true));
   }
 
   /**
    * returns all item that are negative, this mean all the items that should be removed.
    * the item is not keeped if the condition described in `getFiltered` is false.
    */
-  public getFilteredOut(filter: Filter, searchTerm : string): FilterItem[] {
+  public getFilteredOut(filter: Filter, searchTerm : string, pagination : Pagination): FilterItem[] {
     searchTerm = searchTerm || ""; //replace empty search term by empty string, who always match.
-    return this.filterItems.filter(this.getFilterPredicate(filter, searchTerm, false));
+    return this.filterItems.filter(this.getFilterPredicate(filter, searchTerm, pagination, false));
   }
 
   /**
@@ -78,14 +79,19 @@ export default class FilterItems implements Destructible, Styleable {
    * @param searchTerm
    * @param inverse inverse the filtering. true => get all that are keeped. false => get all that are removed
    */
-  private getFilterPredicate(filter : Filter, searchTerm : string, inverse : boolean) : (f : FilterItem) => boolean {
+  private getFilterPredicate(filter : Filter, searchTerm : string, pagination : Pagination, inverse : boolean) : (f : FilterItem) => boolean {
+    let acceptedElemCount = 0;
     return (filterItem : FilterItem) : boolean => {
       const shouldBeFiltered = this.shouldBeFiltered(filterItem.getCategories(), filter)
       const contentsMatchSearch = filterItem.contentsMatchSearch(searchTerm);
+      const elementInRange = !pagination || (acceptedElemCount >= pagination.start && acceptedElemCount < pagination.end)
+      if(shouldBeFiltered && contentsMatchSearch) {
+        acceptedElemCount++;
+      }
       if(inverse) {
-        return shouldBeFiltered && contentsMatchSearch
+        return shouldBeFiltered && contentsMatchSearch && elementInRange
       } else {
-        return !(shouldBeFiltered && contentsMatchSearch);
+        return !(shouldBeFiltered && contentsMatchSearch && elementInRange);
       }
     }
   }
@@ -105,7 +111,7 @@ export default class FilterItems implements Destructible, Styleable {
   }
 
   public shuffle(): void {
-    const filteredItems = this.getFiltered(this.options.filter, this.options.searchTerm);
+    const filteredItems = this.getFiltered(this.options.filter, this.options.searchTerm, null);
 
     if (filteredItems.length > 1) {
       const indicesBeforeShuffling = filteredItems
