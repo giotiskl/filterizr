@@ -85,8 +85,8 @@ describe('Filterizr', () => {
 
     beforeEach(() => {
       filterizr.filter(filter);
-      filteredOutItems = filterizr['filterItems'].getFilteredOut(filter);
-      filteredInItems = filterizr['filterItems'].getFiltered(filter);
+      filteredOutItems = filterizr['filterItems'].getFilteredOut(filter, "");
+      filteredInItems = filterizr['filterItems'].getFiltered(filter, "");
     });
 
     it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter', () => {
@@ -214,26 +214,21 @@ describe('Filterizr', () => {
   describe('#search', () => {
     it('should apply an extra layer of filtering based on the search term', () => {
       filterizr.filter('1'); // by this point 3 items should be visible
-      filterizr.setOptions({ searchTerm: 'city' });
       expect(
-        filterizr['filterItems'].getFiltered(filterizr.options.filter).length
+        filterizr['filterItems'].getFiltered("1", 'city').length
       ).toEqual(2);
     });
 
     it('should render an empty grid if no item was found', () => {
-      filterizr.setOptions({
-        searchTerm: 'term not contained a nywhere in grid',
-      });
       expect(
-        filterizr['filterItems'].getFiltered(filterizr.options.filter).length
+        filterizr['filterItems'].getFiltered("all", 'term not contained a nywhere in grid').length
       ).toEqual(0);
     });
 
     it('should render only items containing the search term', () => {
       const term = 'city';
-      filterizr.setOptions({ searchTerm: term });
       filterizr['filterItems']
-        .getFiltered(filterizr.options.filter)
+        .getFiltered("all", 'city')
         .forEach((filteredItem) => {
           const contents = $(filteredItem.node)
             .find('.item-desc')

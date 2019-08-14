@@ -12,6 +12,7 @@ import Spinner from '../Spinner';
 import makeLayoutPositions from '../makeLayoutPositions';
 import installAsJQueryPlugin from './installAsJQueryPlugin';
 
+//@ts-ignore
 const imagesLoaded = require('imagesloaded');
 
 export default class Filterizr implements Destructible {
@@ -206,9 +207,9 @@ export default class Filterizr implements Destructible {
 
   private render(): void {
     const { filterContainer, filterItems, options } = this;
-    const itemsToFilterIn = filterItems.getFiltered(options.filter);
+    const itemsToFilterIn = filterItems.getFiltered(options.filter, options.searchTerm);
 
-    filterItems.getFilteredOut(options.filter).forEach((filterItem): void => {
+    filterItems.getFilteredOut(options.filter, options.searchTerm).forEach((filterItem): void => {
       filterItem.filterOut();
     });
 
