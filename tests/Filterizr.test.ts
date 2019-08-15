@@ -8,11 +8,26 @@ import { fakeDom } from './testSetup';
 import Filterizr from '../src/Filterizr';
 import FilterContainer from '../src/FilterContainer';
 import FilterItem from '../src/FilterItem';
+import { resolve } from 'path';
 
 // General setup
 (window as any).$ = $;
 
 jest.mock('fast-memoize', () => ({ default: (a: any) => a }));
+
+const triggerAllEvent = (filterizr : Filterizr, done : () => void) => {
+  const allItem = filterizr['filterItems'].getFiltered("all", "", null);
+      Promise.all(allItem.map((filterItem) => {
+        return new Promise((resolve) => {
+          filterItem.node.addEventListener("transitionend", () => {
+            resolve();
+          }, {once : true});
+          filterItem.node.dispatchEvent(new Event("transitionend"));
+        })
+      })).then(() => {
+        done();
+      });
+}
 
 // Test suite for Filterizr
 describe('Filterizr', () => {
@@ -83,41 +98,36 @@ describe('Filterizr', () => {
     const filter = '2';
     let filteredOutItems: FilterItem[], filteredInItems: FilterItem[];
 
-    beforeEach(() => {
+    beforeEach(done => {
       filterizr.filter(filter);
-      filteredOutItems = filterizr['filterItems'].getFilteredOut(filter);
-      filteredInItems = filterizr['filterItems'].getFiltered(filter);
+      filteredOutItems = filterizr['filterItems'].getFilteredOut(filter, "", null);
+      filteredInItems = filterizr['filterItems'].getFiltered(filter, "", null);
+      triggerAllEvent(filterizr, done)
     });
 
     it('should keep as visible only the .filtr-item elements, whose data-category contains the active filter', () => {
       // Wait for animation to finish before test
-      setTimeout(() => {
-        filteredInItems.forEach((filterItem) => {
-          const categories = filterItem.getCategories();
-          const belongsToCategory = categories.includes(filter);
-          expect(belongsToCategory).toEqual(true);
-        });
-      }, 1000);
+      
+      filteredInItems.forEach((filterItem) => {
+        const categories = filterItem.getCategories();
+        const belongsToCategory = categories.includes(filter);
+        expect(belongsToCategory).toEqual(true);
+      });
     });
 
     it('should add the .filteredOut class to all filtered out .filtr-item elements', () => {
       // Wait for animation to finish before test
-      setTimeout(() => {
-        filteredOutItems.forEach((filterItem) => {
-          expect(Array.from(filterItem.node.classList).includes('filteredOut'));
-        });
+      filteredOutItems.forEach((filterItem) => {
+        expect(Array.from(filterItem.node.classList).includes('filteredOut'));
       });
     });
 
     it('should set an inline style z-index: -1000 on filteringEnd for .filteredOut .filtr-item elements', () => {
       // Wait for animation to finish before test
-      setTimeout(() => {
-        filteredOutItems.forEach((filterItem) => {
-          const zIndexOfFilteredOutItem = (filterItem.node as HTMLElement).style
-            .zIndex;
-          expect(zIndexOfFilteredOutItem).toEqual('-1000');
-        });
-      }, 1000);
+      filteredOutItems.forEach((filterItem) => {
+        const zIndexOfFilteredOutItem = (filterItem.node as HTMLElement).style.zIndex;
+        expect(zIndexOfFilteredOutItem).toBe('-1000');
+      });
     });
   });
 
@@ -214,26 +224,21 @@ describe('Filterizr', () => {
   describe('#search', () => {
     it('should apply an extra layer of filtering based on the search term', () => {
       filterizr.filter('1'); // by this point 3 items should be visible
-      filterizr.setOptions({ searchTerm: 'city' });
       expect(
-        filterizr['filterItems'].getFiltered(filterizr.options.filter).length
+        filterizr['filterItems'].getFiltered("1", 'city', null).length
       ).toEqual(2);
     });
 
     it('should render an empty grid if no item was found', () => {
-      filterizr.setOptions({
-        searchTerm: 'term not contained a nywhere in grid',
-      });
       expect(
-        filterizr['filterItems'].getFiltered(filterizr.options.filter).length
+        filterizr['filterItems'].getFiltered("all", 'term not contained a nywhere in grid', null).length
       ).toEqual(0);
     });
 
     it('should render only items containing the search term', () => {
       const term = 'city';
-      filterizr.setOptions({ searchTerm: term });
       filterizr['filterItems']
-        .getFiltered(filterizr.options.filter)
+        .getFiltered("all", 'city', null)
         .forEach((filteredItem) => {
           const contents = $(filteredItem.node)
             .find('.item-desc')
@@ -242,6 +247,47 @@ describe('Filterizr', () => {
           const termFound = ~contents.lastIndexOf(term);
           expect(termFound).toBeTruthy();
         });
+    });
+  });
+
+  describe("#pagination", () => {
+    beforeEach(done => {
+      filterizr.setOptions({
+        pagination : {
+          pageSize : 3,
+          currentPage : 0
+        },
+      });
+      triggerAllEvent(filterizr, done)
+    });
+    it('should apply an extra layer of filtering based on pagination', () => {
+      expect($(".filtr-item").length).toEqual(9);
+      expect($(".filtr-item.filteredOut").length).toEqual(6);
+      expect($(".filtr-item:not(.filteredOut)").length).toEqual(3);
+      filterizr['filterItems']["filterItems"].slice(0, 3).forEach(filterItem => {
+        expect(filterItem.node.classList).not.toContain("filteredOut")
+      });
+      filterizr['filterItems']["filterItems"].slice(3).forEach(filterItem => {
+        expect(filterItem.node.classList).toContain("filteredOut")
+      });
+    });
+
+    it('should work with search', done => {
+      filterizr.search("in")
+      filterizr.nextPage();
+      expect(filterizr.options.get().pagination.currentPage).toBe(1);
+      triggerAllEvent(filterizr, () => {
+        expect($(".filtr-item").length).toEqual(9);
+        expect($(".filtr-item.filteredOut").length).toEqual(8);
+        expect($(".filtr-item:not(.filteredOut)").length).toEqual(1);
+        filterizr['filterItems']["filterItems"].slice(0, 8).forEach(filterItem => {
+          expect(filterItem.node.classList).toContain("filteredOut")
+        })
+        filterizr['filterItems']["filterItems"].slice(8).forEach(filterItem => {
+          expect(filterItem.node.classList).not.toContain("filteredOut")
+        })
+        done();
+      });
     });
   });
 

@@ -42,6 +42,7 @@ const defaultOptions: RawOptions = {
       'z-index': 2,
     },
   },
+  pagination : null
 };
 
 export default defaultOptions;

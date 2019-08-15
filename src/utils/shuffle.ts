@@ -1,11 +1,12 @@
 /**
  * Fisher-Yates shuffle ES6 non-mutating implementation.
- * @param {Array} array the array to shuffle
- * @return {Array} shuffled array without mutating the initial array.
+ * @param {Array<T>} array the array to shuffle
+ * @return {Array<T>} shuffled array without mutating the initial array, but with the same element reference.
+ * @template {T}
  */
-export const shuffle = (array: any[]): any[] => {
-  // perform deep clone on array to mutate
-  let cloned = array.slice(0);
+export const shuffle = <T>(array: T[]): T[] => {
+  // perform shallow clone on array to mutate
+  let cloned = array.slice();
   // array to return
   let randomizedArray = [];
   // perform shuffle

@@ -1,5 +1,5 @@
 import StyledFilterItems from './StyledFilterItems';
-import { Filter } from '../types';
+import { Filter, Pagination } from '../types';
 import FilterItem from '../FilterItem';
 import FilterizrOptions from '../FilterizrOptions/FilterizrOptions';
 import {
@@ -10,6 +10,7 @@ import {
   sortBy,
 } from '../utils';
 import { Destructible, Styleable } from '../types/interfaces';
+
 
 export default class FilterItems implements Destructible, Styleable {
   private filterItems: FilterItem[];
@@ -48,25 +49,51 @@ export default class FilterItems implements Destructible, Styleable {
     );
   }
 
-  public getFiltered(filter: Filter): FilterItem[] {
-    const { searchTerm } = this.options;
-    const searchedFilterItems = this.search(this.filterItems, searchTerm);
-    if (filter === 'all') {
-      return searchedFilterItems;
-    }
-    return searchedFilterItems.filter((filterItem): boolean =>
-      this.shouldBeFiltered(filterItem.getCategories(), filter)
-    );
+  /**
+   * returns all item that are positive, this mean all the items that should be keeped.
+   */
+  public getFiltered(filter: Filter, searchTerm : string, pagination : Pagination): FilterItem[] {
+    searchTerm = searchTerm || ""; //replace empty search term by empty string, who always match.
+    return this.filterItems.filter(this.getFilterPredicate(filter, searchTerm, pagination, true));
   }
 
-  public getFilteredOut(filter: Filter): FilterItem[] {
-    const { searchTerm } = this.options;
-    return this.filterItems.filter((filterItem: FilterItem): boolean => {
-      const categories = filterItem.getCategories();
-      const shouldBeFiltered = this.shouldBeFiltered(categories, filter);
+  /**
+   * returns all item that are negative, this mean all the items that should be removed.
+   * the item is not keeped if the condition described in `getFiltered` is false.
+   */
+  public getFilteredOut(filter: Filter, searchTerm : string, pagination : Pagination): FilterItem[] {
+    searchTerm = searchTerm || ""; //replace empty search term by empty string, who always match.
+    return this.filterItems.filter(this.getFilterPredicate(filter, searchTerm, pagination, false));
+  }
+
+  /**
+   * By extracting the structure of "getFiltered" and "getFilteredOut", we make it clearer the difference between them
+   * and prevent us of doing error between the two by reducing code duplication
+   * 
+   * item is keeped if :
+   * (it's categorie match the current filter or the current filter is "all") and 
+   * (it text match the search term or there is no search term) and
+   * (it's index match the current page range or there is no pagination)
+   *
+   * @param filter
+   * @param searchTerm
+   * @param inverse inverse the filtering. true => get all that are keeped. false => get all that are removed
+   */
+  private getFilterPredicate(filter : Filter, searchTerm : string, pagination : Pagination, inverse : boolean) : (f : FilterItem) => boolean {
+    let acceptedElemCount = 0;
+    return (filterItem : FilterItem) : boolean => {
+      const shouldBeFiltered = this.shouldBeFiltered(filterItem.getCategories(), filter)
       const contentsMatchSearch = filterItem.contentsMatchSearch(searchTerm);
-      return !shouldBeFiltered || !contentsMatchSearch;
-    });
+      const elementInRange = !pagination || (acceptedElemCount >= pagination.start && acceptedElemCount < pagination.end)
+      if(shouldBeFiltered && contentsMatchSearch) {
+        acceptedElemCount++;
+      }
+      if(inverse) {
+        return shouldBeFiltered && contentsMatchSearch && elementInRange
+      } else {
+        return !(shouldBeFiltered && contentsMatchSearch && elementInRange);
+      }
+    }
   }
 
   public sort(
@@ -84,21 +111,17 @@ export default class FilterItems implements Destructible, Styleable {
   }
 
   public shuffle(): void {
-    const filteredItems = this.getFiltered(this.options.filter);
+    const filteredItems = this.getFiltered(this.options.filter, this.options.searchTerm, null);
 
     if (filteredItems.length > 1) {
-      const indicesBeforeShuffling = this.getFiltered(this.options.filter)
-        .map((filterItem): number => this.filterItems.indexOf(filterItem))
-        .slice();
+      const indicesBeforeShuffling = filteredItems
+        .map((filterItem): number => this.filterItems.indexOf(filterItem));
 
       // Shuffle filtered items (until they have a new order)
       let shuffledItems;
       do {
         shuffledItems = shuffle(filteredItems);
       } while (filterItemArraysHaveSameSorting(filteredItems, shuffledItems));
-      {
-        shuffledItems = shuffle(filteredItems);
-      }
 
       // Update filterItems to have them in the new shuffled order
       shuffledItems.forEach((filterItem, index): void => {
@@ -122,18 +145,22 @@ export default class FilterItems implements Destructible, Styleable {
     );
   }
 
+  /**
+   * the filter system is mostly positive. you must have some or all of the filter term in your categorie to be still here.
+   * @returns {boolean}, true if the element should be keeped. the name is misleading.
+   */
   private shouldBeFiltered(categories: string[], filter: Filter): boolean {
-    const { multifilterLogicalOperator } = this.options.getRaw();
-    const isMultifilteringEnabled = Array.isArray(filter);
-
-    if (!isMultifilteringEnabled) {
-      return categories.includes(filter as string);
+    //by checking for filter === "all" here, we prevent us to forget to check it before calling "shouldBeFiltered"
+    if(filter === "all") {
+      return true
+    //By directly putting "isArray" in if condition, we can use typescript garde and we don't have to specify the type of filter with "as"
+    } else if(Array.isArray(filter)) {
+      //By using ternary operator, we reduce the number of "if" and "return" in the function, making it (arguably) clearer to read.
+      return this.options.getRaw().multifilterLogicalOperator === 'or' ?
+        !!intersection(categories, filter).length :
+        allStringsOfArray1InArray2(filter, categories)
+    } else {
+      return categories.includes(filter);
     }
-
-    if (multifilterLogicalOperator === 'or') {
-      return !!intersection(categories, filter as string[]).length;
-    }
-
-    return allStringsOfArray1InArray2(filter as string[], categories);
   }
 }
