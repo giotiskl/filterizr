@@ -20,7 +20,7 @@ const defaultOptions: RawOptions = {
   filter: 'all',
   filterOutCss: {
     opacity: 0,
-    transform: 'scale(0.5)',
+    transform: 'scale(0)',
   },
   filterInCss: {
     opacity: 1,
