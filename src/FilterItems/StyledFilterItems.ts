@@ -10,6 +10,10 @@ export default class StyledFilterItems extends StyledFilterizrElements {
     this._filterItems = elements.map(({ styles }): StyledFilterItem => styles);
   }
 
+  public resetDisplay(): void {
+    this._filterItems.forEach((filterItem): void => filterItem.setVisible());
+  }
+
   public removeWidth(): void {
     this._filterItems.forEach((filterItem): void => filterItem.removeWidth());
   }

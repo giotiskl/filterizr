@@ -89,10 +89,10 @@ export default class FilterItem extends FilterizrElement {
       // It adds a .filteredOut class so that user can target these items
       // via css if needed. It sets the z-index to -1000 to prevent mouse
       // events from being triggered.
-      const { filteredOut } = this;
-      if (filteredOut) {
+      if (this.filteredOut) {
         this.node.classList.add('filteredOut');
         this.styles.setZIndex(-1000);
+        this.styles.setHidden();
       } else {
         this.node.classList.remove('filteredOut');
         this.styles.removeZIndex();

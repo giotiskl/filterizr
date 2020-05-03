@@ -1,4 +1,8 @@
-## Version 2.2.2
+## Version 2.2.4
+
+- Set `display: none` on filtered out items
+
+## Version 2.2.3
 
 - Fix bug with circular JSON ref by dememoizing `getFiltered`
 

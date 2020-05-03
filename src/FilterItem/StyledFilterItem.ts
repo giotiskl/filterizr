@@ -91,4 +91,12 @@ export default class StyledFilterItem extends StyledFilterizrElement {
   public removeWidth(): void {
     this.remove('width');
   }
+
+  public setHidden(): void {
+    this.set({ display: 'none' });
+  }
+
+  public setVisible(): void {
+    this.remove('display');
+  }
 }
