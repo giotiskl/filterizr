@@ -224,6 +224,10 @@ export default class Filterizr implements Destructible {
     itemsToFilterIn.forEach((filterItem, index): void => {
       filterItem.filterIn(itemsPositions[index]);
     });
+    // Workaround: trigger transitionend manually
+    filterItems.getFilteredOut(options.filter).forEach((filterItem): void => {
+      filterItem.refresh();
+    });
   }
 
   /**

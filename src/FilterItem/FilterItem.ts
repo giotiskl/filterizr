@@ -82,6 +82,9 @@ export default class FilterItem extends FilterizrElement {
   public getSortAttribute(sortAttribute: string): string | number {
     return this.sortData[sortAttribute];
   }
+  public refresh(): void {
+    this.trigger('transitionend');
+  }
 
   protected bindEvents(): void {
     this.eventReceiver.on('transitionend', (): void => {
